@@ -12,7 +12,7 @@ function MenuLeft() {
                     <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
                         <a href="#" className="flex items-center space-x-2 block w-full">
                             <PieChart size={16} />
-                            <span>Biểu đồ</span>
+                            <span>Biểu đồ</span>  
                         </a>
                     </li>
                     <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">

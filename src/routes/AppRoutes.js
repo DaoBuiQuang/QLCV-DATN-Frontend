@@ -5,6 +5,7 @@ import MenuLeft from "../components/MenuLeft";
 import ListCustomer from "../containers/Customer/ListCustomer";
 import Login from "../containers/Auth/Login";
 import StaffList from "../containers/Staff/StaffList";
+import StaffAdd from "../containers/Staff/StaffAdd";
 
 const MainLayout = () => {
   return (
@@ -30,8 +31,10 @@ const AppRoutes = () => {
 
 
           <Route path="/stafflist" element={<StaffList />} />
+          <Route path="/staffadd" element={<StaffAdd></StaffAdd>}/>
         </Route>
         <Route path="/login" element={<Login />} />
+      
       </Routes>
     </Router>
   );
