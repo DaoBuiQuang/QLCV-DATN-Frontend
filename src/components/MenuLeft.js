@@ -1,6 +1,9 @@
-import { Home, PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
+import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings } from "lucide-react";
 
 function MenuLeft() {
+    const location = useLocation(); // Lấy đường dẫn hiện tại
+
     return (
         <aside className="bg-white w-56 h-screen shadow-md flex flex-col">
             {/* Logo */}
@@ -9,66 +12,110 @@ function MenuLeft() {
             </div>
             <nav className="flex-1 px-4 py-4">
                 <ul className="space-y-2 text-[#B1B1B1] text-sm">
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="#" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/dashboard"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/dashboard" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <PieChart size={16} />
                             <span>Biểu đồ</span>  
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="/detail" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/detail"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/detail" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <Users size={16} />
                             <span>Khách hàng</span>
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="/industry" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/industry"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/industry" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <Briefcase size={16} />
                             <span>Ngành nghề</span>
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="/industry/add" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/industry/add"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/industry/add" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <Handshake size={16} />
                             <span>Đối tác</span>
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="/industry" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/countrylist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/countrylist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <Globe size={16} />
                             <span>Quốc gia</span>
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="/industry" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/stafflist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/stafflist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <UserCheck size={16} />
                             <span>Nhân sự</span>
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="/industry" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/cases"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/cases" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <FileText size={16} />
                             <span>Hồ sơ vụ việc</span>
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="/industry" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/casetype"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/casetype" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <Layers size={16} />
                             <span>Loại vụ việc</span>
-                        </a>
+                        </NavLink>
                     </li>
-                    <li className="p-2 rounded-lg hover:bg-blue-500 hover:text-white transition">
-                        <a href="#" className="flex items-center space-x-2 block w-full">
+                    <li>
+                        <NavLink 
+                            to="/settings"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
+                                location.pathname === "/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                        >
                             <Settings size={16} />
                             <span>Cài đặt</span>
-                        </a>
+                        </NavLink>
                     </li>
                 </ul>
             </nav>
 
             {/* Đăng xuất */}
             <div className="p-4 border-t flex items-center space-x-2 text-[#B1B1B1] text-sm">
-                {/* <img src="/avatar.jpg" alt="User Avatar" className="w-8 h-8 rounded-full" /> */}
                 <span>Bùi Quang Đạo</span>
             </div>
         </aside>
