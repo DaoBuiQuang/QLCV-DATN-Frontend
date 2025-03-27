@@ -36,9 +36,9 @@ function MenuLeft() {
                     </li>
                     <li>
                         <NavLink 
-                            to="/industry"
+                            to="/joblist"
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/industry" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                location.pathname === "/joblist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                             }`}
                         >
                             <Briefcase size={16} />

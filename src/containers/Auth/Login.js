@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import callAPI from "../../utils/api";
 const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -9,25 +10,27 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(""); 
-        debugger
+        setError("");
         try {
-            const response = await axios.post("http://localhost:3000/api/login", {
-                username,
-                password
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/login",
+                data: { username, password },
             });
-            if (response.data.token) {
-                localStorage.setItem("token", response.data.token);
+    
+            if (response.token) {
+                localStorage.setItem("token", response.token);
                 alert("Đăng nhập thành công!");
-                console.log("Token nhận được:", response.data.token);
+                console.log("Token nhận được:", response.token);
                 navigate("/");
             } else {
                 throw new Error("Không nhận được token từ server!");
             }
         } catch (error) {
-            setError(error.response?.data?.message || "Đăng nhập thất bại!");
+            setError(error.message || "Đăng nhập thất bại!");
         }
     };
+    
 
     return (
         <div className="flex items-center justify-center h-screen bg-gray-100">
