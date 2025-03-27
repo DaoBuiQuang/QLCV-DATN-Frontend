@@ -11,7 +11,6 @@ function CountryEdit() {
   // Gọi API lấy thông tin quốc gia khi vào trang
   useEffect(() => {
     const fetchCountryDetail = async () => {
-        debugger
       const token = localStorage.getItem("token");
       if (!token) {
         alert("Không tìm thấy token. Vui lòng đăng nhập lại.");

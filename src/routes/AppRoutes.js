@@ -11,6 +11,10 @@ import CountryAdd from "../containers/Country/CountryAdd";
 import CountryEdit from "../containers/Country/CountryEdit";
 import CountryDetail from "../containers/Country/CountryDetail";
 import JobList from "../containers/Job/JobList";
+import JobAdd from "../containers/Job/JobAdd";
+import PartnerList from "../containers/Partner/PartnerList";
+import PartnerAdd from "../containers/Partner/PartnerAdd";
+import PartnerEdit from "../containers/Partner/PartnerEdit";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -52,6 +56,11 @@ const AppRoutes = () => {
           <Route path="/countrydetail/:maQuocGia" element={<CountryDetail></CountryDetail>} />
 
           <Route path="/joblist" element={<JobList></JobList>} />
+          <Route path="/jobadd" element={<JobAdd></JobAdd>} />
+
+          <Route path="/partnerlist" element={<PartnerList></PartnerList>} />
+          <Route path="/partneradd" element={<PartnerAdd></PartnerAdd>} />
+          <Route path="/partneredit/:maDoiTac" element={<PartnerEdit></PartnerEdit>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

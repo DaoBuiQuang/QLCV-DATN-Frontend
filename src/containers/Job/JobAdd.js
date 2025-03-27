@@ -9,7 +9,7 @@ function JobAdd() {
     try {
       const response = await callAPI({
         method: "post",
-        endpoint: "/job/add",
+        endpoint: "/industry/add",
         data: {
             maNganhNghe,
             tenNganhNghe,

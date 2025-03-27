@@ -47,9 +47,9 @@ function MenuLeft() {
                     </li>
                     <li>
                         <NavLink 
-                            to="/industry/add"
+                            to="/partnerlist"
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/industry/add" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                location.pathname === "/partnerlist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                             }`}
                         >
                             <Handshake size={16} />
