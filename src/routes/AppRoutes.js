@@ -15,6 +15,7 @@ import JobAdd from "../containers/Job/JobAdd";
 import PartnerList from "../containers/Partner/PartnerList";
 import PartnerAdd from "../containers/Partner/PartnerAdd";
 import PartnerEdit from "../containers/Partner/PartnerEdit";
+import PartnerDetail from "../containers/Partner/PartnerDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -61,6 +62,7 @@ const AppRoutes = () => {
           <Route path="/partnerlist" element={<PartnerList></PartnerList>} />
           <Route path="/partneradd" element={<PartnerAdd></PartnerAdd>} />
           <Route path="/partneredit/:maDoiTac" element={<PartnerEdit></PartnerEdit>} />
+          <Route path="/partnerdetail/:maDoiTac" element={<PartnerDetail></PartnerDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 
