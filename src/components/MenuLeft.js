@@ -25,9 +25,9 @@ function MenuLeft() {
                     </li>
                     <li>
                         <NavLink 
-                            to="/detail"
+                            to="/"
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/detail" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                location.pathname === "/" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                             }`}
                         >
                             <Users size={16} />

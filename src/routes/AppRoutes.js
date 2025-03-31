@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import MenuLeft from "../components/MenuLeft";
-import ListCustomer from "../containers/Customer/ListCustomer";
 import Login from "../containers/Auth/Login";
 import StaffList from "../containers/Staff/StaffList";
 import StaffAdd from "../containers/Staff/StaffAdd";
@@ -16,6 +15,9 @@ import PartnerList from "../containers/Partner/PartnerList";
 import PartnerAdd from "../containers/Partner/PartnerAdd";
 import PartnerEdit from "../containers/Partner/PartnerEdit";
 import PartnerDetail from "../containers/Partner/PartnerDetail";
+import CustomerList from "../containers/Customer/CustomerList";
+import CustomerAdd from "../containers/Customer/CustomerAdd";
+import CustomerEdit from "../containers/Customer/CustomerEdit";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -45,8 +47,9 @@ const AppRoutes = () => {
       <Routes>
         {/* Bọc layout chung */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<ListCustomer />} />
-
+          <Route path="/" element={<CustomerList />} />
+          <Route path="/customeradd" element={<CustomerAdd></CustomerAdd>} />
+          <Route path="/customeredit/:maKhachHang" element={<CustomerEdit></CustomerEdit>} />
 
           <Route path="/stafflist" element={<StaffList />} />
           <Route path="/staffadd" element={<StaffAdd></StaffAdd>} />
