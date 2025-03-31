@@ -1,4 +1,6 @@
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -9,9 +11,9 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("token"); 
+        const token = localStorage.getItem("token");
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`; 
+            config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
     },
@@ -22,8 +24,8 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            localStorage.removeItem("token"); 
-            window.location.href = "/login"; 
+            localStorage.removeItem("token");
+            window.location.href = "/login";
         }
         return Promise.reject(error);
     }
@@ -47,8 +49,10 @@ const callAPI = async ({ method = "get", endpoint, data = null, params = null })
         });
         return response.data;
     } catch (error) {
-        console.error("Lỗi API:", error.response?.data || error.message);
-        throw error.response?.data || error.message;
+        const errorMessage = error.response?.data?.message || "Lỗi kết nối đến server!";
+        toast.error(`🚨 ${errorMessage}`, { position: "top-right", autoClose: 3000 });
+        console.error("Lỗi API:", errorMessage);
+        throw errorMessage;
     }
 };
 

@@ -14,7 +14,7 @@ function CustomerAdd() {
     const [maQuocGia, setMaQuocGia] = useState("");
     const [maNganhNghe, setMaNganhNghe] = useState("");
     const [trangThai, setTrangThai] = useState("Đang hoạt động");
-
+    const [maKhachHangCu, setMaKhachHangCu] = useState("");
     const [countries, setCountries] = useState([]);
     const [partners, setPartners] = useState([]);
     const [industries, setIndustries] = useState([]);
@@ -80,7 +80,8 @@ function CustomerAdd() {
                     ghiChu,
                     maQuocGia,
                     trangThai,
-                    maNganhNghe
+                    maNganhNghe,
+                    maKhachHangCu
                 },
             });
             alert("Thêm khách hàng thành công!");
@@ -193,6 +194,11 @@ function CustomerAdd() {
                     <div>
                         <label className="block text-gray-700">Ghi chú</label>
                         <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700">Mã khách hàng cũ</label>
+                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                 </div>
 

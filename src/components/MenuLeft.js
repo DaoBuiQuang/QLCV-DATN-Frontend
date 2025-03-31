@@ -91,9 +91,9 @@ function MenuLeft() {
                     </li>
                     <li>
                         <NavLink 
-                            to="/casetype"
+                            to="/casetypelist"
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/casetype" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                location.pathname === "/casetypelist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                             }`}
                         >
                             <Layers size={16} />

@@ -18,13 +18,17 @@ import PartnerDetail from "../containers/Partner/PartnerDetail";
 import CustomerList from "../containers/Customer/CustomerList";
 import CustomerAdd from "../containers/Customer/CustomerAdd";
 import CustomerEdit from "../containers/Customer/CustomerEdit";
+import CustomerDetail from "../containers/Customer/CustomerDetail";
+import CaseTypeList from "../containers/CaseType/CaseTypeList";
+import CaseTypeAdd from "../containers/CaseType/CaseTypeAdd";
+import CaseTypeEdit from "../containers/CaseType/CaseTypeEdit";
+import CaseTypeDetail from "../containers/CaseType/CaseTypeDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar có hiệu ứng trượt vào/ra */}
       <div
         className={`fixed top-0 left-0 h-full w-56 bg-white shadow-md transform transition-transform duration-300 
         ${isMenuOpen ? "translate-x-0" : "-translate-x-56"}`}
@@ -50,6 +54,7 @@ const AppRoutes = () => {
           <Route path="/" element={<CustomerList />} />
           <Route path="/customeradd" element={<CustomerAdd></CustomerAdd>} />
           <Route path="/customeredit/:maKhachHang" element={<CustomerEdit></CustomerEdit>} />
+          <Route path="/customerdetail/:maKhachHang" element={<CustomerDetail></CustomerDetail>} />
 
           <Route path="/stafflist" element={<StaffList />} />
           <Route path="/staffadd" element={<StaffAdd></StaffAdd>} />
@@ -66,6 +71,11 @@ const AppRoutes = () => {
           <Route path="/partneradd" element={<PartnerAdd></PartnerAdd>} />
           <Route path="/partneredit/:maDoiTac" element={<PartnerEdit></PartnerEdit>} />
           <Route path="/partnerdetail/:maDoiTac" element={<PartnerDetail></PartnerDetail>} />
+
+          <Route path="/casetypelist" element={<CaseTypeList></CaseTypeList>} />
+          <Route path="/casetypeadd" element={<CaseTypeAdd></CaseTypeAdd>} />
+          <Route path="/casetypeedit/:maLoaiVuViec" element={<CaseTypeEdit></CaseTypeEdit>} />
+          <Route path="/casetypedetail/:maLoaiVuViec" element={<CaseTypeDetail></CaseTypeDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 
