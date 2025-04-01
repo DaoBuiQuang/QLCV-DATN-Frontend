@@ -23,6 +23,8 @@ import CaseTypeList from "../containers/CaseType/CaseTypeList";
 import CaseTypeAdd from "../containers/CaseType/CaseTypeAdd";
 import CaseTypeEdit from "../containers/CaseType/CaseTypeEdit";
 import CaseTypeDetail from "../containers/CaseType/CaseTypeDetail";
+import StaffEdit from "../containers/Staff/StaffEdit";
+import StaffDetail from "../containers/Staff/StaffDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -58,6 +60,8 @@ const AppRoutes = () => {
 
           <Route path="/stafflist" element={<StaffList />} />
           <Route path="/staffadd" element={<StaffAdd></StaffAdd>} />
+          <Route path="/staffedit/:maNhanSu" element={<StaffEdit></StaffEdit>} />
+          <Route path="/staffdetail/:maNhanSu" element={<StaffDetail></StaffDetail>} />
 
           <Route path="/countrylist" element={<CountryList></CountryList>} />
           <Route path="/countryadd" element={<CountryAdd></CountryAdd>} />
