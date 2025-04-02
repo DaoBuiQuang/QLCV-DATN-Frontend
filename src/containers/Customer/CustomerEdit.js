@@ -118,7 +118,7 @@ function CustomerEdit() {
     };
 
     return (
-        <div className="p-6 bg-gray-100 flex items-center justify-center">
+        <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm khách hàng mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

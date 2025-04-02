@@ -30,7 +30,7 @@ function RegisterStaff() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 flex items-center justify-center">
+    <div className="p-1 bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-lg">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Tạo tài khoản nhân sự</h2>
         <div className="mb-4">
