@@ -27,6 +27,7 @@ import StaffEdit from "../containers/Staff/StaffEdit";
 import StaffDetail from "../containers/Staff/StaffDetail";
 import RegisterStaff from "../containers/Auth/RegisterStaff";
 import CaseList from "../containers/Case/CaseList";
+import CaseAdd from "../containers/Case/CaseAdd";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -85,6 +86,7 @@ const AppRoutes = () => {
           <Route path="/casetypedetail/:maLoaiVuViec" element={<CaseTypeDetail></CaseTypeDetail>} />
 
           <Route path="/caselist" element={<CaseList></CaseList>} />
+          <Route path="/caseadd" element={<CaseAdd></CaseAdd>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

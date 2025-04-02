@@ -151,48 +151,36 @@ function CaseList() {
                         onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
                         placeholder="🌍 Chọn quốc gia"
                         className="w-full md:w-1/6"
-                        isClearable  
+                        isClearable
                     />
 
-                    <select
-                        className="border p-2 text-sm rounded-md w-full md:w-1/6 bg-white shadow-sm"
-                        value={selectedPartner}
-                        onChange={(e) => setSelectedPartner(e.target.value)}
-                    >
-                        <option value="">🤝 Chọn đối tác</option>
-                        {partners.map((partner) => (
-                            <option key={partner.maDoiTac} value={partner.maDoiTac}>
-                                {partner.tenDoiTac}
-                            </option>
-                        ))}
-                    </select>
+                    <Select
+                        options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
+                        value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
+                        onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
+                        placeholder="🤝 Chọn đối tác"
+                        className="w-full md:w-1/6"
+                        isClearable
+                    />
 
-                    {/* Select ngành nghề */}
-                    <select
-                        className="border p-2 text-sm rounded-md w-full md:w-1/6 bg-white shadow-sm"
-                        value={selectedCustomer}
-                        onChange={(e) => setSelectedCustomer(e.target.value)}
-                    >
-                        <option value="">🧑‍💼 Chọn khách hàng</option>
-                        {customers.map((customer) => (
-                            <option key={customer.maKhachHang} value={customer.maKhachHang}>
-                                {customer.tenKhachHang}
-                            </option>
-                        ))}
-                    </select>
+                    <Select
+                        options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
+                        value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
+                        onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
+                        placeholder="🧑‍💼 Chọn khách hàng"
+                        className="w-full md:w-1/6"
+                        isClearable
+                    />
 
-                    <select
-                        className="border p-2 text-sm rounded-md w-full md:w-1/6 bg-white shadow-sm"
-                        value={selectedCasetype}
-                        onChange={(e) => setSelectedCasetype(e.target.value)}
-                    >
-                        <option value=""> Chọn loại vụ việc</option>
-                        {casetypes.map((casetype) => (
-                            <option key={casetype.maLoaiVuViec} value={casetype.maLoaiVuViec}>
-                                {casetype.tenLoaiVuViec}
-                            </option>
-                        ))}
-                    </select>
+                    <Select
+                        options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
+                        value={selectedCasetype ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === selectedCasetype) : null}
+                        onChange={selectedOption => setSelectedCasetype(selectedOption?.value)}
+                        placeholder="Chọn loại vụ việc"
+                        className="w-full md:w-1/6"
+                        isClearable
+                    />
+
                 </div>
             </div>
 

@@ -13,99 +13,91 @@ function MenuLeft() {
             <nav className="flex-1 px-4 py-4">
                 <ul className="space-y-2 text-[#B1B1B1] text-sm">
                     <li>
-                        <NavLink 
-                            to="/dashboard"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/dashboard" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
-                        >
-                            <PieChart size={16} />
-                            <span>Biểu đồ</span>  
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink 
+                        <NavLink
                             to="/"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
                         >
                             <Users size={16} />
                             <span>Khách hàng</span>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink 
-                            to="/joblist"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/joblist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
-                        >
-                            <Briefcase size={16} />
-                            <span>Ngành nghề</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink 
-                            to="/partnerlist"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/partnerlist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
-                        >
-                            <Handshake size={16} />
-                            <span>Đối tác</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink 
-                            to="/countrylist"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/countrylist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
-                        >
-                            <Globe size={16} />
-                            <span>Quốc gia</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink 
-                            to="/stafflist"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/stafflist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
-                        >
-                            <UserCheck size={16} />
-                            <span>Nhân sự</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink 
+                        <NavLink
                             to="/caselist"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/caselist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/caselist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
                         >
                             <FileText size={16} />
                             <span>Hồ sơ vụ việc</span>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink 
+                        <NavLink
+                            to="/dashboard"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/dashboard" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <PieChart size={16} />
+                            <span>Biểu đồ</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/joblist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/joblist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <Briefcase size={16} />
+                            <span>Ngành nghề</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/partnerlist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/partnerlist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <Handshake size={16} />
+                            <span>Đối tác</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/countrylist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/countrylist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <Globe size={16} />
+                            <span>Quốc gia</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/stafflist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/stafflist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <UserCheck size={16} />
+                            <span>Nhân sự</span>
+                        </NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink
                             to="/casetypelist"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/casetypelist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/casetypelist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
                         >
                             <Layers size={16} />
                             <span>Loại vụ việc</span>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink 
+                        <NavLink
                             to="/settings"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                            }`}
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
                         >
                             <Settings size={16} />
                             <span>Cài đặt</span>
