@@ -25,6 +25,8 @@ import CaseTypeEdit from "../containers/CaseType/CaseTypeEdit";
 import CaseTypeDetail from "../containers/CaseType/CaseTypeDetail";
 import StaffEdit from "../containers/Staff/StaffEdit";
 import StaffDetail from "../containers/Staff/StaffDetail";
+import RegisterStaff from "../containers/Auth/RegisterStaff";
+import CaseList from "../containers/Case/CaseList";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -62,6 +64,7 @@ const AppRoutes = () => {
           <Route path="/staffadd" element={<StaffAdd></StaffAdd>} />
           <Route path="/staffedit/:maNhanSu" element={<StaffEdit></StaffEdit>} />
           <Route path="/staffdetail/:maNhanSu" element={<StaffDetail></StaffDetail>} />
+          <Route path="/registerstaff/:maNhanSu" element={<RegisterStaff></RegisterStaff>} />
 
           <Route path="/countrylist" element={<CountryList></CountryList>} />
           <Route path="/countryadd" element={<CountryAdd></CountryAdd>} />
@@ -80,6 +83,8 @@ const AppRoutes = () => {
           <Route path="/casetypeadd" element={<CaseTypeAdd></CaseTypeAdd>} />
           <Route path="/casetypeedit/:maLoaiVuViec" element={<CaseTypeEdit></CaseTypeEdit>} />
           <Route path="/casetypedetail/:maLoaiVuViec" element={<CaseTypeDetail></CaseTypeDetail>} />
+
+          <Route path="/caselist" element={<CaseList></CaseList>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

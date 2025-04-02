@@ -80,9 +80,9 @@ function MenuLeft() {
                     </li>
                     <li>
                         <NavLink 
-                            to="/cases"
+                            to="/caselist"
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname === "/cases" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                location.pathname === "/caselist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                             }`}
                         >
                             <FileText size={16} />

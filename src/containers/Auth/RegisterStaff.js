@@ -1,0 +1,92 @@
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import callAPI from "../../utils/api";
+
+function RegisterStaff() {
+  const navigate = useNavigate();
+  const { maNhanSu } = useParams();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
+
+  const handleRegister = async () => {
+    try {
+      const response = await callAPI({
+        method: "post",
+        endpoint: "/register",
+        data: {
+          maNhanSu,
+          username,
+          password,
+          role,
+        },
+      });
+      alert("Tạo tài khoản thành công!");
+      navigate(-1);
+    } catch (error) {
+      console.error("Lỗi khi tạo tài khoản!", error);
+      alert("Đã có lỗi xảy ra khi tạo tài khoản.");
+    }
+  };
+
+  return (
+    <div className="p-6 bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-lg">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Tạo tài khoản nhân sự</h2>
+        <div className="mb-4">
+          <label className="block text-gray-700">Mã nhân sự</label>
+          <input
+            type="text"
+            value={maNhanSu}
+            disabled
+            className="w-full p-2 mt-1 border rounded-lg bg-gray-200 cursor-not-allowed"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Tên đăng nhập</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Nhập tên đăng nhập"
+            className="w-full p-2 mt-1 border rounded-lg"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Mật khẩu</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Nhập mật khẩu"
+            className="w-full p-2 mt-1 border rounded-lg"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Vai trò</label>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full p-2 mt-1 border rounded-lg"
+          >
+            <option value="user">Nhân viên</option>
+            <option value="admin">Quản trị viên</option>
+          </select>
+        </div>
+        <div className="flex justify-center gap-4 mt-4">
+          <button className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg" onClick={() => navigate(-1)}>
+            Quay lại
+          </button>
+          <button
+            onClick={handleRegister}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+          >
+            Tạo tài khoản
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default RegisterStaff;
