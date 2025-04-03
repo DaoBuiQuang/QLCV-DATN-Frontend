@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import Select from "react-select";
 function CaseAdd() {
     const navigate = useNavigate();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
@@ -10,7 +10,7 @@ function CaseAdd() {
     const [ngayTiepNhan, setNgayTiepNhan] = useState("");
     const [ngayXuLy, setNgayXuLy] = useState(null);
     const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
-    const [maQuocGiaVuViec, setMaQuocGiaVuViec] = useState("");
+    const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
     const [ngayTao, setNgayTao] = useState("");
     const [ngayCapNhap, setNgayCapNhap] = useState("");
@@ -20,6 +20,12 @@ function CaseAdd() {
     const [partners, setPartners] = useState([]);
     const [industries, setIndustries] = useState([]);
 
+    const formatOptions = (data, valueKey, labelKey) => {
+        return data.map(item => ({
+            value: item[valueKey],
+            label: item[labelKey]
+        }));
+    };
     const fetchCountries = async () => {
         try {
             const response = await callAPI({
@@ -78,7 +84,7 @@ function CaseAdd() {
                     ngayTiepNhan,
                     ngayXuLy,
                     maLoaiVuViec,
-                    maQuocGiaVuViec,
+                    maQuocGia,
                     trangThaiVuViec,
                     ngayTao,
                     ngayCapNhap,
@@ -108,7 +114,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Mã khách hàng</label>
+                        <label className="block text-gray-700">Tên khách hàng </label>
                         <input
                             type="text"
                             value={maKhachHang}
@@ -158,11 +164,13 @@ function CaseAdd() {
 
                     <div>
                         <label className="block text-gray-700">Quốc gia vụ việc</label>
-                        <input
-                            type="text"
-                            value={maQuocGiaVuViec}
-                            onChange={(e) => setMaQuocGiaVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
+                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
+                            placeholder="🌍 Chọn quốc gia"
+                            className="w-full  mt-1  rounded-lg"
+                            isClearable
                         />
                     </div>
 
@@ -208,6 +216,15 @@ function CaseAdd() {
 
                     <div>
                         <label className="block text-gray-700">Nhân sự vụ việc</label>
+                        <input
+                            type="text"
+                            value={nhanSuVuViec.map((item) => item.maNhanSu).join(", ")}
+                            onChange={(e) => setNhanSuVuViec(e.target.value.split(", ").map((value) => ({ maNhanSu: value, vaiTro: "Chính" })))}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Đối tác</label>
                         <input
                             type="text"
                             value={nhanSuVuViec.map((item) => item.maNhanSu).join(", ")}
