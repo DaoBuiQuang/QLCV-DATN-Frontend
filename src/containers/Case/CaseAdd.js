@@ -6,6 +6,7 @@ function CaseAdd() {
     const navigate = useNavigate();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maKhachHang, setMaKhachHang] = useState("");
+    const [maDoiTac, setMaDoiTac] = useState("");
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
     const [ngayTiepNhan, setNgayTiepNhan] = useState("");
     const [ngayXuLy, setNgayXuLy] = useState(null);
@@ -16,9 +17,25 @@ function CaseAdd() {
     const [ngayCapNhap, setNgayCapNhap] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
     const [nhanSuVuViec, setNhanSuVuViec] = useState([]);
+    const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState(null);
+    const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState(null);
+
+    const [casetypes, setCasetypes] = useState([]);
     const [countries, setCountries] = useState([]);
+    const [customers, setCustomers] = useState([]);
     const [partners, setPartners] = useState([]);
-    const [industries, setIndustries] = useState([]);
+    const [staffs, setStaffs] = useState([]);
+    const processSteps = [
+        { value: "buoc_1", label: "Bước 1: Tiếp nhận" },
+        { value: "buoc_2", label: "Bước 2: Xử lý" },
+        { value: "buoc_3", label: "Bước 3: Hoàn tất" }
+    ];
+    const statusOptions = [
+        { value: "dang_xu_ly", label: "Đang xử lý" },
+        { value: "hoan_thanh", label: "Hoàn thành" },
+        { value: "tam_dung", label: "Tạm dừng" }
+    ];
+
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -26,6 +43,17 @@ function CaseAdd() {
             label: item[labelKey]
         }));
     };
+
+    const handleSelectChange = (selectedOption, vaiTro) => {
+        setNhanSuVuViec(prevState => {
+            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro); // Xóa nhân sự cũ có cùng vai trò
+            if (selectedOption) {
+                updatedList.push({ maNhanSu: selectedOption.value, vaiTro }); // Thêm nhân sự mới
+            }
+            return updatedList;
+        });
+    };
+
     const fetchCountries = async () => {
         try {
             const response = await callAPI({
@@ -48,27 +76,52 @@ function CaseAdd() {
             });
             setPartners(response);
         } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu đối tác:", error);
+            console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
         }
     };
 
-    const fetchIndustries = async () => {
+    const fetchCustomers = async () => {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/industry/list",
+                endpoint: "/customers/by-name",
                 data: {},
             });
-            setIndustries(response);
+            setCustomers(response);
         } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu ngành nghề:", error);
+            console.error("Lỗi khi lấy dữ liệu khách hàng", error);
         }
     };
-
+    const fetchCaseTypes = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/casetype/list",
+                data: {},
+            });
+            setCasetypes(response);
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu loại nghề nghiệp:", error);
+        }
+    };
+    const fetchStaffs = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/staff/basiclist",
+                data: {},
+            });
+            setStaffs(response);
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu nhân sự:", error);
+        }
+    };
     useEffect(() => {
         fetchCountries();
         fetchPartners();
-        fetchIndustries();
+        fetchCustomers();
+        fetchCaseTypes();
+        fetchStaffs();
     }, []);
 
     // Add case
@@ -104,26 +157,30 @@ function CaseAdd() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label className="block text-gray-700">Mã hồ sơ vụ việc</label>
+                    <div className="flex-1">
+                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                         <input
                             type="text"
                             value={maHoSoVuViec}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-100"
+                            onChange={(e) => setMaHoSoVuViec(e.target.value)} // Cập nhật state khi nhập
+                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                        />
+                    </div>
+
+                    <div className="flex-1">
+                        <label className="block text-gray-700 text-left">Tên khách hàng </label>
+                        <Select
+                            options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
+                            value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
+                            onChange={selectedOption => setMaKhachHang(selectedOption?.value)}
+                            placeholder="Chọn khách hàng"
+                            className="w-full mt-1 rounded-lg h-10"
+                            isClearable
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Tên khách hàng </label>
-                        <input
-                            type="text"
-                            value={maKhachHang}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-100"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Nội dung vụ việc</label>
+                        <label className="block text-gray-700 text-left">Nội dung vụ việc</label>
                         <input
                             type="text"
                             value={noiDungVuViec}
@@ -133,7 +190,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Ngày tiếp nhận</label>
+                        <label className="block text-gray-700 text-left">Ngày tiếp nhận</label>
                         <input
                             type="date"
                             value={ngayTiepNhan}
@@ -143,7 +200,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Ngày xử lý</label>
+                        <label className="block text-gray-700 text-left">Ngày xử lý</label>
                         <input
                             type="date"
                             value={ngayXuLy}
@@ -153,83 +210,88 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Loại vụ việc</label>
-                        <input
-                            type="text"
-                            value={maLoaiVuViec}
-                            onChange={(e) => setMaLoaiVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Quốc gia vụ việc</label>
+                        <label className="block text-gray-700 text-left">Loại vụ việc</label>
                         <Select
-                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
-                            placeholder="🌍 Chọn quốc gia"
+                            options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
+                            value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
+                            onChange={selectedOption => setMaLoaiVuViec(selectedOption?.value)}
+                            placeholder="Chọn loại vụ việc"
                             className="w-full  mt-1  rounded-lg"
                             isClearable
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Trạng thái vụ việc</label>
-                        <input
-                            type="text"
-                            value={trangThaiVuViec}
-                            onChange={(e) => setTrangThaiVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                        <label className="block text-gray-700 text-left">Quốc gia vụ việc</label>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
+                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
+                            placeholder="Chọn quốc gia"
+                            className="w-full  mt-1  rounded-lg"
+                            isClearable
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Đối tác</label>
+                        <Select
+                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
+                            value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
+                            onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
+                            placeholder="Chọn đối tác"
+                            className="w-full  mt-1  rounded-lg"
+                            isClearable
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Trạng thái vụ việc</label>
+                        <Select
+                            options={formatOptions(statusOptions, "value", "label")}
+                            value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
+                            onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
+                            placeholder="Chọn trạng thái"
+                            className="w-full mt-1 rounded-lg"
+                            isClearable
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Ngày tạo</label>
-                        <input
-                            type="date"
-                            value={ngayTao}
-                            onChange={(e) => setNgayTao(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Ngày cập nhật</label>
-                        <input
-                            type="date"
-                            value={ngayCapNhap}
-                            onChange={(e) => setNgayCapNhap(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Bước xử lý hiện tại</label>
-                        <input
-                            type="text"
-                            value={buocXuLyHienTai}
-                            onChange={(e) => setBuocXuLyHienTai(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Nhân sự vụ việc</label>
-                        <input
-                            type="text"
-                            value={nhanSuVuViec.map((item) => item.maNhanSu).join(", ")}
-                            onChange={(e) => setNhanSuVuViec(e.target.value.split(", ").map((value) => ({ maNhanSu: value, vaiTro: "Chính" })))}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                        <label className="block text-gray-700 text-left">Bước xử lý hiện tại</label>
+                        <Select
+                            options={formatOptions(processSteps, "value", "label")}
+                            value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
+                            onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
+                            placeholder="Chọn bước xử lý"
+                            className="w-full mt-1 rounded-lg"
+                            isClearable
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Đối tác</label>
-                        <input
-                            type="text"
-                            value={nhanSuVuViec.map((item) => item.maNhanSu).join(", ")}
-                            onChange={(e) => setNhanSuVuViec(e.target.value.split(", ").map((value) => ({ maNhanSu: value, vaiTro: "Chính" })))}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                        <label className="block text-gray-700 text-left">Người xử lí chính</label>
+                        <Select
+                            options={formatOptions(staffs, "maNhanSu", "hoTen")}
+                            value={nguoiXuLyChinh}
+                            onChange={(selectedOption) => {
+                                setNguoiXuLyChinh(selectedOption);
+                                handleSelectChange(selectedOption, "Chính");
+                            }}
+                            placeholder="Chọn người xử lí chính"
+                            className="w-full mt-1 rounded-lg"
+                            isClearable
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Người xử lí phụ</label>
+                        <Select
+                            options={formatOptions(staffs, "maNhanSu", "hoTen")}
+                            value={nguoiXuLyPhu}
+                            onChange={(selectedOption) => {
+                                setNguoiXuLyPhu(selectedOption);
+                                handleSelectChange(selectedOption, "Phụ");
+                            }}
+                            placeholder="Chọn người xử lí phụ"
+                            className="w-full mt-1 rounded-lg"
+                            isClearable
                         />
                     </div>
                 </div>
