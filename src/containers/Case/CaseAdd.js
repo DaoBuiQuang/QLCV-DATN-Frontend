@@ -13,8 +13,8 @@ function CaseAdd() {
     const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
     const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
-    const [ngayTao, setNgayTao] = useState("");
-    const [ngayCapNhap, setNgayCapNhap] = useState("");
+    // const [ngayTao, setNgayTao] = useState("");
+    // const [ngayCapNhap, setNgayCapNhap] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
     const [nhanSuVuViec, setNhanSuVuViec] = useState([]);
     const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState(null);
@@ -139,8 +139,8 @@ function CaseAdd() {
                     maLoaiVuViec,
                     maQuocGia,
                     trangThaiVuViec,
-                    ngayTao,
-                    ngayCapNhap,
+                    // ngayTao,
+                    // ngayCapNhap,
                     buocXuLyHienTai,
                     nhanSuVuViec
                 },
