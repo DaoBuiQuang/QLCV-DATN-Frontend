@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
 function CaseEdit() {
     const navigate = useNavigate();
-    const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
+    const { maHoSoVuViec } = useParams();
     const [maKhachHang, setMaKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
@@ -46,12 +46,38 @@ function CaseEdit() {
 
     const handleSelectChange = (selectedOption, vaiTro) => {
         setNhanSuVuViec(prevState => {
-            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro); // Xóa nhân sự cũ có cùng vai trò
+            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro); 
             if (selectedOption) {
-                updatedList.push({ maNhanSu: selectedOption.value, vaiTro }); // Thêm nhân sự mới
+                updatedList.push({ maNhanSu: selectedOption.value, vaiTro }); 
             }
             return updatedList;
         });
+    };
+
+    const fetchCaseDetail = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/case/detail",
+                data: { maHoSoVuViec }
+            });
+
+            if (response) {
+
+                setMaKhachHang(response.maKhachHang);
+                setMaDoiTac(response.maDoiTac);
+                setNoiDungVuViec(response.noiDungVuViec);
+                setNgayTiepNhan(response.ngayTiepNhan);
+                setNgayXuLy(response.ngayXuLy);
+                setMaLoaiVuViec(response.maLoaiVuViec);
+                setMaQuocGia(response.maQuocGiaVuViec);
+                setTrangThaiVuViec(response.trangThaiVuViec);
+                setBuocXuLyHienTai(response.buocXuLyHienTai);
+                setNhanSuVuViec(response.nhanSuVuViec || []);
+            }
+        } catch (error) {
+            console.error("Lỗi khi lấy chi tiết hồ sơ vụ việc:", error);
+        }
     };
 
     const fetchCountries = async () => {
@@ -70,7 +96,7 @@ function CaseEdit() {
     const fetchPartners = async () => {
         try {
             const response = await callAPI({
-                method: "post",
+                method: "put",
                 endpoint: "/partner/list",
                 data: {},
             });
@@ -117,6 +143,7 @@ function CaseEdit() {
         }
     };
     useEffect(() => {
+        fetchCaseDetail();
         fetchCountries();
         fetchPartners();
         fetchCustomers();
@@ -125,11 +152,11 @@ function CaseEdit() {
     }, []);
 
     // Add case
-    const handleAddCase = async () => {
+    const handleEditCase = async () => {
         try {
             await callAPI({
                 method: "post",
-                endpoint: "/case/add",
+                endpoint: "/case/edit",
                 data: {
                     maHoSoVuViec,
                     maKhachHang,
@@ -155,14 +182,13 @@ function CaseEdit() {
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ vụ việc</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                         <input
                             type="text"
                             value={maHoSoVuViec}
-                            onChange={(e) => setMaHoSoVuViec(e.target.value)} // Cập nhật state khi nhập
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
@@ -298,7 +324,7 @@ function CaseEdit() {
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleAddCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm hồ sơ vụ việc</button>
+                    <button onClick={handleEditCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa hồ sơ vụ việc</button>
                 </div>
             </div>
         </div>
