@@ -29,6 +29,7 @@ import RegisterStaff from "../containers/Auth/RegisterStaff";
 import CaseList from "../containers/Case/CaseList";
 import CaseAdd from "../containers/Case/CaseAdd";
 import CaseEdit from "../containers/Case/CaseEdit";
+import CaseDetail from "../containers/Case/CaseDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -55,7 +56,6 @@ const AppRoutes = () => {
   return (
     <Router>
       <Routes>
-        {/* Bọc layout chung */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<CustomerList />} />
           <Route path="/customeradd" element={<CustomerAdd></CustomerAdd>} />
@@ -89,6 +89,7 @@ const AppRoutes = () => {
           <Route path="/caselist" element={<CaseList></CaseList>} />
           <Route path="/caseadd" element={<CaseAdd></CaseAdd>} />
           <Route path="/caseedit/:maHoSoVuViec" element={<CaseEdit></CaseEdit>} />
+          <Route path="/casedetail/:maHoSoVuViec" element={<CaseDetail></CaseDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

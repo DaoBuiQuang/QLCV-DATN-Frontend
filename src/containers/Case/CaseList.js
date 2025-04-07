@@ -30,7 +30,7 @@ function CaseList() {
                 method: "post",
                 endpoint: "/case/list",
                 data: {
-                    noiDungVuViec: searchValue,
+                    searchText: searchValue,
                     maDoiTac: partnerId,
                     maQuocGia: countryId,
                     maKhachHang: customerId,
@@ -94,7 +94,7 @@ function CaseList() {
         }
     };
     useEffect(() => {
-        fetchCases("");
+        // fetchCases("");
         fetchCountries();
         fetchPartners();
         fetchCustomers();
@@ -149,7 +149,7 @@ function CaseList() {
                         options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                         value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
                         onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
-                        placeholder="🌍 Chọn quốc gia"
+                        placeholder="Chọn quốc gia"
                         className="w-full md:w-1/6"
                         isClearable
                     />
@@ -158,7 +158,7 @@ function CaseList() {
                         options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                         value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
                         onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
-                        placeholder="🤝 Chọn đối tác"
+                        placeholder="Chọn đối tác"
                         className="w-full md:w-1/6"
                         isClearable
                     />
@@ -167,7 +167,7 @@ function CaseList() {
                         options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                         value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
                         onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
-                        placeholder="🧑‍💼 Chọn khách hàng"
+                        placeholder="Chọn khách hàng"
                         className="w-full md:w-1/6"
                         isClearable
                     />

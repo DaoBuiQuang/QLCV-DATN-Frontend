@@ -43,7 +43,7 @@ function CaseTypeList() {
               🔎 Tìm kiếm
             </button>
             <button
-              onClick={() => navigate("/casetypeadd")} // Chuyển hướng khi bấm nút
+              onClick={() => navigate("/casetypeadd")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               ➕ Thêm mới

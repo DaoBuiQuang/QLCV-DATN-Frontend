@@ -8,7 +8,7 @@ function CaseAdd() {
     const [maKhachHang, setMaKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
-    const [ngayTiepNhan, setNgayTiepNhan] = useState("");
+    const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
     const [ngayXuLy, setNgayXuLy] = useState(null);
     const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
     const [maQuocGia, setMaQuocGia] = useState("");
@@ -46,9 +46,9 @@ function CaseAdd() {
 
     const handleSelectChange = (selectedOption, vaiTro) => {
         setNhanSuVuViec(prevState => {
-            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro); // Xóa nhân sự cũ có cùng vai trò
+            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro); 
             if (selectedOption) {
-                updatedList.push({ maNhanSu: selectedOption.value, vaiTro }); // Thêm nhân sự mới
+                updatedList.push({ maNhanSu: selectedOption.value, vaiTro }); 
             }
             return updatedList;
         });
