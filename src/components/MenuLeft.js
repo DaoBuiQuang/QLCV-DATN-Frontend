@@ -95,6 +95,16 @@ function MenuLeft() {
                     </li>
                     <li>
                         <NavLink
+                            to="/applicationtypelist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/applicationtypelist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <Layers size={16} />
+                            <span>Loại đơn đăng kí</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
                             to="/settings"
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                                 }`}

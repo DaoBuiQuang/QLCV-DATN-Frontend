@@ -30,6 +30,10 @@ import CaseList from "../containers/Case/CaseList";
 import CaseAdd from "../containers/Case/CaseAdd";
 import CaseEdit from "../containers/Case/CaseEdit";
 import CaseDetail from "../containers/Case/CaseDetail";
+import ApplicationTypeList from "../containers/ApplicationType/ApplicationTypeList";
+import ApplicationTypeAdd from "../containers/ApplicationType/ApplicationTypeAdd";
+import ApplicationTypeEdit from "../containers/ApplicationType/ApplicationTypeEdit";
+import ApplicationTypeDetail from "../containers/ApplicationType/ApplicationTypeDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -90,6 +94,11 @@ const AppRoutes = () => {
           <Route path="/caseadd" element={<CaseAdd></CaseAdd>} />
           <Route path="/caseedit/:maHoSoVuViec" element={<CaseEdit></CaseEdit>} />
           <Route path="/casedetail/:maHoSoVuViec" element={<CaseDetail></CaseDetail>} />
+
+          <Route path="/applicationtypelist" element={<ApplicationTypeList></ApplicationTypeList>} />
+          <Route path="/applicationtypeadd" element={<ApplicationTypeAdd></ApplicationTypeAdd>} />
+          <Route path="/applicationtypeedit/:maLoaiDon" element={<ApplicationTypeEdit></ApplicationTypeEdit>} />
+          <Route path="/applicationtypedetail/:maLoaiDon" element={<ApplicationTypeDetail></ApplicationTypeDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

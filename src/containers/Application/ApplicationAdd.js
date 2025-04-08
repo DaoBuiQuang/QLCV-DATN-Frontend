@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
-function CaseAdd() {
+function ApplicationAdd() {
     const navigate = useNavigate();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maKhachHang, setMaKhachHang] = useState("");
@@ -13,8 +13,6 @@ function CaseAdd() {
     const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
     const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
-    // const [ngayTao, setNgayTao] = useState("");
-    // const [ngayCapNhap, setNgayCapNhap] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
     const [nhanSuVuViec, setNhanSuVuViec] = useState([]);
     const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState(null);
@@ -157,6 +155,15 @@ function CaseAdd() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="flex-1">
+                        <label className="block text-gray-700 text-left">Mã đơn đăng kí</label>
+                        <input
+                            type="text"
+                            value={maHoSoVuViec}
+                            onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                        />
+                    </div>
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                         <input
@@ -168,7 +175,7 @@ function CaseAdd() {
                     </div>
 
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Tên khách hàng </label>
+                        <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                             value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
@@ -180,17 +187,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Nội dung vụ việc</label>
-                        <input
-                            type="text"
-                            value={noiDungVuViec}
-                            onChange={(e) => setNoiDungVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày tiếp nhận</label>
+                        <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
                         <input
                             type="date"
                             value={ngayTiepNhan}
@@ -200,7 +197,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Ngày xử lý</label>
+                        <label className="block text-gray-700 text-left">Ngày hoàn thành hồ sơ tài liệu</label>
                         <input
                             type="date"
                             value={ngayXuLy}
@@ -208,55 +205,8 @@ function CaseAdd() {
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
-
                     <div>
-                        <label className="block text-gray-700 text-left">Loại vụ việc</label>
-                        <Select
-                            options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
-                            value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
-                            onChange={selectedOption => setMaLoaiVuViec(selectedOption?.value)}
-                            placeholder="Chọn loại vụ việc"
-                            className="w-full  mt-1  rounded-lg"
-                            isClearable
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Quốc gia vụ việc</label>
-                        <Select
-                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
-                            placeholder="Chọn quốc gia"
-                            className="w-full  mt-1  rounded-lg"
-                            isClearable
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Đối tác</label>
-                        <Select
-                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
-                            value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
-                            onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
-                            placeholder="Chọn đối tác"
-                            className="w-full  mt-1  rounded-lg"
-                            isClearable
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Trạng thái vụ việc</label>
-                        <Select
-                            options={formatOptions(statusOptions, "value", "label")}
-                            value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
-                            onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
-                            placeholder="Chọn trạng thái"
-                            className="w-full mt-1 rounded-lg"
-                            isClearable
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Bước xử lý hiện tại</label>
+                        <label className="block text-gray-700 text-left">Trạng thái hoàn thành hồ sơ tài liệu</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
                             value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
@@ -267,29 +217,138 @@ function CaseAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Người xử lí chính</label>
-                        <Select
-                            options={formatOptions(staffs, "maNhanSu", "hoTen")}
-                            value={nguoiXuLyChinh}
-                            onChange={(selectedOption) => {
-                                setNguoiXuLyChinh(selectedOption);
-                                handleSelectChange(selectedOption, "Chính");
-                            }}
-                            placeholder="Chọn người xử lí chính"
-                            className="w-full mt-1 rounded-lg"
-                            isClearable
+                        <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ dự kiến</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Người xử lí phụ</label>
+                        <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày công bố đơn dự kiến</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày công bố đơn</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày thông báo cấp bằng</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày nộp phí cấp bằng</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày nhận bằng</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày gửi bằng cho khách hàng</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <label className="block text-gray-700 text-left">Số bằng</label>
+                        <input
+                            type="text"
+                            value={maHoSoVuViec}
+                            onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày cấp bằng</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày hết hạn bằng</label>
+                        <input
+                            type="date"
+                            value={ngayXuLy}
+                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                         <Select
-                            options={formatOptions(staffs, "maNhanSu", "hoTen")}
-                            value={nguoiXuLyPhu}
-                            onChange={(selectedOption) => {
-                                setNguoiXuLyPhu(selectedOption);
-                                handleSelectChange(selectedOption, "Phụ");
-                            }}
-                            placeholder="Chọn người xử lí phụ"
+                            options={formatOptions(processSteps, "value", "label")}
+                            value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
+                            onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
+                            placeholder="Chọn bước xử lý"
                             className="w-full mt-1 rounded-lg"
                             isClearable
                         />
@@ -305,4 +364,4 @@ function CaseAdd() {
     );
 }
 
-export default CaseAdd;
+export default ApplicationAdd;
