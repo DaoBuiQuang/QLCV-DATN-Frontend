@@ -34,12 +34,12 @@ function MenuLeft() {
                     </li>
                     <li>
                         <NavLink
-                            to="/dashboard"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/dashboard" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                            to="/applicationlist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/applicationlist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                                 }`}
                         >
                             <PieChart size={16} />
-                            <span>Biểu đồ</span>
+                            <span>Đơn đăng kí</span>
                         </NavLink>
                     </li>
                     <li>

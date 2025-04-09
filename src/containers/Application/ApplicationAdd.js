@@ -5,6 +5,12 @@ import Select from "react-select";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
+    const [maLoaiDon, setMaLoaiDon] = useState("")
+
+    const [ngayXuLy, setNgayXuLy] = useState("")
+    const [ngayTiepNhan, setNgayTiepNhan] = useState("")
+    const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("")
+
     const [ngayNopDon, setNgayNopDon] = useState("");
     const [ngayHoanThanhHoSo, setNgayHoanThanhHoSo] = useState("");
     const [ngayQDHopLeDuKien, setNgayQDHopLeDuKien] = useState("");
@@ -38,16 +44,6 @@ function ApplicationAdd() {
             value: item[valueKey],
             label: item[labelKey]
         }));
-    };
-
-    const handleSelectChange = (selectedOption, vaiTro) => {
-        setNhanSuVuViec(prevState => {
-            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro);
-            if (selectedOption) {
-                updatedList.push({ maNhanSu: selectedOption.value, vaiTro });
-            }
-            return updatedList;
-        });
     };
 
     const fetchCountries = async () => {
@@ -127,18 +123,7 @@ function ApplicationAdd() {
                 method: "post",
                 endpoint: "/case/add",
                 data: {
-                    maHoSoVuViec,
-                    maKhachHang,
-                    noiDungVuViec,
-                    ngayTiepNhan,
-                    ngayXuLy,
-                    maLoaiVuViec,
-                    maQuocGia,
-                    trangThaiVuViec,
-                    // ngayTao,
-                    // ngayCapNhap,
-                    buocXuLyHienTai,
-                    nhanSuVuViec
+                   
                 },
             });
             alert("Thêm hồ sơ vụ việc thành công!");
@@ -176,8 +161,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
-                            value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
-                            onChange={selectedOption => setMaKhachHang(selectedOption?.value)}
+                            value={maLoaiDon ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maLoaiDon) : null}
+                            onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
                             placeholder="Chọn khách hàng"
                             className="w-full mt-1 rounded-lg h-10"
                             isClearable
