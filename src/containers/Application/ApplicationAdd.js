@@ -4,29 +4,35 @@ import callAPI from "../../utils/api";
 import Select from "react-select";
 function ApplicationAdd() {
     const navigate = useNavigate();
+    const [maDonDangKy, setMaDonDangKy] = useState("");
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maLoaiDon, setMaLoaiDon] = useState("")
 
-    const [ngayXuLy, setNgayXuLy] = useState("")
-    const [ngayTiepNhan, setNgayTiepNhan] = useState("")
-    const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("")
+    const [ngayNopDon, setNgayNopDon] = useState(null);
+    const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
+    const [trangThaiHoanThanhHSTL, setTrangThaiHoanThanhHSTL] = useState("");
 
-    const [ngayNopDon, setNgayNopDon] = useState("");
-    const [ngayHoanThanhHoSo, setNgayHoanThanhHoSo] = useState("");
-    const [ngayQDHopLeDuKien, setNgayQDHopLeDuKien] = useState("");
-    const [ngayQDHopLe, setNgayQDHopLe] = useState("");
-    const [ngayCongBoDuKien, setNgayCongBoDuKien] = useState("");
-    const [ngayCongBo, setNgayCongBo] = useState("");
-    const [ngayThamDinhND_DuKien, setNgayThamDinhND_DuKien] = useState("");
-    const [ngayThamDinhND, setNgayThamDinhND] = useState("");
-    const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState("");
+    const [ngayQDHopLe_DuKien, setNgayQDHopLe_DuKien] = useState(null);
+    const [ngayQDHopLe, setNgayQDHopLe] = useState(null);
 
+    const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
+    const [ngayCongBo, setNgayCongBo] = useState(null);
 
-    const [casetypes, setCasetypes] = useState([]);
-    const [countries, setCountries] = useState([]);
-    const [customers, setCustomers] = useState([]);
-    const [partners, setPartners] = useState([]);
-    const [staffs, setStaffs] = useState([]);
+    const [ngayThamDinhND_DuKien, setNgayThamDinhND_DuKien] = useState(null);
+    const [ngayThamDinhND, setNgayThamDinhND] = useState(null);
+    const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
+
+    const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
+    const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
+    const [ngayNhanBang, setNgayNhanBang] = useState(null);
+    const [ngayGuiBangChoKH, setNgayGuiBangChoKH] = useState(null);
+    const [soBang, setSoBang] = useState("");
+    const [ngayCapBang, setNgayCapBang] = useState(null);
+    const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
+
+    const [trangThaiDon, setTrangThaiDon] = useState("");
+
+    const [applicationtypes, setApplicationTypes] = useState([]);
     const processSteps = [
         { value: "buoc_1", label: "Bước 1: Tiếp nhận" },
         { value: "buoc_2", label: "Bước 2: Xử lý" },
@@ -46,74 +52,21 @@ function ApplicationAdd() {
         }));
     };
 
-    const fetchCountries = async () => {
+    
+    const fetchApplicationTypes = async () => {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/country/list",
+                endpoint: "/applicationtype/all",
                 data: {},
             });
-            setCountries(response);
+            setApplicationTypes(response);
         } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
-        }
-    };
-
-    const fetchPartners = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/partner/list",
-                data: {},
-            });
-            setPartners(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
-        }
-    };
-
-    const fetchCustomers = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/customers/by-name",
-                data: {},
-            });
-            setCustomers(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu khách hàng", error);
-        }
-    };
-    const fetchCaseTypes = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/casetype/list",
-                data: {},
-            });
-            setCasetypes(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu loại nghề nghiệp:", error);
-        }
-    };
-    const fetchStaffs = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/staff/basiclist",
-                data: {},
-            });
-            setStaffs(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu nhân sự:", error);
+            console.error("Lỗi khi lấy dữ liệu loại đơn", error);
         }
     };
     useEffect(() => {
-        fetchCountries();
-        fetchPartners();
-        fetchCustomers();
-        fetchCaseTypes();
-        fetchStaffs();
+        fetchApplicationTypes();
     }, []);
 
     // Add case
@@ -136,14 +89,14 @@ function ApplicationAdd() {
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Mã đơn đăng kí</label>
                         <input
                             type="text"
-                            value={maHoSoVuViec}
-                            onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                            value={maDonDangKy}
+                            onChange={(e) => setMaDonDangKy(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
@@ -160,10 +113,10 @@ function ApplicationAdd() {
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
                         <Select
-                            options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
-                            value={maLoaiDon ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maLoaiDon) : null}
+                            options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
+                            value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
                             onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
-                            placeholder="Chọn khách hàng"
+                            placeholder="Chọn loại đơn đăng kí"
                             className="w-full mt-1 rounded-lg h-10"
                             isClearable
                         />
@@ -173,8 +126,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
                         <input
                             type="date"
-                            value={ngayTiepNhan}
-                            onChange={(e) => setNgayTiepNhan(e.target.value)}
+                            value={ngayNopDon}
+                            onChange={(e) => setNgayNopDon(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -183,8 +136,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày hoàn thành hồ sơ tài liệu</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayHoanThanhHSTL}
+                            onChange={(e) => setNgayHoanThanhHSTL(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -192,9 +145,9 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Trạng thái hoàn thành hồ sơ tài liệu</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
-                            value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
-                            onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
-                            placeholder="Chọn bước xử lý"
+                            value={trangThaiHoanThanhHSTL ? processSteps.find(opt => opt.value === trangThaiHoanThanhHSTL) : null}
+                            onChange={selectedOption => setTrangThaiHoanThanhHSTL(selectedOption?.value)}
+                            placeholder="Chọn trạng thái hoàn thành hồ sơ vụ việc"
                             className="w-full mt-1 rounded-lg"
                             isClearable
                         />
@@ -203,8 +156,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ dự kiến</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayQDHopLe_DuKien}
+                            onChange={(e) => setNgayQDHopLe_DuKien(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -212,8 +165,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayQDHopLe}
+                            onChange={(e) => setNgayQDHopLe(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -221,8 +174,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày công bố đơn dự kiến</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayCongBo_DuKien}
+                            onChange={(e) => setNgayCongBo_DuKien(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -230,8 +183,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày công bố đơn</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayCongBo}
+                            onChange={(e) => setNgayCongBo(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -239,8 +192,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayThamDinhND_DuKien}
+                            onChange={(e) => setNgayThamDinhND_DuKien(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -248,8 +201,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayThamDinhND}
+                            onChange={(e) => setNgayThamDinhND(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -257,8 +210,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayTraLoiKQThamDinhND}
+                            onChange={(e) => setNgayTraLoiKQThamDinhND(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -266,8 +219,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày thông báo cấp bằng</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayThongBaoCapBang}
+                            onChange={(e) => setNgayThongBaoCapBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -275,8 +228,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày nộp phí cấp bằng</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayNopPhiCapBang}
+                            onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -284,8 +237,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày nhận bằng</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayNhanBang}
+                            onChange={(e) => setNgayNhanBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -293,8 +246,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày gửi bằng cho khách hàng</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayGuiBangChoKH}
+                            onChange={(e) => setNgayGuiBangChoKH(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -302,8 +255,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Số bằng</label>
                         <input
                             type="text"
-                            value={maHoSoVuViec}
-                            onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                            value={soBang}
+                            onChange={(e) => setSoBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
@@ -311,8 +264,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày cấp bằng</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayCapBang}
+                            onChange={(e) => setNgayCapBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -320,8 +273,8 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Ngày hết hạn bằng</label>
                         <input
                             type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
+                            value={ngayHetHanBang}
+                            onChange={(e) => setNgayHetHanBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
@@ -329,9 +282,9 @@ function ApplicationAdd() {
                         <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
-                            value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
-                            onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
-                            placeholder="Chọn bước xử lý"
+                            value={trangThaiDon ? processSteps.find(opt => opt.value === trangThaiDon) : null}
+                            onChange={selectedOption => setTrangThaiDon(selectedOption?.value)}
+                            placeholder="Chọn trạng thái đơn"
                             className="w-full mt-1 rounded-lg"
                             isClearable
                         />
@@ -340,7 +293,7 @@ function ApplicationAdd() {
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleAddCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm hồ sơ vụ việc</button>
+                    <button onClick={handleAddCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
                 </div>
             </div>
         </div>
