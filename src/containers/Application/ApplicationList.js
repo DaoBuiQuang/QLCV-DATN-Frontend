@@ -1,26 +1,48 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
+import Select from "react-select";
 function ApplicationList() {
-  const [casetypes, setCaseTypes] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); 
+  const [applicationTypes, setApplicationTypes] = useState([]);
+  const [selectedApplicationTypes, setSelectedApplicationType] = useState("");
 
-  const fetchCaseTypes = async (searchValue) => {
+  const navigate = useNavigate();
+
+  const fetchApplications = async (searchValue) => {
     try {
       const response = await callAPI({
         method: "post",
-        endpoint: "/casetype/list",
+        endpoint: "/application/list",
         data: { search: searchValue },
       });
-      setCaseTypes(response);
+      setApplications(response);
     } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu loại nghề nghiệp:", error);
+      console.error("Lỗi khi lấy danh sách đơn đăng ký:", error);
     }
   };
-
+  const fetchApplicationTypes = async () => {
+    try {
+      const response = await callAPI({
+        method: "post",
+        endpoint: "/applicationtype/all",
+        data:{}
+      })
+      setApplicationTypes(response)
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu loại đơn: ", error)
+    }
+  }
+  const formatOptions = (data, valueKey, labelKey) => {
+    return data.map(item => ({
+      value: item[valueKey],
+      label: item[labelKey]
+    }));
+  };
   useEffect(() => {
-    fetchCaseTypes("");
+    fetchApplications("");
+    fetchApplicationTypes();
   }, []);
 
   return (
@@ -32,12 +54,12 @@ function ApplicationList() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="🔍 Nhập tên ngành nghề"
+            placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
             className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <div className="flex gap-3">
             <button
-              onClick={() => fetchCaseTypes(searchTerm)}
+              onClick={() => fetchApplications(searchTerm)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               🔎 Tìm kiếm
@@ -49,43 +71,71 @@ function ApplicationList() {
               ➕ Thêm mới
             </button>
           </div>
+        
         </div>
+        <div className="flex flex-wrap gap-3">
+            <Select
+              options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
+              value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
+              onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
+              placeholder="Chọn loại đơn"
+              className="w-full md:w-1/6"
+              isClearable
+            />
 
-
+          </div>
       </div>
+
       <table className="w-full border-collapse bg-white text-sm mt-4">
         <thead>
           <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-            <th className="p-2 font-normal">STT</th>
-            <th className="p-2 font-normal">Mã loại vụ việc</th>
-            <th className="p-2 font-normal">Tên loại vụ việc</th>
-            <th className="p-2 font-normal">Mô tả</th>
-            <th className="p-2 text-center"></th>
+            <th className="p-2">STT</th>
+            <th className="p-2">Mã đơn</th>
+            <th className="p-2">Mã hồ sơ</th>
+            <th className="p-2">Loại đơn</th>
+            <th className="p-2">Ngày nộp đơn</th>
+            <th className="p-2">Ngày hoàn thành hồ sơ tài liệu</th>
+            <th className="p-2">Trạng thái hoàn thành hồ sơ tài liệu</th>
+            <th className="p-2">Ngày quyết định đơn hợp lệ dự kiến</th>
+            <th className="p-2">Ngày quyết định đơn hợp lệ</th>
+            <th className="p-2">Ngày công bố đơn dự kiến</th>
+            <th className="p-2">Ngày công bố đơn</th>
+            <th className="p-2">Ngày thẩm định nội dung dự kiến</th>
+            <th className="p-2">Ngày kết quả thâm định nội dung</th>
+            <th className="p-2">Trạng thái đơn</th>
+            <th className="p-2"></th>
           </tr>
         </thead>
         <tbody>
-          {casetypes.map((casetype, index) => (
-            <tr
-              key={casetype.id}
-              className="hover:bg-gray-100 text-center border-b"
-            >
+          {applications.map((app, index) => (
+            <tr key={app.maDonDangKy} className="hover:bg-gray-100 text-center border-b">
               <td className="p-2">{index + 1}</td>
               <td
                 className="p-2 text-blue-500 cursor-pointer hover:underline"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/casetypedetail/${casetype.maLoaiVuViec}`);
+                  navigate(`/applicationdetail/${app.maDonDangKy}`);
                 }}
               >
-                {casetype.maLoaiVuViec}
+                {app.maDonDangKy}
               </td>
-              <td className="p-2">{casetype.tenLoaiVuViec}</td>
-              <td className="p-2">{casetype.moTa}</td>
+              <td className="p-2">{app.maHoSoVuViec}</td>
+              <td className="p-2">{app.tenLoaiDon}</td>
+              <td className="p-2">{new Date(app.ngayNopDon).toLocaleDateString()}</td>
+              <td className="p-2">{new Date(app.ngayHoanThanhHoSoTaiLieu).toLocaleDateString()}</td>
+              <td className="p-2">{app.trangThaiHoanThienHoSoTaiLieu}</td>
+              <td className="p-2">{new Date(app.ngayQuyetDinhDonHopLeDuKien).toLocaleDateString()}</td>
+              <td className="p-2">{new Date(app.ngayQuyetDinhDonHopLe).toLocaleDateString()}</td>
+              <td className="p-2">{new Date(app.ngayCongBoDonDuKien).toLocaleDateString()}</td>
+              <td className="p-2">{new Date(app.ngayCongBoDon).toLocaleDateString()}</td>
+              <td className="p-2">{new Date(app.ngayThamDinhNoiDungDuKien).toLocaleDateString()}</td>
+              <td className="p-2">{new Date(app.ngayKetQuaThamDinhNoiDung).toLocaleDateString()}</td>
+              <td className="p-2">{app.trangThaiDon}</td>
               <td className="p-2">
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-center">
                   <button
                     className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                    onClick={() => navigate(`/casetypeedit/${casetype.maLoaiVuViec}`)}
+                    onClick={() => navigate(`/applicationedit/${app.maDonDangKy}`)}
                   >
                     📝
                   </button>
