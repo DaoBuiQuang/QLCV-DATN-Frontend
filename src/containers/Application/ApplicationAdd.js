@@ -33,10 +33,9 @@ function ApplicationAdd() {
     const [trangThaiDon, setTrangThaiDon] = useState("");
 
     const [applicationtypes, setApplicationTypes] = useState([]);
-    const processSteps = [
-        { value: "buoc_1", label: "Bước 1: Tiếp nhận" },
-        { value: "buoc_2", label: "Bước 2: Xử lý" },
-        { value: "buoc_3", label: "Bước 3: Hoàn tất" }
+    const processStatus = [
+        { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
+        { value: "hoan_thanh", label: "Hoàn thành" }
     ];
     const statusOptions = [
         { value: "dang_xu_ly", label: "Đang xử lý" },
@@ -70,13 +69,32 @@ function ApplicationAdd() {
     }, []);
 
     // Add case
-    const handleAddCase = async () => {
+    const handleApplication = async () => {
         try {
             await callAPI({
                 method: "post",
-                endpoint: "/case/add",
+                endpoint: "/application/add",
                 data: {
-                   
+                   maDonDangKy,
+                   maHoSoVuViec,
+                   maLoaiDon,
+                   ngayNopDon,
+                   ngayHoanThanhHSTL,
+                   trangThaiHoanThanhHSTL,
+                   ngayQDHopLe_DuKien,
+                   ngayQDHopLe,
+                   ngayCongBo_DuKien,
+                   ngayCongBo,
+                   ngayThamDinhND_DuKien,
+                   ngayThamDinhND,
+                   ngayTraLoiKQThamDinhND,
+                   ngayThongBaoCapBang,
+                   ngayNopPhiCapBang,
+                   ngayNhanBang,
+                   ngayGuiBangChoKH,
+                   trangThaiDon,
+                   ngayCapBang,
+                   ngayHetHanBang
                 },
             });
             alert("Thêm hồ sơ vụ việc thành công!");
@@ -144,8 +162,8 @@ function ApplicationAdd() {
                     <div>
                         <label className="block text-gray-700 text-left">Trạng thái hoàn thành hồ sơ tài liệu</label>
                         <Select
-                            options={formatOptions(processSteps, "value", "label")}
-                            value={trangThaiHoanThanhHSTL ? processSteps.find(opt => opt.value === trangThaiHoanThanhHSTL) : null}
+                            options={formatOptions(processStatus, "value", "label")}
+                            value={trangThaiHoanThanhHSTL ? processStatus.find(opt => opt.value === trangThaiHoanThanhHSTL) : null}
                             onChange={selectedOption => setTrangThaiHoanThanhHSTL(selectedOption?.value)}
                             placeholder="Chọn trạng thái hoàn thành hồ sơ vụ việc"
                             className="w-full mt-1 rounded-lg"
@@ -281,8 +299,8 @@ function ApplicationAdd() {
                     <div>
                         <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                         <Select
-                            options={formatOptions(processSteps, "value", "label")}
-                            value={trangThaiDon ? processSteps.find(opt => opt.value === trangThaiDon) : null}
+                            options={formatOptions(statusOptions, "value", "label")}
+                            value={trangThaiDon ? statusOptions.find(opt => opt.value === trangThaiDon) : null}
                             onChange={selectedOption => setTrangThaiDon(selectedOption?.value)}
                             placeholder="Chọn trạng thái đơn"
                             className="w-full mt-1 rounded-lg"
@@ -293,7 +311,7 @@ function ApplicationAdd() {
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleAddCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
+                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
                 </div>
             </div>
         </div>
