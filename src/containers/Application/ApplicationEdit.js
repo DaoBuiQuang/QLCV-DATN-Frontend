@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
-import Modal from 'react-modal';
-import AddDocumentModal from "../../components/AddDocumentModal";
-import DocumentSection from "../../components/DocumentSection";
-function ApplicationAdd() {
+function ApplicationEdit() {
     const navigate = useNavigate();
-    const [maDonDangKy, setMaDonDangKy] = useState("");
+    const { maDonDangKy } = useParams();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
-    const [maLoaiDon, setMaLoaiDon] = useState("")
+    const [maLoaiDon, setMaLoaiDon] = useState("");
 
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
@@ -87,7 +84,10 @@ function ApplicationAdd() {
         }
 
     }, [ngayNopDon, ngayThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayQDHopLe]);
-
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        return new Date(dateString).toISOString().split("T")[0];
+    };
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -95,7 +95,6 @@ function ApplicationAdd() {
             label: item[labelKey]
         }));
     };
-
 
     const fetchApplicationTypes = async () => {
         try {
@@ -111,73 +110,94 @@ function ApplicationAdd() {
     };
     useEffect(() => {
         fetchApplicationTypes();
+        detailApplication();
     }, []);
+    const detailApplication = async () => {
+        try {
+            debugger;
+            const response = await callAPI({
+                method: "post",
+                endpoint: "application/detail",
+                data: { maDonDangKy }
+            });
+
+            if (response) {
+                setMaHoSoVuViec(response.maHoSoVuViec);
+                setMaLoaiDon(response.maLoaiDon);
+                setNgayNopDon(formatDate(response.ngayNopDon));
+                setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
+                setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
+                setNgayQDHopLe_DuKien(formatDate(response.ngayQuyetDinhDonHopLeDuKien));
+                setNgayQDHopLe(formatDate(response.ngayQuyetDinhDonHopLe));
+                setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
+                setNgayCongBo(formatDate(response.ngayCongBoDon));
+                setNgayThamDinhND_DuKien(formatDate(response.ngayThamDinhNoiDungDuKien));
+                setNgayThamDinhND(formatDate(response.ngayKetQuaThamDinhNoiDung));
+                setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKetQuaThamDinhNoiDungDuKien));
+                setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKetQuaThamDinhNoiDung));
+                setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
+                setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
+                setNgayNhanBang(formatDate(response.ngayNhanBang));
+                setNgayGuiBangChoKH(formatDate(response.ngayGuiBangChoKhachHang));
+                setSoBang(response.soBang);
+                setNgayCapBang(formatDate(response.ngayCapBang));
+                setNgayHetHanBang(formatDate(response.ngayHetHanBang));
+                setTrangThaiDon(response.trangThaiDon);
+            }
+        } catch (error) {
+            console.error("Lỗi khi gọi API chi tiết đơn:", error);
+        }
+    };
 
     // Add case
     const handleApplication = async () => {
         try {
             await callAPI({
-                method: "post",
-                endpoint: "/application/add",
+                method: "put",
+                endpoint: "/application/edit",
                 data: {
                     maDonDangKy: maDonDangKy,
                     maHoSoVuViec: maHoSoVuViec,
                     maLoaiDon: maLoaiDon,
-                    ngayNopDon: ngayNopDon,
-                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL,
-                    trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
-                    ngayQuyetDinhDonHopLeDuKien: ngayQDHopLe_DuKien,
-                    ngayQuyetDinhDonHopLe: ngayQDHopLe,
-                    ngayCongBoDonDuKien: ngayCongBo_DuKien,
-                    ngayCongBoDon: ngayCongBo,
-                    ngayThamDinhNoiDungDuKien: ngayThamDinhND_DuKien,
-                    ngayKetQuaThamDinhNoiDung: ngayThamDinhND,
-                    ngayTraLoiKetQuaThamDinhNoiDungDuKien: ngayTraLoiKQThamDinhND_DuKien,
-                    ngayTraLoiKetQuaThamDinhNoiDung: ngayTraLoiKQThamDinhND,
-                    ngayThongBaoCapBang: ngayThongBaoCapBang,
-                    ngayNopPhiCapBang: ngayNopPhiCapBang,
-                    ngayNhanBang: ngayNhanBang,
-                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH,
-                    trangThaiDon: trangThaiDon,
-                    ngayCapBang: ngayCapBang,
-                    ngayHetHanBang: ngayHetHanBang
+                    ngayNopDon: ngayNopDon || null,
+                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL || null,
+                    trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL || null,
+                    ngayQuyetDinhDonHopLeDuKien: ngayQDHopLe_DuKien || null,
+                    ngayQuyetDinhDonHopLe: ngayQDHopLe || null,
+                    ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
+                    ngayCongBoDon: ngayCongBo || null,
+                    ngayThamDinhNoiDungDuKien: ngayThamDinhND_DuKien || null,
+                    ngayKetQuaThamDinhNoiDung: ngayThamDinhND || null,
+                    ngayTraLoiKetQuaThamDinhNoiDungDuKien: ngayTraLoiKQThamDinhND_DuKien || null,
+                    ngayTraLoiKetQuaThamDinhNoiDung: ngayTraLoiKQThamDinhND || null,
+                    ngayThongBaoCapBang: ngayThongBaoCapBang || null,
+                    ngayNopPhiCapBang: ngayNopPhiCapBang || null,
+                    ngayNhanBang: ngayNhanBang || null,
+                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
+                    trangThaiDon: trangThaiDon || null,
+                    ngayCapBang: ngayCapBang || null,
+                    ngayHetHanBang: ngayHetHanBang || null
                 },
             });
-            alert("Thêm hồ sơ vụ việc thành công!");
+            alert("Sửa hồ sơ vụ việc thành công!");
             navigate(-1);
         } catch (error) {
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
-    /////
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [fileName, setFileName] = useState("");
-    const [file, setFile] = useState(null);
-    const [dsTaiLieu, setDsTaiLieu] = useState([]);
-
-    const handleAddTaiLieu = () => {
-        if (!file || !fileName) return alert("Vui lòng nhập tên và chọn file.");
-        const newFile = {
-            ten: fileName,
-            file: file
-        };
-        setDsTaiLieu([...dsTaiLieu, newFile]);
-        setFile(null);
-        setFileName("");
-        setIsModalOpen(false);
-    };
 
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Mã đơn đăng kí</label>
                         <input
                             type="text"
                             value={maDonDangKy}
-                            onChange={(e) => setMaDonDangKy(e.target.value)}
+                            disabled
+                            // onChange={(e) => setMaDonDangKy(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
@@ -188,6 +208,7 @@ function ApplicationAdd() {
                             value={maHoSoVuViec}
                             onChange={(e) => setMaHoSoVuViec(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg h-10"
+                            disabled
                         />
                     </div>
 
@@ -323,6 +344,7 @@ function ApplicationAdd() {
                         <input
                             type="date"
                             value={ngayNopPhiCapBang}
+                            disabled
                             onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
@@ -384,16 +406,14 @@ function ApplicationAdd() {
                         />
                     </div>
                 </div>
-                <DocumentSection></DocumentSection>
-
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
+                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
                 </div>
             </div>
         </div>
     );
 }
 
-export default ApplicationAdd;
+export default ApplicationEdit;

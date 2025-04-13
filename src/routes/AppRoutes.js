@@ -36,6 +36,8 @@ import ApplicationTypeEdit from "../containers/ApplicationType/ApplicationTypeEd
 import ApplicationTypeDetail from "../containers/ApplicationType/ApplicationTypeDetail";
 import ApplicationList from "../containers/Application/ApplicationList";
 import ApplicationAdd from "../containers/Application/ApplicationAdd";
+import ApplicationEdit from "../containers/Application/ApplicationEdit";
+import ApplicationDetail from "../containers/Application/ApplicationDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -104,6 +106,8 @@ const AppRoutes = () => {
 
           <Route path="/applicationlist" element={<ApplicationList></ApplicationList>} />
           <Route path="/applicationadd" element={<ApplicationAdd></ApplicationAdd>} />
+          <Route path="/applicationedit/:maDonDangKy" element={<ApplicationEdit></ApplicationEdit>} />
+          <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetail></ApplicationDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

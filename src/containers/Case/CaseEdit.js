@@ -45,7 +45,7 @@ function CaseEdit() {
     };
     const formatDate = (dateString) => {
         if (!dateString) return "";
-        return new Date(dateString).toISOString().split("T")[0]; // lấy phần YYYY-MM-DD
+        return new Date(dateString).toISOString().split("T")[0]; 
     };
 
     const handleSelectChange = (selectedOption, vaiTro) => {
@@ -60,7 +60,6 @@ function CaseEdit() {
 
     const fetchCaseDetail = async () => {
         try {
-            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "/case/detail",
@@ -190,7 +189,9 @@ function CaseEdit() {
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
-
+    const handleApplicationAdd = () => {
+        navigate("/applicationadd"); 
+    };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             {console.log("người xử lí: ", nguoiXuLyChinh)}
@@ -340,7 +341,7 @@ function CaseEdit() {
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleEditCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa hồ sơ vụ việc</button>
-                    <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
                         Tạo đơn đăng kí
                     </button>
                 </div>

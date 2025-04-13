@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
-import Modal from 'react-modal';
-import AddDocumentModal from "../../components/AddDocumentModal";
-import DocumentSection from "../../components/DocumentSection";
-function ApplicationAdd() {
+function ApplicationDetail() {
     const navigate = useNavigate();
-    const [maDonDangKy, setMaDonDangKy] = useState("");
+    const { maDonDangKy } = useParams();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
-    const [maLoaiDon, setMaLoaiDon] = useState("")
+    const [maLoaiDon, setMaLoaiDon] = useState("");
 
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
@@ -51,43 +48,39 @@ function ApplicationAdd() {
 
     useEffect(() => {
         if (ngayNopDon) {
-            const ngayQDHopLe = dayjs(ngayNopDon).add(1, 'month');
-            setNgayQDHopLe_DuKien(ngayQDHopLe.format('YYYY-MM-DD'));
-
+          const ngayQDHopLe = dayjs(ngayNopDon).add(1, 'month');
+          const ngayCongBo = ngayQDHopLe.add(2, 'month');
+          const ngayThamDinhND = ngayCongBo.add(9, 'month');
+          
+        //   const ngayTra
+      
+          setNgayQDHopLe_DuKien(ngayQDHopLe.format('YYYY-MM-DD'));
+          setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
+          setNgayThamDinhND_DuKien(ngayThamDinhND.format('YYYY-MM-DD'));
         } else {
-            setNgayQDHopLe_DuKien(null);
-
+          setNgayQDHopLe_DuKien(null);
+          setNgayCongBo_DuKien(null);
+          setNgayThamDinhND_DuKien(null);
         }
-        if (ngayQDHopLe) {
-            const ngayCongBo = dayjs(ngayQDHopLe).add(2, 'month');
-            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
-        } else {
-            setNgayCongBo_DuKien(null);
-        }
-
-        if (ngayCongBo) {
-            const ngayThamDinhND = dayjs(ngayCongBo).add(9, 'month');
-            setNgayThamDinhND_DuKien(ngayThamDinhND.format('YYYY-MM-DD'));
-        } else {
-            setNgayThamDinhND_DuKien(null);
-        }
-
         if (ngayThamDinhND) {
             const ngayTraLoiKQThamDinhND = dayjs(ngayThamDinhND).add(3, 'month');
             setNgayTraLoiKQThamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
         } else {
             setNgayTraLoiKQThamDinhND_DuKien(null);
         }
-
+        
         if (ngayThongBaoCapBang) {
             const ngayNopPhiCapBang = dayjs(ngayThongBaoCapBang).add(3, 'month');
             setNgayNopPhiCapBang(ngayNopPhiCapBang.format('YYYY-MM-DD'));
         } else {
             setNgayNopPhiCapBang(null);
         }
-
-    }, [ngayNopDon, ngayThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayQDHopLe]);
-
+        
+    }, [ngayNopDon, ngayThamDinhND, ngayThongBaoCapBang]);
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        return new Date(dateString).toISOString().split("T")[0]; 
+    };   
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -95,7 +88,6 @@ function ApplicationAdd() {
             label: item[labelKey]
         }));
     };
-
 
     const fetchApplicationTypes = async () => {
         try {
@@ -111,61 +103,44 @@ function ApplicationAdd() {
     };
     useEffect(() => {
         fetchApplicationTypes();
+        detailApplication();
     }, []);
-
-    // Add case
-    const handleApplication = async () => {
+    const detailApplication = async () => {
         try {
-            await callAPI({
-                method: "post",
-                endpoint: "/application/add",
-                data: {
-                    maDonDangKy: maDonDangKy,
-                    maHoSoVuViec: maHoSoVuViec,
-                    maLoaiDon: maLoaiDon,
-                    ngayNopDon: ngayNopDon,
-                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL,
-                    trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
-                    ngayQuyetDinhDonHopLeDuKien: ngayQDHopLe_DuKien,
-                    ngayQuyetDinhDonHopLe: ngayQDHopLe,
-                    ngayCongBoDonDuKien: ngayCongBo_DuKien,
-                    ngayCongBoDon: ngayCongBo,
-                    ngayThamDinhNoiDungDuKien: ngayThamDinhND_DuKien,
-                    ngayKetQuaThamDinhNoiDung: ngayThamDinhND,
-                    ngayTraLoiKetQuaThamDinhNoiDungDuKien: ngayTraLoiKQThamDinhND_DuKien,
-                    ngayTraLoiKetQuaThamDinhNoiDung: ngayTraLoiKQThamDinhND,
-                    ngayThongBaoCapBang: ngayThongBaoCapBang,
-                    ngayNopPhiCapBang: ngayNopPhiCapBang,
-                    ngayNhanBang: ngayNhanBang,
-                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH,
-                    trangThaiDon: trangThaiDon,
-                    ngayCapBang: ngayCapBang,
-                    ngayHetHanBang: ngayHetHanBang
-                },
-            });
-            alert("Thêm hồ sơ vụ việc thành công!");
-            navigate(-1);
+          debugger;
+          const response = await callAPI({
+            method: "post",
+            endpoint: "application/detail",
+            data: { maDonDangKy }
+          });
+      
+          if (response) {
+            setMaHoSoVuViec(response.maHoSoVuViec);
+            setMaLoaiDon(response.maLoaiDon);
+            setNgayNopDon(formatDate(response.ngayNopDon));
+            setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
+            setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
+            setNgayQDHopLe_DuKien(formatDate(response.ngayQuyetDinhDonHopLeDuKien));
+            setNgayQDHopLe(formatDate(response.ngayQuyetDinhDonHopLe));
+            setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
+            setNgayCongBo(formatDate(response.ngayCongBoDon));
+            setNgayThamDinhND_DuKien(formatDate(response.ngayThamDinhNoiDungDuKien));
+            setNgayThamDinhND(formatDate(response.ngayKetQuaThamDinhNoiDung));
+            setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKetQuaThamDinhNoiDungDuKien));
+            setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKetQuaThamDinhNoiDung));
+            setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
+            setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
+            setNgayNhanBang(formatDate(response.ngayNhanBang));
+            setNgayGuiBangChoKH(formatDate(response.ngayGuiBangChoKhachHang));
+            setSoBang(response.soBang);
+            setNgayCapBang(formatDate(response.ngayCapBang));
+            setNgayHetHanBang(formatDate(response.ngayHetHanBang));
+            setTrangThaiDon(response.trangThaiDon);
+          }
         } catch (error) {
-            console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
+          console.error("Lỗi khi gọi API chi tiết đơn:", error);
         }
-    };
-    /////
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [fileName, setFileName] = useState("");
-    const [file, setFile] = useState(null);
-    const [dsTaiLieu, setDsTaiLieu] = useState([]);
-
-    const handleAddTaiLieu = () => {
-        if (!file || !fileName) return alert("Vui lòng nhập tên và chọn file.");
-        const newFile = {
-            ten: fileName,
-            file: file
-        };
-        setDsTaiLieu([...dsTaiLieu, newFile]);
-        setFile(null);
-        setFileName("");
-        setIsModalOpen(false);
-    };
+      };
 
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
@@ -177,7 +152,8 @@ function ApplicationAdd() {
                         <input
                             type="text"
                             value={maDonDangKy}
-                            onChange={(e) => setMaDonDangKy(e.target.value)}
+                            disabled
+                            // onChange={(e) => setMaDonDangKy(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
@@ -188,6 +164,7 @@ function ApplicationAdd() {
                             value={maHoSoVuViec}
                             onChange={(e) => setMaHoSoVuViec(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg h-10"
+                            disabled
                         />
                     </div>
 
@@ -200,6 +177,7 @@ function ApplicationAdd() {
                             placeholder="Chọn loại đơn đăng kí"
                             className="w-full mt-1 rounded-lg h-10"
                             isClearable
+                            isDisabled
                         />
                     </div>
 
@@ -210,6 +188,7 @@ function ApplicationAdd() {
                             value={ngayNopDon}
                             onChange={(e) => setNgayNopDon(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
 
@@ -220,6 +199,7 @@ function ApplicationAdd() {
                             value={ngayHoanThanhHSTL}
                             onChange={(e) => setNgayHoanThanhHSTL(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -231,6 +211,7 @@ function ApplicationAdd() {
                             placeholder="Chọn trạng thái hoàn thành hồ sơ vụ việc"
                             className="w-full mt-1 rounded-lg"
                             isClearable
+                            isDisabled
                         />
                     </div>
                     <div>
@@ -241,6 +222,7 @@ function ApplicationAdd() {
                             onChange={(e) => setNgayQDHopLe_DuKien(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                             disabled
+                            
                         />
                     </div>
                     <div>
@@ -250,6 +232,7 @@ function ApplicationAdd() {
                             value={ngayQDHopLe}
                             onChange={(e) => setNgayQDHopLe(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -269,6 +252,7 @@ function ApplicationAdd() {
                             value={ngayCongBo}
                             onChange={(e) => setNgayCongBo(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -279,6 +263,7 @@ function ApplicationAdd() {
                             value={ngayThamDinhND_DuKien}
                             onChange={(e) => setNgayThamDinhND_DuKien(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            
                         />
                     </div>
                     <div>
@@ -288,6 +273,7 @@ function ApplicationAdd() {
                             value={ngayThamDinhND}
                             onChange={(e) => setNgayThamDinhND(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -298,6 +284,7 @@ function ApplicationAdd() {
                             disabled
                             onChange={(e) => setNgayTraLoiKQThamDinhND_DuKien(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            
                         />
                     </div>
                     <div>
@@ -307,6 +294,7 @@ function ApplicationAdd() {
                             value={ngayTraLoiKQThamDinhND}
                             onChange={(e) => setNgayTraLoiKQThamDinhND(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -316,6 +304,7 @@ function ApplicationAdd() {
                             value={ngayThongBaoCapBang}
                             onChange={(e) => setNgayThongBaoCapBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -323,6 +312,7 @@ function ApplicationAdd() {
                         <input
                             type="date"
                             value={ngayNopPhiCapBang}
+                            disabled
                             onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
@@ -334,6 +324,7 @@ function ApplicationAdd() {
                             value={ngayNhanBang}
                             onChange={(e) => setNgayNhanBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -343,6 +334,7 @@ function ApplicationAdd() {
                             value={ngayGuiBangChoKH}
                             onChange={(e) => setNgayGuiBangChoKH(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div className="flex-1">
@@ -352,6 +344,7 @@ function ApplicationAdd() {
                             value={soBang}
                             onChange={(e) => setSoBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg h-10"
+                            disabled
                         />
                     </div>
                     <div>
@@ -361,6 +354,7 @@ function ApplicationAdd() {
                             value={ngayCapBang}
                             onChange={(e) => setNgayCapBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -370,6 +364,7 @@ function ApplicationAdd() {
                             value={ngayHetHanBang}
                             onChange={(e) => setNgayHetHanBang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
+                            disabled
                         />
                     </div>
                     <div>
@@ -380,20 +375,19 @@ function ApplicationAdd() {
                             onChange={selectedOption => setTrangThaiDon(selectedOption?.value)}
                             placeholder="Chọn trạng thái đơn"
                             className="w-full mt-1 rounded-lg"
+                            isDisabled
                             isClearable
                         />
                     </div>
                 </div>
-                <DocumentSection></DocumentSection>
-
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
+                    {/* <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button> */}
                 </div>
             </div>
         </div>
     );
 }
 
-export default ApplicationAdd;
+export default ApplicationDetail;

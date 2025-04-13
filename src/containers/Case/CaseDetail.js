@@ -158,36 +158,9 @@ function CaseEdit() {
         fetchCaseTypes();
         fetchStaffs();
     }, []);
-
-    // Add case
-    // const handleEditCase = async () => {
-    //     try {
-    //         debugger
-    //         await callAPI({
-    //             method: "put",
-    //             endpoint: "/case/edit",
-    //             data: {
-    //                 maHoSoVuViec,
-    //                 maKhachHang,
-    //                 noiDungVuViec,
-    //                 ngayTiepNhan,
-    //                 ngayXuLy,
-    //                 maLoaiVuViec,
-    //                 maQuocGia,
-    //                 trangThaiVuViec,
-    //                 // ngayTao,
-    //                 // ngayCapNhap,
-    //                 buocXuLyHienTai,
-    //                 nhanSuVuViec
-    //             },
-    //         });
-    //         alert("Sửa hồ sơ vụ việc thành công!");
-    //         navigate(-1);
-    //     } catch (error) {
-    //         console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
-    //     }
-    // };
-
+    const handleApplicationAdd = () => {
+        navigate("/applicationadd"); 
+    };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             {console.log("người xử lí: ", nguoiXuLyChinh)}
@@ -349,6 +322,9 @@ function CaseEdit() {
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     {/* <button onClick={handleEditCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa hồ sơ vụ việc</button> */}
+                    <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                        Tạo đơn đăng kí
+                    </button>
                 </div>
             </div>
         </div>

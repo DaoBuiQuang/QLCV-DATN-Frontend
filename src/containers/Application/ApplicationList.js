@@ -27,7 +27,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/applicationtype/all",
-        data:{}
+        data: {}
       })
       setApplicationTypes(response)
     } catch (error) {
@@ -71,19 +71,19 @@ function ApplicationList() {
               ➕ Thêm mới
             </button>
           </div>
-        
+
         </div>
         <div className="flex flex-wrap gap-3">
-            <Select
-              options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
-              value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
-              onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
-              placeholder="Chọn loại đơn"
-              className="w-full md:w-1/6"
-              isClearable
-            />
+          <Select
+            options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
+            value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
+            onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
+            placeholder="Chọn loại đơn"
+            className="w-full md:w-1/6"
+            isClearable
+          />
 
-          </div>
+        </div>
       </div>
 
       <table className="w-full border-collapse bg-white text-sm mt-4">
@@ -121,15 +121,32 @@ function ApplicationList() {
               </td>
               <td className="p-2">{app.maHoSoVuViec}</td>
               <td className="p-2">{app.tenLoaiDon}</td>
-              <td className="p-2">{new Date(app.ngayNopDon).toLocaleDateString()}</td>
-              <td className="p-2">{new Date(app.ngayHoanThanhHoSoTaiLieu).toLocaleDateString()}</td>
+              <td className="p-2">
+                {app.ngayNopDon ? new Date(app.ngayNopDon).toLocaleDateString() : ""}
+              </td>
+              <td className="p-2">
+                {app.ngayHoanThanhHoSoTaiLieu ? new Date(app.ngayHoanThanhHoSoTaiLieu).toLocaleDateString() : ""}
+              </td>
               <td className="p-2">{app.trangThaiHoanThienHoSoTaiLieu}</td>
-              <td className="p-2">{new Date(app.ngayQuyetDinhDonHopLeDuKien).toLocaleDateString()}</td>
-              <td className="p-2">{new Date(app.ngayQuyetDinhDonHopLe).toLocaleDateString()}</td>
-              <td className="p-2">{new Date(app.ngayCongBoDonDuKien).toLocaleDateString()}</td>
-              <td className="p-2">{new Date(app.ngayCongBoDon).toLocaleDateString()}</td>
-              <td className="p-2">{new Date(app.ngayThamDinhNoiDungDuKien).toLocaleDateString()}</td>
-              <td className="p-2">{new Date(app.ngayKetQuaThamDinhNoiDung).toLocaleDateString()}</td>
+              <td className="p-2">
+                {app.ngayQuyetDinhDonHopLeDuKien ? new Date(app.ngayQuyetDinhDonHopLeDuKien).toLocaleDateString() : ""}
+              </td>
+              <td className="p-2">
+                {app.ngayQuyetDinhDonHopLe ? new Date(app.ngayQuyetDinhDonHopLe).toLocaleDateString() : ""}
+              </td>
+              <td className="p-2">
+                {app.ngayCongBoDonDuKien ? new Date(app.ngayCongBoDonDuKien).toLocaleDateString() : ""}
+              </td>
+              <td className="p-2">
+                {app.ngayCongBoDon ? new Date(app.ngayCongBoDon).toLocaleDateString() : ""}
+              </td>
+              <td className="p-2">
+                {app.ngayThamDinhNoiDungDuKien ? new Date(app.ngayThamDinhNoiDungDuKien).toLocaleDateString() : ""}
+              </td>
+              <td className="p-2">
+                {app.ngayKetQuaThamDinhNoiDung ? new Date(app.ngayKetQuaThamDinhNoiDung).toLocaleDateString() : ""}
+              </td>
+
               <td className="p-2">{app.trangThaiDon}</td>
               <td className="p-2">
                 <div className="flex gap-2 justify-center">
