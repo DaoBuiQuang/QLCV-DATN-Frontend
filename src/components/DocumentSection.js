@@ -1,16 +1,51 @@
 import React, { useState } from "react";
 import AddDocumentModal from "./AddDocumentModal";
 
-const DocumentSection = () => {
+const DocumentSection = ({ onTaiLieuChange }) => {
     const [dsTaiLieu, setDsTaiLieu] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fileName, setFileName] = useState("");
     const [file, setFile] = useState(null);
     const [status, setStatus] = useState("Đã tải lên");
 
+    const updateTaiLieuList = (newList) => {
+        setDsTaiLieu(newList);
+        if (onTaiLieuChange) {
+            onTaiLieuChange(newList); 
+        }
+    };
+
     const handleAddTaiLieu = () => {
-        if (fileName) {
-            setDsTaiLieu([...dsTaiLieu, { ten: fileName, file, status }]);
+        if (!fileName) return;
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result;
+
+                const newList = [...dsTaiLieu, {
+                    tenTaiLieu: fileName,
+                    linkTaiLieu: base64String,
+                    trangThai: status
+                }];
+                updateTaiLieuList(newList); 
+
+                // Reset modal
+                setFileName("");
+                setFile(null);
+                setStatus("Đã tải lên");
+                setIsModalOpen(false);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            const newList = [...dsTaiLieu, {
+                tenTaiLieu: fileName,
+                linkTaiLieu: null,
+                trangThai: status
+            }];
+            updateTaiLieuList(newList); 
+
+            // Reset modal
             setFileName("");
             setFile(null);
             setStatus("Đã tải lên");
@@ -27,7 +62,7 @@ const DocumentSection = () => {
         if (confirmDelete) {
             const newList = [...dsTaiLieu];
             newList.splice(index, 1);
-            setDsTaiLieu(newList);
+            updateTaiLieuList(newList); // ✅ gọi hàm chung
         }
     };
 
@@ -55,13 +90,14 @@ const DocumentSection = () => {
                                     <td className="px-4 py-2 border">
                                         {tl.file ? (
                                             <a
-                                                href={URL.createObjectURL(tl.file)}
+                                                href={tl.file}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-blue-600 hover:underline"
                                             >
                                                 Xem file
                                             </a>
+
                                         ) : (
                                             <span className="text-gray-400 italic">Không có</span>
                                         )}

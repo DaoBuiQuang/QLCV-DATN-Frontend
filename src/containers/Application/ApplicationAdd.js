@@ -38,6 +38,7 @@ function ApplicationAdd() {
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
 
+    const [taiLieuList, setTaiLieuList] = useState([]);
     const [applicationtypes, setApplicationTypes] = useState([]);
     const processStatus = [
         { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
@@ -150,21 +151,9 @@ function ApplicationAdd() {
         }
     };
     /////
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [fileName, setFileName] = useState("");
-    const [file, setFile] = useState(null);
-    const [dsTaiLieu, setDsTaiLieu] = useState([]);
-
-    const handleAddTaiLieu = () => {
-        if (!file || !fileName) return alert("Vui lòng nhập tên và chọn file.");
-        const newFile = {
-            ten: fileName,
-            file: file
-        };
-        setDsTaiLieu([...dsTaiLieu, newFile]);
-        setFile(null);
-        setFileName("");
-        setIsModalOpen(false);
+    const handleTaiLieuChange = (list) => {
+        setTaiLieuList(list);
+        console.log("Tài liệu mới:", list); // In ra để kiểm tra
     };
 
     return (
@@ -384,7 +373,7 @@ function ApplicationAdd() {
                         />
                     </div>
                 </div>
-                <DocumentSection></DocumentSection>
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
 
 
                 <div className="flex justify-center gap-4 mt-4">
