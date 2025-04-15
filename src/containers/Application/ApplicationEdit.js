@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import DocumentSection from "../../components/DocumentSection";
 function ApplicationEdit() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
@@ -34,7 +35,7 @@ function ApplicationEdit() {
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
-
+     const [taiLieuList, setTaiLieuList] = useState([]);
     const [applicationtypes, setApplicationTypes] = useState([]);
     const processStatus = [
         { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
@@ -114,7 +115,6 @@ function ApplicationEdit() {
     }, []);
     const detailApplication = async () => {
         try {
-            debugger;
             const response = await callAPI({
                 method: "post",
                 endpoint: "application/detail",
@@ -143,6 +143,7 @@ function ApplicationEdit() {
                 setNgayCapBang(formatDate(response.ngayCapBang));
                 setNgayHetHanBang(formatDate(response.ngayHetHanBang));
                 setTrangThaiDon(response.trangThaiDon);
+                setTaiLieuList(response.taiLieus)
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -176,7 +177,8 @@ function ApplicationEdit() {
                     ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
                     trangThaiDon: trangThaiDon || null,
                     ngayCapBang: ngayCapBang || null,
-                    ngayHetHanBang: ngayHetHanBang || null
+                    ngayHetHanBang: ngayHetHanBang || null,
+                    taiLieus: taiLieuList
                 },
             });
             alert("Sửa hồ sơ vụ việc thành công!");
@@ -185,7 +187,11 @@ function ApplicationEdit() {
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
-
+     /////
+    const handleTaiLieuChange = (list) => {
+        setTaiLieuList(list);
+        console.log("Tài liệu mới:", list); // In ra để kiểm tra
+    };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
@@ -406,7 +412,7 @@ function ApplicationEdit() {
                         />
                     </div>
                 </div>
-
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange}  initialTaiLieus={taiLieuList}></DocumentSection>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>

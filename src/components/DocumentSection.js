@@ -1,68 +1,79 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddDocumentModal from "./AddDocumentModal";
 
-const DocumentSection = ({ onTaiLieuChange }) => {
+const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
     const [dsTaiLieu, setDsTaiLieu] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fileName, setFileName] = useState("");
     const [file, setFile] = useState(null);
     const [status, setStatus] = useState("Đã tải lên");
+    const [editingIndex, setEditingIndex] = useState(null);
 
+    useEffect(() => {
+        debugger
+        setDsTaiLieu(initialTaiLieus || []);
+    }, [initialTaiLieus]);
     const updateTaiLieuList = (newList) => {
         setDsTaiLieu(newList);
-        if (onTaiLieuChange) {
-            onTaiLieuChange(newList); 
-        }
+        onTaiLieuChange && onTaiLieuChange(newList);
     };
 
     const handleAddTaiLieu = () => {
         if (!fileName) return;
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64String = reader.result;
-
-                const newList = [...dsTaiLieu, {
-                    tenTaiLieu: fileName,
-                    linkTaiLieu: base64String,
-                    trangThai: status
-                }];
-                updateTaiLieuList(newList); 
-
-                // Reset modal
-                setFileName("");
-                setFile(null);
-                setStatus("Đã tải lên");
-                setIsModalOpen(false);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            const newList = [...dsTaiLieu, {
+    
+        const handleAfterUpdate = (linkTaiLieu) => {
+            const newTaiLieu = {
                 tenTaiLieu: fileName,
-                linkTaiLieu: null,
-                trangThai: status
-            }];
-            updateTaiLieuList(newList); 
-
-            // Reset modal
+                linkTaiLieu: linkTaiLieu,
+                trangThai: status,
+                maTaiLieu: editingIndex !== null ? dsTaiLieu[editingIndex].maTaiLieu : undefined, // Thêm maTaiLieu nếu đang chỉnh sửa
+            };
+    
+            let newList;
+            if (editingIndex !== null) {
+                newList = [...dsTaiLieu];
+                newList[editingIndex] = newTaiLieu;
+            } else {
+                newList = [...dsTaiLieu, newTaiLieu];
+            }
+    
+            updateTaiLieuList(newList);
             setFileName("");
             setFile(null);
             setStatus("Đã tải lên");
+            setEditingIndex(null);
             setIsModalOpen(false);
+        };
+    
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => handleAfterUpdate(reader.result);
+            reader.readAsDataURL(file);
+        } else {
+            // Giữ nguyên link cũ nếu đang sửa mà không thay đổi file
+            const oldLink = editingIndex !== null ? dsTaiLieu[editingIndex].linkTaiLieu : null;
+            handleAfterUpdate(oldLink);
         }
     };
+    
+    
 
     const handleEdit = (index) => {
-        alert("Chỉnh sửa chưa được cài đặt");
+        const taiLieu = dsTaiLieu[index];
+        setFileName(taiLieu.tenTaiLieu);
+        setStatus(taiLieu.trangThai);
+        setFile(null); 
+        setEditingIndex(index);
+        setIsModalOpen(true);
     };
+    
 
     const handleDelete = (index) => {
         const confirmDelete = window.confirm("Bạn có chắc muốn xóa tài liệu này?");
         if (confirmDelete) {
             const newList = [...dsTaiLieu];
             newList.splice(index, 1);
-            updateTaiLieuList(newList); // ✅ gọi hàm chung
+            updateTaiLieuList(newList); 
         }
     };
 
@@ -93,10 +104,12 @@ const DocumentSection = ({ onTaiLieuChange }) => {
                                                 href={tl.linkTaiLieu}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                download={tl.tenTaiLieu} // tên file khi tải về
                                                 className="text-blue-600 hover:underline"
                                             >
                                                 Xem file
                                             </a>
+
 
                                         ) : (
                                             <span className="text-gray-400 italic">Không có</span>
@@ -145,6 +158,7 @@ const DocumentSection = ({ onTaiLieuChange }) => {
                 setFile={setFile}
                 status={status}
                 setStatus={setStatus}
+                editingIndex={editingIndex}
             />
         </div>
     );

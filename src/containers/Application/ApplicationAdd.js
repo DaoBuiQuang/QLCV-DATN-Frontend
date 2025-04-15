@@ -374,7 +374,7 @@ function ApplicationAdd() {
                         />
                     </div>
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />   
 
 
                 <div className="flex justify-center gap-4 mt-4">

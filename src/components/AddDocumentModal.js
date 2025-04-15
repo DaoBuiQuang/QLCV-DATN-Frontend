@@ -9,7 +9,8 @@ function AddDocumentModal({
     file,
     setFile,
     status,
-    setStatus
+    setStatus,
+    editingIndex
 }) {
     if (!isOpen) return null;
 
@@ -45,7 +46,10 @@ function AddDocumentModal({
 
                 <div className="flex justify-end mt-6 gap-3">
                     <button onClick={onClose} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md">Hủy</button>
-                    <button onClick={onAdd} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Thêm</button>
+                    <button onClick={onAdd} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        {editingIndex !== null ? "Cập nhật" : "Thêm"}
+                    </button>
+
                 </div>
             </div>
         </div>
