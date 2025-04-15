@@ -141,7 +141,8 @@ function ApplicationAdd() {
                     ngayGuiBangChoKhachHang: ngayGuiBangChoKH,
                     trangThaiDon: trangThaiDon,
                     ngayCapBang: ngayCapBang,
-                    ngayHetHanBang: ngayHetHanBang
+                    ngayHetHanBang: ngayHetHanBang,
+                    taiLieus: taiLieuList
                 },
             });
             alert("Thêm hồ sơ vụ việc thành công!");

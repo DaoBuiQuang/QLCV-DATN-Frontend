@@ -86,11 +86,11 @@ const DocumentSection = ({ onTaiLieuChange }) => {
                         <tbody>
                             {dsTaiLieu.map((tl, idx) => (
                                 <tr key={idx} className="hover:bg-gray-50">
-                                    <td className="px-4 py-2 border">{tl.ten}</td>
+                                    <td className="px-4 py-2 border">{tl.tenTaiLieu}</td>
                                     <td className="px-4 py-2 border">
-                                        {tl.file ? (
+                                        {tl.linkTaiLieu ? (
                                             <a
-                                                href={tl.file}
+                                                href={tl.linkTaiLieu}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-blue-600 hover:underline"
@@ -103,7 +103,7 @@ const DocumentSection = ({ onTaiLieuChange }) => {
                                         )}
                                     </td>
                                     <td className="px-4 py-2 border text-green-600 font-medium">
-                                        {tl.status}
+                                        {tl.trangThai}
                                     </td>
                                     <td className="px-4 py-2 border text-center">
                                         <button
