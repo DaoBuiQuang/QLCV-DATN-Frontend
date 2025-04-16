@@ -204,7 +204,7 @@ function ApplicationEdit() {
                             value={maDonDangKy}
                             disabled
                             // onChange={(e) => setMaDonDangKy(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
                         />
                     </div>
                     <div className="flex-1">
@@ -213,7 +213,7 @@ function ApplicationEdit() {
                             type="text"
                             value={maHoSoVuViec}
                             onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
                             disabled
                         />
                     </div>

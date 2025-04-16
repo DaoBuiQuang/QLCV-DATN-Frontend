@@ -14,7 +14,7 @@ function StaffDetail() {
     const [ngayThangNamSinh, setNgayThangNamSinh] = useState("");
     const [cccd, setCccd] = useState("");
     const [bangCap, setBangCap] = useState("");
-
+    const [taiKhoan, setTaiKhoan] = useState(null)
     useEffect(() => {
         const fetchStaffDetails = async () => {
 
@@ -23,7 +23,7 @@ function StaffDetail() {
                 const response = await callAPI({
                     method: "post",
                     endpoint: `/staff/detail`,
-                    data:{
+                    data: {
                         maNhanSu
                     }
                 });
@@ -35,6 +35,7 @@ function StaffDetail() {
                 setNgayThangNamSinh(response.ngayThangNamSinh);
                 setCccd(response.cccd);
                 setBangCap(response.bangCap);
+                setTaiKhoan(response.tenTaiKhoan)
             } catch (error) {
                 console.error("Lỗi khi lấy thông tin nhân sự!", error);
             }
@@ -49,48 +50,58 @@ function StaffDetail() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="block text-gray-700">Mã nhân sự</label>
-                        <input type="text" value={maNhanSu} disabled className="w-full p-2 mt-1 border rounded-lg bg-gray-200" readOnly/>
+                        <input type="text" value={maNhanSu} disabled className="w-full p-2 mt-1 border rounded-lg bg-gray-200" readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">Họ tên</label>
-                        <input type="text" value={hoTen} onChange={(e) => setHoTen(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly/>
+                        <input type="text" value={hoTen} onChange={(e) => setHoTen(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">Chức vụ</label>
-                        <input type="text" value={chucVu} onChange={(e) => setChucVu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly/>
+                        <input type="text" value={chucVu} onChange={(e) => setChucVu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">Phòng ban</label>
-                        <input type="text" value={phongBan} onChange={(e) => setPhongBan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly/>
+                        <input type="text" value={phongBan} onChange={(e) => setPhongBan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">Số điện thoại</label>
-                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly/>
+                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">Email</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly/>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">Ngày sinh</label>
-                        <input type="date" value={ngayThangNamSinh} onChange={(e) => setNgayThangNamSinh(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly/>
+                        <input type="date" value={ngayThangNamSinh} onChange={(e) => setNgayThangNamSinh(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">CCCD</label>
-                        <input type="text" value={cccd} onChange={(e) => setCccd(e.target.value)} className="w-full p-2 mt-1 border rounded-l bg-gray-100" disabled readOnly/>
+                        <input type="text" value={cccd} onChange={(e) => setCccd(e.target.value)} className="w-full p-2 mt-1 border rounded-l bg-gray-100" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700">Bằng cấp</label>
-                        <input type="text" value={bangCap} onChange={(e) => setBangCap(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly/>
+                        <input type="text" value={bangCap} onChange={(e) => setBangCap(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">Tên tài khoản</label>
+                        <input type="text" value={taiKhoan} onChange={(e) => setTaiKhoan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" disabled readOnly />
                     </div>
                 </div>
                 <div className="flex justify-center gap-4 mt-4">
                     <button className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg" onClick={() => navigate(-1)}>
                         Quay lại
                     </button>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg" onClick={() => navigate(`/registerstaff/${maNhanSu}`)}>
-                        Tạo tài khoản
-                    </button>
+                    {(!taiKhoan || taiKhoan.trim() === "") && (
+                        <button
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+                            onClick={() => navigate(`/registerstaff/${maNhanSu}`)}
+                        >
+                            Tạo tài khoản
+                        </button>
+                    )}
+
                 </div>
             </div>
         </div>

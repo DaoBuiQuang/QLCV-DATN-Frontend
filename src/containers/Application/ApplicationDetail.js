@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import DocumentSection from "../../components/DocumentSection";
 function ApplicationDetail() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
@@ -34,7 +35,7 @@ function ApplicationDetail() {
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
-
+    const [taiLieuList, setTaiLieuList] = useState([]);
     const [applicationtypes, setApplicationTypes] = useState([]);
     const processStatus = [
         { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
@@ -136,12 +137,16 @@ function ApplicationDetail() {
             setNgayCapBang(formatDate(response.ngayCapBang));
             setNgayHetHanBang(formatDate(response.ngayHetHanBang));
             setTrangThaiDon(response.trangThaiDon);
+            setTaiLieuList(response.taiLieus)
           }
         } catch (error) {
           console.error("Lỗi khi gọi API chi tiết đơn:", error);
         }
       };
-
+    const handleTaiLieuChange = (list) => {
+        setTaiLieuList(list);
+        console.log("Tài liệu mới:", list); // In ra để kiểm tra
+    };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
@@ -154,7 +159,7 @@ function ApplicationDetail() {
                             value={maDonDangKy}
                             disabled
                             // onChange={(e) => setMaDonDangKy(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
                         />
                     </div>
                     <div className="flex-1">
@@ -163,7 +168,7 @@ function ApplicationDetail() {
                             type="text"
                             value={maHoSoVuViec}
                             onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
                             disabled
                         />
                     </div>
@@ -175,7 +180,7 @@ function ApplicationDetail() {
                             value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
                             onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
                             placeholder="Chọn loại đơn đăng kí"
-                            className="w-full mt-1 rounded-lg h-10"
+                            className="w-full mt-1 rounded-lg h-10 bg-gray-200" 
                             isClearable
                             isDisabled
                         />
@@ -379,8 +384,9 @@ function ApplicationDetail() {
                             isClearable
                         />
                     </div>
+                    
                 </div>
-
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange}  initialTaiLieus={taiLieuList}></DocumentSection>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     {/* <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button> */}
