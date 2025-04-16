@@ -14,7 +14,7 @@ function Header({ toggleMenu }) {
     
                 const currentTime = Date.now() / 1000;
                 if (decoded.exp && decoded.exp > currentTime) {
-                    setUsername(decoded.username || decoded.sub || "Người dùng");
+                    setUsername(decoded.tenNhanSu ||  "Người dùng");
                 } else {
                     localStorage.removeItem("token");
                     window.location.href = "/login"; // token hết hạn
