@@ -266,7 +266,7 @@ function ApplicationEdit() {
                             type="date"
                             value={ngayQDHopLe_DuKien}
                             onChange={(e) => setNgayQDHopLe_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
                             disabled
                         />
                     </div>
@@ -285,7 +285,7 @@ function ApplicationEdit() {
                             type="date"
                             value={ngayCongBo_DuKien}
                             onChange={(e) => setNgayCongBo_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
                             disabled
                         />
                     </div>
@@ -305,7 +305,7 @@ function ApplicationEdit() {
                             disabled
                             value={ngayThamDinhND_DuKien}
                             onChange={(e) => setNgayThamDinhND_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
                         />
                     </div>
                     <div>
@@ -324,7 +324,7 @@ function ApplicationEdit() {
                             value={ngayTraLoiKQThamDinhND_DuKien}
                             disabled
                             onChange={(e) => setNgayTraLoiKQThamDinhND_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
                         />
                     </div>
                     <div>
@@ -352,7 +352,7 @@ function ApplicationEdit() {
                             value={ngayNopPhiCapBang}
                             disabled
                             onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
                         />
                     </div>
                     <div>
