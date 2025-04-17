@@ -38,6 +38,14 @@ import ApplicationList from "../containers/Application/ApplicationList";
 import ApplicationAdd from "../containers/Application/ApplicationAdd";
 import ApplicationEdit from "../containers/Application/ApplicationEdit";
 import ApplicationDetail from "../containers/Application/ApplicationDetail";
+import BrandList from "../containers/Brand/BrandList";
+import BrandAdd from "../containers/Brand/BrandAdd";
+import BrandEdit from "../containers/Brand/BrandEdit";
+import BrandDetail from "../containers/Brand/BrandDetail";
+import ProductAndServicesEdit from "../containers/ProductAndServices/ProductAndServicesEdit";
+import ProductAndServicesList from "../containers/ProductAndServices/ProductAndServicesList";
+import ProductAndServicesAdd from "../containers/ProductAndServices/ProductAndServicesAdd";
+import ProductAndServicesDetail from "../containers/ProductAndServices/ProductAndServicesDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -108,6 +116,16 @@ const AppRoutes = () => {
           <Route path="/applicationadd" element={<ApplicationAdd></ApplicationAdd>} />
           <Route path="/applicationedit/:maDonDangKy" element={<ApplicationEdit></ApplicationEdit>} />
           <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetail></ApplicationDetail>} />
+
+          <Route path="/brandlist" element={<BrandList></BrandList>} />
+          <Route path="/brandadd" element={<BrandAdd></BrandAdd>} />
+          <Route path="/brandedit/:maNhanHieu" element={<BrandEdit></BrandEdit>} />
+          <Route path="/branddetail/:maNhanHieu" element={<BrandDetail></BrandDetail>} />
+
+          <Route path="/productandserviceslist" element={<ProductAndServicesList></ProductAndServicesList>} />
+          <Route path="/productandservicesadd" element={<ProductAndServicesAdd></ProductAndServicesAdd>} />
+          <Route path="/productandservicesedit/:maSPDV" element={<ProductAndServicesEdit></ProductAndServicesEdit>} />
+          <Route path="/productandservicesdetail/:maSPDV" element={<ProductAndServicesDetail></ProductAndServicesDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

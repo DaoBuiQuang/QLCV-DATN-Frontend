@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings } from "lucide-react";
+import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings, Tag, ShoppingCart } from "lucide-react";
 
 function MenuLeft() {
     const location = useLocation(); // Lấy đường dẫn hiện tại
@@ -8,7 +8,7 @@ function MenuLeft() {
         <aside className="bg-white w-56 h-screen shadow-md flex flex-col">
             {/* Logo */}
             <div className="p-2 flex justify-center">
-                <img src="https://ipac.vn/image/catalog/logo/rsz_1logo.jpg" alt="Logo" className="w-32" />
+                <img src="https://ipac.vn/image/catalog/Logo-Slogan-PNG.png" alt="Logo" className="w-32" />
             </div>
             <nav className="flex-1 px-4 py-4">
                 <ul className="space-y-2 text-[#B1B1B1] text-sm">
@@ -99,8 +99,28 @@ function MenuLeft() {
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/applicationtypelist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                                 }`}
                         >
-                            <Layers size={16} />
+                             <Briefcase size={16} />
                             <span>Loại đơn đăng kí</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/brandlist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/brandlist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <Tag size={16} />
+                            <span>Nhãn hiệu</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/productandserviceslist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/productandserviceslist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <ShoppingCart size={16} />
+                            <span>Sản phẩm và dịch vụ</span>
                         </NavLink>
                     </li>
                     <li>

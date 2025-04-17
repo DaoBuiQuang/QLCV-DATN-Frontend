@@ -6,7 +6,6 @@ function Header({ toggleMenu }) {
     const [username, setUsername] = useState(null);
 
     useEffect(() => {
-        debugger
         const token = localStorage.getItem("token");
         if (token) {
             try {
