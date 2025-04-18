@@ -5,6 +5,7 @@ import callAPI from "../../utils/api";
 function CustomerDetail() {
     const navigate = useNavigate();
     const { maKhachHang } = useParams();
+    const [tenVietTatKH, setTenVietTatKH] = useState("");
     const [tenKhachHang, setTenKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
     const [moTa, setMoTa] = useState("");
@@ -26,7 +27,7 @@ function CustomerDetail() {
                     endpoint: "/customer/detail",
                     data: { maKhachHang }
                 });
-
+                setTenVietTatKH(response.tenVietTatKH || "");
                 setTenKhachHang(response.tenKhachHang || "");
                 setMaDoiTac(response.maDoiTac || "");
                 setMoTa(response.moTa || "");
@@ -106,7 +107,15 @@ function CustomerDetail() {
                             className="w-full p-2 mt-1 border rounded-lg bg-gray-100 cursor-not-allowed"
                         />
                     </div>
-
+                    <div>
+                        <label className="block text-gray-700">Tên viết tắt khách hàng</label>
+                        <input
+                            type="text"
+                            value={tenVietTatKH}
+                    
+                            className="w-full p-2 mt-1 border rounded-lg bg-gray-100 cursor-not-allowed"
+                        />
+                    </div>
 
                     <div>
                         <label className="block text-gray-700">Tên khách hàng</label>

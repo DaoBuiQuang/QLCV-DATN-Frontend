@@ -5,6 +5,7 @@ import callAPI from "../../utils/api";
 function CustomerEdit() {
     const navigate = useNavigate();
     const { maKhachHang } = useParams();
+    const [tenVietTatKH, setTenVietTatKH] = useState("");
     const [tenKhachHang, setTenKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
     const [moTa, setMoTa] = useState("");
@@ -26,7 +27,7 @@ function CustomerEdit() {
                     endpoint: "/customer/detail",
                     data: { maKhachHang }
                 });
-
+                setTenVietTatKH(response.tenVietTatKH || "");
                 setTenKhachHang(response.tenKhachHang || "");
                 setMaDoiTac(response.maDoiTac || "");
                 setMoTa(response.moTa || "");
@@ -99,6 +100,7 @@ function CustomerEdit() {
                 endpoint: "/customer/edit",
                 data: {
                     maKhachHang,
+                    tenVietTatKH,
                     tenKhachHang,
                     maDoiTac: maDoiTac === "" ? null : maDoiTac,
                     moTa,
@@ -132,13 +134,22 @@ function CustomerEdit() {
                             className="w-full p-2 mt-1 border rounded-lg bg-gray-100"
                         />
                     </div>
-
-
+                    <div>
+                        <label className="block text-gray-700">Tên viết tắt khách hàng</label>
+                        <input
+                            type="text"
+                            value={tenVietTatKH}
+                            onChange={(e) => setTenVietTatKH(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
                     <div>
                         <label className="block text-gray-700">Tên khách hàng</label>
                         <input
                             type="text"
                             value={tenKhachHang}
+                            
+                            onChange={(e) => setTenKhachHang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>

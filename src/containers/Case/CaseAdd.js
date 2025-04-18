@@ -151,7 +151,27 @@ function CaseAdd() {
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
-
+    const handleMaKhachHangChange = async (selectedOption) => {
+        if (selectedOption) {
+            const value = selectedOption.value;
+            setMaKhachHang(value);
+    
+            try {
+                const response = await callAPI({
+                    method: "post",
+                    endpoint: "/case/generate-code-case",
+                    data: { maKhachHang: value }
+                });
+                setMaHoSoVuViec(response.maHoSoVuViec);
+            } catch (error) {
+                console.error("Lỗi khi tạo mã hồ sơ vụ việc:", error);
+            }
+        } else {
+            setMaKhachHang("");
+            setMaHoSoVuViec("");
+        }
+    };
+    
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
@@ -162,7 +182,9 @@ function CaseAdd() {
                         <input
                             type="text"
                             value={maHoSoVuViec}
-                            onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                            // onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                            readOnly
+                            disabled
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
@@ -172,7 +194,7 @@ function CaseAdd() {
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                             value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
-                            onChange={selectedOption => setMaKhachHang(selectedOption?.value)}
+                            onChange={handleMaKhachHangChange}
                             placeholder="Chọn khách hàng"
                             className="w-full mt-1 rounded-lg h-10"
                             isClearable

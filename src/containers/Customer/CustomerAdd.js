@@ -5,6 +5,7 @@ import callAPI from "../../utils/api";
 function CustomerAdd() {
     const navigate = useNavigate();
     const [maKhachHang, setMaKhachHang] = useState("");
+    const [tenVietTatKH, setTenVietTatKH] = useState("");
     const [tenKhachHang, setTenKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
     const [moTa, setMoTa] = useState("");
@@ -72,6 +73,7 @@ function CustomerAdd() {
                 endpoint: "/customer/add",
                 data: {
                     maKhachHang,
+                    tenVietTatKH,
                     tenKhachHang,
                     maDoiTac: maDoiTac === "" ? null : maDoiTac,
                     moTa,
@@ -90,16 +92,16 @@ function CustomerAdd() {
             console.error("Lỗi khi thêm khách hàng!", error);
         }
     };
-    const handleTenKhachHangChange = async (e) => {
+    const handleTenVietTatKhachHangChange = async (e) => {
         const value = e.target.value;
-        setTenKhachHang(value);
+        setTenVietTatKH(value);
 
         if (value.trim() !== "") {
             try {
                 const response = await callAPI({
                     method: "post",
-                    endpoint: "/customer/generate-code",
-                    data: { tenKhachHang: value }
+                    endpoint: "/customer/generate-code-customer",
+                    data: { tenVietTatKH: value }
                 });
                 setMaKhachHang(response.maKhachHang);
             } catch (error) {
@@ -126,13 +128,22 @@ function CustomerAdd() {
                         />
                     </div>
 
-
+                    <div>
+                        <label className="block text-gray-700">Tên viết tắt khách hàng</label>
+                        <input
+                            type="text"
+                            value={tenVietTatKH}
+                            onChange={handleTenVietTatKhachHangChange}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
                     <div>
                         <label className="block text-gray-700">Tên khách hàng</label>
                         <input
                             type="text"
                             value={tenKhachHang}
-                            onChange={handleTenKhachHangChange}
+                            
+                            onChange={(e) => setTenKhachHang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
