@@ -184,76 +184,78 @@ function CaseList() {
                 </div>
             </div>
 
-            <table className="w-full border-collapse bg-white text-sm mt-4">
-                <thead>
-                    <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                        <th className="p-2">STT</th>
-                        <th className="p-2">Mã hồ sơ</th>
-                        <th className="p-2">Nội dung vụ việc</th>
-                        <th className="p-2">Trạng thái</th>
-                        <th className="p-2">Bước xử lý hiện tại</th>
-                        <th className="p-2">Ngày tiếp nhận</th>
-                        <th className="p-2">Ngày tạo</th>
-                        <th className="p-2">Ngày cập nhật</th>
-                        <th className="p-2">Tên khách hàng</th>
-                        <th className="p-2">Quốc gia</th>
-                        <th className="p-2">Loại vụ việc</th>
-                        <th className="p-2">Nhân sự xử lý</th>
-                        <th className="p-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cases.map((caseItem, index) => (
-                        <tr key={caseItem.maHoSoVuViec} className="hover:bg-gray-100 text-center border-b">
-                            <td className="p-2">{index + 1}</td>
-                            <td
-                                className="p-2 text-blue-500 cursor-pointer hover:underline"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
-                                }}
-                            >
-                                {caseItem.maHoSoVuViec}
-                            </td>
-                            <td className="p-2">{caseItem.noiDungVuViec}</td>
-                            <td className="p-2">{caseItem.trangThaiVuViec}</td>
-                            <td className="p-2">{caseItem.buocXuLyHienTai}</td>
-                            <td className="p-2">{new Date(caseItem.ngayTiepNhan).toLocaleDateString()}</td>
-                            <td className="p-2">{new Date(caseItem.ngayTao).toLocaleDateString()}</td>
-                            <td className="p-2">{new Date(caseItem.ngayCapNhap).toLocaleDateString()}</td>
-                            <td className="p-2">{caseItem.tenKhachHang}</td>
-                            <td className="p-2">{caseItem.tenQuocGia}</td>
-                            <td className="p-2">{caseItem.tenLoaiVuViec}</td>
-                            <td className="p-2">
-                                {caseItem.nhanSuXuLy.map((person, idx) => (
-                                    <div key={idx}>
-                                        {person.tenNhanSu} ({person.vaiTro})
-                                    </div>
-                                ))}
-                            </td>
-                            <td className="p-2">
-                                <div className="flex gap-2 justify-center">
-                                    <button
-                                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                        onClick={() => navigate(`/caseedit/${caseItem.maHoSoVuViec}`)}
-                                    >
-                                        📝
-                                    </button>
-                                    <button
-                                        className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                        onClick={() => {
-                                            setCaseToDelete(caseItem.maHoSoVuViec);
-                                            setShowDeleteModal(true);
-                                        }}
-                                    >
-                                        🗑️
-                                    </button>
-                                </div>
-                            </td>
+            <div class="overflow-x-auto">
+                <table className="w-full border-collapse bg-white text-sm mt-4">
+                    <thead>
+                        <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
+                            <th className="p-2">STT</th>
+                            <th className="p-2">Mã hồ sơ</th>
+                            <th className="p-2">Nội dung vụ việc</th>
+                            <th className="p-2">Trạng thái</th>
+                            <th className="p-2">Bước xử lý hiện tại</th>
+                            <th className="p-2">Ngày tiếp nhận</th>
+                            <th className="p-2">Ngày tạo</th>
+                            <th className="p-2">Ngày cập nhật</th>
+                            <th className="p-2">Tên khách hàng</th>
+                            <th className="p-2">Quốc gia</th>
+                            <th className="p-2">Loại vụ việc</th>
+                            <th className="p-2">Nhân sự xử lý</th>
+                            <th className="p-2"></th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {cases.map((caseItem, index) => (
+                            <tr key={caseItem.maHoSoVuViec} className="hover:bg-gray-100 text-center border-b">
+                                <td className="p-2">{index + 1}</td>
+                                <td
+                                    className="p-2 text-blue-500 cursor-pointer hover:underline"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
+                                    }}
+                                >
+                                    {caseItem.maHoSoVuViec}
+                                </td>
+                                <td className="p-2">{caseItem.noiDungVuViec}</td>
+                                <td className="p-2">{caseItem.trangThaiVuViec}</td>
+                                <td className="p-2">{caseItem.buocXuLyHienTai}</td>
+                                <td className="p-2">{new Date(caseItem.ngayTiepNhan).toLocaleDateString()}</td>
+                                <td className="p-2">{new Date(caseItem.ngayTao).toLocaleDateString()}</td>
+                                <td className="p-2">{new Date(caseItem.ngayCapNhap).toLocaleDateString()}</td>
+                                <td className="p-2">{caseItem.tenKhachHang}</td>
+                                <td className="p-2">{caseItem.tenQuocGia}</td>
+                                <td className="p-2">{caseItem.tenLoaiVuViec}</td>
+                                <td className="p-2">
+                                    {caseItem.nhanSuXuLy.map((person, idx) => (
+                                        <div key={idx}>
+                                            {person.tenNhanSu} ({person.vaiTro})
+                                        </div>
+                                    ))}
+                                </td>
+                                <td className="p-2">
+                                    <div className="flex gap-2 justify-center">
+                                        <button
+                                            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                            onClick={() => navigate(`/caseedit/${caseItem.maHoSoVuViec}`)}
+                                        >
+                                            📝
+                                        </button>
+                                        <button
+                                            className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                            onClick={() => {
+                                                setCaseToDelete(caseItem.maHoSoVuViec);
+                                                setShowDeleteModal(true);
+                                            }}
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             {showDeleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-md w-80">

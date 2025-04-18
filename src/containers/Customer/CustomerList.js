@@ -160,64 +160,65 @@ function CustomerList() {
                     </select>
                 </div>
             </div>
-
-            <table className="w-full border-collapse bg-white text-sm mt-4">
-                <thead>
-                    <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                        <th className="p-2">STT</th>
-                        <th className="p-2">Mã KH</th>
-                        <th className="p-2">Tên KH</th>
-                        <th className="p-2">Địa chỉ</th>
-                        <th className="p-2">SĐT</th>
-                        <th className="p-2">Đối tác</th>
-                        <th className="p-2">Quốc gia</th>
-                        <th className="p-2">Ngành nghề</th>
-                        <th className="p-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {customers.map((customer, index) => (
-                        <tr key={customer.maKhachHang} className="hover:bg-gray-100 text-center border-b">
-                            <td className="p-2">{index + 1}</td>
-                            <td
-                                className="p-2 text-blue-500 cursor-pointer hover:underline"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(`/customerdetail/${customer.maKhachHang}`);
-                                }}
-                            >
-                                {customer.maKhachHang}
-                            </td>
-                            <td className="p-2">{customer.tenKhachHang}</td>
-                            <td className="p-2">{customer.diaChi}</td>
-                            <td className="p-2">{customer.sdt}</td>
-                            <td className="p-2">{customer.tenDoiTac}</td>
-                            <td className="p-2">{customer.tenQuocGia}</td>
-                            <td className="p-2">{customer.tenNganhNghe}</td>
-                            <td className="p-2">
-                                <div className="flex gap-2 justify-center">
-                                    <button
-                                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                        onClick={() => navigate(`/customeredit/${customer.maKhachHang}`)}
-                                    >
-                                        📝
-                                    </button>
-                                    <button
-                                        className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                        onClick={() => {
-                                            setCustomerToDelete(customer.maKhachHang);
-                                            setShowDeleteModal(true);
-                                        }}
-                                    >
-                                        🗑️
-                                    </button>
-                                </div>
-                            </td>
+            <div class="overflow-x-auto">
+                <table className="w-full border-collapse bg-white text-sm mt-4">
+                    <thead>
+                        <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
+                            <th className="p-2">STT</th>
+                            <th className="p-2">Mã KH</th>
+                            <th className="p-2">Tên KH</th>
+                            <th className="p-2">Địa chỉ</th>
+                            <th className="p-2">SĐT</th>
+                            <th className="p-2">Đối tác</th>
+                            <th className="p-2">Quốc gia</th>
+                            <th className="p-2">Ngành nghề</th>
+                            <th className="p-2"></th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-
+                    </thead>
+                    <tbody>
+                        {customers.map((customer, index) => (
+                            <tr key={customer.maKhachHang} className="hover:bg-gray-100 text-center border-b">
+                                <td className="p-2">{index + 1}</td>
+                                <td
+                                    className="p-2 text-blue-500 cursor-pointer hover:underline"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/customerdetail/${customer.maKhachHang}`);
+                                    }}
+                                >
+                                    {customer.maKhachHang}
+                                </td>
+                                <td className="p-2">{customer.tenKhachHang}</td>
+                                <td className="p-2">{customer.diaChi}</td>
+                                <td className="p-2">{customer.sdt}</td>
+                                <td className="p-2">{customer.tenDoiTac}</td>
+                                <td className="p-2">{customer.tenQuocGia}</td>
+                                <td className="p-2">{customer.tenNganhNghe}</td>
+                                <td className="p-2">
+                                    <div className="flex gap-2 justify-center">
+                                        <button
+                                            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                            onClick={() => navigate(`/customeredit/${customer.maKhachHang}`)}
+                                        >
+                                            📝
+                                        </button>
+                                        <button
+                                            className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                            onClick={() => {
+                                                setCustomerToDelete(customer.maKhachHang);
+                                                setShowDeleteModal(true);
+                                            }}
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            
             {/* Modal Xác nhận xóa */}
             {showDeleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">

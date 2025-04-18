@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import MenuLeft from "../components/MenuLeft";
@@ -49,6 +49,20 @@ import ProductAndServicesDetail from "../containers/ProductAndServices/ProductAn
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsMenuOpen(false);
+      } else {
+        setIsMenuOpen(true);
+      }
+    };
+
+    handleResize(); 
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="flex h-screen">
@@ -61,7 +75,7 @@ const MainLayout = () => {
 
       <div className={`flex flex-col flex-1 transition-all duration-300 ${isMenuOpen ? "ml-56" : "ml-0"}`}>
         <Header toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
-        <main className="flex-1 p-4 bg-gray-100">
+        <main className="flex-1 p-4 bg-gray-100"  style={{ width: window.innerWidth >= 1024 ? 'calc(100vw - 224px)' : '100vw' }}>
           <Outlet />
         </main>
       </div>
