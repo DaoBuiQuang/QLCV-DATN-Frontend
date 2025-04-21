@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AddDocumentModal from "./AddDocumentModal";
+import AddDocumentModal from "./TrademarkRegistrationProcess/AddDocumentModal";
 
 const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
     const [dsTaiLieu, setDsTaiLieu] = useState([]);

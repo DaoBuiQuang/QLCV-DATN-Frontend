@@ -11,6 +11,7 @@ function CaseEdit() {
     const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
     const [ngayXuLy, setNgayXuLy] = useState(null);
     const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
+    const [maLoaiDon, setMaLoaiDon] = useState("")
     const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
@@ -22,6 +23,7 @@ function CaseEdit() {
     const [countries, setCountries] = useState([]);
     const [customers, setCustomers] = useState([]);
     const [partners, setPartners] = useState([]);
+    const [applicationtypes, setApplicationTypes] = useState([]);
     const [staffs, setStaffs] = useState([]);
     const processSteps = [
         { value: "buoc_1", label: "Bước 1: Tiếp nhận" },
@@ -150,6 +152,18 @@ function CaseEdit() {
             console.error("Lỗi khi lấy dữ liệu nhân sự:", error);
         }
     };
+    const fetchApplicationTypes = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/applicationtype/all",
+                data: {},
+            });
+            setApplicationTypes(response);
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu loại đơn", error);
+        }
+    };
     useEffect(() => {
         fetchCaseDetail();
         fetchCountries();
@@ -236,7 +250,17 @@ function CaseEdit() {
                             isClearable
                         />
                     </div>
-
+                    <div className="flex-1">
+                        <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
+                        <Select
+                            options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
+                            value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
+                            onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
+                            placeholder="Chọn loại đơn đăng kí"
+                            className="w-full mt-1 rounded-lg h-10"
+                            isClearable
+                        />
+                    </div>
                     <div>
                         <label className="block text-gray-700 text-left">Quốc gia vụ việc</label>
                         <Select

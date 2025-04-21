@@ -7,7 +7,8 @@ function CaseList() {
     const [searchTerm, setSearchTerm] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [caseToDelete, setCaseToDelete] = useState(null);
-
+    const [applicationTypes, setApplicationTypes] = useState([]);
+    const [selectedApplicationTypes, setSelectedApplicationType] = useState("");
     const [countries, setCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState("");
     const [partners, setPartners] = useState([]);
@@ -93,12 +94,25 @@ function CaseList() {
             console.error("Lỗi khi lấy dữ liệu loại nghề nghiệp:", error);
         }
     };
+    const fetchApplicationTypes = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/applicationtype/all",
+                data: {}
+            })
+            setApplicationTypes(response)
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu loại đơn: ", error)
+        }
+    }
     useEffect(() => {
         // fetchCases("");
         fetchCountries();
         fetchPartners();
         fetchCustomers();
         fetchCaseTypes();
+        fetchApplicationTypes();
     }, []);
 
     const handleDeleteCase = async () => {
@@ -117,7 +131,7 @@ function CaseList() {
     };
 
     return (
-        <div className="p-1 bg-gray-100 min-h-screen">
+        <div className="p-1 bg-gray-100 ">
             <div className="bg-white p-4 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách hồ sơ vụ việc</h2>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
@@ -180,7 +194,14 @@ function CaseList() {
                         className="w-full md:w-1/6"
                         isClearable
                     />
-
+                    <Select
+                        options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
+                        value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
+                        onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
+                        placeholder="Chọn loại đơn"
+                        className="w-full md:w-1/6"
+                        isClearable
+                    />
                 </div>
             </div>
 

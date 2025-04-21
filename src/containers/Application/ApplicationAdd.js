@@ -4,8 +4,13 @@ import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
 import Modal from 'react-modal';
-import AddDocumentModal from "../../components/AddDocumentModal";
+import AddDocumentModal from "../../components/TrademarkRegistrationProcess/AddDocumentModal";
 import DocumentSection from "../../components/DocumentSection";
+import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication";
+import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination";
+import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
+import DiphimaProcess from "../../components/TrademarkRegistrationProcess/DiphimaProcess";
+import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const [maDonDangKy, setMaDonDangKy] = useState("");
@@ -16,17 +21,17 @@ function ApplicationAdd() {
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
     const [trangThaiHoanThanhHSTL, setTrangThaiHoanThanhHSTL] = useState("");
 
-    const [ngayQDHopLe_DuKien, setNgayQDHopLe_DuKien] = useState(null);
-    const [ngayQDHopLe, setNgayQDHopLe] = useState(null);
+    const [ngayKQThamDinhHinhThuc_DuKien, setKQThamDinhHinhThuc_DuKien] = useState(null);
+    const [ngayKQThamDinhHinhThuc, setKQThamDinhHinhThuc] = useState(null);
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
 
-    const [ngayThamDinhND_DuKien, setNgayThamDinhND_DuKien] = useState(null);
-    const [ngayThamDinhND, setNgayThamDinhND] = useState(null);
+    const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
+    const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
 
-    const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
-    const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
+    const [ngayKQTraLoiThamDinhND_DuKien, setNgayKQTraLoihamDinhND_DuKien] = useState(null);
+    const [ngayKQTraLoiThamDinhND, setNgayKQTraLoiThamDinhND] = useState(null);
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
     const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
@@ -39,7 +44,7 @@ function ApplicationAdd() {
     const [trangThaiDon, setTrangThaiDon] = useState("");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
-    const [applicationtypes, setApplicationTypes] = useState([]);
+
     const processStatus = [
         { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
         { value: "hoan_thanh", label: "Hoàn thành" }
@@ -49,35 +54,35 @@ function ApplicationAdd() {
         { value: "hoan_thanh", label: "Hoàn thành" },
         { value: "tam_dung", label: "Tạm dừng" }
     ];
-
+    const [daChonNgayThamDinh, setDaChonNgayThamDinh] = useState(false);
     useEffect(() => {
         if (ngayNopDon) {
-            const ngayQDHopLe = dayjs(ngayNopDon).add(1, 'month');
-            setNgayQDHopLe_DuKien(ngayQDHopLe.format('YYYY-MM-DD'));
+            const ngayKQThamDinhHinhThuc = dayjs(ngayNopDon).add(1, 'month');
+            setKQThamDinhHinhThuc(ngayKQThamDinhHinhThuc.format('YYYY-MM-DD'));
 
         } else {
-            setNgayQDHopLe_DuKien(null);
-
+            setKQThamDinhHinhThuc(null);
         }
-        if (ngayQDHopLe) {
-            const ngayCongBo = dayjs(ngayQDHopLe).add(2, 'month');
-            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
-        } else {
-            setNgayCongBo_DuKien(null);
-        }
+        // if (ngayKQThamDinhHinhThuc) {
+        //     const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
+        //     setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
+        // } else {
+        //     setNgayCongBo_DuKien(null);
+        // }
 
         if (ngayCongBo) {
-            const ngayThamDinhND = dayjs(ngayCongBo).add(9, 'month');
-            setNgayThamDinhND_DuKien(ngayThamDinhND.format('YYYY-MM-DD'));
+            debugger
+            const ngayKQThamDinhND = dayjs(ngayCongBo).add(9, 'month');
+            setNgayKQThamDinhND_DuKien(ngayKQThamDinhND.format('YYYY-MM-DD'));
         } else {
-            setNgayThamDinhND_DuKien(null);
+            setNgayKQThamDinhND_DuKien(null);
         }
 
-        if (ngayThamDinhND) {
-            const ngayTraLoiKQThamDinhND = dayjs(ngayThamDinhND).add(3, 'month');
-            setNgayTraLoiKQThamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
+        if (ngayKQThamDinhND) {
+            const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
+            setNgayKQTraLoihamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
         } else {
-            setNgayTraLoiKQThamDinhND_DuKien(null);
+            setNgayKQTraLoihamDinhND_DuKien(null);
         }
 
         if (ngayThongBaoCapBang) {
@@ -87,9 +92,18 @@ function ApplicationAdd() {
             setNgayNopPhiCapBang(null);
         }
 
-    }, [ngayNopDon, ngayThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayQDHopLe]);
+    }, [ngayNopDon, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo]);
 
-
+    useEffect(() => {
+        if (ngayKQThamDinhHinhThuc) {
+            const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
+            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
+            setDaChonNgayThamDinh(true); // ✅ Cập nhật trạng thái
+        } else {
+            setNgayCongBo_DuKien(null);
+        }
+    }, [ngayKQThamDinhHinhThuc]);
+    
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
             value: item[valueKey],
@@ -97,22 +111,9 @@ function ApplicationAdd() {
         }));
     };
 
-
-    const fetchApplicationTypes = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/applicationtype/all",
-                data: {},
-            });
-            setApplicationTypes(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu loại đơn", error);
-        }
-    };
-    useEffect(() => {
-        fetchApplicationTypes();
-    }, []);
+    // useEffect(() => {
+    //     fetchApplicationTypes();
+    // }, []);
 
     // Add case
     const handleApplication = async () => {
@@ -123,18 +124,17 @@ function ApplicationAdd() {
                 data: {
                     maDonDangKy: maDonDangKy,
                     maHoSoVuViec: maHoSoVuViec,
-                    maLoaiDon: maLoaiDon,
                     ngayNopDon: ngayNopDon,
                     ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL,
                     trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
-                    ngayQuyetDinhDonHopLeDuKien: ngayQDHopLe_DuKien,
-                    ngayQuyetDinhDonHopLe: ngayQDHopLe,
+                    ngayQuyetDinhDonHopLeDuKien: ngayKQThamDinhHinhThuc_DuKien,
+                    ngayQuyetDinhDonHopLe: ngayKQThamDinhHinhThuc,
                     ngayCongBoDonDuKien: ngayCongBo_DuKien,
                     ngayCongBoDon: ngayCongBo,
-                    ngayThamDinhNoiDungDuKien: ngayThamDinhND_DuKien,
-                    ngayKetQuaThamDinhNoiDung: ngayThamDinhND,
-                    ngayTraLoiKetQuaThamDinhNoiDungDuKien: ngayTraLoiKQThamDinhND_DuKien,
-                    ngayTraLoiKetQuaThamDinhNoiDung: ngayTraLoiKQThamDinhND,
+                    ngayThamDinhNoiDungDuKien: ngayKQThamDinhND_DuKien,
+                    ngayKetQuaThamDinhNoiDung: ngayKQThamDinhND,
+                    ngayTraLoiKetQuaThamDinhNoiDungDuKien: ngayKQTraLoiThamDinhND_DuKien,
+                    ngayTraLoiKetQuaThamDinhNoiDung: ngayKQTraLoiThamDinhND,
                     ngayThongBaoCapBang: ngayThongBaoCapBang,
                     ngayNopPhiCapBang: ngayNopPhiCapBang,
                     ngayNhanBang: ngayNhanBang,
@@ -180,19 +180,6 @@ function ApplicationAdd() {
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
-
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
-                        <Select
-                            options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
-                            value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
-                            onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
-                            placeholder="Chọn loại đơn đăng kí"
-                            className="w-full mt-1 rounded-lg h-10"
-                            isClearable
-                        />
-                    </div>
-
                     <div>
                         <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
                         <input
@@ -224,145 +211,6 @@ function ApplicationAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ dự kiến</label>
-                        <input
-                            type="date"
-                            value={ngayQDHopLe_DuKien}
-                            onChange={(e) => setNgayQDHopLe_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ</label>
-                        <input
-                            type="date"
-                            value={ngayQDHopLe}
-                            onChange={(e) => setNgayQDHopLe(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày công bố đơn dự kiến</label>
-                        <input
-                            type="date"
-                            value={ngayCongBo_DuKien}
-                            onChange={(e) => setNgayCongBo_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày công bố đơn</label>
-                        <input
-                            type="date"
-                            value={ngayCongBo}
-                            onChange={(e) => setNgayCongBo(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
-                        <input
-                            type="date"
-                            disabled
-                            value={ngayThamDinhND_DuKien}
-                            onChange={(e) => setNgayThamDinhND_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
-                        <input
-                            type="date"
-                            value={ngayThamDinhND}
-                            onChange={(e) => setNgayThamDinhND(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung dự kiến</label>
-                        <input
-                            type="date"
-                            value={ngayTraLoiKQThamDinhND_DuKien}
-                            disabled
-                            onChange={(e) => setNgayTraLoiKQThamDinhND_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung</label>
-                        <input
-                            type="date"
-                            value={ngayTraLoiKQThamDinhND}
-                            onChange={(e) => setNgayTraLoiKQThamDinhND(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày thông báo cấp bằng</label>
-                        <input
-                            type="date"
-                            value={ngayThongBaoCapBang}
-                            onChange={(e) => setNgayThongBaoCapBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày nộp phí cấp bằng</label>
-                        <input
-                            type="date"
-                            value={ngayNopPhiCapBang}
-                            onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày nhận bằng</label>
-                        <input
-                            type="date"
-                            value={ngayNhanBang}
-                            onChange={(e) => setNgayNhanBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày gửi bằng cho khách hàng</label>
-                        <input
-                            type="date"
-                            value={ngayGuiBangChoKH}
-                            onChange={(e) => setNgayGuiBangChoKH(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Số bằng</label>
-                        <input
-                            type="text"
-                            value={soBang}
-                            onChange={(e) => setSoBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày cấp bằng</label>
-                        <input
-                            type="date"
-                            value={ngayCapBang}
-                            onChange={(e) => setNgayCapBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày hết hạn bằng</label>
-                        <input
-                            type="date"
-                            value={ngayHetHanBang}
-                            onChange={(e) => setNgayHetHanBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
                         <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                         <Select
                             options={formatOptions(statusOptions, "value", "label")}
@@ -373,10 +221,78 @@ function ApplicationAdd() {
                             isClearable
                         />
                     </div>
+                    <div className="col-span-2">
+                        <FormalDetermination
+                            ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
+                            setKQTraLoiThamDinhHinhThuc_DuKien={setKQThamDinhHinhThuc_DuKien}
+                            ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
+                            setKQTraLoiThamDinhHinhThuc={setKQThamDinhHinhThuc}
+                        />
+                    </div>
+                    {daChonNgayThamDinh && (
+                        <div className="col-span-2">
+                            <AnnouncementOfApplication
+                                ngayCongBo_DuKien={ngayCongBo_DuKien}
+                                setNgayCongBo_DuKien={setNgayCongBo_DuKien}
+                                ngayCongBo={ngayCongBo}
+                                setNgayCongBo={setNgayCongBo}
+                            />
+                        </div>
+                    )}
+
+                    
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
+                        <input
+                            type="date"
+                            disabled
+                            value={ngayKQThamDinhND_DuKien}
+                            onChange={(e) => setNgayKQThamDinhND_DuKien(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
+                        <input
+                            type="date"
+                            value={ngayKQThamDinhND}
+                            onChange={(e) => setNgayKQThamDinhND(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg"
+                        />
+                    </div>
+                    <div className="col-span-2">
+                        <ContentReview
+                            ngayKQTraLoiThamDinhND_DuKien={ngayKQTraLoiThamDinhND_DuKien}
+                            setNgayKQTraLoihamDinhND_DuKien={setNgayKQTraLoihamDinhND_DuKien}
+                            ngayKQTraLoiThamDinhND={ngayKQTraLoiThamDinhND}
+                            setNgayKQTraLoiThamDinhND={setNgayKQTraLoiThamDinhND}
+                        />
+                    </div>
+                    <div className="col-span-2">
+                        <DiphimaProcess
+                            ngayThongBaoCapBang={ngayThongBaoCapBang}
+                            setNgayThongBaoCapBang={setNgayThongBaoCapBang}
+                            ngayNopPhiCapBang={ngayNopPhiCapBang}
+                            setNgayNopPhiCapBang={setNgayNopPhiCapBang}
+                            ngayNhanBang={ngayNhanBang}
+                            setNgayNhanBang={setNgayNhanBang}
+                        />
+
+                    </div>
+                    <div className="col-span-2">
+                        <DegreeInformation
+                            soBang={soBang}
+                            setSoBang={setSoBang}
+                            ngayCapBang={ngayCapBang}
+                            setNgayCapBang={setNgayCapBang}
+                            ngayHetHanBang={ngayHetHanBang}
+                            setNgayHetHanBang={setNgayHetHanBang}
+                            ngayGuiBangChoKH={ngayGuiBangChoKH}
+                            setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                        />
+                    </div>
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />   
-
-
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>

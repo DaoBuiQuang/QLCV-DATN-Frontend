@@ -65,7 +65,7 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-x-hidden">
       <div
         className={`fixed top-0 left-0 h-full w-56 bg-white shadow-md transform transition-transform duration-300 
         ${isMenuOpen ? "translate-x-0" : "-translate-x-56"}`}

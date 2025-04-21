@@ -7,14 +7,13 @@ function CaseAdd() {
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maKhachHang, setMaKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
+    const [maLoaiDon, setMaLoaiDon] = useState("")
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
     const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
     const [ngayXuLy, setNgayXuLy] = useState(null);
     const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
     const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
-    // const [ngayTao, setNgayTao] = useState("");
-    // const [ngayCapNhap, setNgayCapNhap] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
     const [nhanSuVuViec, setNhanSuVuViec] = useState([]);
     const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState(null);
@@ -25,6 +24,7 @@ function CaseAdd() {
     const [customers, setCustomers] = useState([]);
     const [partners, setPartners] = useState([]);
     const [staffs, setStaffs] = useState([]);
+    const [applicationtypes, setApplicationTypes] = useState([]);
     const processSteps = [
         { value: "buoc_1", label: "Bước 1: Tiếp nhận" },
         { value: "buoc_2", label: "Bước 2: Xử lý" },
@@ -116,12 +116,25 @@ function CaseAdd() {
             console.error("Lỗi khi lấy dữ liệu nhân sự:", error);
         }
     };
+    const fetchApplicationTypes = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/applicationtype/all",
+                data: {},
+            });
+            setApplicationTypes(response);
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu loại đơn", error);
+        }
+    };
     useEffect(() => {
         fetchCountries();
         fetchPartners();
         fetchCustomers();
         fetchCaseTypes();
         fetchStaffs();
+        fetchApplicationTypes();
     }, []);
 
     // Add case
@@ -137,8 +150,9 @@ function CaseAdd() {
                     ngayTiepNhan,
                     ngayXuLy,
                     maLoaiVuViec,
-                    maQuocGia,
+                    maQuocGiaVuViec: maQuocGia,
                     trangThaiVuViec,
+                    maLoaiDon,
                     // ngayTao,
                     // ngayCapNhap,
                     buocXuLyHienTai,
@@ -242,7 +256,17 @@ function CaseAdd() {
                             isClearable
                         />
                     </div>
-
+                    <div>
+                        <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
+                        <Select
+                            options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
+                            value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
+                            onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
+                            placeholder="Chọn loại đơn đăng kí"
+                            className="w-full mt-1 rounded-lg h-10"
+                            isClearable
+                        />
+                    </div>
                     <div>
                         <label className="block text-gray-700 text-left">Quốc gia vụ việc</label>
                         <Select

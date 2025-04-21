@@ -5,9 +5,6 @@ import Select from "react-select";
 function ApplicationList() {
   const [applications, setApplications] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [applicationTypes, setApplicationTypes] = useState([]);
-  const [selectedApplicationTypes, setSelectedApplicationType] = useState("");
-
   const navigate = useNavigate();
 
   const fetchApplications = async (searchValue) => {
@@ -22,18 +19,6 @@ function ApplicationList() {
       console.error("Lỗi khi lấy danh sách đơn đăng ký:", error);
     }
   };
-  const fetchApplicationTypes = async () => {
-    try {
-      const response = await callAPI({
-        method: "post",
-        endpoint: "/applicationtype/all",
-        data: {}
-      })
-      setApplicationTypes(response)
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu loại đơn: ", error)
-    }
-  }
   const formatOptions = (data, valueKey, labelKey) => {
     return data.map(item => ({
       value: item[valueKey],
@@ -42,7 +27,6 @@ function ApplicationList() {
   };
   useEffect(() => {
     fetchApplications("");
-    fetchApplicationTypes();
   }, []);
 
   return (
@@ -73,17 +57,7 @@ function ApplicationList() {
           </div>
 
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Select
-            options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
-            value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
-            onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
-            placeholder="Chọn loại đơn"
-            className="w-full md:w-1/6"
-            isClearable
-          />
-
-        </div>
+       
       </div>
       <div class="overflow-x-auto">
         <table className="w-full border-collapse bg-white text-sm mt-4">
@@ -120,7 +94,6 @@ function ApplicationList() {
                   {app.maDonDangKy}
                 </td>
                 <td className="p-2">{app.maHoSoVuViec}</td>
-                <td className="p-2">{app.tenLoaiDon}</td>
                 <td className="p-2">
                   {app.ngayNopDon ? new Date(app.ngayNopDon).toLocaleDateString() : ""}
                 </td>
