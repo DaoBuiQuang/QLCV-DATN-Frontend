@@ -8,9 +8,10 @@ import AddDocumentModal from "../../components/TrademarkRegistrationProcess/AddD
 import DocumentSection from "../../components/DocumentSection";
 import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication";
 import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination";
-import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
+import ReplyContentRating from "../../components/TrademarkRegistrationProcess/ReplyContentRating";
 import DiphimaProcess from "../../components/TrademarkRegistrationProcess/DiphimaProcess";
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
+import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const [maDonDangKy, setMaDonDangKy] = useState("");
@@ -21,8 +22,8 @@ function ApplicationAdd() {
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
     const [trangThaiHoanThanhHSTL, setTrangThaiHoanThanhHSTL] = useState("");
 
-    const [ngayKQThamDinhHinhThuc_DuKien, setKQThamDinhHinhThuc_DuKien] = useState(null);
-    const [ngayKQThamDinhHinhThuc, setKQThamDinhHinhThuc] = useState(null);
+    const [ngayKQThamDinhHinhThuc_DuKien, setNgayKQThamDinhHinhThuc_DuKien] = useState(null);
+    const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
@@ -30,8 +31,8 @@ function ApplicationAdd() {
     const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
 
-    const [ngayKQTraLoiThamDinhND_DuKien, setNgayKQTraLoihamDinhND_DuKien] = useState(null);
-    const [ngayKQTraLoiThamDinhND, setNgayKQTraLoiThamDinhND] = useState(null);
+    const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQhamDinhND_DuKien] = useState(null);
+    const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
     const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
@@ -54,35 +55,37 @@ function ApplicationAdd() {
         { value: "hoan_thanh", label: "Hoàn thành" },
         { value: "tam_dung", label: "Tạm dừng" }
     ];
-    const [daChonNgayThamDinh, setDaChonNgayThamDinh] = useState(false);
+    const [daChonNgayThamDinhHinhThuc, setDaChonNgayThamDinhHinhThuc] = useState(false);
+    const [daChonNgayCongBoDon, setDaChonNgayCongBoDon] = useState(false);
     useEffect(() => {
         if (ngayNopDon) {
             const ngayKQThamDinhHinhThuc = dayjs(ngayNopDon).add(1, 'month');
-            setKQThamDinhHinhThuc(ngayKQThamDinhHinhThuc.format('YYYY-MM-DD'));
+            setNgayKQThamDinhHinhThuc_DuKien(ngayKQThamDinhHinhThuc.format('YYYY-MM-DD'));
 
         } else {
-            setKQThamDinhHinhThuc(null);
+            setNgayKQThamDinhHinhThuc_DuKien(null);
         }
-        // if (ngayKQThamDinhHinhThuc) {
-        //     const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
-        //     setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
-        // } else {
-        //     setNgayCongBo_DuKien(null);
-        // }
+        if (ngayKQThamDinhHinhThuc) {
+            const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
+            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
+            setDaChonNgayThamDinhHinhThuc(true);
+        } else {
+            setNgayCongBo_DuKien(null);
+        }
 
         if (ngayCongBo) {
-            debugger
             const ngayKQThamDinhND = dayjs(ngayCongBo).add(9, 'month');
             setNgayKQThamDinhND_DuKien(ngayKQThamDinhND.format('YYYY-MM-DD'));
+            setDaChonNgayCongBoDon(true)
         } else {
             setNgayKQThamDinhND_DuKien(null);
         }
 
         if (ngayKQThamDinhND) {
             const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
-            setNgayKQTraLoihamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
+            setNgayTraLoiKQhamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
         } else {
-            setNgayKQTraLoihamDinhND_DuKien(null);
+            setNgayTraLoiKQhamDinhND_DuKien(null);
         }
 
         if (ngayThongBaoCapBang) {
@@ -92,18 +95,18 @@ function ApplicationAdd() {
             setNgayNopPhiCapBang(null);
         }
 
-    }, [ngayNopDon, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo]);
+    }, [ngayNopDon, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc]);
 
-    useEffect(() => {
-        if (ngayKQThamDinhHinhThuc) {
-            const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
-            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
-            setDaChonNgayThamDinh(true); // ✅ Cập nhật trạng thái
-        } else {
-            setNgayCongBo_DuKien(null);
-        }
-    }, [ngayKQThamDinhHinhThuc]);
-    
+    // useEffect(() => {
+    //     if (ngayKQThamDinhHinhThuc) {
+    //         const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
+    //         setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
+    //         setDaChonNgayThamDinh(true); // ✅ Cập nhật trạng thái
+    //     } else {
+    //         setNgayCongBo_DuKien(null);
+    //     }
+    // }, [ngayKQThamDinhHinhThuc]);
+
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
             value: item[valueKey],
@@ -133,8 +136,8 @@ function ApplicationAdd() {
                     ngayCongBoDon: ngayCongBo,
                     ngayThamDinhNoiDungDuKien: ngayKQThamDinhND_DuKien,
                     ngayKetQuaThamDinhNoiDung: ngayKQThamDinhND,
-                    ngayTraLoiKetQuaThamDinhNoiDungDuKien: ngayKQTraLoiThamDinhND_DuKien,
-                    ngayTraLoiKetQuaThamDinhNoiDung: ngayKQTraLoiThamDinhND,
+                    ngayTraLoiKetQuaThamDinhNoiDungDuKien: ngayTraLoiKQThamDinhND_DuKien,
+                    ngayTraLoiKetQuaThamDinhNoiDung: ngayTraLoiKQThamDinhND,
                     ngayThongBaoCapBang: ngayThongBaoCapBang,
                     ngayNopPhiCapBang: ngayNopPhiCapBang,
                     ngayNhanBang: ngayNhanBang,
@@ -224,12 +227,12 @@ function ApplicationAdd() {
                     <div className="col-span-2">
                         <FormalDetermination
                             ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
-                            setKQTraLoiThamDinhHinhThuc_DuKien={setKQThamDinhHinhThuc_DuKien}
+                            setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
                             ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
-                            setKQTraLoiThamDinhHinhThuc={setKQThamDinhHinhThuc}
+                            setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
                         />
                     </div>
-                    {daChonNgayThamDinh && (
+                    {daChonNgayThamDinhHinhThuc && (
                         <div className="col-span-2">
                             <AnnouncementOfApplication
                                 ngayCongBo_DuKien={ngayCongBo_DuKien}
@@ -239,33 +242,23 @@ function ApplicationAdd() {
                             />
                         </div>
                     )}
+                    {daChonNgayCongBoDon && (
+                        <div className="col-span-2">
+                            <ContentReview
+                                ngayKQThamDinhND_DuKien={ngayKQThamDinhND_DuKien}
+                                setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
+                                ngayKQThamDinhND={ngayKQThamDinhND}
+                                setNgayKQThamDinhND={setNgayKQThamDinhND}
+                            />
+                        </div>
+                    )}
 
-                    
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
-                        <input
-                            type="date"
-                            disabled
-                            value={ngayKQThamDinhND_DuKien}
-                            onChange={(e) => setNgayKQThamDinhND_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
-                        <input
-                            type="date"
-                            value={ngayKQThamDinhND}
-                            onChange={(e) => setNgayKQThamDinhND(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
                     <div className="col-span-2">
-                        <ContentReview
-                            ngayKQTraLoiThamDinhND_DuKien={ngayKQTraLoiThamDinhND_DuKien}
-                            setNgayKQTraLoihamDinhND_DuKien={setNgayKQTraLoihamDinhND_DuKien}
-                            ngayKQTraLoiThamDinhND={ngayKQTraLoiThamDinhND}
-                            setNgayKQTraLoiThamDinhND={setNgayKQTraLoiThamDinhND}
+                        <ReplyContentRating
+                            ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
+                            setNgayTraLoiKQhamDinhND_DuKien={setNgayTraLoiKQhamDinhND_DuKien}
+                            ngayTraLoiKQThamDinhND={ngayTraLoiKQThamDinhND}
+                            setNgayTraLoiKQThamDinhND={setNgayTraLoiKQThamDinhND}
                         />
                     </div>
                     <div className="col-span-2">

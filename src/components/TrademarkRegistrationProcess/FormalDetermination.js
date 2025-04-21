@@ -3,9 +3,9 @@ import React from 'react';
 
 const FormalDetermination = ({
     ngayKQThamDinhHinhThuc_DuKien,
-    setKQThamDinhHinhThuc_DuKien,
+    setNgayKQThamDinhHinhThuc_DuKien,
     ngayKQThamDinhHinhThuc,
-    setKQThamDinhHinhThuc
+    setNgayKQThamDinhHinhThuc
 }) => {
     return (
         <div className="flex-1">
@@ -16,7 +16,7 @@ const FormalDetermination = ({
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc_DuKien}
-                        onChange={(e) => setKQThamDinhHinhThuc_DuKien(e.target.value)}
+                        onChange={(e) => setNgayKQThamDinhHinhThuc_DuKien(e.target.value)}
                         className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
                         disabled
                     />
@@ -26,7 +26,7 @@ const FormalDetermination = ({
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc}
-                        onChange={(e) => setKQThamDinhHinhThuc(e.target.value)}
+                        onChange={(e) => setNgayKQThamDinhHinhThuc(e.target.value)}
                         className="w-full p-2 mt-1 border rounded-lg"
                     />
                 </div>
