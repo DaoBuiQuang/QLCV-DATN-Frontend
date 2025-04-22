@@ -16,7 +16,6 @@ function ApplicationAdd() {
     const navigate = useNavigate();
     const [maDonDangKy, setMaDonDangKy] = useState("");
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
-    const [maLoaiDon, setMaLoaiDon] = useState("")
 
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
@@ -57,6 +56,9 @@ function ApplicationAdd() {
     ];
     const [daChonNgayThamDinhHinhThuc, setDaChonNgayThamDinhHinhThuc] = useState(false);
     const [daChonNgayCongBoDon, setDaChonNgayCongBoDon] = useState(false);
+    const [daChonNgayThamDinhNoiDung, setDaChonNgayThamDinhNoiDung] = useState(false);
+    const [daChonNgayTraLoiThamDinhNoiDung, setDaChonNgayTraLoiThamDinhNoiDung] = useState(false)
+    const [daChonHoanTatThuTucNhapBang, setDaChonHoanTatThuTucNhapBang] = useState(false)
     useEffect(() => {
         if (ngayNopDon) {
             const ngayKQThamDinhHinhThuc = dayjs(ngayNopDon).add(1, 'month');
@@ -84,28 +86,25 @@ function ApplicationAdd() {
         if (ngayKQThamDinhND) {
             const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
             setNgayTraLoiKQhamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
+            setDaChonNgayThamDinhNoiDung(true);
         } else {
             setNgayTraLoiKQhamDinhND_DuKien(null);
         }
+        if (ngayTraLoiKQThamDinhND) {
+            setDaChonNgayTraLoiThamDinhNoiDung(true)
+        } else {
 
+        }
         if (ngayThongBaoCapBang) {
             const ngayNopPhiCapBang = dayjs(ngayThongBaoCapBang).add(3, 'month');
             setNgayNopPhiCapBang(ngayNopPhiCapBang.format('YYYY-MM-DD'));
         } else {
             setNgayNopPhiCapBang(null);
         }
-
-    }, [ngayNopDon, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc]);
-
-    // useEffect(() => {
-    //     if (ngayKQThamDinhHinhThuc) {
-    //         const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
-    //         setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
-    //         setDaChonNgayThamDinh(true); // ✅ Cập nhật trạng thái
-    //     } else {
-    //         setNgayCongBo_DuKien(null);
-    //     }
-    // }, [ngayKQThamDinhHinhThuc]);
+        if (ngayNhanBang) {
+            setDaChonHoanTatThuTucNhapBang(true);
+        }
+    }, [ngayNopDon, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang]);
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -192,7 +191,6 @@ function ApplicationAdd() {
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
-
                     <div>
                         <label className="block text-gray-700 text-left">Ngày hoàn thành hồ sơ tài liệu</label>
                         <input
@@ -252,38 +250,43 @@ function ApplicationAdd() {
                             />
                         </div>
                     )}
+                    {daChonNgayThamDinhNoiDung && (
+                        <div className="col-span-2">
+                            <ReplyContentRating
+                                ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
+                                setNgayTraLoiKQhamDinhND_DuKien={setNgayTraLoiKQhamDinhND_DuKien}
+                                ngayTraLoiKQThamDinhND={ngayTraLoiKQThamDinhND}
+                                setNgayTraLoiKQThamDinhND={setNgayTraLoiKQThamDinhND}
+                            />
+                        </div>
+                    )}
+                    {daChonNgayTraLoiThamDinhNoiDung && (
+                        <div className="col-span-2">
+                            <DiphimaProcess
+                                ngayThongBaoCapBang={ngayThongBaoCapBang}
+                                setNgayThongBaoCapBang={setNgayThongBaoCapBang}
+                                ngayNopPhiCapBang={ngayNopPhiCapBang}
+                                setNgayNopPhiCapBang={setNgayNopPhiCapBang}
+                                ngayNhanBang={ngayNhanBang}
+                                setNgayNhanBang={setNgayNhanBang}
+                            />
+                        </div>
+                    )}
+                    {daChonHoanTatThuTucNhapBang && (
+                        <div className="col-span-2">
+                            <DegreeInformation
+                                soBang={soBang}
+                                setSoBang={setSoBang}
+                                ngayCapBang={ngayCapBang}
+                                setNgayCapBang={setNgayCapBang}
+                                ngayHetHanBang={ngayHetHanBang}
+                                setNgayHetHanBang={setNgayHetHanBang}
+                                ngayGuiBangChoKH={ngayGuiBangChoKH}
+                                setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                            />
+                        </div>
+                    )}
 
-                    <div className="col-span-2">
-                        <ReplyContentRating
-                            ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
-                            setNgayTraLoiKQhamDinhND_DuKien={setNgayTraLoiKQhamDinhND_DuKien}
-                            ngayTraLoiKQThamDinhND={ngayTraLoiKQThamDinhND}
-                            setNgayTraLoiKQThamDinhND={setNgayTraLoiKQThamDinhND}
-                        />
-                    </div>
-                    <div className="col-span-2">
-                        <DiphimaProcess
-                            ngayThongBaoCapBang={ngayThongBaoCapBang}
-                            setNgayThongBaoCapBang={setNgayThongBaoCapBang}
-                            ngayNopPhiCapBang={ngayNopPhiCapBang}
-                            setNgayNopPhiCapBang={setNgayNopPhiCapBang}
-                            ngayNhanBang={ngayNhanBang}
-                            setNgayNhanBang={setNgayNhanBang}
-                        />
-
-                    </div>
-                    <div className="col-span-2">
-                        <DegreeInformation
-                            soBang={soBang}
-                            setSoBang={setSoBang}
-                            ngayCapBang={ngayCapBang}
-                            setNgayCapBang={setNgayCapBang}
-                            ngayHetHanBang={ngayHetHanBang}
-                            setNgayHetHanBang={setNgayHetHanBang}
-                            ngayGuiBangChoKH={ngayGuiBangChoKH}
-                            setNgayGuiBangChoKH={setNgayGuiBangChoKH}
-                        />
-                    </div>
                 </div>
                 <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
                 <div className="flex justify-center gap-4 mt-4">
