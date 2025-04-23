@@ -79,6 +79,7 @@ function CaseEdit() {
                 setMaQuocGia(response.maQuocGiaVuViec);
                 setTrangThaiVuViec(response.trangThaiVuViec);
                 setBuocXuLyHienTai(response.buocXuLyHienTai);
+                setMaLoaiDon(response.maLoaiDon);
                 const nhanSuChinh = response.nhanSuXuLy.find(item => item.vaiTro === "Chính");
                 const nhanSuPhu = response.nhanSuXuLy.find(item => item.vaiTro === "Phụ");
 

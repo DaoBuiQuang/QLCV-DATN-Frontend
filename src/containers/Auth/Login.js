@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import { useDispatch } from 'react-redux';
-import { setRole } from "../../features/authSlice";
+import { setAuth } from "../../features/authSlice";
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Login = () => {
             if (response.token) {
                 localStorage.setItem("token", response.token);
                 const decoded = jwtDecode(response.token);
-                dispatch(setRole(decoded.role));
+                dispatch(setAuth({ authId: decoded.id, role: decoded.role }));
                 alert("Đăng nhập thành công!");
                 console.log("Token nhận được:", response.token);
                 navigate("/");

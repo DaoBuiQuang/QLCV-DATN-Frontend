@@ -47,12 +47,14 @@ function ApplicationAdd() {
 
     const [taiLieuList, setTaiLieuList] = useState([]);
 
-   
+
     const statusOptions = [
         { value: "dang_xu_ly", label: "Đang xử lý" },
         { value: "hoan_thanh", label: "Hoàn thành" },
         { value: "tam_dung", label: "Tạm dừng" }
     ];
+    const [daChonNgayNopDon, setDaChonNgayNopDon] = useState(false);
+    const [daChonNgayHoanThanhHSTL, setDaChonNgayHoanThanhHSTL] = useState(false);
     const [daChonNgayThamDinhHinhThuc, setDaChonNgayThamDinhHinhThuc] = useState(false);
     const [daChonNgayCongBoDon, setDaChonNgayCongBoDon] = useState(false);
     const [daChonNgayThamDinhNoiDung, setDaChonNgayThamDinhNoiDung] = useState(false);
@@ -60,9 +62,18 @@ function ApplicationAdd() {
     const [daChonHoanTatThuTucNhapBang, setDaChonHoanTatThuTucNhapBang] = useState(false)
     useEffect(() => {
         if (ngayNopDon) {
-            const ngayKQThamDinhHinhThuc = dayjs(ngayNopDon).add(1, 'month');
+            const ngayHoanThanhHoSoTaiLieu = dayjs(ngayNopDon).add(1, 'month');
+            setNgayHoanThanhHSTL_DuKien(ngayHoanThanhHoSoTaiLieu.format('YYYY-MM-DD'));
+            setDaChonNgayNopDon(true);
+            setTrangThaiDon("Hoàn thành hồ sơ tài liệu")
+        } else {
+            setNgayHoanThanhHSTL_DuKien(null);
+        }
+        if (ngayHoanThanhHSTL) {
+            const ngayKQThamDinhHinhThuc = dayjs(ngayHoanThanhHSTL).add(1, 'month');
             setNgayKQThamDinhHinhThuc_DuKien(ngayKQThamDinhHinhThuc.format('YYYY-MM-DD'));
-
+            setDaChonNgayHoanThanhHSTL(true)
+            setTrangThaiDon("Thẩm định hình thức")
         } else {
             setNgayKQThamDinhHinhThuc_DuKien(null);
         }
@@ -70,6 +81,7 @@ function ApplicationAdd() {
             const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
             setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
             setDaChonNgayThamDinhHinhThuc(true);
+            setTrangThaiDon("Công bố đơn")
         } else {
             setNgayCongBo_DuKien(null);
         }
@@ -78,6 +90,7 @@ function ApplicationAdd() {
             const ngayKQThamDinhND = dayjs(ngayCongBo).add(9, 'month');
             setNgayKQThamDinhND_DuKien(ngayKQThamDinhND.format('YYYY-MM-DD'));
             setDaChonNgayCongBoDon(true)
+            setTrangThaiDon("Thẩm định nội dung")
         } else {
             setNgayKQThamDinhND_DuKien(null);
         }
@@ -86,15 +99,18 @@ function ApplicationAdd() {
             const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
             setNgayTraLoiKQhamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
             setDaChonNgayThamDinhNoiDung(true);
+            setTrangThaiDon("Trả lời thẩm định nội dung")
         } else {
             setNgayTraLoiKQhamDinhND_DuKien(null);
         }
         if (ngayTraLoiKQThamDinhND) {
+            setTrangThaiDon("Hoàn thành nhận bằng")
             setDaChonNgayTraLoiThamDinhNoiDung(true)
         } else {
 
         }
         if (ngayThongBaoCapBang) {
+            setTrangThaiDon("Chờ nhận bằng")
             const ngayNopPhiCapBang = dayjs(ngayThongBaoCapBang).add(3, 'month');
             setNgayNopPhiCapBang(ngayNopPhiCapBang.format('YYYY-MM-DD'));
         } else {
@@ -103,7 +119,7 @@ function ApplicationAdd() {
         if (ngayNhanBang) {
             setDaChonHoanTatThuTucNhapBang(true);
         }
-    }, [ngayNopDon, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang]);
+    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang]);
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -181,6 +197,16 @@ function ApplicationAdd() {
                             className="w-full p-2 mt-1 border rounded-lg h-10"
                         />
                     </div>
+                    <div className="flex-1">
+                        <label className="block text-gray-700 text-left">Trạng thái đơn</label>
+                        <input
+                            type="text"
+                            value={trangThaiDon}
+                            disabled
+                            onChange={(e) => setTrangThaiDon(e.target.value)}
+                            className="w-full p-2 mt-1 border rounded-lg h-10 "
+                        />
+                    </div>
                     <div>
                         <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
                         <input
@@ -190,27 +216,29 @@ function ApplicationAdd() {
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
-                    
-                    <div className="col-span-2">
-                        <CompleteDocumentation
-                            ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
-                            setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
-                            ngayHoanThanhHSTL={ngayHoanThanhHSTL}
-                            setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
-                            trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
-                            setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
-                            formatOptions={formatOptions}
-                        />
-                    </div>
-                    
-                    <div className="col-span-2">
-                        <FormalDetermination
-                            ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
-                            setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
-                            ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
-                            setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
-                        />
-                    </div>
+                    {daChonNgayNopDon && (
+                        <div className="col-span-2">
+                            <CompleteDocumentation
+                                ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
+                                setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
+                                ngayHoanThanhHSTL={ngayHoanThanhHSTL}
+                                setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
+                                trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
+                                setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
+                                formatOptions={formatOptions}
+                            />
+                        </div>
+                    )}
+                    {daChonNgayHoanThanhHSTL && (
+                        <div className="col-span-2">
+                            <FormalDetermination
+                                ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
+                                setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
+                                ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
+                                setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
+                            />
+                        </div>
+                    )}
                     {daChonNgayThamDinhHinhThuc && (
                         <div className="col-span-2">
                             <AnnouncementOfApplication
@@ -267,7 +295,6 @@ function ApplicationAdd() {
                             />
                         </div>
                     )}
-
                 </div>
                 <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
                 <div className="flex justify-center gap-4 mt-4">

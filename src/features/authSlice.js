@@ -1,21 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  role: null, 
+  role: null,
+  authId: null, 
 };
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setRole: (state, action) => {
-      state.role = action.payload;
+    // setRole: (state, action) => {
+    //   state.role = action.payload;
+    // },
+    setAuth: (state, action) => {
+      state.authId = action.payload.authId;
+      state.role = action.payload.role;
     },
-    clearRole: (state) => {
+    clearAuth: (state) => {
       state.role = null;
+      state.authId = null;
     },
   },
 });
 
-export const { setRole, clearRole } = authSlice.actions;
+export const { setRole, setAuth, clearAuth } = authSlice.actions;
 
 export default authSlice.reducer;

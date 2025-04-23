@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
+import { useSelector } from 'react-redux';
 function CountryList() {
+  const role = useSelector((state) => state.auth.role);
   const [countries, setCountries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); // Hook điều hướng
-
+  const navigate = useNavigate();
   const fetchCountries = async (searchValue) => {
     try {
       const response = await callAPI({
@@ -42,12 +43,15 @@ function CountryList() {
             >
               🔎 Tìm kiếm
             </button>
-            <button
-              onClick={() => navigate("/countryadd")} // Chuyển hướng khi bấm nút
-              className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
-            >
-              ➕ Thêm mới
-            </button>
+            {(role === 'admin' || role === 'user') && (
+              <button
+                onClick={() => navigate("/countryadd")}
+                className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+              >
+                ➕ Thêm mới
+              </button>
+            )}
+
           </div>
         </div>
 
@@ -81,15 +85,20 @@ function CountryList() {
               <td className="p-2">{country.tenQuocGia}</td>
               <td className="p-2">
                 <div className="flex gap-2">
-                  <button
-                    className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                    onClick={() => navigate(`/countryedit/${country.maQuocGia}`)}
-                  >
-                    📝
-                  </button>
-                  <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300">
-                    🗑️
-                  </button>
+                  {(role === 'admin' || role === 'user') && (
+                    <div className="flex gap-2">
+                      <button
+                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                        onClick={() => navigate(`/countryedit/${country.maQuocGia}`)}
+                      >
+                        📝
+                      </button>
+                      <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300">
+                        🗑️
+                      </button>
+                    </div>
+                  )}
+
                 </div>
               </td>
             </tr>

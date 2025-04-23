@@ -16,7 +16,7 @@ const CompleteDocumentation = ({
     ];
     return (
         <div className="flex-1">
-            <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Thẩm định nội dung</h3>
+            <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Hoàn thành hồ sơ tài liệu</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label className="block text-gray-700 text-left">Ngày hoàn thành hồ sơ tài liệu dự kiến</label>
