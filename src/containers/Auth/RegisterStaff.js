@@ -71,6 +71,7 @@ function RegisterStaff() {
           >
             <option value="user">Nhân viên</option>
             <option value="admin">Quản trị viên</option>
+            <option value="trainee">Thực tập sinh - học việc</option>
           </select>
         </div>
         <div className="flex justify-center gap-4 mt-4">

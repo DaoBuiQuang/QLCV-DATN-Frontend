@@ -6,13 +6,11 @@ import { ToastContainer } from "react-toastify";
 export default function App() {
   return (
     <div className="App">
-            {/* <AuthProvider> */}
-            <ToastContainer />
-                <AppRoutes />
-            {/* </AuthProvider> */}
-    
-           
-        </div>
+      {/* <AuthProvider> */}
+      <ToastContainer />
+      <AppRoutes />
+      {/* </AuthProvider> */}
+    </div>
   );
 }
 

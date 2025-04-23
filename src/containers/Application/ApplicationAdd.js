@@ -12,12 +12,14 @@ import ReplyContentRating from "../../components/TrademarkRegistrationProcess/Re
 import DiphimaProcess from "../../components/TrademarkRegistrationProcess/DiphimaProcess";
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
+import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const [maDonDangKy, setMaDonDangKy] = useState("");
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
 
     const [ngayNopDon, setNgayNopDon] = useState(null);
+    const [ngayHoanThanhHSTL_DuKien, setNgayHoanThanhHSTL_DuKien] = useState(null);
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
     const [trangThaiHoanThanhHSTL, setTrangThaiHoanThanhHSTL] = useState("");
 
@@ -45,10 +47,7 @@ function ApplicationAdd() {
 
     const [taiLieuList, setTaiLieuList] = useState([]);
 
-    const processStatus = [
-        { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
-        { value: "hoan_thanh", label: "Hoàn thành" }
-    ];
+   
     const statusOptions = [
         { value: "dang_xu_ly", label: "Đang xử lý" },
         { value: "hoan_thanh", label: "Hoàn thành" },
@@ -191,37 +190,19 @@ function ApplicationAdd() {
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày hoàn thành hồ sơ tài liệu</label>
-                        <input
-                            type="date"
-                            value={ngayHoanThanhHSTL}
-                            onChange={(e) => setNgayHoanThanhHSTL(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                    
+                    <div className="col-span-2">
+                        <CompleteDocumentation
+                            ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
+                            setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
+                            ngayHoanThanhHSTL={ngayHoanThanhHSTL}
+                            setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
+                            trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
+                            setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
+                            formatOptions={formatOptions}
                         />
                     </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Trạng thái hoàn thành hồ sơ tài liệu</label>
-                        <Select
-                            options={formatOptions(processStatus, "value", "label")}
-                            value={trangThaiHoanThanhHSTL ? processStatus.find(opt => opt.value === trangThaiHoanThanhHSTL) : null}
-                            onChange={selectedOption => setTrangThaiHoanThanhHSTL(selectedOption?.value)}
-                            placeholder="Chọn trạng thái hoàn thành hồ sơ vụ việc"
-                            className="w-full mt-1 rounded-lg"
-                            isClearable
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Trạng thái đơn</label>
-                        <Select
-                            options={formatOptions(statusOptions, "value", "label")}
-                            value={trangThaiDon ? statusOptions.find(opt => opt.value === trangThaiDon) : null}
-                            onChange={selectedOption => setTrangThaiDon(selectedOption?.value)}
-                            placeholder="Chọn trạng thái đơn"
-                            className="w-full mt-1 rounded-lg"
-                            isClearable
-                        />
-                    </div>
+                    
                     <div className="col-span-2">
                         <FormalDetermination
                             ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}

@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
+import { useDispatch } from 'react-redux';
+import { setRole } from "../../features/authSlice";
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -20,6 +23,8 @@ const Login = () => {
     
             if (response.token) {
                 localStorage.setItem("token", response.token);
+                const decoded = jwtDecode(response.token);
+                dispatch(setRole(decoded.role));
                 alert("Đăng nhập thành công!");
                 console.log("Token nhận được:", response.token);
                 navigate("/");

@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
-
+import { useSelector } from 'react-redux';
 function StaffList() {
+  const role = useSelector((state) => state.auth.role);
+  console.log("role: ", role)
   const [staffs, setStaffs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
