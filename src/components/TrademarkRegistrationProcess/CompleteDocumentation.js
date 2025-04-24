@@ -24,7 +24,8 @@ const CompleteDocumentation = ({
                         type="date"
                         value={ngayHoanThanhHSTL_DuKien}
                         onChange={(e) => setNgayHoanThanhHSTL_DuKien(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg"
+                        className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        disabled
                     />
                 </div>
                 <div>

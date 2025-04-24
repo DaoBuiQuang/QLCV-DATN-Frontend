@@ -1,22 +1,33 @@
-// components/CongBoDon.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 
 const FormalDetermination = ({
     ngayKQThamDinhHinhThuc_DuKien,
     setNgayKQThamDinhHinhThuc_DuKien,
     ngayKQThamDinhHinhThuc,
-    setNgayKQThamDinhHinhThuc
+    setNgayKQThamDinhHinhThuc,
+    ngayTraLoiKQTuChoiThamDinhHinhThuc,
+    setNgayTraLoiKQTuChoiThamDinhHinhThuc,
+    giaHanTraLoiKQTuChoiThamDinhHinhThuc,
+    setGiaHanTraLoiKQTuChoiThamDinhHinhThuc
 }) => {
     const [biTuChoi, setBiTuChoi] = useState(false);
-    const [ngayTraLoiTuChoi, setNgayTraLoiTuChoi] = useState("");
+    const originalNgayTraLoiRef = useRef("");
 
-    const handleGiaHan = () => {
-        if (ngayTraLoiTuChoi) {
-            const newDate = dayjs(ngayTraLoiTuChoi).add(2, 'month').format('YYYY-MM-DD');
-            setNgayTraLoiTuChoi(newDate);
+    useEffect(() => {
+        if (giaHanTraLoiKQTuChoiThamDinhHinhThuc) {
+            if (ngayTraLoiKQTuChoiThamDinhHinhThuc && !originalNgayTraLoiRef.current) {
+                originalNgayTraLoiRef.current = ngayTraLoiKQTuChoiThamDinhHinhThuc;
+                const newDate = dayjs(ngayTraLoiKQTuChoiThamDinhHinhThuc).add(2, 'month').format('YYYY-MM-DD');
+                setNgayTraLoiKQTuChoiThamDinhHinhThuc(newDate);
+            }
+        } else {
+            if (originalNgayTraLoiRef.current) {
+                setNgayTraLoiKQTuChoiThamDinhHinhThuc(originalNgayTraLoiRef.current);
+                originalNgayTraLoiRef.current = "";
+            }
         }
-    };
+    }, [giaHanTraLoiKQTuChoiThamDinhHinhThuc]);
 
     return (
         <div className="flex-1">
@@ -42,6 +53,7 @@ const FormalDetermination = ({
                     />
                 </div>
             </div>
+
             <div className="mt-4">
                 <label className="inline-flex items-center text-gray-700">
                     <input
@@ -55,26 +67,34 @@ const FormalDetermination = ({
             </div>
 
             {biTuChoi && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày trả lời bị từ chối</label>
-                        <input
-                            type="date"
-                            value={ngayTraLoiTuChoi}
-                            onChange={(e) => setNgayTraLoiTuChoi(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
+                <>
+                    <div className="mt-2">
+                        <label className="inline-flex items-center text-gray-700">
+                            <input
+                                type="checkbox"
+                                className="form-checkbox mr-2"
+                                checked={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                onChange={(e) => setGiaHanTraLoiKQTuChoiThamDinhHinhThuc(e.target.checked)}
+                            />
+                            Cho phép gia hạn trả lời từ chối thêm 2 tháng?
+                        </label>
                     </div>
-                    <div className="flex items-end">
-                        <button
-                            type="button"
-                            onClick={handleGiaHan}
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
-                            Gia hạn thêm 2 tháng
-                        </button>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label className="block text-gray-700 text-left">Ngày trả lời từ chối thẩm định hình thức</label>
+                            <input
+                                type="date"
+                                value={ngayTraLoiKQTuChoiThamDinhHinhThuc}
+                                onChange={(e) => {
+                                    setNgayTraLoiKQTuChoiThamDinhHinhThuc(e.target.value);
+                                    originalNgayTraLoiRef.current = ""; 
+                                }}
+                                className="w-full p-2 mt-1 border rounded-lg"
+                            />
+                        </div>
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

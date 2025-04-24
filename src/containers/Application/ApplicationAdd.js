@@ -19,18 +19,23 @@ function ApplicationAdd() {
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
 
     const [ngayNopDon, setNgayNopDon] = useState(null);
+
     const [ngayHoanThanhHSTL_DuKien, setNgayHoanThanhHSTL_DuKien] = useState(null);
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
     const [trangThaiHoanThanhHSTL, setTrangThaiHoanThanhHSTL] = useState("");
 
     const [ngayKQThamDinhHinhThuc_DuKien, setNgayKQThamDinhHinhThuc_DuKien] = useState(null);
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
+    const [ngayTraLoiKQTuChoiThamDinhHinhThuc, setNgayTraLoiKQTuChoiThamDinhHinhThuc] = useState(null);
+    const [giaHanTraLoiKQTuChoiThamDinhHinhThuc, setGiaHanTraLoiKQTuChoiThamDinhHinhThuc] = useState(false)
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
 
     const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
+    const [ngayTraLoiKQTuChoiThamDinhND, setNgayTraLoiKQTuChoiThamDinhND] = useState(null);
+    const [giaHanTraLoiKQTuChoiThamDinhNoiDung, setGiaHanTraLoiKQTuChoiThamDinhNoiDung] = useState(false)
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQhamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
@@ -127,12 +132,6 @@ function ApplicationAdd() {
             label: item[labelKey]
         }));
     };
-
-    // useEffect(() => {
-    //     fetchApplicationTypes();
-    // }, []);
-
-    // Add case
     const handleApplication = async () => {
         try {
             await callAPI({
@@ -236,6 +235,10 @@ function ApplicationAdd() {
                                 setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
                                 ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
                                 setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
+                                ngayTraLoiKQTuChoiThamDinhHinhThuc={ngayTraLoiKQTuChoiThamDinhHinhThuc}
+                                setNgayTraLoiKQTuChoiThamDinhHinhThuc={setNgayTraLoiKQTuChoiThamDinhHinhThuc}
+                                giaHanTraLoiKQTuChoiThamDinhHinhThuc={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc={setGiaHanTraLoiKQTuChoiThamDinhHinhThuc}
                             />
                         </div>
                     )}
@@ -256,6 +259,10 @@ function ApplicationAdd() {
                                 setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
                                 ngayKQThamDinhND={ngayKQThamDinhND}
                                 setNgayKQThamDinhND={setNgayKQThamDinhND}
+                                ngayTraLoiKQTuChoiThamDinhND={ngayTraLoiKQTuChoiThamDinhND}
+                                setNgayTraLoiKQTuChoiThamDinhND={setNgayTraLoiKQTuChoiThamDinhND}
+                                giaHanTraLoiKQTuChoiThamDinhNoiDung={giaHanTraLoiKQTuChoiThamDinhNoiDung}
+                                setGiaHanTraLoiKQTuChoiThamDinhNoiDung={setGiaHanTraLoiKQTuChoiThamDinhNoiDung}
                             />
                         </div>
                     )}
