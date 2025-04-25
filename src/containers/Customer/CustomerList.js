@@ -2,9 +2,9 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
+import Select from "react-select";
 function CustomerList() {
     const role = useSelector((state) => state.auth.role);
-    console.log("role: ",role)
     const [customers, setCustomers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -92,7 +92,12 @@ function CustomerList() {
             console.error("Lỗi khi xóa khách hàng:", error);
         }
     };
-
+    const formatOptions = (data, valueKey, labelKey) => {
+        return data.map(item => ({
+            value: item[valueKey],
+            label: item[labelKey]
+        }));
+    };
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md">
@@ -122,44 +127,32 @@ function CustomerList() {
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <select
-                        className="border p-2 text-sm rounded-md w-full md:w-1/6 bg-white shadow-sm"
-                        value={selectedCountry}
-                        onChange={(e) => setSelectedCountry(e.target.value)}
-                    >
-                        <option value="">🌍 Chọn quốc gia</option>
-                        {countries.map((country) => (
-                            <option key={country.maQuocGia} value={country.maQuocGia}>
-                                {country.tenQuocGia}
-                            </option>
-                        ))}
-                    </select>
-                    <select
-                        className="border p-2 text-sm rounded-md w-full md:w-1/6 bg-white shadow-sm"
-                        value={selectedPartner}
-                        onChange={(e) => setSelectedPartner(e.target.value)}
-                    >
-                        <option value="">🤝 Chọn đối tác</option>
-                        {partners.map((partner) => (
-                            <option key={partner.maDoiTac} value={partner.maDoiTac}>
-                                {partner.tenDoiTac}
-                            </option>
-                        ))}
-                    </select>
+                    <Select
+                        options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                        value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
+                        onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
+                        placeholder="Chọn quốc gia"
+                        className="w-full md:w-1/6"
+                        isClearable
+                    />
+                     <Select
+                        options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
+                        value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
+                        onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
+                        placeholder="Chọn đối tác"
+                        className="w-full md:w-1/6"
+                        isClearable
+                    />
 
                     {/* Select ngành nghề */}
-                    <select
-                        className="border p-2 text-sm rounded-md w-full md:w-1/6 bg-white shadow-sm"
-                        value={selectedIndustry}
-                        onChange={(e) => setSelectedIndustry(e.target.value)}
-                    >
-                        <option value="">🏭 Chọn ngành nghề</option>
-                        {industries.map((industry) => (
-                            <option key={industry.maNganhNghe} value={industry.maNganhNghe}>
-                                {industry.tenNganhNghe}
-                            </option>
-                        ))}
-                    </select>
+                    <Select
+                        options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
+                        value={selectedIndustry ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === selectedIndustry) : null}
+                        onChange={selectedOption => setSelectedIndustry(selectedOption?.value)}
+                        placeholder="Chọn ngành nghề"
+                        className="w-full md:w-1/6"
+                        isClearable
+                    />
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -220,7 +213,7 @@ function CustomerList() {
                     </tbody>
                 </table>
             </div>
-            
+
             {/* Modal Xác nhận xóa */}
             {showDeleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">

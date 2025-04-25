@@ -83,7 +83,7 @@ function ApplicationEdit() {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/productsandservices/list", 
+                endpoint: "/productsandservices/list",
                 data: { search: searchValue },
             });
             setProductAndService(response);
@@ -165,8 +165,8 @@ function ApplicationEdit() {
     };
     const formatDate = (dateString) => {
         if (!dateString) return "";
-        return new Date(dateString).toISOString().split("T")[0]; 
-    };   
+        return new Date(dateString).toISOString().split("T")[0];
+    };
     const detailApplication = async () => {
         try {
             const response = await callAPI({
@@ -186,7 +186,7 @@ function ApplicationEdit() {
                 setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
                 setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
                 setNgayKQThamDinhHinhThuc_DuKien(formatDate(response.ngayKQThamDinhHinhThuc_DuKien));
-                
+
                 setNgayKQThamDinhHinhThuc(formatDate(response.ngayKQThamDinhHinhThuc));
                 setNgayTraLoiKQTuChoiThamDinhHinhThuc(formatDate(response.ngayTraLoiKQTuChoiThamDinhHinhThuc));
                 setGiaHanTraLoiKQTuChoiThamDinhHinhThuc(response.giaHanTraLoiKQTuChoiThamDinhHinhThuc);
@@ -216,43 +216,43 @@ function ApplicationEdit() {
     const handleApplication = async () => {
         try {
             await callAPI({
-                method: "post",
-                endpoint: "/application/add",
+                method: "put",
+                endpoint: "/application/edit",
                 data: {
-                    // maDonDangKy: maDonDangKy,
+                    maDonDangKy: maDonDangKy,
                     maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
-                    maNhanHieu:maNhanHieu,
-                    maSPDVList:maSPDVList,
+                    maNhanHieu: maNhanHieu,
+                    maSPDVList: maSPDVList,
                     trangThaiDon: trangThaiDon,
 
-                    ngayNopDon: ngayNopDon,
-                    ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien,
-                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL,
+                    ngayNopDon: ngayNopDon || null,
+                    ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien || null,
+                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL || null,
                     trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
-                    ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien,
-                    ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc,
-                    ngayTraLoiKQTuChoiThamDinhHinhThuc: ngayTraLoiKQTuChoiThamDinhHinhThuc,
-                    giaHanTraLoiKQTuChoiThamDinhHinhThuc:giaHanTraLoiKQTuChoiThamDinhHinhThuc,
-                    ngayCongBoDonDuKien: ngayCongBo_DuKien,
-                    ngayCongBoDon: ngayCongBo,
-                    ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien,
-                    ngayKQThamDinhND: ngayKQThamDinhND,
-                    ngayTraLoiKQTuChoiThamDinhND:ngayTraLoiKQTuChoiThamDinhND,
+                    ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien || null,
+                    ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc || null,
+                    ngayTraLoiKQTuChoiThamDinhHinhThuc: ngayTraLoiKQTuChoiThamDinhHinhThuc || null,
+                    giaHanTraLoiKQTuChoiThamDinhHinhThuc: giaHanTraLoiKQTuChoiThamDinhHinhThuc,
+                    ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
+                    ngayCongBoDon: ngayCongBo || null,
+                    ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien || null,
+                    ngayKQThamDinhND: ngayKQThamDinhND || null,
+                    ngayTraLoiKQTuChoiThamDinhND: ngayTraLoiKQTuChoiThamDinhND || null,
                     giaHanTraLoiKQTuChoiThamDinhNoiDung: giaHanTraLoiKQTuChoiThamDinhNoiDung,
-                    ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien,
-                    ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND,
-                    ngayThongBaoCapBang: ngayThongBaoCapBang,
-                    ngayNopPhiCapBang: ngayNopPhiCapBang,
-                    ngayNhanBang: ngayNhanBang,
-                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH,
-                    ngayCapBang: ngayCapBang,
-                    ngayHetHanBang: ngayHetHanBang,
+                    ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
+                    ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
+                    ngayThongBaoCapBang: ngayThongBaoCapBang || null,
+                    ngayNopPhiCapBang: ngayNopPhiCapBang || null,
+                    ngayNhanBang: ngayNhanBang || null,
+                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
+                    ngayCapBang: ngayCapBang || null,
+                    ngayHetHanBang: ngayHetHanBang || null,
                     soBang: soBang,
                     taiLieus: taiLieuList
                 },
             });
-            alert("Thêm hồ sơ vụ việc thành công!");
+            alert("Sửa hồ sơ vụ việc thành công!");
             navigate(-1);
         } catch (error) {
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
@@ -274,7 +274,8 @@ function ApplicationEdit() {
                             type="text"
                             value={maHoSoVuViec}
                             onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                            disabled
                         />
                     </div>
                     <div className="flex-1">
@@ -294,7 +295,7 @@ function ApplicationEdit() {
                             value={trangThaiDon}
                             disabled
                             onChange={(e) => setTrangThaiDon(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10 "
+                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
                         />
                     </div>
                     <div>
@@ -323,7 +324,9 @@ function ApplicationEdit() {
                             options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                             value={
                                 maSPDVList && maSPDVList.length > 0
-                                    ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
+                                    ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt =>
+                                        maSPDVList.map(item => item.maSPDV).includes(opt.value)
+                                    )
                                     : []
                             }
                             onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
@@ -425,7 +428,7 @@ function ApplicationEdit() {
                 <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
+                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
                 </div>
             </div>
         </div>

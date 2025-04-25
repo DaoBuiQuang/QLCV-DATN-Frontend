@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import Select from "react-select";
 function PartnerAdd() {
   const navigate = useNavigate();
   const [maDoiTac, setMaDoiTac] = useState("");
@@ -46,7 +46,12 @@ function PartnerAdd() {
       console.error("Lỗi khi thêm đối tác!", error);
     }
   };
-
+  const formatOptions = (data, valueKey, labelKey) => {
+    return data.map(item => ({
+      value: item[valueKey],
+      label: item[labelKey]
+    }));
+  };
   return (
     <div className="p-1 bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
@@ -74,18 +79,14 @@ function PartnerAdd() {
           </div>
           <div>
             <label className="block text-gray-700">Quốc gia</label>
-            <select
-              value={maQuocGia}
-              onChange={(e) => setMaQuocGia(e.target.value)}
-              className="w-full p-2 mt-1 border rounded-lg bg-white"
-            >
-              <option value="">Chọn quốc gia</option>
-              {countries.map((country) => (
-                <option key={country.maQuocGia} value={country.maQuocGia}>
-                  {country.tenQuocGia}
-                </option>
-              ))}
-            </select>
+            <Select
+              options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+              value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
+              onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
+              placeholder="Chọn quốc gia"
+              className="w-full  mt-1  rounded-lg"
+              isClearable
+            />
           </div>
         </div>
 

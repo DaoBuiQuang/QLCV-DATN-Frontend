@@ -13,7 +13,11 @@ const FormalDetermination = ({
 }) => {
     const [biTuChoi, setBiTuChoi] = useState(false);
     const originalNgayTraLoiRef = useRef("");
-
+    useEffect(() => {
+        if (ngayTraLoiKQTuChoiThamDinhHinhThuc) {
+            setBiTuChoi(true);
+        }
+    }, [ngayTraLoiKQTuChoiThamDinhHinhThuc]);
     useEffect(() => {
         if (giaHanTraLoiKQTuChoiThamDinhHinhThuc) {
             if (ngayTraLoiKQTuChoiThamDinhHinhThuc && !originalNgayTraLoiRef.current) {

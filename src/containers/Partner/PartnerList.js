@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
-
+import Select from "react-select";
 function PartnerList() {
   const [partners, setPartners] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -57,7 +57,12 @@ function PartnerList() {
       console.error("Lỗi khi xóa đối tác:", error);
     }
   };
-
+  const formatOptions = (data, valueKey, labelKey) => {
+    return data.map(item => ({
+      value: item[valueKey],
+      label: item[labelKey]
+    }));
+  };
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
@@ -86,18 +91,14 @@ function PartnerList() {
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
-          <select
-            className="border p-2 text-sm rounded-md w-full md:w-1/6 bg-white shadow-sm"
-            value={selectedCountry}
-            onChange={(e) => setSelectedCountry(e.target.value)}
-          >
-            <option value="">🌍 Chọn quốc gia</option>
-            {countries.map((country) => (
-              <option key={country.maQuocGia} value={country.maQuocGia}>
-                {country.tenQuocGia}
-              </option>
-            ))}
-          </select>
+          <Select
+            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+            value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
+            onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
+            placeholder="Chọn quốc gia"
+            className="w-full md:w-1/6"
+            isClearable
+          />
         </div>
       </div>
 

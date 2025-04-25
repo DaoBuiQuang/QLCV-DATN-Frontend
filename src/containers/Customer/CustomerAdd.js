@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import Select from "react-select";
 function CustomerAdd() {
     const navigate = useNavigate();
     const [maKhachHang, setMaKhachHang] = useState("");
@@ -19,7 +19,12 @@ function CustomerAdd() {
     const [countries, setCountries] = useState([]);
     const [partners, setPartners] = useState([]);
     const [industries, setIndustries] = useState([]);
-
+    const formatOptions = (data, valueKey, labelKey) => {
+        return data.map(item => ({
+            value: item[valueKey],
+            label: item[labelKey]
+        }));
+    };
     const fetchCountries = async () => {
         try {
             const response = await callAPI({
@@ -111,7 +116,10 @@ function CustomerAdd() {
             setMaKhachHang(""); // Nếu xóa tên thì cũng xóa mã
         }
     };
-
+    const trangThaiOptions = [
+        { value: "Đang hoạt động", label: "Đang hoạt động" },
+        { value: "Dừng hoạt động", label: "Dừng hoạt động" }
+    ];
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
@@ -142,7 +150,7 @@ function CustomerAdd() {
                         <input
                             type="text"
                             value={tenKhachHang}
-                            
+
                             onChange={(e) => setTenKhachHang(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
@@ -151,32 +159,38 @@ function CustomerAdd() {
 
                     <div>
                         <label className="block text-gray-700">Đối tác</label>
-                        <select value={maDoiTac} onChange={(e) => setMaDoiTac(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-white">
-                            <option value="">Chọn đối tác</option>
-                            {partners.map(partner => (
-                                <option key={partner.maDoiTac} value={partner.maDoiTac}>{partner.tenDoiTac}</option>
-                            ))}
-                        </select>
+                        <Select
+                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
+                            value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
+                            onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
+                            placeholder="Chọn đối tác"
+                            className="w-full  mt-1  rounded-lg"
+                            isClearable
+                        />
                     </div>
 
                     <div>
                         <label className="block text-gray-700">Quốc gia</label>
-                        <select value={maQuocGia} onChange={(e) => setMaQuocGia(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-white">
-                            <option value="">Chọn quốc gia</option>
-                            {countries.map(country => (
-                                <option key={country.maQuocGia} value={country.maQuocGia}>{country.tenQuocGia}</option>
-                            ))}
-                        </select>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
+                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
+                            placeholder="Chọn quốc gia"
+                            className="w-full  mt-1  rounded-lg"
+                            isClearable
+                        />
                     </div>
 
                     <div>
                         <label className="block text-gray-700">Ngành nghề</label>
-                        <select value={maNganhNghe} onChange={(e) => setMaNganhNghe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-white">
-                            <option value="">Chọn ngành nghề</option>
-                            {industries.map(industry => (
-                                <option key={industry.maNganhNghe} value={industry.maNganhNghe}>{industry.tenNganhNghe}</option>
-                            ))}
-                        </select>
+                        <Select
+                            options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
+                            value={maNganhNghe ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === maNganhNghe) : null}
+                            onChange={selectedOption => setMaNganhNghe(selectedOption?.value)}
+                            placeholder="Chọn ngành nghề"
+                            className="w-full  mt-1  rounded-lg"
+                            isClearable
+                        />
                     </div>
 
                     <div>
@@ -191,10 +205,14 @@ function CustomerAdd() {
 
                     <div>
                         <label className="block text-gray-700">Trạng thái</label>
-                        <select value={trangThai} onChange={(e) => setTrangThai(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-white">
-                            <option value="Đang hoạt động">Đang hoạt động</option>
-                            <option value="Dừng hoạt động">Dừng hoạt động</option>
-                        </select>
+                        <Select
+                            options={trangThaiOptions}
+                            value={trangThaiOptions.find(option => option.value === trangThai)}
+                            onChange={(selectedOption) => setTrangThai(selectedOption?.value)}
+                            placeholder="Chọn trạng thái"
+                            className="w-full mt-1 rounded-lg"
+                            isClearable
+                        />
                     </div>
 
                     <div>
