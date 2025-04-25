@@ -64,18 +64,18 @@ function ApplicationList() {
           <thead>
             <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
               <th className="p-2">STT</th>
-              <th className="p-2">Mã đơn</th>
-              <th className="p-2">Mã hồ sơ</th>
-              <th className="p-2">Loại đơn</th>
+              <th className="p-2">Số Đơn</th>
+              <th className="p-2">Mã hồ sơ vụ việc</th>
+              <th className="p-2">Mã nhãn hiệu</th>
               <th className="p-2">Ngày nộp đơn</th>
               <th className="p-2">Ngày hoàn thành hồ sơ tài liệu</th>
-              <th className="p-2">Trạng thái hoàn thành hồ sơ tài liệu</th>
-              <th className="p-2">Ngày quyết định đơn hợp lệ dự kiến</th>
+              <th className="p-2">Ngày có kết quả thẩm đi</th>
               <th className="p-2">Ngày quyết định đơn hợp lệ</th>
               <th className="p-2">Ngày công bố đơn dự kiến</th>
               <th className="p-2">Ngày công bố đơn</th>
               <th className="p-2">Ngày thẩm định nội dung dự kiến</th>
               <th className="p-2">Ngày kết quả thâm định nội dung</th>
+              <th className="p-2">Trạng thái hoàn thành hồ sơ tài liệu</th>
               <th className="p-2">Trạng thái đơn</th>
               <th className="p-2"></th>
             </tr>
