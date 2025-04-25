@@ -57,26 +57,25 @@ function ApplicationList() {
           </div>
 
         </div>
-       
+
       </div>
       <div class="overflow-x-auto">
         <table className="w-full border-collapse bg-white text-sm mt-4">
           <thead>
             <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
               <th className="p-2">STT</th>
+              <th className="p-2">Mã đơn đăng ký</th>
               <th className="p-2">Số Đơn</th>
               <th className="p-2">Mã hồ sơ vụ việc</th>
               <th className="p-2">Mã nhãn hiệu</th>
+              <th className="p-2">Trạng thái đơn</th>
               <th className="p-2">Ngày nộp đơn</th>
               <th className="p-2">Ngày hoàn thành hồ sơ tài liệu</th>
-              <th className="p-2">Ngày có kết quả thẩm đi</th>
-              <th className="p-2">Ngày quyết định đơn hợp lệ</th>
-              <th className="p-2">Ngày công bố đơn dự kiến</th>
+              <th className="p-2">Ngày có kết quả thẩm định hình thức</th>
               <th className="p-2">Ngày công bố đơn</th>
-              <th className="p-2">Ngày thẩm định nội dung dự kiến</th>
-              <th className="p-2">Ngày kết quả thâm định nội dung</th>
+              <th className="p-2">Ngày có kết quả thẩm định nội dung</th>
+              <th className="p-2">Ngày trả lời kết quả  định nội dung</th>
               <th className="p-2">Trạng thái hoàn thành hồ sơ tài liệu</th>
-              <th className="p-2">Trạng thái đơn</th>
               <th className="p-2"></th>
             </tr>
           </thead>
@@ -93,34 +92,30 @@ function ApplicationList() {
                 >
                   {app.maDonDangKy}
                 </td>
+                <td className="p-2">{app.soDon}</td>
                 <td className="p-2">{app.maHoSoVuViec}</td>
+                <td className="p-2">{app.maNhanHieu}</td>
+                <td className="p-2">{app.trangThaiDon}</td>
                 <td className="p-2">
-                  {app.ngayNopDon ? new Date(app.ngayNopDon).toLocaleDateString() : ""}
+                  {app.ngayNopDon ? new Date(app.ngayNopDon).toLocaleDateString('vi-VN') : ""}
                 </td>
                 <td className="p-2">
-                  {app.ngayHoanThanhHoSoTaiLieu ? new Date(app.ngayHoanThanhHoSoTaiLieu).toLocaleDateString() : ""}
+                  {app.ngayHoanThanhHoSoTaiLieu ? new Date(app.ngayHoanThanhHoSoTaiLieu).toLocaleDateString('vi-VN') : ""}
+                </td>
+                <td className="p-2">
+                  {app.ngayKQThamDinhHinhThuc ? new Date(app.ngayKQThamDinhHinhThuc).toLocaleDateString('vi-VN') : ""}
+                </td>
+                <td className="p-2">
+                  {app.ngayCongBoDon ? new Date(app.ngayCongBoDon).toLocaleDateString('vi-VN') : ""}
+                </td>
+                <td className="p-2">
+                  {app.ngayKQThamDinhND ? new Date(app.ngayKQThamDinhND).toLocaleDateString('vi-VN') : ""}
+                </td>
+                <td className="p-2">
+                  {app.ngayTraLoiKQThamDinhND ? new Date(app.ngayTraLoiKQThamDinhND).toLocaleDateString('vi-VN') : ""}
                 </td>
                 <td className="p-2">{app.trangThaiHoanThienHoSoTaiLieu}</td>
-                <td className="p-2">
-                  {app.ngayQuyetDinhDonHopLeDuKien ? new Date(app.ngayQuyetDinhDonHopLeDuKien).toLocaleDateString() : ""}
-                </td>
-                <td className="p-2">
-                  {app.ngayQuyetDinhDonHopLe ? new Date(app.ngayQuyetDinhDonHopLe).toLocaleDateString() : ""}
-                </td>
-                <td className="p-2">
-                  {app.ngayCongBoDonDuKien ? new Date(app.ngayCongBoDonDuKien).toLocaleDateString() : ""}
-                </td>
-                <td className="p-2">
-                  {app.ngayCongBoDon ? new Date(app.ngayCongBoDon).toLocaleDateString() : ""}
-                </td>
-                <td className="p-2">
-                  {app.ngayThamDinhNoiDungDuKien ? new Date(app.ngayThamDinhNoiDungDuKien).toLocaleDateString() : ""}
-                </td>
-                <td className="p-2">
-                  {app.ngayKetQuaThamDinhNoiDung ? new Date(app.ngayKetQuaThamDinhNoiDung).toLocaleDateString() : ""}
-                </td>
 
-                <td className="p-2">{app.trangThaiDon}</td>
                 <td className="p-2">
                   <div className="flex gap-2 justify-center">
                     <button

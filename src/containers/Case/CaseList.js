@@ -240,9 +240,9 @@ function CaseList() {
                                 <td className="p-2">{caseItem.noiDungVuViec}</td>
                                 <td className="p-2">{caseItem.trangThaiVuViec}</td>
                                 <td className="p-2">{caseItem.buocXuLyHienTai}</td>
-                                <td className="p-2">{new Date(caseItem.ngayTiepNhan).toLocaleDateString()}</td>
-                                <td className="p-2">{new Date(caseItem.ngayTao).toLocaleDateString()}</td>
-                                <td className="p-2">{new Date(caseItem.ngayCapNhap).toLocaleDateString()}</td>
+                                <td className="p-2">{new Date(caseItem.ngayTiepNhan).toLocaleDateString('vi-VN')}</td>
+                                <td className="p-2">{new Date(caseItem.ngayTao).toLocaleDateString('vi-VN')}</td>
+                                <td className="p-2">{new Date(caseItem.ngayCapNhap).toLocaleDateString('vi-VN')}</td>
                                 <td className="p-2">{caseItem.tenKhachHang}</td>
                                 <td className="p-2">{caseItem.tenQuocGia}</td>
                                 <td className="p-2">{caseItem.tenLoaiVuViec}</td>

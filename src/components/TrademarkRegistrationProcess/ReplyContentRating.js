@@ -3,7 +3,7 @@ import React from 'react';
 
 const ReplyContentRating = ({
     ngayTraLoiKQThamDinhND_DuKien,
-    setNgayTraLoiKQhamDinhND_DuKien,
+    setNgayTraLoiKQThamDinhND_DuKien,
     ngayTraLoiKQThamDinhND,
     setNgayTraLoiKQThamDinhND
 }) => {
@@ -17,7 +17,7 @@ const ReplyContentRating = ({
                         type="date"
                         disabled
                         value={ngayTraLoiKQThamDinhND_DuKien}
-                        onChange={(e) => setNgayTraLoiKQhamDinhND_DuKien(e.target.value)}
+                        onChange={(e) => setNgayTraLoiKQThamDinhND_DuKien(e.target.value)}
                         className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
                     />
                 </div>

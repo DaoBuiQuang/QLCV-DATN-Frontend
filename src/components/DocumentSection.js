@@ -10,7 +10,6 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
     const [editingIndex, setEditingIndex] = useState(null);
 
     useEffect(() => {
-        debugger
         setDsTaiLieu(initialTaiLieus || []);
     }, [initialTaiLieus]);
     const updateTaiLieuList = (newList) => {
