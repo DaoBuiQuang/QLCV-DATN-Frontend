@@ -83,7 +83,7 @@ function ApplicationAdd() {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/productsandservices/list", 
+                endpoint: "/productsandservices/list",
                 data: { search: searchValue },
             });
             setProductAndService(response);
@@ -171,8 +171,8 @@ function ApplicationAdd() {
                     // maDonDangKy: maDonDangKy,
                     maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
-                    maNhanHieu:maNhanHieu,
-                    maSPDVList:maSPDVList,
+                    maNhanHieu: maNhanHieu,
+                    maSPDVList: maSPDVList,
                     trangThaiDon: trangThaiDon,
 
                     ngayNopDon: ngayNopDon,
@@ -182,12 +182,12 @@ function ApplicationAdd() {
                     ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien,
                     ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc,
                     ngayTraLoiKQTuChoiThamDinhHinhThuc: ngayTraLoiKQTuChoiThamDinhHinhThuc,
-                    giaHanTraLoiKQTuChoiThamDinhHinhThuc:giaHanTraLoiKQTuChoiThamDinhHinhThuc,
+                    giaHanTraLoiKQTuChoiThamDinhHinhThuc: giaHanTraLoiKQTuChoiThamDinhHinhThuc,
                     ngayCongBoDonDuKien: ngayCongBo_DuKien,
                     ngayCongBoDon: ngayCongBo,
                     ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien,
                     ngayKQThamDinhND: ngayKQThamDinhND,
-                    ngayTraLoiKQTuChoiThamDinhND:ngayTraLoiKQTuChoiThamDinhND,
+                    ngayTraLoiKQTuChoiThamDinhND: ngayTraLoiKQTuChoiThamDinhND,
                     giaHanTraLoiKQTuChoiThamDinhNoiDung: giaHanTraLoiKQTuChoiThamDinhNoiDung,
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND,
@@ -217,70 +217,73 @@ function ApplicationAdd() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
-                        <input
-                            type="text"
-                            value={maHoSoVuViec}
-                            onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Số đơn</label>
-                        <input
-                            type="text"
-                            value={soDon}
-                            onChange={(e) => setSoDon(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
-                        />
-                    </div>
+                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div >
+                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
+                            <input
+                                type="text"
+                                value={maHoSoVuViec}
+                                onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                disabled
+                            />
+                        </div>
+                        <div >
+                            <label className="block text-gray-700 text-left">Số đơn</label>
+                            <input
+                                type="text"
+                                value={soDon}
+                                onChange={(e) => setSoDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg h-10"
+                            />
+                        </div>
 
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Trạng thái đơn</label>
-                        <input
-                            type="text"
-                            value={trangThaiDon}
-                            disabled
-                            onChange={(e) => setTrangThaiDon(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10 "
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
-                        <input
-                            type="date"
-                            value={ngayNopDon}
-                            onChange={(e) => setNgayNopDon(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Mã nhãn hiệu</label>
-                        <Select
-                            options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
-                            value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
-                            onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
-                            placeholder="Chọn mã nhãn hiệu"
-                            className="w-full mt-1 rounded-lg h-10"
-                            isClearable
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Chọn danh sách sản phẩm dịch vụ</label>
-                        <Select
-                            options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
-                            value={
-                                maSPDVList && maSPDVList.length > 0
-                                    ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
-                                    : []
-                            }
-                            onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
-                            placeholder="Chọn mã nhãn hiệu"
-                            className="w-full mt-1 rounded-lg h-10"
-                            isClearable
-                            isMulti
-                        />
+                        <div>
+                            <label className="block text-gray-700 text-left">Trạng thái đơn</label>
+                            <input
+                                type="text"
+                                value={trangThaiDon}
+                                disabled
+                                onChange={(e) => setTrangThaiDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
+                            <input
+                                type="date"
+                                value={ngayNopDon}
+                                onChange={(e) => setNgayNopDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg"
+                            />
+                        </div>
+                        <div >
+                            <label className="block text-gray-700 text-left">Mã nhãn hiệu</label>
+                            <Select
+                                options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
+                                value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
+                                onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
+                                placeholder="Chọn mã nhãn hiệu"
+                                className="w-full mt-1 rounded-lg h-10"
+                                isClearable
+                            />
+                        </div>
+                        <div >
+                            <label className="block text-gray-700 text-left">Chọn danh sách sản phẩm dịch vụ</label>
+                            <Select
+                                options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
+                                value={
+                                    maSPDVList && maSPDVList.length > 0
+                                        ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
+                                        : []
+                                }
+                                onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
+                                placeholder="Chọn mã nhãn hiệu"
+                                className="w-full mt-1 rounded-lg h-10"
+                                isClearable
+                                isMulti
+                            />
+                        </div>
                     </div>
 
                     {daChonNgayNopDon && (

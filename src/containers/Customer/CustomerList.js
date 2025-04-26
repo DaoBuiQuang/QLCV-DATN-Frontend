@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
 import Select from "react-select";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 function CustomerList() {
     const role = useSelector((state) => state.auth.role);
     const [customers, setCustomers] = useState([]);
@@ -98,6 +101,34 @@ function CustomerList() {
             label: item[labelKey]
         }));
     };
+    const exportToExcel = () => {
+        const dataToExport = customers.map((customer, index) => ({
+            STT: index + 1,
+            "Mã KH": customer.maKhachHang,
+            "Tên KH": customer.tenKhachHang,
+            "Địa chỉ": customer.diaChi,
+            "SĐT": customer.sdt,
+            "Đối tác": customer.tenDoiTac,
+            "Quốc gia": customer.tenQuocGia,
+            "Ngành nghề": customer.tenNganhNghe,
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "DanhSachKhachHang");
+
+        const excelBuffer = XLSX.write(workbook, {
+            bookType: "xlsx",
+            type: "array",
+        });
+
+        const blob = new Blob([excelBuffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        saveAs(blob, "DanhSachKhachHang.xlsx");
+    };
+
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md">
@@ -124,6 +155,13 @@ function CustomerList() {
                         >
                             ➕ Thêm mới
                         </button>
+                        <button
+                            onClick={exportToExcel}
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+                        >
+                            📁 Xuất Excel
+                        </button>
+
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -135,7 +173,7 @@ function CustomerList() {
                         className="w-full md:w-1/6"
                         isClearable
                     />
-                     <Select
+                    <Select
                         options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                         value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
                         onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
@@ -213,8 +251,6 @@ function CustomerList() {
                     </tbody>
                 </table>
             </div>
-
-            {/* Modal Xác nhận xóa */}
             {showDeleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-md w-80">

@@ -58,7 +58,7 @@ const MainLayout = () => {
       }
     };
 
-    handleResize(); 
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -75,9 +75,17 @@ const MainLayout = () => {
 
       <div className={`flex flex-col flex-1 transition-all duration-300 ${isMenuOpen ? "ml-56" : "ml-0"}`}>
         <Header toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
-        <main className="flex-1 p-4 bg-gray-100"  style={{ width: window.innerWidth >= 1024 ? 'calc(100vw - 224px)' : '100vw' }}>
+        <main
+          className="flex-1 p-4 bg-gray-100"
+          style={{
+            width: window.innerWidth >= 1024
+              ? (isMenuOpen ? 'calc(100vw - 224px)' : '100vw')
+              : '100vw'
+          }}
+        >
           <Outlet />
         </main>
+
       </div>
     </div>
   );

@@ -52,8 +52,6 @@ function ApplicationDetail() {
           const ngayQDHopLe = dayjs(ngayNopDon).add(1, 'month');
           const ngayCongBo = ngayQDHopLe.add(2, 'month');
           const ngayThamDinhND = ngayCongBo.add(9, 'month');
-          
-        //   const ngayTra
       
           setNgayQDHopLe_DuKien(ngayQDHopLe.format('YYYY-MM-DD'));
           setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
