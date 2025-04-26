@@ -180,7 +180,7 @@ function ApplicationEdit() {
                 setSoDon(response.soDon)
                 setMaNhanHieu(response.maNhanHieu);
                 setTrangThaiDon(response.trangThaiDon);
-                setMaSPDVList(response.DonDK_SPDVs)
+                setMaSPDVList(response.maSPDVList)
                 setNgayNopDon(formatDate(response.ngayNopDon));
                 setNgayHoanThanhHSTL_DuKien(formatDate(response.ngayHoanThanhHoSoTaiLieu_DuKien));
                 setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
@@ -215,10 +215,13 @@ function ApplicationEdit() {
     };
     const handleApplication = async () => {
         try {
+            debugger
             await callAPI({
                 method: "put",
+                
                 endpoint: "/application/edit",
                 data: {
+                    
                     maDonDangKy: maDonDangKy,
                     maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
@@ -268,7 +271,7 @@ function ApplicationEdit() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="flex-1">
+                    <div >
                         <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                         <input
                             type="text"
@@ -278,7 +281,7 @@ function ApplicationEdit() {
                             disabled
                         />
                     </div>
-                    <div className="flex-1">
+                    <div >
                         <label className="block text-gray-700 text-left">Số đơn</label>
                         <input
                             type="text"
@@ -288,7 +291,7 @@ function ApplicationEdit() {
                         />
                     </div>
 
-                    <div className="flex-1">
+                    <div>
                         <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                         <input
                             type="text"
@@ -307,7 +310,7 @@ function ApplicationEdit() {
                             className="w-full p-2 mt-1 border rounded-lg"
                         />
                     </div>
-                    <div className="flex-1">
+                    <div >
                         <label className="block text-gray-700 text-left">Mã nhãn hiệu</label>
                         <Select
                             options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
@@ -318,15 +321,13 @@ function ApplicationEdit() {
                             isClearable
                         />
                     </div>
-                    <div className="flex-1">
+                    <div >
                         <label className="block text-gray-700 text-left">Chọn danh sách sản phẩm dịch vụ</label>
                         <Select
                             options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                             value={
                                 maSPDVList && maSPDVList.length > 0
-                                    ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt =>
-                                        maSPDVList.map(item => item.maSPDV).includes(opt.value)
-                                    )
+                                    ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
                                     : []
                             }
                             onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}

@@ -16,21 +16,20 @@ const FormalDetermination = ({
     useEffect(() => {
         if (ngayTraLoiKQTuChoiThamDinhHinhThuc) {
             setBiTuChoi(true);
+            originalNgayTraLoiRef.current = dayjs(ngayTraLoiKQTuChoiThamDinhHinhThuc)
+                .subtract(giaHanTraLoiKQTuChoiThamDinhHinhThuc ? 2 : 0, 'month')
+                .format('YYYY-MM-DD');
         }
     }, [ngayTraLoiKQTuChoiThamDinhHinhThuc]);
     useEffect(() => {
-        if (giaHanTraLoiKQTuChoiThamDinhHinhThuc) {
-            if (ngayTraLoiKQTuChoiThamDinhHinhThuc && !originalNgayTraLoiRef.current) {
-                originalNgayTraLoiRef.current = ngayTraLoiKQTuChoiThamDinhHinhThuc;
-                const newDate = dayjs(ngayTraLoiKQTuChoiThamDinhHinhThuc).add(2, 'month').format('YYYY-MM-DD');
-                setNgayTraLoiKQTuChoiThamDinhHinhThuc(newDate);
-            }
-        } else {
-            if (originalNgayTraLoiRef.current) {
-                setNgayTraLoiKQTuChoiThamDinhHinhThuc(originalNgayTraLoiRef.current);
-                originalNgayTraLoiRef.current = "";
-            }
-        }
+        const goc = originalNgayTraLoiRef.current;
+        if (!goc) return;
+
+        const updatedDate = dayjs(goc)
+            .add(giaHanTraLoiKQTuChoiThamDinhHinhThuc ? 2 : 0, 'month')
+            .format('YYYY-MM-DD');
+
+        setNgayTraLoiKQTuChoiThamDinhHinhThuc(updatedDate);
     }, [giaHanTraLoiKQTuChoiThamDinhHinhThuc]);
 
     return (
@@ -38,7 +37,9 @@ const FormalDetermination = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thẩm định hình thức</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày có kết quả trả lời thẩm định hình thức dự kiến</label>
+                    <label className="block text-gray-700 text-left">
+                        Ngày có kết quả trả lời thẩm định hình thức dự kiến
+                    </label>
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc_DuKien}
@@ -48,7 +49,9 @@ const FormalDetermination = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày có kết quả trả lời thẩm định hình thức</label>
+                    <label className="block text-gray-700 text-left">
+                        Ngày có kết quả trả lời thẩm định hình thức
+                    </label>
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc}
@@ -86,13 +89,15 @@ const FormalDetermination = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div>
-                            <label className="block text-gray-700 text-left">Ngày trả lời từ chối thẩm định hình thức</label>
+                            <label className="block text-gray-700 text-left">
+                                Ngày trả lời từ chối thẩm định hình thức
+                            </label>
                             <input
                                 type="date"
                                 value={ngayTraLoiKQTuChoiThamDinhHinhThuc}
                                 onChange={(e) => {
                                     setNgayTraLoiKQTuChoiThamDinhHinhThuc(e.target.value);
-                                    originalNgayTraLoiRef.current = ""; 
+                                    originalNgayTraLoiRef.current = e.target.value;
                                 }}
                                 className="w-full p-2 mt-1 border rounded-lg"
                             />

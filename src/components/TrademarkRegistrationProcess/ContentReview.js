@@ -13,26 +13,37 @@ const ContentReview = ({
 }) => {
     const [biTuChoi, setBiTuChoi] = useState(false);
     const originalNgayTraLoiRef = useRef("");
+
+    // Ghi nhận ngày gốc ban đầu từ API
     useEffect(() => {
-        if (giaHanTraLoiKQTuChoiThamDinhNoiDung) {
-            if (ngayTraLoiKQTuChoiThamDinhND && !originalNgayTraLoiRef.current) {
-                originalNgayTraLoiRef.current = ngayTraLoiKQTuChoiThamDinhND;
-                const newDate = dayjs(ngayTraLoiKQTuChoiThamDinhND).add(2, 'month').format('YYYY-MM-DD');
-                setNgayTraLoiKQTuChoiThamDinhND(newDate);
-            }
-        } else {
-            if (originalNgayTraLoiRef.current) {
-                setNgayTraLoiKQTuChoiThamDinhND(originalNgayTraLoiRef.current);
-                originalNgayTraLoiRef.current = "";
-            }
+        if (ngayTraLoiKQTuChoiThamDinhND) {
+            setBiTuChoi(true);
+            originalNgayTraLoiRef.current = dayjs(ngayTraLoiKQTuChoiThamDinhND)
+                .subtract(giaHanTraLoiKQTuChoiThamDinhNoiDung ? 2 : 0, 'month')
+                .format('YYYY-MM-DD');
         }
+    }, [ngayTraLoiKQTuChoiThamDinhND]);
+
+    // Cập nhật khi bật/tắt checkbox gia hạn
+    useEffect(() => {
+        const goc = originalNgayTraLoiRef.current;
+        if (!goc) return;
+
+        const updated = dayjs(goc)
+            .add(giaHanTraLoiKQTuChoiThamDinhNoiDung ? 2 : 0, 'month')
+            .format('YYYY-MM-DD');
+
+        setNgayTraLoiKQTuChoiThamDinhND(updated);
     }, [giaHanTraLoiKQTuChoiThamDinhNoiDung]);
+
     return (
         <div className="flex-1">
-            <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Thẩm định nội dung</h3>
+            <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thẩm định nội dung</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
+                    <label className="block text-gray-700 text-left">
+                        Ngày kết quả thẩm định nội dung đơn dự kiến
+                    </label>
                     <input
                         type="date"
                         disabled
@@ -42,7 +53,9 @@ const ContentReview = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
+                    <label className="block text-gray-700 text-left">
+                        Ngày kết quả thẩm định nội dung đơn
+                    </label>
                     <input
                         type="date"
                         value={ngayKQThamDinhND}
@@ -51,6 +64,7 @@ const ContentReview = ({
                     />
                 </div>
             </div>
+
             <div className="mt-4">
                 <label className="inline-flex items-center text-gray-700">
                     <input
@@ -62,6 +76,7 @@ const ContentReview = ({
                     Bị từ chối thẩm định nội dung?
                 </label>
             </div>
+
             {biTuChoi && (
                 <>
                     <div className="mt-2">
@@ -78,13 +93,15 @@ const ContentReview = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div>
-                            <label className="block text-gray-700 text-left">Ngày trả lời từ chối thẩm định hình thức</label>
+                            <label className="block text-gray-700 text-left">
+                                Ngày trả lời từ chối thẩm định nội dung
+                            </label>
                             <input
                                 type="date"
                                 value={ngayTraLoiKQTuChoiThamDinhND}
                                 onChange={(e) => {
                                     setNgayTraLoiKQTuChoiThamDinhND(e.target.value);
-                                    originalNgayTraLoiRef.current = "";
+                                    originalNgayTraLoiRef.current = e.target.value;
                                 }}
                                 className="w-full p-2 mt-1 border rounded-lg"
                             />
