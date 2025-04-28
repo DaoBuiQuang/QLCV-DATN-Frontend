@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import Select from "react-select";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 
 function CustomerList() {
     const role = useSelector((state) => state.auth.role);
@@ -101,33 +102,15 @@ function CustomerList() {
             label: item[labelKey]
         }));
     };
-    const exportToExcel = () => {
-        const dataToExport = customers.map((customer, index) => ({
-            STT: index + 1,
-            "Mã KH": customer.maKhachHang,
-            "Tên KH": customer.tenKhachHang,
-            "Địa chỉ": customer.diaChi,
-            "SĐT": customer.sdt,
-            "Đối tác": customer.tenDoiTac,
-            "Quốc gia": customer.tenQuocGia,
-            "Ngành nghề": customer.tenNganhNghe,
-        }));
-
-        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "DanhSachKhachHang");
-
-        const excelBuffer = XLSX.write(workbook, {
-            bookType: "xlsx",
-            type: "array",
-        });
-
-        const blob = new Blob([excelBuffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-
-        saveAs(blob, "DanhSachKhachHang.xlsx");
-    };
+    const columns = [
+        { label: "Mã KH", key: "maKhachHang" },
+        { label: "Tên KH", key: "tenKhachHang" },
+        { label: "Địa chỉ", key: "diaChi" },
+        { label: "SĐT", key: "sdt" },
+        { label: "Đối tác", key: "tenDoiTac" },
+        { label: "Quốc gia", key: "tenQuocGia" },
+        { label: "Ngành nghề", key: "tenNganhNghe" },
+    ];
 
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
@@ -156,7 +139,7 @@ function CustomerList() {
                             ➕ Thêm mới
                         </button>
                         <button
-                            onClick={exportToExcel}
+                            onClick={() => exportToExcel(customers, columns, "DanhSachKhachHang")}
                             className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             📁 Xuất Excel

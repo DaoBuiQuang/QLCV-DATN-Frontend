@@ -7,7 +7,8 @@ const DiphimaProcess = ({
     ngayNopPhiCapBang,
     setNgayNopPhiCapBang,
     ngayNhanBang,
-    setNgayNhanBang
+    setNgayNhanBang,
+    isViewOnly
 }) => {
     return (
         <div className="flex-1">
@@ -19,7 +20,8 @@ const DiphimaProcess = ({
                         type="date"
                         value={ngayThongBaoCapBang}
                         onChange={(e) => setNgayThongBaoCapBang(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg"
+                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        disabled={isViewOnly}
                     />
                 </div>
                 <div>
@@ -28,7 +30,8 @@ const DiphimaProcess = ({
                         type="date"
                         value={ngayNopPhiCapBang}
                         onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        className={`w-full p-2 mt-1 border rounded-lg bg-gray-200`}
+                        disabled
                     />
                 </div>
                 <div>
@@ -37,7 +40,8 @@ const DiphimaProcess = ({
                         type="date"
                         value={ngayNhanBang}
                         onChange={(e) => setNgayNhanBang(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg"
+                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        disabled={isViewOnly}
                     />
                 </div>
             </div>

@@ -11,6 +11,8 @@ import DiphimaProcess from "../../components/TrademarkRegistrationProcess/Diphim
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
+
+import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 function ApplicationEdit() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
@@ -207,7 +209,7 @@ function ApplicationEdit() {
                 setNgayCapBang(formatDate(response.ngayCapBang));
                 setNgayHetHanBang(formatDate(response.ngayHetHanBang));
                 setTrangThaiDon(response.trangThaiDon);
-                setTaiLieuList(response.taiLieus)
+                setTaiLieuList(response.taiLieu)
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -426,11 +428,33 @@ function ApplicationEdit() {
                         </div>
                     )}
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} />
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
                 </div>
+                <div className="mt-4">
+                    <ExportWordButton
+                        data={{
+                            maHoSoVuViec: maHoSoVuViec,
+                            soDon: soDon,
+                            trangThaiDon: trangThaiDon,
+                            ngayNopDon: ngayNopDon,
+                            maNhanHieu: maNhanHieu,
+                            ngayHoanThanhHSTL_DuKien: ngayHoanThanhHSTL_DuKien,
+                            ngayHoanThanhHSTL: ngayHoanThanhHSTL,
+                            ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien,
+                            ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc,
+                            ngayTraLoiKQTuChoiThamDinhHinhThuc: ngayTraLoiKQTuChoiThamDinhHinhThuc,
+                            giaHanTraLoiKQTuChoiThamDinhHinhThuc: giaHanTraLoiKQTuChoiThamDinhHinhThuc,
+                            ngayCongBo_DuKien: ngayCongBo_DuKien,
+                            ngayCongBo: ngayCongBo,
+
+                        }}
+                        fileName={`ThongDonDangKy_${maDonDangKy}`}
+                    />
+                </div>
+
             </div>
         </div>
     );

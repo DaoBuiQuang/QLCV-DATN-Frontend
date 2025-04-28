@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { saveAs } from "file-saver";
-
-// Thêm thư viện để xử lý file mẫu Word
-import PizZip from "pizzip";
-import Docxtemplater from "docxtemplater";
+import ExportWordButton from "../../components/ExportFile/ExportWordButton.js"; // Thêm dòng này
 
 function CountryDetail() {
   const navigate = useNavigate();
-  const { maQuocGia } = useParams(); // Lấy maQuocGia từ URL
+  const { maQuocGia } = useParams();
 
   const [tenQuocGia, setTenQuocGia] = useState("");
-  const [templateFile, setTemplateFile] = useState(null); // File mẫu
 
-  // Gọi API lấy thông tin quốc gia khi vào trang
   useEffect(() => {
     const fetchCountryDetail = async () => {
       const token = localStorage.getItem("token");
@@ -44,52 +38,6 @@ function CountryDetail() {
     };
     fetchCountryDetail();
   }, [maQuocGia]);
-
-  // Xử lý chọn file mẫu
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setTemplateFile(file);
-    }
-  };
-
-  // Hàm in file Word dựa trên file mẫu
-  const handlePrintToWord = async () => {
-    if (!templateFile) {
-      alert("Vui lòng chọn file mẫu trước!");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const content = event.target.result;
-        const zip = new PizZip(content);
-        const doc = new Docxtemplater(zip, {
-          paragraphLoop: true,
-          linebreaks: true,
-        });
-
-        // Thay thế dữ liệu vào placeholders
-        doc.render({
-          MaQuocGia: maQuocGia,
-          TenQuocGia: tenQuocGia,
-        });
-
-        const out = doc.getZip().generate({
-          type: "blob",
-          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        });
-
-        saveAs(out, `ThongTinQuocGia_${maQuocGia}.docx`);
-      } catch (error) {
-        console.error("Lỗi khi tạo file Word:", error);
-        alert("Có lỗi xảy ra khi tạo file Word!");
-      }
-    };
-
-    reader.readAsBinaryString(templateFile);
-  };
 
   return (
     <div className="p-1 bg-gray-100 flex items-center justify-center">
@@ -125,21 +73,14 @@ function CountryDetail() {
             Quay lại
           </button>
 
-          {/* Nút chọn file mẫu */}
-          <input
-            type="file"
-            accept=".docx"
-            onChange={handleFileChange}
-            className="border px-4 py-2 rounded-lg"
+          {/* Gọi ExportWordButton và truyền data + fileName */}
+          <ExportWordButton
+            data={{
+              MaQuocGia: maQuocGia,
+              TenQuocGia: tenQuocGia,
+            }}
+            fileName={`ThongTinQuocGia_${maQuocGia}`}
           />
-
-          {/* Nút In file Word */}
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-            onClick={handlePrintToWord}
-          >
-            In file Word
-          </button>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
@@ -13,8 +13,7 @@ import ContentReview from "../../components/TrademarkRegistrationProcess/Content
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 function ApplicationAdd() {
     const navigate = useNavigate();
-    const [maDonDangKy, setMaDonDangKy] = useState("");
-    const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
+    const { maHoSoVuViec } = useParams();
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [maNhanHieu, setMaNhanHieu] = useState("");
@@ -223,7 +222,7 @@ function ApplicationAdd() {
                             <input
                                 type="text"
                                 value={maHoSoVuViec}
-                                onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                            
                                 className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
                                 disabled
                             />
@@ -246,15 +245,6 @@ function ApplicationAdd() {
                                 disabled
                                 onChange={(e) => setTrangThaiDon(e.target.value)}
                                 className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
-                            <input
-                                type="date"
-                                value={ngayNopDon}
-                                onChange={(e) => setNgayNopDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg"
                             />
                         </div>
                         <div >
@@ -282,6 +272,15 @@ function ApplicationAdd() {
                                 className="w-full mt-1 rounded-lg h-10"
                                 isClearable
                                 isMulti
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
+                            <input
+                                type="date"
+                                value={ngayNopDon}
+                                onChange={(e) => setNgayNopDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg"
                             />
                         </div>
                     </div>

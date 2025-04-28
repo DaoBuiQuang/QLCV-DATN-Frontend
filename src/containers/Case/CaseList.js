@@ -262,6 +262,12 @@ function CaseList() {
                                             📝
                                         </button>
                                         <button
+                                            className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
+                                            onClick={() => navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)}
+                                        >
+                                            📄
+                                        </button>
+                                        <button
                                             className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                                             onClick={() => {
                                                 setCaseToDelete(caseItem.maHoSoVuViec);
@@ -272,6 +278,7 @@ function CaseList() {
                                         </button>
                                     </div>
                                 </td>
+
                             </tr>
                         ))}
                     </tbody>

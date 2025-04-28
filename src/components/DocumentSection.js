@@ -10,6 +10,7 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
     const [editingIndex, setEditingIndex] = useState(null);
 
     useEffect(() => {
+        debugger
         setDsTaiLieu(initialTaiLieus || []);
     }, [initialTaiLieus]);
     const updateTaiLieuList = (newList) => {
@@ -25,7 +26,7 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
                 tenTaiLieu: fileName,
                 linkTaiLieu: linkTaiLieu,
                 trangThai: status,
-                maTaiLieu: editingIndex !== null ? dsTaiLieu[editingIndex].maTaiLieu : undefined, // Thêm maTaiLieu nếu đang chỉnh sửa
+                maTaiLieu: editingIndex !== null ? dsTaiLieu[editingIndex].maTaiLieu : undefined, 
             };
     
             let newList;

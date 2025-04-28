@@ -48,12 +48,12 @@ function ApplicationList() {
             >
               🔎 Tìm kiếm
             </button>
-            <button
+            {/* <button
               onClick={() => navigate("/applicationadd")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               ➕ Thêm mới
-            </button>
+            </button> */}
           </div>
 
         </div>
@@ -103,7 +103,29 @@ function ApplicationList() {
                 <td className="p-2">{app.maHoSoVuViec}</td>
                 <td className="p-2">{app.maNhanHieu}</td>
                 <td className="p-2">{app.trangThaiDon}</td>
-                <td className="p-2">{app.trangThaiHoanThienHoSoTaiLieu}</td>
+                <td className="p-2">
+                  <div className="flex flex-col items-center">
+                    <span>{app.trangThaiHoanThienHoSoTaiLieu}</span>
+                    {app.ngayHoanThanhHoSoTaiLieu_DuKien && (
+                      <span className="text-xs text-gray-500">
+                        {(() => {
+                          const today = new Date();
+                          const dueDate = new Date(app.ngayHoanThanhHoSoTaiLieu_DuKien);
+                          const diffTime = dueDate - today;
+                          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // chuyển mili giây -> ngày
+                          if (diffDays > 0) {
+                            return `Còn ${diffDays} ngày`;
+                          } else if (diffDays === 0) {
+                            return "Hạn là hôm nay";
+                          } else {
+                            return `Quá hạn ${Math.abs(diffDays)} ngày`;
+                          }
+                        })()}
+                      </span>
+                    )}
+                  </div>
+                </td>
+
                 <td className="p-2">
                   {app.ngayNopDon ? new Date(app.ngayNopDon).toLocaleDateString('vi-VN') : ""}
                 </td>
@@ -122,7 +144,7 @@ function ApplicationList() {
                 <td className="p-2">
                   {app.ngayTraLoiKQThamDinhND ? new Date(app.ngayTraLoiKQThamDinhND).toLocaleDateString('vi-VN') : ""}
                 </td>
-             {/* test */}
+                {/* test */}
                 <td className="p-2">
                   {app.ngayThongBaoCapBang ? new Date(app.ngayThongBaoCapBang).toLocaleDateString('vi-VN') : ""}
                 </td>
@@ -144,7 +166,7 @@ function ApplicationList() {
                 <td className="p-2">
                   {app.ngayGuiBangChoKhachHang ? new Date(app.ngayGuiBangChoKhachHang).toLocaleDateString('vi-VN') : ""}
                 </td>
-               
+
                 <td className="p-2">
                   <div className="flex gap-2 justify-center">
                     <button

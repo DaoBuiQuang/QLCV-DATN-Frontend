@@ -4,24 +4,39 @@ import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
 import DocumentSection from "../../components/DocumentSection";
+import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication";
+import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination";
+import ReplyContentRating from "../../components/TrademarkRegistrationProcess/ReplyContentRating";
+import DiphimaProcess from "../../components/TrademarkRegistrationProcess/DiphimaProcess";
+import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
+import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
+import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 function ApplicationDetail() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
+    const isViewOnly = true
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
-    const [maLoaiDon, setMaLoaiDon] = useState("");
-
+    const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
+    const [maNhanHieu, setMaNhanHieu] = useState("");
+    const [maSPDVList, setMaSPDVList] = useState([]);
+
+    const [ngayHoanThanhHSTL_DuKien, setNgayHoanThanhHSTL_DuKien] = useState(null);
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
     const [trangThaiHoanThanhHSTL, setTrangThaiHoanThanhHSTL] = useState("");
 
-    const [ngayQDHopLe_DuKien, setNgayQDHopLe_DuKien] = useState(null);
-    const [ngayQDHopLe, setNgayQDHopLe] = useState(null);
+    const [ngayKQThamDinhHinhThuc_DuKien, setNgayKQThamDinhHinhThuc_DuKien] = useState(null);
+    const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
+    const [ngayTraLoiKQTuChoiThamDinhHinhThuc, setNgayTraLoiKQTuChoiThamDinhHinhThuc] = useState(null);
+    const [giaHanTraLoiKQTuChoiThamDinhHinhThuc, setGiaHanTraLoiKQTuChoiThamDinhHinhThuc] = useState(false)
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
 
-    const [ngayThamDinhND_DuKien, setNgayThamDinhND_DuKien] = useState(null);
-    const [ngayThamDinhND, setNgayThamDinhND] = useState(null);
+    const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
+    const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
+    const [ngayTraLoiKQTuChoiThamDinhND, setNgayTraLoiKQTuChoiThamDinhND] = useState(null);
+    const [giaHanTraLoiKQTuChoiThamDinhNoiDung, setGiaHanTraLoiKQTuChoiThamDinhNoiDung] = useState(false)
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
@@ -35,51 +50,113 @@ function ApplicationDetail() {
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
+
     const [taiLieuList, setTaiLieuList] = useState([]);
-    const [applicationtypes, setApplicationTypes] = useState([]);
-    const processStatus = [
-        { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
-        { value: "hoan_thanh", label: "Hoàn thành" }
-    ];
+    const [brands, setBrands] = useState([]);
+    const [productAndService, setProductAndService] = useState([]);
+
     const statusOptions = [
         { value: "dang_xu_ly", label: "Đang xử lý" },
         { value: "hoan_thanh", label: "Hoàn thành" },
         { value: "tam_dung", label: "Tạm dừng" }
     ];
+    const [daChonNgayNopDon, setDaChonNgayNopDon] = useState(false);
+    const [daChonNgayHoanThanhHSTL, setDaChonNgayHoanThanhHSTL] = useState(false);
+    const [daChonNgayThamDinhHinhThuc, setDaChonNgayThamDinhHinhThuc] = useState(false);
+    const [daChonNgayCongBoDon, setDaChonNgayCongBoDon] = useState(false);
+    const [daChonNgayThamDinhNoiDung, setDaChonNgayThamDinhNoiDung] = useState(false);
+    const [daChonNgayTraLoiThamDinhNoiDung, setDaChonNgayTraLoiThamDinhNoiDung] = useState(false)
+    const [daChonHoanTatThuTucNhapBang, setDaChonHoanTatThuTucNhapBang] = useState(false)
 
+    const fetchBrands = async (searchValue) => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/brand/list",
+                data: { search: searchValue },
+            });
+            setBrands(response);
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu nhãn hiệu:", error);
+        }
+    };
+    const fetchItems = async (searchValue) => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/productsandservices/list",
+                data: { search: searchValue },
+            });
+            setProductAndService(response);
+        } catch (error) {
+            console.error("Lỗi khi lấy danh sách sản phẩm/dịch vụ:", error);
+        }
+    };
+    useEffect(() => {
+        fetchBrands();
+        fetchItems();
+        detailApplication();
+    }, [])
     useEffect(() => {
         if (ngayNopDon) {
-          const ngayQDHopLe = dayjs(ngayNopDon).add(1, 'month');
-          const ngayCongBo = ngayQDHopLe.add(2, 'month');
-          const ngayThamDinhND = ngayCongBo.add(9, 'month');
-      
-          setNgayQDHopLe_DuKien(ngayQDHopLe.format('YYYY-MM-DD'));
-          setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
-          setNgayThamDinhND_DuKien(ngayThamDinhND.format('YYYY-MM-DD'));
+            const ngayHoanThanhHoSoTaiLieu = dayjs(ngayNopDon).add(1, 'month');
+            setNgayHoanThanhHSTL_DuKien(ngayHoanThanhHoSoTaiLieu.format('YYYY-MM-DD'));
+            setDaChonNgayNopDon(true);
+            setTrangThaiDon("Hoàn thành hồ sơ tài liệu")
         } else {
-          setNgayQDHopLe_DuKien(null);
-          setNgayCongBo_DuKien(null);
-          setNgayThamDinhND_DuKien(null);
+            setNgayHoanThanhHSTL_DuKien(null);
         }
-        if (ngayThamDinhND) {
-            const ngayTraLoiKQThamDinhND = dayjs(ngayThamDinhND).add(3, 'month');
+        if (ngayHoanThanhHSTL) {
+            const ngayKQThamDinhHinhThuc = dayjs(ngayHoanThanhHSTL).add(1, 'month');
+            setNgayKQThamDinhHinhThuc_DuKien(ngayKQThamDinhHinhThuc.format('YYYY-MM-DD'));
+            setDaChonNgayHoanThanhHSTL(true)
+            setTrangThaiDon("Thẩm định hình thức")
+        } else {
+            setNgayKQThamDinhHinhThuc_DuKien(null);
+        }
+        if (ngayKQThamDinhHinhThuc) {
+            const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
+            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
+            setDaChonNgayThamDinhHinhThuc(true);
+            setTrangThaiDon("Công bố đơn")
+        } else {
+            setNgayCongBo_DuKien(null);
+        }
+
+        if (ngayCongBo) {
+            const ngayKQThamDinhND = dayjs(ngayCongBo).add(9, 'month');
+            setNgayKQThamDinhND_DuKien(ngayKQThamDinhND.format('YYYY-MM-DD'));
+            setDaChonNgayCongBoDon(true)
+            setTrangThaiDon("Thẩm định nội dung")
+        } else {
+            setNgayKQThamDinhND_DuKien(null);
+        }
+
+        if (ngayKQThamDinhND) {
+            const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
             setNgayTraLoiKQThamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
+            setDaChonNgayThamDinhNoiDung(true);
+            setTrangThaiDon("Trả lời thẩm định nội dung")
         } else {
             setNgayTraLoiKQThamDinhND_DuKien(null);
         }
-        
+        if (ngayTraLoiKQThamDinhND) {
+            setTrangThaiDon("Hoàn thành nhận bằng")
+            setDaChonNgayTraLoiThamDinhNoiDung(true)
+        } else {
+
+        }
         if (ngayThongBaoCapBang) {
+            setTrangThaiDon("Chờ nhận bằng")
             const ngayNopPhiCapBang = dayjs(ngayThongBaoCapBang).add(3, 'month');
             setNgayNopPhiCapBang(ngayNopPhiCapBang.format('YYYY-MM-DD'));
         } else {
             setNgayNopPhiCapBang(null);
         }
-        
-    }, [ngayNopDon, ngayThamDinhND, ngayThongBaoCapBang]);
-    const formatDate = (dateString) => {
-        if (!dateString) return "";
-        return new Date(dateString).toISOString().split("T")[0]; 
-    };   
+        if (ngayNhanBang) {
+            setDaChonHoanTatThuTucNhapBang(true);
+        }
+    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang]);
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -87,307 +164,236 @@ function ApplicationDetail() {
             label: item[labelKey]
         }));
     };
-
-    const fetchApplicationTypes = async () => {
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        return new Date(dateString).toISOString().split("T")[0];
+    };
+    const detailApplication = async () => {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/applicationtype/all",
-                data: {},
+                endpoint: "application/detail",
+                data: { maDonDangKy }
             });
-            setApplicationTypes(response);
+
+            if (response) {
+                setMaHoSoVuViec(response.maHoSoVuViec);
+                setSoDon(response.soDon)
+                setMaNhanHieu(response.maNhanHieu);
+                setTrangThaiDon(response.trangThaiDon);
+                setMaSPDVList(response.maSPDVList)
+                setNgayNopDon(formatDate(response.ngayNopDon));
+                setNgayHoanThanhHSTL_DuKien(formatDate(response.ngayHoanThanhHoSoTaiLieu_DuKien));
+                setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
+                setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
+                setNgayKQThamDinhHinhThuc_DuKien(formatDate(response.ngayKQThamDinhHinhThuc_DuKien));
+
+                setNgayKQThamDinhHinhThuc(formatDate(response.ngayKQThamDinhHinhThuc));
+                setNgayTraLoiKQTuChoiThamDinhHinhThuc(formatDate(response.ngayTraLoiKQTuChoiThamDinhHinhThuc));
+                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc(response.giaHanTraLoiKQTuChoiThamDinhHinhThuc);
+                setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
+                setNgayCongBo(formatDate(response.ngayCongBoDon));
+                setNgayKQThamDinhND_DuKien(formatDate(response.ngayKQThamDinhND_DuKien));
+                setNgayKQThamDinhND(formatDate(response.ngayKQThamDinhND));
+                setNgayTraLoiKQTuChoiThamDinhND(formatDate(response.ngayTraLoiKQTuChoiThamDinhND));
+                setGiaHanTraLoiKQTuChoiThamDinhNoiDung(response.giaHanTraLoiKQTuChoiThamDinhNoiDung);
+                setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKQThamDinhND_DuKien));
+                setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKQThamDinhND));
+
+                setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
+                setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
+                setNgayNhanBang(formatDate(response.ngayNhanBang));
+                setNgayGuiBangChoKH(formatDate(response.ngayGuiBangChoKhachHang));
+                setSoBang(response.soBang);
+                setNgayCapBang(formatDate(response.ngayCapBang));
+                setNgayHetHanBang(formatDate(response.ngayHetHanBang));
+                setTrangThaiDon(response.trangThaiDon);
+                setTaiLieuList(response.taiLieus)
+            }
         } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu loại đơn", error);
+            console.error("Lỗi khi gọi API chi tiết đơn:", error);
         }
     };
-    useEffect(() => {
-        fetchApplicationTypes();
-        detailApplication();
-    }, []);
-    const detailApplication = async () => {
-        try {
-          debugger;
-          const response = await callAPI({
-            method: "post",
-            endpoint: "application/detail",
-            data: { maDonDangKy }
-          });
-      
-          if (response) {
-            setMaHoSoVuViec(response.maHoSoVuViec);
-            setMaLoaiDon(response.maLoaiDon);
-            setNgayNopDon(formatDate(response.ngayNopDon));
-            setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
-            setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
-            setNgayQDHopLe_DuKien(formatDate(response.ngayQuyetDinhDonHopLeDuKien));
-            setNgayQDHopLe(formatDate(response.ngayQuyetDinhDonHopLe));
-            setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
-            setNgayCongBo(formatDate(response.ngayCongBoDon));
-            setNgayThamDinhND_DuKien(formatDate(response.ngayThamDinhNoiDungDuKien));
-            setNgayThamDinhND(formatDate(response.ngayKetQuaThamDinhNoiDung));
-            setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKetQuaThamDinhNoiDungDuKien));
-            setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKetQuaThamDinhNoiDung));
-            setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
-            setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
-            setNgayNhanBang(formatDate(response.ngayNhanBang));
-            setNgayGuiBangChoKH(formatDate(response.ngayGuiBangChoKhachHang));
-            setSoBang(response.soBang);
-            setNgayCapBang(formatDate(response.ngayCapBang));
-            setNgayHetHanBang(formatDate(response.ngayHetHanBang));
-            setTrangThaiDon(response.trangThaiDon);
-            setTaiLieuList(response.taiLieus)
-          }
-        } catch (error) {
-          console.error("Lỗi khi gọi API chi tiết đơn:", error);
-        }
-      };
+    /////
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
-        console.log("Tài liệu mới:", list); // In ra để kiểm tra
     };
+
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Mã đơn đăng kí</label>
-                        <input
-                            type="text"
-                            value={maDonDangKy}
-                            disabled
-                            // onChange={(e) => setMaDonDangKy(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
-                        <input
-                            type="text"
-                            value={maHoSoVuViec}
-                            onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
-                            disabled
-                        />
-                    </div>
+                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div >
+                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
+                            <input
+                                type="text"
+                                value={maHoSoVuViec}
+                                onChange={(e) => setMaHoSoVuViec(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                disabled
+                            />
+                        </div>
+                        <div >
+                            <label className="block text-gray-700 text-left">Số đơn</label>
+                            <input
+                                type="text"
+                                value={soDon}
+                                onChange={(e) => setSoDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                disabled
+                            />
+                        </div>
 
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
-                        <Select
-                            options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
-                            value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
-                            onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
-                            placeholder="Chọn loại đơn đăng kí"
-                            className="w-full mt-1 rounded-lg h-10 bg-gray-200" 
-                            isClearable
-                            isDisabled
-                        />
+                        <div>
+                            <label className="block text-gray-700 text-left">Trạng thái đơn</label>
+                            <input
+                                type="text"
+                                value={trangThaiDon}
+                                disabled
+                                onChange={(e) => setTrangThaiDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
+                            <input
+                                type="date"
+                                value={ngayNopDon}
+                                onChange={(e) => setNgayNopDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                                disabled
+                            />
+                        </div>
+                        <div >
+                            <label className="block text-gray-700 text-left">Tên nhãn hiệu</label>
+                            <Select
+                                options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
+                                value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
+                                onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
+                                placeholder="Chọn mã nhãn hiệu"
+                                className="w-full mt-1 rounded-lg h-1"
+                                isDisabled
+                                isClearable
+                            />
+                        </div>
+                        <div >
+                            <label className="block text-gray-700 text-left">Chọn danh sách sản phẩm dịch vụ</label>
+                            <Select
+                                options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
+                                value={
+                                    maSPDVList && maSPDVList.length > 0
+                                        ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
+                                        : []
+                                }
+                                onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
+                                placeholder="Chọn mã nhãn hiệu"
+                                className="w-full mt-1 rounded-lg h-10"
+                                isClearable
+                                isMulti
+                                isDisabled
+                            />
+                        </div>
                     </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
-                        <input
-                            type="date"
-                            value={ngayNopDon}
-                            onChange={(e) => setNgayNopDon(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày hoàn thành hồ sơ tài liệu</label>
-                        <input
-                            type="date"
-                            value={ngayHoanThanhHSTL}
-                            onChange={(e) => setNgayHoanThanhHSTL(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Trạng thái hoàn thành hồ sơ tài liệu</label>
-                        <Select
-                            options={formatOptions(processStatus, "value", "label")}
-                            value={trangThaiHoanThanhHSTL ? processStatus.find(opt => opt.value === trangThaiHoanThanhHSTL) : null}
-                            onChange={selectedOption => setTrangThaiHoanThanhHSTL(selectedOption?.value)}
-                            placeholder="Chọn trạng thái hoàn thành hồ sơ vụ việc"
-                            className="w-full mt-1 rounded-lg"
-                            isClearable
-                            isDisabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ dự kiến</label>
-                        <input
-                            type="date"
-                            value={ngayQDHopLe_DuKien}
-                            onChange={(e) => setNgayQDHopLe_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                            
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày quyết định đơn hợp lệ</label>
-                        <input
-                            type="date"
-                            value={ngayQDHopLe}
-                            onChange={(e) => setNgayQDHopLe(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày công bố đơn dự kiến</label>
-                        <input
-                            type="date"
-                            value={ngayCongBo_DuKien}
-                            onChange={(e) => setNgayCongBo_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày công bố đơn</label>
-                        <input
-                            type="date"
-                            value={ngayCongBo}
-                            onChange={(e) => setNgayCongBo(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
-                        <input
-                            type="date"
-                            disabled
-                            value={ngayThamDinhND_DuKien}
-                            onChange={(e) => setNgayThamDinhND_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
-                        <input
-                            type="date"
-                            value={ngayThamDinhND}
-                            onChange={(e) => setNgayThamDinhND(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung dự kiến</label>
-                        <input
-                            type="date"
-                            value={ngayTraLoiKQThamDinhND_DuKien}
-                            disabled
-                            onChange={(e) => setNgayTraLoiKQThamDinhND_DuKien(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung</label>
-                        <input
-                            type="date"
-                            value={ngayTraLoiKQThamDinhND}
-                            onChange={(e) => setNgayTraLoiKQThamDinhND(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày thông báo cấp bằng</label>
-                        <input
-                            type="date"
-                            value={ngayThongBaoCapBang}
-                            onChange={(e) => setNgayThongBaoCapBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày nộp phí cấp bằng</label>
-                        <input
-                            type="date"
-                            value={ngayNopPhiCapBang}
-                            disabled
-                            onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày nhận bằng</label>
-                        <input
-                            type="date"
-                            value={ngayNhanBang}
-                            onChange={(e) => setNgayNhanBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày gửi bằng cho khách hàng</label>
-                        <input
-                            type="date"
-                            value={ngayGuiBangChoKH}
-                            onChange={(e) => setNgayGuiBangChoKH(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Số bằng</label>
-                        <input
-                            type="text"
-                            value={soBang}
-                            onChange={(e) => setSoBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày cấp bằng</label>
-                        <input
-                            type="date"
-                            value={ngayCapBang}
-                            onChange={(e) => setNgayCapBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngày hết hạn bằng</label>
-                        <input
-                            type="date"
-                            value={ngayHetHanBang}
-                            onChange={(e) => setNgayHetHanBang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Trạng thái đơn</label>
-                        <Select
-                            options={formatOptions(statusOptions, "value", "label")}
-                            value={trangThaiDon ? statusOptions.find(opt => opt.value === trangThaiDon) : null}
-                            onChange={selectedOption => setTrangThaiDon(selectedOption?.value)}
-                            placeholder="Chọn trạng thái đơn"
-                            className="w-full mt-1 rounded-lg"
-                            isDisabled
-                            isClearable
-                        />
-                    </div>
-                    
+                    {daChonNgayNopDon && (
+                        <div className="col-span-2">
+                            <CompleteDocumentation
+                                isViewOnly={isViewOnly}
+                                ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
+                                setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
+                                ngayHoanThanhHSTL={ngayHoanThanhHSTL}
+                                setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
+                                trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
+                                setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
+                                formatOptions={formatOptions}
+                            />
+                        </div>
+                    )}
+                    {daChonNgayHoanThanhHSTL && (
+                        <div className="col-span-2">
+                            <FormalDetermination
+                                isViewOnly={isViewOnly}
+                                ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
+                                setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
+                                ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
+                                setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
+                                ngayTraLoiKQTuChoiThamDinhHinhThuc={ngayTraLoiKQTuChoiThamDinhHinhThuc}
+                                setNgayTraLoiKQTuChoiThamDinhHinhThuc={setNgayTraLoiKQTuChoiThamDinhHinhThuc}
+                                giaHanTraLoiKQTuChoiThamDinhHinhThuc={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc={setGiaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                            />
+                        </div>
+                    )}
+                    {daChonNgayThamDinhHinhThuc && (
+                        <div className="col-span-2">
+                            <AnnouncementOfApplication
+                                isViewOnly={isViewOnly}
+                                ngayCongBo_DuKien={ngayCongBo_DuKien}
+                                setNgayCongBo_DuKien={setNgayCongBo_DuKien}
+                                ngayCongBo={ngayCongBo}
+                                setNgayCongBo={setNgayCongBo}
+                            />
+                        </div>
+                    )}
+                    {daChonNgayCongBoDon && (
+                        <div className="col-span-2">
+                            <ContentReview
+                                isViewOnly={isViewOnly}
+                                ngayKQThamDinhND_DuKien={ngayKQThamDinhND_DuKien}
+                                setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
+                                ngayKQThamDinhND={ngayKQThamDinhND}
+                                setNgayKQThamDinhND={setNgayKQThamDinhND}
+                                ngayTraLoiKQTuChoiThamDinhND={ngayTraLoiKQTuChoiThamDinhND}
+                                setNgayTraLoiKQTuChoiThamDinhND={setNgayTraLoiKQTuChoiThamDinhND}
+                                giaHanTraLoiKQTuChoiThamDinhNoiDung={giaHanTraLoiKQTuChoiThamDinhNoiDung}
+                                setGiaHanTraLoiKQTuChoiThamDinhNoiDung={setGiaHanTraLoiKQTuChoiThamDinhNoiDung}
+                            />
+                        </div>
+                    )}
+                    {daChonNgayThamDinhNoiDung && (
+                        <div className="col-span-2">
+                            <ReplyContentRating
+                                isViewOnly={isViewOnly}
+                                ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
+                                setNgayTraLoiKQThamDinhND_DuKien={setNgayTraLoiKQThamDinhND_DuKien}
+                                ngayTraLoiKQThamDinhND={ngayTraLoiKQThamDinhND}
+                                setNgayTraLoiKQThamDinhND={setNgayTraLoiKQThamDinhND}
+                            />
+                        </div>
+                    )}
+                    {daChonNgayTraLoiThamDinhNoiDung && (
+                        <div className="col-span-2">
+                            <DiphimaProcess
+                                isViewOnly={isViewOnly}
+                                ngayThongBaoCapBang={ngayThongBaoCapBang}
+                                setNgayThongBaoCapBang={setNgayThongBaoCapBang}
+                                ngayNopPhiCapBang={ngayNopPhiCapBang}
+                                setNgayNopPhiCapBang={setNgayNopPhiCapBang}
+                                ngayNhanBang={ngayNhanBang}
+                                setNgayNhanBang={setNgayNhanBang}
+                            />
+                        </div>
+                    )}
+                    {daChonHoanTatThuTucNhapBang && (
+                        <div className="col-span-2">
+                            <DegreeInformation
+                                isViewOnly={isViewOnly}
+                                soBang={soBang}
+                                setSoBang={setSoBang}
+                                ngayCapBang={ngayCapBang}
+                                setNgayCapBang={setNgayCapBang}
+                                ngayHetHanBang={ngayHetHanBang}
+                                setNgayHetHanBang={setNgayHetHanBang}
+                                ngayGuiBangChoKH={ngayGuiBangChoKH}
+                                setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                            />
+                        </div>
+                    )}
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange}  initialTaiLieus={taiLieuList}></DocumentSection>
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    {/* <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button> */}
                 </div>
             </div>
         </div>

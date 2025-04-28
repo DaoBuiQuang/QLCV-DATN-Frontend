@@ -9,7 +9,8 @@ const FormalDetermination = ({
     ngayTraLoiKQTuChoiThamDinhHinhThuc,
     setNgayTraLoiKQTuChoiThamDinhHinhThuc,
     giaHanTraLoiKQTuChoiThamDinhHinhThuc,
-    setGiaHanTraLoiKQTuChoiThamDinhHinhThuc
+    setGiaHanTraLoiKQTuChoiThamDinhHinhThuc,
+    isViewOnly
 }) => {
     const [biTuChoi, setBiTuChoi] = useState(false);
     const originalNgayTraLoiRef = useRef("");
@@ -56,7 +57,8 @@ const FormalDetermination = ({
                         type="date"
                         value={ngayKQThamDinhHinhThuc}
                         onChange={(e) => setNgayKQThamDinhHinhThuc(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg"
+                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        disabled={isViewOnly}
                     />
                 </div>
             </div>
@@ -68,6 +70,7 @@ const FormalDetermination = ({
                         className="form-checkbox mr-2"
                         checked={biTuChoi}
                         onChange={(e) => setBiTuChoi(e.target.checked)}
+                        disabled={isViewOnly}
                     />
                     Bị từ chối thẩm định hình thức?
                 </label>
@@ -82,6 +85,7 @@ const FormalDetermination = ({
                                 className="form-checkbox mr-2"
                                 checked={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
                                 onChange={(e) => setGiaHanTraLoiKQTuChoiThamDinhHinhThuc(e.target.checked)}
+                                disabled={isViewOnly}
                             />
                             Cho phép gia hạn trả lời từ chối thêm 2 tháng?
                         </label>
@@ -99,7 +103,8 @@ const FormalDetermination = ({
                                     setNgayTraLoiKQTuChoiThamDinhHinhThuc(e.target.value);
                                     originalNgayTraLoiRef.current = e.target.value;
                                 }}
-                                className="w-full p-2 mt-1 border rounded-lg"
+                                disabled={isViewOnly}
+                                className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
                             />
                         </div>
                     </div>

@@ -5,7 +5,8 @@ const AnnouncementOfApplication = ({
     ngayCongBo_DuKien,
     setNgayCongBo_DuKien,
     ngayCongBo,
-    setNgayCongBo
+    setNgayCongBo,
+    isViewOnly,
 }) => {
     return (
         <div className="flex-1">
@@ -27,7 +28,8 @@ const AnnouncementOfApplication = ({
                         type="date"
                         value={ngayCongBo}
                         onChange={(e) => setNgayCongBo(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg"
+                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        disabled={isViewOnly}
                     />
                 </div>
             </div>

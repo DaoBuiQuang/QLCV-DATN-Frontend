@@ -8,7 +8,8 @@ const CompleteDocumentation = ({
     setNgayHoanThanhHSTL,
     trangThaiHoanThanhHSTL,
     setTrangThaiHoanThanhHSTL,
-    formatOptions
+    formatOptions,
+    isViewOnly,
 }) => {
     const processStatus = [
         { value: "chua_hoan_thanh", label: "Chưa hoàn thành" },
@@ -24,7 +25,7 @@ const CompleteDocumentation = ({
                         type="date"
                         value={ngayHoanThanhHSTL_DuKien}
                         onChange={(e) => setNgayHoanThanhHSTL_DuKien(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        className={`w-full p-2 mt-1 border rounded-lg `}
                         disabled
                     />
                 </div>
@@ -34,7 +35,8 @@ const CompleteDocumentation = ({
                         type="date"
                         value={ngayHoanThanhHSTL}
                         onChange={(e) => setNgayHoanThanhHSTL(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg"
+                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        disabled={isViewOnly}
                     />
                 </div>
                 <div>
@@ -46,6 +48,7 @@ const CompleteDocumentation = ({
                         placeholder="Chọn trạng thái hoàn thành hồ sơ vụ việc"
                         className="w-full mt-1 rounded-lg"
                         isClearable
+                        isDisabled={isViewOnly}
                     />
                 </div>
             </div>

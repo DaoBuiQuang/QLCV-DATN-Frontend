@@ -5,7 +5,8 @@ const ReplyContentRating = ({
     ngayTraLoiKQThamDinhND_DuKien,
     setNgayTraLoiKQThamDinhND_DuKien,
     ngayTraLoiKQThamDinhND,
-    setNgayTraLoiKQThamDinhND
+    setNgayTraLoiKQThamDinhND,
+    isViewOnly
 }) => {
     return (
         <div className="flex-1">
@@ -27,7 +28,8 @@ const ReplyContentRating = ({
                         type="date"
                         value={ngayTraLoiKQThamDinhND}
                         onChange={(e) => setNgayTraLoiKQThamDinhND(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg"
+                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        disabled={isViewOnly}
                     />
                 </div>
             </div>
