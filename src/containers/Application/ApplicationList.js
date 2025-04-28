@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 function ApplicationList() {
   const [applications, setApplications] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,27 @@ function ApplicationList() {
   useEffect(() => {
     fetchApplications("");
   }, []);
-
+  const columns = [
+    { label: "Mã đơn đăng ký", key: "maDonDangKy" },
+    { label: "Số Đơn", key: "soDon" },
+    { label: "Mã hồ sơ vụ việc", key: "maHoSoVuViec" },
+    { label: "Mã nhãn hiệu", key: "maNhanHieu" },
+    { label: "Trạng thái đơn", key: "trangThaiDon" },
+    { label: "Trạng thái hoàn thành hồ sơ tài liệu", key: "trangThaiHoanThienHoSoTaiLieu" },
+    { label: "Ngày nộp đơn", key: "ngayNopDon" },
+    { label: "Ngày hoàn thành hồ sơ tài liệu", key: "ngayHoanThanhHoSoTaiLieu" },
+    { label: "Ngày có kết quả thẩm định hình thức", key: "ngayKQThamDinhHinhThuc" },
+    { label: "Ngày công bố đơn", key: "ngayCongBoDon" },
+    { label: "Ngày có kết quả thẩm định nội dung", key: "ngayKQThamDinhND" },
+    { label: "Ngày trả lời kết quả thẩm định nội dung", key: "ngayTraLoiKQThamDinhND" },
+    { label: "Ngày thông báo cấp bằng", key: "ngayThongBaoCapBang" },
+    { label: "Ngày nộp phí cấp bằng", key: "ngayNopPhiCapBang" },
+    { label: "Ngày nhận bằng", key: "ngayNhanBang" },
+    { label: "Số bằng", key: "soBang" },
+    { label: "Ngày cấp bằng", key: "ngayCapBang" },
+    { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
+    { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
+  ];
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
@@ -48,6 +69,13 @@ function ApplicationList() {
             >
               🔎 Tìm kiếm
             </button>
+            <button
+              onClick={() => exportToExcel(applications, columns, "DanhSachĐonK")}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+            >
+              📁 Xuất Excel
+            </button>
+
             {/* <button
               onClick={() => navigate("/applicationadd")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
@@ -106,22 +134,25 @@ function ApplicationList() {
                 <td className="p-2">
                   <div className="flex flex-col items-center">
                     <span>{app.trangThaiHoanThienHoSoTaiLieu}</span>
-                    {app.ngayHoanThanhHoSoTaiLieu_DuKien && (
-                      <span className="text-xs text-gray-500">
-                        {(() => {
-                          const today = new Date();
-                          const dueDate = new Date(app.ngayHoanThanhHoSoTaiLieu_DuKien);
-                          const diffTime = dueDate - today;
-                          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // chuyển mili giây -> ngày
-                          if (diffDays > 0) {
-                            return `Còn ${diffDays} ngày`;
-                          } else if (diffDays === 0) {
-                            return "Hạn là hôm nay";
-                          } else {
-                            return `Quá hạn ${Math.abs(diffDays)} ngày`;
-                          }
-                        })()}
-                      </span>
+                    {app.ngayHoanThanhHoSoTaiLieu_DuKien && app.trangThaiHoanThienHoSoTaiLieu !== "hoan_thanh" && (
+                      (() => {
+                        const today = new Date();
+                        const dueDate = new Date(app.ngayHoanThanhHoSoTaiLieu_DuKien);
+                        const diffTime = dueDate - today;
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        const textColor = diffDays < 0 ? "text-red-500" : "text-yellow-500";
+
+                        return (
+                          <span className={`text-xs ${textColor}`}>
+                            {diffDays > 0
+                              ? `Còn ${diffDays} ngày`
+                              : diffDays === 0
+                                ? "Hạn là hôm nay"
+                                : `Quá hạn ${Math.abs(diffDays)} ngày`}
+                          </span>
+                        );
+                      })()
                     )}
                   </div>
                 </td>
