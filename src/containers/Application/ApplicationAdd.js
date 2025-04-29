@@ -27,7 +27,7 @@ function ApplicationAdd() {
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
     const [ngayTraLoiKQTuChoiThamDinhHinhThuc, setNgayTraLoiKQTuChoiThamDinhHinhThuc] = useState(null);
     const [giaHanTraLoiKQTuChoiThamDinhHinhThuc, setGiaHanTraLoiKQTuChoiThamDinhHinhThuc] = useState(false)
-    const [lichSuTuChoi, setLichSuTuChoi] = useState([])
+    const [lichSuThamDinh, setLichSuThamDinh] = useState([])
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
@@ -198,7 +198,8 @@ function ApplicationAdd() {
                     ngayCapBang: ngayCapBang,
                     ngayHetHanBang: ngayHetHanBang,
                     soBang: soBang,
-                    taiLieus: taiLieuList
+                    taiLieus: taiLieuList,
+                    lichSuThamDinh: lichSuThamDinh
                 },
             });
             alert("Thêm hồ sơ vụ việc thành công!");
@@ -299,7 +300,21 @@ function ApplicationAdd() {
                             />
                         </div>
                     )}
-                    {daChonNgayHoanThanhHSTL && (
+                    <div className="col-span-2">
+                            <FormalDetermination
+                                ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
+                                setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
+                                ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
+                                setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
+                                ngayTraLoiKQTuChoiThamDinhHinhThuc={ngayTraLoiKQTuChoiThamDinhHinhThuc}
+                                setNgayTraLoiKQTuChoiThamDinhHinhThuc={setNgayTraLoiKQTuChoiThamDinhHinhThuc}
+                                giaHanTraLoiKQTuChoiThamDinhHinhThuc={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc={setGiaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                lichSuThamDinh={lichSuThamDinh}
+                                setLichSuThamDinh={setLichSuThamDinh}
+                            />
+                        </div>
+                    {/* {daChonNgayHoanThanhHSTL && (
                         <div className="col-span-2">
                             <FormalDetermination
                                 ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
@@ -314,7 +329,7 @@ function ApplicationAdd() {
                                 setLichSuTuChoi={setLichSuTuChoi}
                             />
                         </div>
-                    )}
+                    )} */}
                     {daChonNgayThamDinhHinhThuc && (
                         <div className="col-span-2">
                             <AnnouncementOfApplication
