@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 
 const FormalDetermination = ({
@@ -6,32 +6,31 @@ const FormalDetermination = ({
     setNgayKQThamDinhHinhThuc_DuKien,
     ngayKQThamDinhHinhThuc,
     setNgayKQThamDinhHinhThuc,
-    ngayTraLoiKQTuChoiThamDinhHinhThuc,
-    setNgayTraLoiKQTuChoiThamDinhHinhThuc,
-    giaHanTraLoiKQTuChoiThamDinhHinhThuc,
-    setGiaHanTraLoiKQTuChoiThamDinhHinhThuc,
+    lichSuTuChoi,
+    setLichSuTuChoi,
     isViewOnly
 }) => {
-    const [biTuChoi, setBiTuChoi] = useState(false);
-    const originalNgayTraLoiRef = useRef("");
-    useEffect(() => {
-        if (ngayTraLoiKQTuChoiThamDinhHinhThuc) {
-            setBiTuChoi(true);
-            originalNgayTraLoiRef.current = dayjs(ngayTraLoiKQTuChoiThamDinhHinhThuc)
-                .subtract(giaHanTraLoiKQTuChoiThamDinhHinhThuc ? 2 : 0, 'month')
-                .format('YYYY-MM-DD');
+    const addNewRefusal = () => {
+        setLichSuTuChoi(prev => [
+            ...prev,
+            {
+                ngayTraLoi: '',
+                giaHan: false
+            }
+        ]);
+    };
+
+    const updateRefusal = (index, field, value) => {
+        const updated = [...lichSuTuChoi];
+        updated[index][field] = value;
+
+        // Nếu chỉnh sửa gia hạn thì tự động cộng thêm 2 tháng
+        if (field === "giaHan" && updated[index].ngayTraLoi) {
+            const baseDate = dayjs(updated[index].ngayTraLoi).subtract(updated[index].giaHan ? 2 : 0, 'month');
+            updated[index].ngayTraLoi = baseDate.add(value ? 2 : 0, 'month').format('YYYY-MM-DD');
         }
-    }, [ngayTraLoiKQTuChoiThamDinhHinhThuc]);
-    useEffect(() => {
-        const goc = originalNgayTraLoiRef.current;
-        if (!goc) return;
-
-        const updatedDate = dayjs(goc)
-            .add(giaHanTraLoiKQTuChoiThamDinhHinhThuc ? 2 : 0, 'month')
-            .format('YYYY-MM-DD');
-
-        setNgayTraLoiKQTuChoiThamDinhHinhThuc(updatedDate);
-    }, [giaHanTraLoiKQTuChoiThamDinhHinhThuc]);
+        setLichSuTuChoi(updated);
+    };
 
     return (
         <div className="flex-1">
@@ -64,51 +63,50 @@ const FormalDetermination = ({
             </div>
 
             <div className="mt-4">
-                <label className="inline-flex items-center text-gray-700">
-                    <input
-                        type="checkbox"
-                        className="form-checkbox mr-2"
-                        checked={biTuChoi}
-                        onChange={(e) => setBiTuChoi(e.target.checked)}
-                        disabled={isViewOnly}
-                    />
-                    Bị từ chối thẩm định hình thức?
-                </label>
+                <button
+                    type="button"
+                    onClick={addNewRefusal}
+                    disabled={isViewOnly}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                >
+                    + Thêm lần bị từ chối
+                </button>
             </div>
 
-            {biTuChoi && (
-                <>
-                    <div className="mt-2">
-                        <label className="inline-flex items-center text-gray-700">
-                            <input
-                                type="checkbox"
-                                className="form-checkbox mr-2"
-                                checked={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
-                                onChange={(e) => setGiaHanTraLoiKQTuChoiThamDinhHinhThuc(e.target.checked)}
-                                disabled={isViewOnly}
-                            />
-                            Cho phép gia hạn trả lời từ chối thêm 2 tháng?
-                        </label>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label className="block text-gray-700 text-left">
-                                Ngày trả lời từ chối thẩm định hình thức
-                            </label>
-                            <input
-                                type="date"
-                                value={ngayTraLoiKQTuChoiThamDinhHinhThuc}
-                                onChange={(e) => {
-                                    setNgayTraLoiKQTuChoiThamDinhHinhThuc(e.target.value);
-                                    originalNgayTraLoiRef.current = e.target.value;
-                                }}
-                                disabled={isViewOnly}
-                                className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
-                            />
+            {lichSuTuChoi.length > 0 && (
+                <div className="mt-4 space-y-4">
+                    {lichSuTuChoi.map((refusal, index) => (
+                        <div key={index} className="p-4 border rounded-lg bg-gray-50">
+                            <h4 className="text-md font-semibold text-gray-700 mb-2">
+                                🛑 Lần từ chối #{index + 1}
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-gray-700 text-left">
+                                        Ngày trả lời từ chối
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={refusal.ngayTraLoi}
+                                        onChange={(e) => updateRefusal(index, 'ngayTraLoi', e.target.value)}
+                                        disabled={isViewOnly}
+                                        className="w-full p-2 mt-1 border rounded-lg"
+                                    />
+                                </div>
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        className="form-checkbox mr-2"
+                                        checked={refusal.giaHan}
+                                        onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}
+                                        disabled={isViewOnly}
+                                    />
+                                    <label className="text-gray-700">Gia hạn thêm 2 tháng</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </>
+                    ))}
+                </div>
             )}
         </div>
     );

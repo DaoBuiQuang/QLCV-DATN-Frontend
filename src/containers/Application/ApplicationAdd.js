@@ -27,6 +27,7 @@ function ApplicationAdd() {
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
     const [ngayTraLoiKQTuChoiThamDinhHinhThuc, setNgayTraLoiKQTuChoiThamDinhHinhThuc] = useState(null);
     const [giaHanTraLoiKQTuChoiThamDinhHinhThuc, setGiaHanTraLoiKQTuChoiThamDinhHinhThuc] = useState(false)
+    const [lichSuTuChoi, setLichSuTuChoi] = useState([])
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
@@ -248,12 +249,12 @@ function ApplicationAdd() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left">Mã nhãn hiệu</label>
+                            <label className="block text-gray-700 text-left">Tên nhãn hiệu</label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
                                 onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
-                                placeholder="Chọn mã nhãn hiệu"
+                                placeholder="Chọn tên nhãn hiệu"
                                 className="w-full mt-1 rounded-lg h-10"
                                 isClearable
                             />
@@ -309,6 +310,8 @@ function ApplicationAdd() {
                                 setNgayTraLoiKQTuChoiThamDinhHinhThuc={setNgayTraLoiKQTuChoiThamDinhHinhThuc}
                                 giaHanTraLoiKQTuChoiThamDinhHinhThuc={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
                                 setGiaHanTraLoiKQTuChoiThamDinhHinhThuc={setGiaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                lichSuTuChoi={lichSuTuChoi}
+                                setLichSuTuChoi={setLichSuTuChoi}
                             />
                         </div>
                     )}
