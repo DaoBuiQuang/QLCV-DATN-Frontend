@@ -42,7 +42,7 @@ const ContentReview = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thẩm định nội dung</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">
+                    <label className="block text-gray-700 text-left text-left">
                         Ngày kết quả thẩm định nội dung đơn dự kiến
                     </label>
                     <input
@@ -54,7 +54,7 @@ const ContentReview = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">
+                    <label className="block text-gray-700 text-left text-left">
                         Ngày kết quả thẩm định nội dung đơn
                     </label>
                     <input
@@ -97,7 +97,7 @@ const ContentReview = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div>
-                            <label className="block text-gray-700 text-left">
+                            <label className="block text-gray-700 text-left text-left">
                                 Ngày trả lời từ chối thẩm định nội dung
                             </label>
                             <input

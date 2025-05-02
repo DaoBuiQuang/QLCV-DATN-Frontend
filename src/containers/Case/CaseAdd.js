@@ -153,8 +153,6 @@ function CaseAdd() {
                     maQuocGiaVuViec: maQuocGia,
                     trangThaiVuViec,
                     maLoaiDon,
-                    // ngayTao,
-                    // ngayCapNhap,
                     buocXuLyHienTai,
                     nhanSuVuViec
                 },
@@ -190,13 +188,12 @@ function CaseAdd() {
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc</label>
                         <input
                             type="text"
                             value={maHoSoVuViec}
-                            // onChange={(e) => setMaHoSoVuViec(e.target.value)}
                             readOnly
                             disabled
                             className="w-full p-2 mt-1 border rounded-lg h-10"
@@ -204,7 +201,7 @@ function CaseAdd() {
                     </div>
 
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Tên khách hàng </label>
+                        <label className="block text-gray-700 text-left text-left">Tên khách hàng </label>
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                             value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
@@ -216,7 +213,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Nội dung vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Nội dung vụ việc</label>
                         <input
                             type="text"
                             value={noiDungVuViec}
@@ -226,7 +223,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Ngày tiếp nhận</label>
+                        <label className="block text-gray-700 text-left text-left">Ngày tiếp nhận</label>
                         <input
                             type="date"
                             value={ngayTiepNhan}
@@ -236,7 +233,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Ngày xử lý</label>
+                        <label className="block text-gray-700 text-left text-left">Ngày xử lý</label>
                         <input
                             type="date"
                             value={ngayXuLy}
@@ -246,7 +243,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Loại vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Loại vụ việc</label>
                         <Select
                             options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
                             value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
@@ -257,7 +254,7 @@ function CaseAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
+                        <label className="block text-gray-700 text-left text-left">Loại đơn đăng kí</label>
                         <Select
                             options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                             value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
@@ -268,7 +265,7 @@ function CaseAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Quốc gia vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc</label>
                         <Select
                             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                             value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
@@ -279,7 +276,7 @@ function CaseAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Đối tác</label>
+                        <label className="block text-gray-700 text-left text-left">Đối tác</label>
                         <Select
                             options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
@@ -290,7 +287,7 @@ function CaseAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Trạng thái vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Trạng thái vụ việc</label>
                         <Select
                             options={formatOptions(statusOptions, "value", "label")}
                             value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
@@ -302,7 +299,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Bước xử lý hiện tại</label>
+                        <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
                             value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
@@ -313,7 +310,7 @@ function CaseAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Người xử lí chính</label>
+                        <label className="block text-gray-700 text-left text-left">Người xử lí chính</label>
                         <Select
                             options={formatOptions(staffs, "maNhanSu", "hoTen")}
                             value={nguoiXuLyChinh}
@@ -327,7 +324,7 @@ function CaseAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Người xử lí phụ</label>
+                        <label className="block text-gray-700 text-left text-left">Người xử lí phụ</label>
                         <Select
                             options={formatOptions(staffs, "maNhanSu", "hoTen")}
                             value={nguoiXuLyPhu}
@@ -341,7 +338,6 @@ function CaseAdd() {
                         />
                     </div>
                 </div>
-
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleAddCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm hồ sơ vụ việc</button>

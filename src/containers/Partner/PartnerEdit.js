@@ -72,7 +72,7 @@ function PartnerEdit() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa đối tác</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700">Mã đối tác</label>
+            <label className="block text-gray-700 text-left">Mã đối tác</label>
             <input
               type="text"
               value={maDoiTac}
@@ -81,7 +81,7 @@ function PartnerEdit() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Tên đối tác</label>
+            <label className="block text-gray-700 text-left">Tên đối tác</label>
             <input
               type="text"
               value={tenDoiTac}
@@ -91,7 +91,7 @@ function PartnerEdit() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Quốc gia</label>
+            <label className="block text-gray-700 text-left">Quốc gia</label>
             <Select
               options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
               value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}

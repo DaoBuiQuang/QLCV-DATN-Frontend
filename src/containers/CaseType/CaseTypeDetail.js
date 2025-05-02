@@ -31,7 +31,7 @@ function CaseTypeDetail() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa loại vụ việc</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700">Mã loại vụ việc</label>
+            <label className="block text-gray-700 text-left">Mã loại vụ việc</label>
             <input
               type="text"
               value={maLoaiVuViec}
@@ -40,7 +40,7 @@ function CaseTypeDetail() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Tên loại vụ việc</label>
+            <label className="block text-gray-700 text-left">Tên loại vụ việc</label>
             <input
               type="text"
               value={tenLoaiVuViec}
@@ -50,7 +50,7 @@ function CaseTypeDetail() {
             />
           </div>
           <div className="col-span-2">
-            <label className="block text-gray-700">Mô tả</label>
+            <label className="block text-gray-700 text-left">Mô tả</label>
             <textarea
               value={moTa}
               readOnly

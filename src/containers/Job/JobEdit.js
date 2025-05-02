@@ -54,7 +54,7 @@ function JobEdit() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa ngành nghề</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700">Mã ngành nghề</label>
+            <label className="block text-gray-700 text-left">Mã ngành nghề</label>
             <input
               type="text"
               value={maNganhNghe}
@@ -64,7 +64,7 @@ function JobEdit() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Tên ngành nghề</label>
+            <label className="block text-gray-700 text-left">Tên ngành nghề</label>
             <input
               type="text"
               value={tenNganhNghe}

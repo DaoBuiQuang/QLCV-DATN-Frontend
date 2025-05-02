@@ -30,7 +30,7 @@ function CountryAdd() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm quốc gia mới</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700">Mã quốc gia</label>
+            <label className="block text-gray-700 text-left">Mã quốc gia</label>
             <input
               type="text"
               value={maQuocGia}
@@ -40,7 +40,7 @@ function CountryAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Tên quốc gia</label>
+            <label className="block text-gray-700 text-left">Tên quốc gia</label>
             <input
               type="text"
               value={tenQuocGia}

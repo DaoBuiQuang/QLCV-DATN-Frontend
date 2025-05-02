@@ -72,39 +72,39 @@ function StaffEdit() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa nhân sự</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="block text-gray-700">Mã nhân sự</label>
+                        <label className="block text-gray-700 text-left">Mã nhân sự</label>
                         <input type="text" value={maNhanSu} disabled className="w-full p-2 mt-1 border rounded-lg bg-gray-200" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Họ tên</label>
+                        <label className="block text-gray-700 text-left">Họ tên</label>
                         <input type="text" value={hoTen} onChange={(e) => setHoTen(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Chức vụ</label>
+                        <label className="block text-gray-700 text-left">Chức vụ</label>
                         <input type="text" value={chucVu} onChange={(e) => setChucVu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Phòng ban</label>
+                        <label className="block text-gray-700 text-left">Phòng ban</label>
                         <input type="text" value={phongBan} onChange={(e) => setPhongBan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Số điện thoại</label>
+                        <label className="block text-gray-700 text-left">Số điện thoại</label>
                         <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Email</label>
+                        <label className="block text-gray-700 text-left">Email</label>
                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Ngày sinh</label>
+                        <label className="block text-gray-700 text-left">Ngày sinh</label>
                         <input type="date" value={ngayThangNamSinh} onChange={(e) => setNgayThangNamSinh(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">CCCD</label>
+                        <label className="block text-gray-700 text-left">CCCD</label>
                         <input type="text" value={cccd} onChange={(e) => setCccd(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Bằng cấp</label>
+                        <label className="block text-gray-700 text-left">Bằng cấp</label>
                         <input type="text" value={bangCap} onChange={(e) => setBangCap(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
                     </div>
                 </div>

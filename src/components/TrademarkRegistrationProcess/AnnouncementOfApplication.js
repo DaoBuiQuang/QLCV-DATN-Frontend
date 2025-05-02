@@ -13,7 +13,7 @@ const AnnouncementOfApplication = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Công bố đơn</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày công bố đơn dự kiến</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày công bố đơn dự kiến</label>
                     <input
                         type="date"
                         value={ngayCongBo_DuKien}
@@ -23,7 +23,7 @@ const AnnouncementOfApplication = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày công bố đơn</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày công bố đơn</label>
                     <input
                         type="date"
                         value={ngayCongBo}

@@ -6,6 +6,8 @@ function CountryList() {
   const role = useSelector((state) => state.auth.role);
   const [countries, setCountries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [countryToDelete, setCountryToDelete] = useState(null);
   const navigate = useNavigate();
   const fetchCountries = async (searchValue) => {
     try {
@@ -23,7 +25,20 @@ function CountryList() {
   useEffect(() => {
     fetchCountries("");
   }, []);
-
+  const handleDeleteCountry = async () => {
+    try {
+      await callAPI({
+        method: "post",
+        endpoint: "/country/delete",
+        data: { maQuocGia: countryToDelete },
+      });
+      setShowDeleteModal(false);
+      setCountryToDelete(null);
+      fetchCountries(searchTerm); 
+    } catch (error) {
+      console.error("Lỗi khi xóa đối tác:", error);
+    }
+  };
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
@@ -93,7 +108,12 @@ function CountryList() {
                       >
                         📝
                       </button>
-                      <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300">
+                      <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                         onClick={() => {
+                          setCountryToDelete(country.maQuocGia);
+                          setShowDeleteModal(true);
+                        }}
+                      >
                         🗑️
                       </button>
                     </div>
@@ -105,6 +125,28 @@ function CountryList() {
           ))}
         </tbody>
       </table>
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md w-80">
+            <h3 className="text-lg font-semibold mb-4 text-center">Xác nhận xóa</h3>
+            <p className="mb-4 text-center">Bạn có chắc chắn muốn xóa quốc gia này không?</p>
+            <div className="flex justify-between">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Hủy
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                onClick={handleDeleteCountry}
+              >
+                Xác nhận xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

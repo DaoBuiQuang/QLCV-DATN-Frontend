@@ -183,7 +183,7 @@ function CaseEdit() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ vụ việc</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc</label>
                         <input
                             type="text"
                             value={maHoSoVuViec}
@@ -193,7 +193,7 @@ function CaseEdit() {
                     </div>
 
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Tên khách hàng </label>
+                        <label className="block text-gray-700 text-left text-left">Tên khách hàng </label>
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                             value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
@@ -207,7 +207,7 @@ function CaseEdit() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Nội dung vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Nội dung vụ việc</label>
                         <input
                             type="text"
                             value={noiDungVuViec}
@@ -218,7 +218,7 @@ function CaseEdit() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Ngày tiếp nhận</label>
+                        <label className="block text-gray-700 text-left text-left">Ngày tiếp nhận</label>
                         <input
                             type="date"
                             value={ngayTiepNhan}
@@ -229,7 +229,7 @@ function CaseEdit() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Ngày xử lý</label>
+                        <label className="block text-gray-700 text-left text-left">Ngày xử lý</label>
                         <input
                             type="date"
                             value={ngayXuLy}
@@ -240,7 +240,7 @@ function CaseEdit() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Loại vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Loại vụ việc</label>
                         <Select
                             options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
                             value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
@@ -252,7 +252,7 @@ function CaseEdit() {
                         />
                     </div>
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left">Loại đơn đăng kí</label>
+                        <label className="block text-gray-700 text-left text-left">Loại đơn đăng kí</label>
                         <Select
                             options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                             value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
@@ -263,7 +263,7 @@ function CaseEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Quốc gia vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc</label>
                         <Select
                             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                             value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
@@ -275,7 +275,7 @@ function CaseEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Đối tác</label>
+                        <label className="block text-gray-700 text-left text-left">Đối tác</label>
                         <Select
                             options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
@@ -287,7 +287,7 @@ function CaseEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Trạng thái vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Trạng thái vụ việc</label>
                         <Select
                             options={formatOptions(statusOptions, "value", "label")}
                             value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
@@ -300,7 +300,7 @@ function CaseEdit() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Bước xử lý hiện tại</label>
+                        <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
                             value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
@@ -312,7 +312,7 @@ function CaseEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Người xử lí chính</label>
+                        <label className="block text-gray-700 text-left text-left">Người xử lí chính</label>
                         <Select
                             options={formatOptions(staffs, "maNhanSu", "hoTen")}
                             // value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
@@ -328,7 +328,7 @@ function CaseEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Người xử lí phụ</label>
+                        <label className="block text-gray-700 text-left text-left">Người xử lí phụ</label>
                         <Select
                             options={formatOptions(staffs, "maNhanSu", "hoTen")}
                             value={formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === nguoiXuLyPhu)}

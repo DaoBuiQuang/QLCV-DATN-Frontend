@@ -35,7 +35,7 @@ function ApplicationTypeDetail() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Chỉnh sửa loại đơn</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="block text-gray-700">Mã loại đơn</label>
+                        <label className="block text-gray-700 text-left">Mã loại đơn</label>
                         <input
                             type="text"
                             value={maLoaiDon}
@@ -44,7 +44,7 @@ function ApplicationTypeDetail() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Tên loại đơn</label>
+                        <label className="block text-gray-700 text-left">Tên loại đơn</label>
                         <input
                             type="text"
                             value={tenLoaiDon}
@@ -55,7 +55,7 @@ function ApplicationTypeDetail() {
                         />
                     </div>
                     <div className="col-span-2">
-                        <label className="block text-gray-700">Mô tả</label>
+                        <label className="block text-gray-700 text-left">Mô tả</label>
                         <textarea
                             value={moTa}
                             onChange={(e) => setMoTa(e.target.value)}

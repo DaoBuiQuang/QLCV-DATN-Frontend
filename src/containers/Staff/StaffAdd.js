@@ -50,9 +50,9 @@ function StaffAdd() {
     <div className="p-1 bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm nhân sự mới</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div>
-            <label className="block text-gray-700">Mã nhân sự</label>
+            <label className="block text-gray-700 text-left">Mã nhân sự</label>
             <input
               type="text"
               value={maNhanSu}
@@ -62,7 +62,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Họ tên</label>
+            <label className="block text-gray-700 text-left">Họ tên</label>
             <input
               type="text"
               value={hoTen}
@@ -72,7 +72,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Chức vụ</label>
+            <label className="block text-gray-700 text-left">Chức vụ</label>
             <input
               type="text"
               value={chucVu}
@@ -82,7 +82,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Phòng ban</label>
+            <label className="block text-gray-700 text-left">Phòng ban</label>
             <input
               type="text"
               value={phongBan}
@@ -92,7 +92,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Số điện thoại</label>
+            <label className="block text-gray-700 text-left">Số điện thoại</label>
             <input
               type="text"
               value={sdt}
@@ -102,7 +102,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700 text-left">Email</label>
             <input
               type="email"
               value={email}
@@ -112,7 +112,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Ngày sinh</label>
+            <label className="block text-gray-700 text-left">Ngày sinh</label>
             <input
               type="date"
               value={ngayThangNamSinh}
@@ -121,7 +121,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">CCCD</label>
+            <label className="block text-gray-700 text-left">CCCD</label>
             <input
               type="text"
               value={cccd}
@@ -131,7 +131,7 @@ function StaffAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Bằng cấp</label>
+            <label className="block text-gray-700 text-left">Bằng cấp</label>
             <input
               type="text"
               value={bangCap}

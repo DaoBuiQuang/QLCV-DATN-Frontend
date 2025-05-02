@@ -34,7 +34,7 @@ function RegisterStaff() {
       <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-lg">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Tạo tài khoản nhân sự</h2>
         <div className="mb-4">
-          <label className="block text-gray-700">Mã nhân sự</label>
+          <label className="block text-gray-700 text-left">Mã nhân sự</label>
           <input
             type="text"
             value={maNhanSu}
@@ -43,7 +43,7 @@ function RegisterStaff() {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Tên đăng nhập</label>
+          <label className="block text-gray-700 text-left">Tên đăng nhập</label>
           <input
             type="text"
             value={username}
@@ -53,7 +53,7 @@ function RegisterStaff() {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Mật khẩu</label>
+          <label className="block text-gray-700 text-left">Mật khẩu</label>
           <input
             type="password"
             value={password}
@@ -63,7 +63,7 @@ function RegisterStaff() {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Vai trò</label>
+          <label className="block text-gray-700 text-left">Vai trò</label>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}

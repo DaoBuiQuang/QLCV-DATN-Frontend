@@ -105,10 +105,10 @@ function CustomerDetail() {
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Chi tiết khách hàng</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
                     <div>
-                        <label className="block text-gray-700">Mã khách hàng</label>
+                        <label className="block text-gray-700 text-left">Mã khách hàng</label>
                         <input
                             type="text"
                             value={maKhachHang}
@@ -117,7 +117,7 @@ function CustomerDetail() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700">Tên viết tắt khách hàng</label>
+                        <label className="block text-gray-700 text-left">Tên viết tắt khách hàng</label>
                         <input
                             type="text"
                             value={tenVietTatKH}
@@ -127,7 +127,7 @@ function CustomerDetail() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Tên khách hàng</label>
+                        <label className="block text-gray-700 text-left">Tên khách hàng</label>
                         <input
                             type="text"
                             value={tenKhachHang}
@@ -138,7 +138,7 @@ function CustomerDetail() {
 
 
                     <div>
-                        <label className="block text-gray-700">Đối tác</label>
+                        <label className="block text-gray-700 text-left">Đối tác</label>
                         <Select
                             options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
@@ -150,7 +150,7 @@ function CustomerDetail() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Quốc gia</label>
+                        <label className="block text-gray-700 text-left">Quốc gia</label>
                         <Select
                             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                             value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
@@ -162,7 +162,7 @@ function CustomerDetail() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Ngành nghề</label>
+                        <label className="block text-gray-700 text-left">Ngành nghề</label>
                         <Select
                             options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
                             value={maNganhNghe ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === maQuocGia) : null}
@@ -174,17 +174,17 @@ function CustomerDetail() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Địa chỉ</label>
+                        <label className="block text-gray-700 text-left">Địa chỉ</label>
                         <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100 " readOnly  />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Số điện thoại</label>
+                        <label className="block text-gray-700 text-left">Số điện thoại</label>
                         <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" readOnly />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Trạng thái</label>
+                        <label className="block text-gray-700 text-left">Trạng thái</label>
                         <Select
                             options={trangThaiOptions}
                             value={trangThaiOptions.find(option => option.value === trangThai)}
@@ -196,16 +196,16 @@ function CustomerDetail() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Mô tả</label>
+                        <label className="block text-gray-700 text-left">Mô tả</label>
                         <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" readOnly/>
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Ghi chú</label>
+                        <label className="block text-gray-700 text-left">Ghi chú</label>
                         <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" readOnly/>
                     </div>
                     <div>
-                        <label className="block text-gray-700">Mã khách hàng cũ</label>
+                        <label className="block text-gray-700 text-left">Mã khách hàng cũ</label>
                         <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-100" readOnly/>
                     </div>
                 </div>

@@ -47,6 +47,13 @@ const callAPI = async ({ method = "get", endpoint, data = null, params = null })
             data,
             params,
         });
+        if (
+            method.toLowerCase() === "post" &&
+            endpoint.toLowerCase().endsWith("/delete") &&
+            response.data?.message
+        ) {
+            toast.success(`${response.data.message}`, { position: "top-right", autoClose: 3000 });
+        }
         return response.data;
     } catch (error) {
         const errorMessage = error.response?.data?.message || "Lỗi kết nối đến server!";

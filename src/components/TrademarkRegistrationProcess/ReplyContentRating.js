@@ -1,4 +1,3 @@
-// components/CongBoDon.jsx
 import React from 'react';
 
 const ReplyContentRating = ({
@@ -13,7 +12,7 @@ const ReplyContentRating = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Trả lời kết quả thẩm định nội dung</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
                     <input
                         type="date"
                         disabled
@@ -23,7 +22,7 @@ const ReplyContentRating = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày kết quả thẩm định nội dung đơn</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày kết quả thẩm định nội dung đơn</label>
                     <input
                         type="date"
                         value={ngayTraLoiKQThamDinhND}

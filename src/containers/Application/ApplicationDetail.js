@@ -226,7 +226,7 @@ function ApplicationDetail() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
-                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
+                            <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc</label>
                             <input
                                 type="text"
                                 value={maHoSoVuViec}
@@ -236,7 +236,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left">Số đơn</label>
+                            <label className="block text-gray-700 text-left text-left">Số đơn</label>
                             <input
                                 type="text"
                                 value={soDon}
@@ -247,7 +247,7 @@ function ApplicationDetail() {
                         </div>
 
                         <div>
-                            <label className="block text-gray-700 text-left">Trạng thái đơn</label>
+                            <label className="block text-gray-700 text-left text-left">Trạng thái đơn</label>
                             <input
                                 type="text"
                                 value={trangThaiDon}
@@ -257,7 +257,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
+                            <label className="block text-gray-700 text-left text-left">Ngày nộp đơn</label>
                             <input
                                 type="date"
                                 value={ngayNopDon}
@@ -267,7 +267,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left">Tên nhãn hiệu</label>
+                            <label className="block text-gray-700 text-left text-left">Tên nhãn hiệu</label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
@@ -279,7 +279,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left">Chọn danh sách sản phẩm dịch vụ</label>
+                            <label className="block text-gray-700 text-left text-left">Chọn danh sách sản phẩm dịch vụ</label>
                             <Select
                                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                                 value={

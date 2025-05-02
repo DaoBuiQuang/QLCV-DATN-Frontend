@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearAuth } from "../../src/features/authSlice";
 import callAPI from "../utils/api";
 
-function Header({ toggleMenu }) {
+function Header({ toggleMenu,isMenuOpen  }) {
   const [username, setUsername] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false); // 👈 Modal state
   const authId = useSelector((state) => state.auth.authId);
@@ -54,9 +54,10 @@ function Header({ toggleMenu }) {
   return (
     <>
       <header
-        className="bg-white shadow-md px-6 py-3 flex items-center justify-between w-full lg:w-auto"
-        style={{ width: window.innerWidth >= 1024 ? "calc(100vw - 224px)" : "100vw" }}
+        className="bg-white shadow-md px-6 py-3 flex items-center justify-between w-full"
+        style={{ width: isMenuOpen && window.innerWidth >= 1024 ? "calc(100vw - 224px)" : "100vw" }}
       >
+
         <button className="text-gray-600 hover:text-gray-800" onClick={toggleMenu}>
           <Menu size={24} />
         </button>
@@ -72,8 +73,6 @@ function Header({ toggleMenu }) {
           </div>
         )}
       </header>
-
-      {/* ✅ Modal xác nhận đăng xuất */}
       {showLogoutModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-80">
@@ -87,7 +86,7 @@ function Header({ toggleMenu }) {
                 Hủy
               </button>
               <button
-                onClick={handleLogout} // 👈 thực hiện logout
+                onClick={handleLogout} 
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
               >
                 Đăng xuất

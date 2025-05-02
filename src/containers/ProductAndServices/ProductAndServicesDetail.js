@@ -32,7 +32,7 @@ function ProductAndServicesDetail() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa Sản phẩm & Dịch vụ</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700">Mã sản phẩm / dịch vụ</label>
+            <label className="block text-gray-700 text-left">Mã sản phẩm / dịch vụ</label>
             <input
               type="text"
               value={maSPDV}
@@ -42,7 +42,7 @@ function ProductAndServicesDetail() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Tên sản phẩm / dịch vụ</label>
+            <label className="block text-gray-700 text-left">Tên sản phẩm / dịch vụ</label>
             <input
               type="text"
               value={tenSanPhamDichVu}
@@ -53,7 +53,7 @@ function ProductAndServicesDetail() {
             />
           </div>
           <div className="col-span-2">
-            <label className="block text-gray-700">Mô tả</label>
+            <label className="block text-gray-700 text-left">Mô tả</label>
             <textarea
               value={moTa}
               onChange={(e) => setMoTa(e.target.value)}

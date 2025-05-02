@@ -51,7 +51,7 @@ function BrandAdd() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm nhãn hiệu mới</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700">Mã nhãn hiệu</label>
+            <label className="block text-gray-700 text-left">Mã nhãn hiệu</label>
             <input
               type="text"
               value={maNhanHieu}
@@ -61,7 +61,7 @@ function BrandAdd() {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Tên nhãn hiệu</label>
+            <label className="block text-gray-700 text-left">Tên nhãn hiệu</label>
             <input
               type="text"
               value={tenNhanHieu}
@@ -71,7 +71,7 @@ function BrandAdd() {
             />
           </div>
           <div className="col-span-2">
-            <label className="block text-gray-700">Mô tả</label>
+            <label className="block text-gray-700 text-left">Mô tả</label>
             <textarea
               value={moTa}
               onChange={(e) => setMoTa(e.target.value)}
@@ -80,7 +80,7 @@ function BrandAdd() {
             ></textarea>
           </div>
           <div className="col-span-2">
-            <label className="block text-gray-700">Chọn ảnh</label>
+            <label className="block text-gray-700 text-left">Chọn ảnh</label>
             <input
               type="file"
               accept="image/*"

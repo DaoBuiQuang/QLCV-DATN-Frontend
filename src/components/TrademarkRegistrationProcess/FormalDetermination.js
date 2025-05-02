@@ -17,15 +17,15 @@ const FormalDetermination = ({
         setLichSuThamDinh(prev => [
             ...prev,
             {
-                loaiThamDinh:'HinhThuc',
-                lanThamDinh: prev.length + 1, 
-                ngayCoKQThamDinh: today.format('YYYY-MM-DD'),
-                ketQuaThamDinh: 'ThatBai',  
-                ngayHanTraLoiKetQuaThamDinh: hanTraLoi,
-                coGiaHan: false
+                loaiThamDinh: 'HinhThuc',
+                lanThamDinh: prev.length + 1,
+                ngayTraLoi: today.format('YYYY-MM-DD'), 
+                hanTraLoi: hanTraLoi,
+                giaHan: false
             }
         ]);
     };
+    
 
     const handleSuccess = () => {
         const today = dayjs().format('YYYY-MM-DD');
@@ -55,24 +55,13 @@ const FormalDetermination = ({
         const updated = lichSuThamDinh.filter((_, i) => i !== index);
         setLichSuThamDinh(updated);
     };
-    // const handleSubmit = () => {
-    //     const mappedLichSu = lichSuThamDinh.map((item, index) => ({
-    //         lanThamDinh: index + 1,
-    //         ngayCoKQThamDinh: item.ngayTraLoi,
-    //         ketQuaThamDinh: 'ThatBai',
-    //         ngayHanTraLoiKetQuaThamDinh: item.hanTraLoi,
-    //         coGiaHan: item.giaHan
-    //     }));
-    //     console.log(mappedLichSu);
-    // }
-    
     return (
         <div className="flex-1">
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thẩm định hình thức</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày có kết quả trả lời thẩm định hình thức dự kiến</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày có kết quả trả lời thẩm định hình thức dự kiến</label>
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc_DuKien}
@@ -82,7 +71,7 @@ const FormalDetermination = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày chấp nhận đơn hợp lệ</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày chấp nhận đơn hợp lệ</label>
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc}
@@ -92,8 +81,6 @@ const FormalDetermination = ({
                     />
                 </div>
             </div>
-
-            {/* Ẩn khi đã có ít nhất 1 lần từ chối */}
             {lichSuThamDinh.length === 0 && (
                 <div className="mt-4 flex space-x-2">
                     <button
@@ -102,7 +89,7 @@ const FormalDetermination = ({
                         disabled={isViewOnly}
                         className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
                     >
-                        ✅ Thành công
+                        ✅ Đạt
                     </button>
                     <button
                         type="button"
@@ -110,7 +97,7 @@ const FormalDetermination = ({
                         disabled={isViewOnly}
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
                     >
-                        ❌ Thất bại
+                        ❌ Không đạt
                     </button>
                 </div>
             )}
@@ -166,7 +153,7 @@ const FormalDetermination = ({
                                                 <input
                                                     type="checkbox"
                                                     checked={refusal.giaHan}
-                                                    onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}  // Cập nhật giaHan
+                                                    onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}  
                                                     className="mr-2"
                                                 />
                                                 Gia hạn
@@ -183,14 +170,14 @@ const FormalDetermination = ({
                                             onClick={handleSuccess}
                                             className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-xs"
                                         >
-                                            ✅ Thành công
+                                            ✅ Đạt
                                         </button>
                                         <button
                                             type="button"
                                             onClick={handleFailure}
                                             className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs"
                                         >
-                                            ❌ Thất bại
+                                            ❌ Không đạt
                                         </button>
                                     </div>
                                 )}

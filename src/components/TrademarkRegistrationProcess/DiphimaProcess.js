@@ -15,7 +15,7 @@ const DiphimaProcess = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Hoàn tất nhận bằng</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày thông báo cấp bằng</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày thông báo cấp bằng</label>
                     <input
                         type="date"
                         value={ngayThongBaoCapBang}
@@ -25,7 +25,7 @@ const DiphimaProcess = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày nộp phí cấp bằng</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày nộp phí cấp bằng</label>
                     <input
                         type="date"
                         value={ngayNopPhiCapBang}
@@ -35,7 +35,7 @@ const DiphimaProcess = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày nhận bằng</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày nhận bằng</label>
                     <input
                         type="date"
                         value={ngayNhanBang}

@@ -5,6 +5,8 @@ import callAPI from "../../utils/api";
 function ProductAndServicesList() {
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [itemeToDelete, setItemToDelete] = useState(null);
     const navigate = useNavigate();
 
     const fetchItems = async (searchValue) => {
@@ -23,7 +25,20 @@ function ProductAndServicesList() {
     useEffect(() => {
         fetchItems("");
     }, []);
-
+    const handleDeleteItem = async () => {
+        try {
+            await callAPI({
+                method: "post",
+                endpoint: "/productsandservices/delete",
+                data: { maSPDV: itemeToDelete },
+            });
+            setShowDeleteModal(false);
+            setItemToDelete(null);
+            fetchItems(searchTerm);
+        } catch (error) {
+            console.error("Lỗi khi xóa sản phẩm dịch vụ:", error);
+        }
+    };
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md">
@@ -89,7 +104,10 @@ function ProductAndServicesList() {
                                     </button>
                                     <button
                                         className="px-3 py-1 bg-red-200 text-red-600 rounded hover:bg-red-300"
-                                    // Bạn có thể thêm xử lý xóa ở đây
+                                        onClick={() => {
+                                            setShowDeleteModal(true);
+                                            setItemToDelete(item.maSPDV);
+                                        }}
                                     >
                                         🗑️
                                     </button>
@@ -99,6 +117,28 @@ function ProductAndServicesList() {
                     ))}
                 </tbody>
             </table>
+            {showDeleteModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-md w-80">
+                        <h3 className="text-lg font-semibold mb-4 text-center">Xác nhận xóa</h3>
+                        <p className="mb-4 text-center">Bạn có chắc chắn muốn xóa sản phẩm dịch vụ này không?</p>
+                        <div className="flex justify-between">
+                            <button
+                                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                                onClick={() => setShowDeleteModal(false)}
+                            >
+                                Hủy
+                            </button>
+                            <button
+                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                onClick={handleDeleteItem}
+                            >
+                                Xác nhận xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

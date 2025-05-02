@@ -74,7 +74,10 @@ const MainLayout = () => {
       </div>
 
       <div className={`flex flex-col flex-1 transition-all duration-300 ${isMenuOpen ? "ml-56" : "ml-0"}`}>
-        <Header toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
+        <Header
+          toggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+          isMenuOpen={isMenuOpen} // 👈 truyền prop này vào
+        />
         <main
           className="flex-1 p-4 bg-gray-100"
           style={{

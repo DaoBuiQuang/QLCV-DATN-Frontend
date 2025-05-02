@@ -17,7 +17,7 @@ const DegreeInformation = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thông tin bằng</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex-1">
-                    <label className="block text-gray-700 text-left">Số bằng</label>
+                    <label className="block text-gray-700 text-left text-left">Số bằng</label>
                     <input
                         type="text"
                         value={soBang}
@@ -27,7 +27,7 @@ const DegreeInformation = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày cấp bằng</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày cấp bằng</label>
                     <input
                         type="date"
                         value={ngayCapBang}
@@ -37,7 +37,7 @@ const DegreeInformation = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày hết hạn bằng</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày hết hạn bằng</label>
                     <input
                         type="date"
                         value={ngayHetHanBang}
@@ -47,7 +47,7 @@ const DegreeInformation = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày gửi bằng cho khách hàng</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày gửi bằng cho khách hàng</label>
                     <input
                         type="date"
                         value={ngayGuiBangChoKH}
