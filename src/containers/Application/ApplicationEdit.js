@@ -28,16 +28,14 @@ function ApplicationEdit() {
 
     const [ngayKQThamDinhHinhThuc_DuKien, setNgayKQThamDinhHinhThuc_DuKien] = useState(null);
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
-    const [ngayTraLoiKQTuChoiThamDinhHinhThuc, setNgayTraLoiKQTuChoiThamDinhHinhThuc] = useState(null);
-    const [giaHanTraLoiKQTuChoiThamDinhHinhThuc, setGiaHanTraLoiKQTuChoiThamDinhHinhThuc] = useState(false)
+    const [lichSuThamDinhHT, setLichSuThamDinhHT] = useState([])
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
 
     const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
-    const [ngayTraLoiKQTuChoiThamDinhND, setNgayTraLoiKQTuChoiThamDinhND] = useState(null);
-    const [giaHanTraLoiKQTuChoiThamDinhNoiDung, setGiaHanTraLoiKQTuChoiThamDinhNoiDung] = useState(false)
+    const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
@@ -190,14 +188,10 @@ function ApplicationEdit() {
                 setNgayKQThamDinhHinhThuc_DuKien(formatDate(response.ngayKQThamDinhHinhThuc_DuKien));
 
                 setNgayKQThamDinhHinhThuc(formatDate(response.ngayKQThamDinhHinhThuc));
-                setNgayTraLoiKQTuChoiThamDinhHinhThuc(formatDate(response.ngayTraLoiKQTuChoiThamDinhHinhThuc));
-                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc(response.giaHanTraLoiKQTuChoiThamDinhHinhThuc);
                 setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
                 setNgayCongBo(formatDate(response.ngayCongBoDon));
                 setNgayKQThamDinhND_DuKien(formatDate(response.ngayKQThamDinhND_DuKien));
                 setNgayKQThamDinhND(formatDate(response.ngayKQThamDinhND));
-                setNgayTraLoiKQTuChoiThamDinhND(formatDate(response.ngayTraLoiKQTuChoiThamDinhND));
-                setGiaHanTraLoiKQTuChoiThamDinhNoiDung(response.giaHanTraLoiKQTuChoiThamDinhNoiDung);
                 setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKQThamDinhND_DuKien));
                 setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKQThamDinhND));
 
@@ -236,14 +230,12 @@ function ApplicationEdit() {
                     trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
                     ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien || null,
                     ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc || null,
-                    ngayTraLoiKQTuChoiThamDinhHinhThuc: ngayTraLoiKQTuChoiThamDinhHinhThuc || null,
-                    giaHanTraLoiKQTuChoiThamDinhHinhThuc: giaHanTraLoiKQTuChoiThamDinhHinhThuc,
+
                     ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
                     ngayCongBoDon: ngayCongBo || null,
                     ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien || null,
                     ngayKQThamDinhND: ngayKQThamDinhND || null,
-                    ngayTraLoiKQTuChoiThamDinhND: ngayTraLoiKQTuChoiThamDinhND || null,
-                    giaHanTraLoiKQTuChoiThamDinhNoiDung: giaHanTraLoiKQTuChoiThamDinhNoiDung,
+
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
                     ngayThongBaoCapBang: ngayThongBaoCapBang || null,
@@ -319,7 +311,7 @@ function ApplicationEdit() {
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
                                 onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
                                 placeholder="Chọn mã nhãn hiệu"
-                                className="w-full mt-1 rounded-lg h-10"
+                                className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                             />
                         </div>
@@ -334,7 +326,7 @@ function ApplicationEdit() {
                                 }
                                 onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
                                 placeholder="Chọn mã nhãn hiệu"
-                                className="w-full mt-1 rounded-lg h-10"
+                                className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                                 isMulti
                             />
@@ -360,10 +352,8 @@ function ApplicationEdit() {
                                 setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
                                 ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
                                 setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
-                                ngayTraLoiKQTuChoiThamDinhHinhThuc={ngayTraLoiKQTuChoiThamDinhHinhThuc}
-                                setNgayTraLoiKQTuChoiThamDinhHinhThuc={setNgayTraLoiKQTuChoiThamDinhHinhThuc}
-                                giaHanTraLoiKQTuChoiThamDinhHinhThuc={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
-                                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc={setGiaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                lichSuThamDinhHT={lichSuThamDinhHT}
+                                setLichSuThamDinhHT={setLichSuThamDinhHT}
                             />
                         </div>
                     )}
@@ -384,10 +374,8 @@ function ApplicationEdit() {
                                 setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
                                 ngayKQThamDinhND={ngayKQThamDinhND}
                                 setNgayKQThamDinhND={setNgayKQThamDinhND}
-                                ngayTraLoiKQTuChoiThamDinhND={ngayTraLoiKQTuChoiThamDinhND}
-                                setNgayTraLoiKQTuChoiThamDinhND={setNgayTraLoiKQTuChoiThamDinhND}
-                                giaHanTraLoiKQTuChoiThamDinhNoiDung={giaHanTraLoiKQTuChoiThamDinhNoiDung}
-                                setGiaHanTraLoiKQTuChoiThamDinhNoiDung={setGiaHanTraLoiKQTuChoiThamDinhNoiDung}
+                                lichSuThamDinhND={lichSuThamDinhND}
+                                setLichSuThamDinhND={setLichSuThamDinhND}
                             />
                         </div>
                     )}
@@ -445,8 +433,7 @@ function ApplicationEdit() {
                             ngayHoanThanhHSTL: ngayHoanThanhHSTL,
                             ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien,
                             ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc,
-                            ngayTraLoiKQTuChoiThamDinhHinhThuc: ngayTraLoiKQTuChoiThamDinhHinhThuc,
-                            giaHanTraLoiKQTuChoiThamDinhHinhThuc: giaHanTraLoiKQTuChoiThamDinhHinhThuc,
+
                             ngayCongBo_DuKien: ngayCongBo_DuKien,
                             ngayCongBo: ngayCongBo,
 

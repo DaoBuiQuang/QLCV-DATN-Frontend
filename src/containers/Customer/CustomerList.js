@@ -153,7 +153,7 @@ function CustomerList() {
                         value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
                         onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
                         placeholder="Chọn quốc gia"
-                        className="w-full md:w-1/6"
+                        className="w-full md:w-1/6 text-left"
                         isClearable
                     />
                     <Select
@@ -161,7 +161,7 @@ function CustomerList() {
                         value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
                         onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
                         placeholder="Chọn đối tác"
-                        className="w-full md:w-1/6"
+                        className="w-full md:w-1/6 text-left"
                         isClearable
                     />
 
@@ -171,7 +171,7 @@ function CustomerList() {
                         value={selectedIndustry ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === selectedIndustry) : null}
                         onChange={selectedOption => setSelectedIndustry(selectedOption?.value)}
                         placeholder="Chọn ngành nghề"
-                        className="w-full md:w-1/6"
+                        className="w-full md:w-1/6 text-left"
                         isClearable
                     />
                 </div>

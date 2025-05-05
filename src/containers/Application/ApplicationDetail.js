@@ -289,7 +289,7 @@ function ApplicationDetail() {
                                 }
                                 onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
                                 placeholder="Chọn mã nhãn hiệu"
-                                className="w-full mt-1 rounded-lg h-10"
+                                className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                                 isMulti
                                 isDisabled

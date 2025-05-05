@@ -19,7 +19,7 @@ const FormalDetermination = ({
             {
                 loaiThamDinh: 'HinhThuc',
                 lanThamDinh: prev.length + 1,
-                ngayBiTuChoiTDHT: "",
+                ngayBiTuChoiTD: "",
                 hanTraLoi: hanTraLoi,
                 giaHan: false,
                 ghiChu: ""
@@ -106,7 +106,7 @@ const FormalDetermination = ({
             {lichSuThamDinhHT.length > 0 && (
                 <div className="mt-4 border">
                     {lichSuThamDinhHT.map((refusal, index) => {
-                        const baseHanTraLoi = dayjs(refusal.ngayBiTuChoiTDHT).add(3, 'month');
+                        const baseHanTraLoi = dayjs(refusal.ngayBiTuChoiTD).add(3, 'month');
                         const hanTraLoi = refusal.giaHan
                             ? baseHanTraLoi.add(2, 'month').format('YYYY-MM-DD')
                             : baseHanTraLoi.format('YYYY-MM-DD');
@@ -131,8 +131,8 @@ const FormalDetermination = ({
                                         <label className="block text-gray-600">Ngày bị từ chối</label>
                                         <input
                                             type="date"
-                                            value={refusal.ngayBiTuChoiTDHT}
-                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTDHT', e.target.value)}
+                                            value={refusal.ngayBiTuChoiTD}
+                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTD', e.target.value)}
                                             disabled={isViewOnly}
                                             className="w-full p-2 mt-1 border rounded-md"
                                         />
@@ -159,7 +159,7 @@ const FormalDetermination = ({
                                         />
                                     </div>
 
-                                    {!isViewOnly && refusal.ngayBiTuChoiTDHT && (
+                                    {!isViewOnly && refusal.ngayBiTuChoiTD && (
                                         <div className="md:col-span-1">
                                             <label className="inline-flex items-center">
                                                 <input

@@ -199,7 +199,7 @@ function CaseEdit() {
                             value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
                             onChange={selectedOption => setMaKhachHang(selectedOption?.value)}
                             placeholder="Chọn khách hàng"
-                            className="w-full mt-1 rounded-lg h-10 bg-gray-200"
+                            className="w-full mt-1 rounded-lg h-10 text-left bg-gray-200"
                             isDisabled 
                             isClearable
                         />
@@ -258,7 +258,7 @@ function CaseEdit() {
                             value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
                             onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
                             placeholder="Chọn loại đơn đăng kí"
-                            className="w-full mt-1 rounded-lg h-10"
+                            className="w-full mt-1 rounded-lg h-10 text-left"
                             isClearable
                         />
                     </div>

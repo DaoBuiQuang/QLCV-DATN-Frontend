@@ -96,7 +96,7 @@ function PartnerList() {
             value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
             onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
             placeholder="Chọn quốc gia"
-            className="w-full md:w-1/6"
+            className="w-full md:w-1/6 text-left"
             isClearable
           />
         </div>

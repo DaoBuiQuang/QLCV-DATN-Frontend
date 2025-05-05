@@ -19,9 +19,10 @@ const ContentReview = ({
             {
                 loaiThamDinh: 'NoiDung',
                 lanThamDinh: prev.length + 1,
-                ngayBiTuChoiTDND: "",
+                ngayBiTuChoiTD: "",
                 hanTraLoi: hanTraLoi,
-                giaHan: false
+                giaHan: false,
+                ghiChu: ""
             }
         ]);
     };
@@ -109,7 +110,7 @@ const ContentReview = ({
             {lichSuThamDinhND.length > 0 && (
                 <div className="mt-4 border">
                     {lichSuThamDinhND.map((refusal, index) => {
-                        const baseHanTraLoi = dayjs(refusal.ngayBiTuChoiTDND).add(3, 'month');
+                        const baseHanTraLoi = dayjs(refusal.ngayBiTuChoiTD).add(3, 'month');
                         const hanTraLoi = refusal.giaHan
                             ? baseHanTraLoi.add(2, 'month').format('YYYY-MM-DD')
                             : baseHanTraLoi.format('YYYY-MM-DD');
@@ -129,19 +130,19 @@ const ContentReview = ({
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
-                                    <div>
+                                <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
+                                    <div className="md:col-span-3">
                                         <label className="block text-gray-600">Ngày bị từ chối</label>
                                         <input
                                             type="date"
-                                            value={refusal.ngayBiTuChoiTDND}
-                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTDND', e.target.value)}
+                                            value={refusal.ngayBiTuChoiTD}
+                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTD', e.target.value)}
                                             disabled={isViewOnly}
                                             className="w-full p-2 mt-1 border rounded-md"
                                         />
                                     </div>
 
-                                    <div>
+                                    <div className="md:col-span-3">
                                         <label className="block text-gray-600">Hạn trả lời kết quả</label>
                                         <input
                                             type="date"
@@ -151,8 +152,19 @@ const ContentReview = ({
                                         />
                                     </div>
 
-                                    <div className="mt-5 md:mt-6">
-                                        {!isViewOnly && (
+                                    <div className="md:col-span-3">
+                                        <label className="block text-gray-600">Ghi chú</label>
+                                        <input
+                                            type="text"
+                                            value={refusal.ghiChu || ''}
+                                            onChange={(e) => updateRefusal(index, 'ghiChu', e.target.value)}
+                                            disabled={isViewOnly}
+                                            className="w-full p-2 mt-1 border rounded-md"
+                                        />
+                                    </div>
+
+                                    {!isViewOnly && refusal.ngayBiTuChoiTD && (
+                                        <div className="md:col-span-1">
                                             <label className="inline-flex items-center">
                                                 <input
                                                     type="checkbox"
@@ -162,10 +174,10 @@ const ContentReview = ({
                                                 />
                                                 Gia hạn
                                             </label>
-                                        )}
-                                    </div>
-
+                                        </div>
+                                    )}
                                 </div>
+
 
                                 {!isViewOnly && index === lichSuThamDinhND.length - 1 && (
                                     <div className="flex space-x-2 mt-3">
