@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
-import DocumentSection from "../../components/DocumentSection";
+import DocumentSection from "../../components/UpdateDocument/DocumentSection";
 import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication";
 import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination";
 import ReplyContentRating from "../../components/TrademarkRegistrationProcess/ReplyContentRating";
@@ -14,6 +14,7 @@ import CompleteDocumentation from "../../components/TrademarkRegistrationProcess
 function ApplicationAdd() {
     const navigate = useNavigate();
     const { maHoSoVuViec } = useParams();
+    const isAddOnly = true
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [maNhanHieu, setMaNhanHieu] = useState("");
@@ -27,7 +28,7 @@ function ApplicationAdd() {
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
     const [ngayTraLoiKQTuChoiThamDinhHinhThuc, setNgayTraLoiKQTuChoiThamDinhHinhThuc] = useState(null);
     const [giaHanTraLoiKQTuChoiThamDinhHinhThuc, setGiaHanTraLoiKQTuChoiThamDinhHinhThuc] = useState(false)
-    const [lichSuThamDinh, setLichSuThamDinh] = useState([])
+    const [lichSuThamDinhHT, setLichSuThamDinhHT] = useState([])
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
@@ -36,6 +37,7 @@ function ApplicationAdd() {
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
     const [ngayTraLoiKQTuChoiThamDinhND, setNgayTraLoiKQTuChoiThamDinhND] = useState(null);
     const [giaHanTraLoiKQTuChoiThamDinhNoiDung, setGiaHanTraLoiKQTuChoiThamDinhNoiDung] = useState(false)
+    const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
@@ -198,7 +200,7 @@ function ApplicationAdd() {
                     ngayHetHanBang: ngayHetHanBang,
                     soBang: soBang,
                     taiLieus: taiLieuList,
-                    lichSuThamDinh: lichSuThamDinh
+                    lichSuThamDinhHT: lichSuThamDinhHT,
                 },
             });
             alert("Thêm hồ sơ vụ việc thành công!");
@@ -305,12 +307,8 @@ function ApplicationAdd() {
                                 setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
                                 ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
                                 setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
-                                ngayTraLoiKQTuChoiThamDinhHinhThuc={ngayTraLoiKQTuChoiThamDinhHinhThuc}
-                                setNgayTraLoiKQTuChoiThamDinhHinhThuc={setNgayTraLoiKQTuChoiThamDinhHinhThuc}
-                                giaHanTraLoiKQTuChoiThamDinhHinhThuc={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
-                                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc={setGiaHanTraLoiKQTuChoiThamDinhHinhThuc}
-                                lichSuThamDinh={lichSuThamDinh}
-                                setLichSuThamDinh={setLichSuThamDinh}
+                                lichSuThamDinhHT={lichSuThamDinhHT}
+                                setLichSuThamDinhHT={setLichSuThamDinhHT}
                             />
                         </div>
                          )}
@@ -351,6 +349,9 @@ function ApplicationAdd() {
                                 setNgayTraLoiKQTuChoiThamDinhND={setNgayTraLoiKQTuChoiThamDinhND}
                                 giaHanTraLoiKQTuChoiThamDinhNoiDung={giaHanTraLoiKQTuChoiThamDinhNoiDung}
                                 setGiaHanTraLoiKQTuChoiThamDinhNoiDung={setGiaHanTraLoiKQTuChoiThamDinhNoiDung}
+
+                                lichSuThamDinhND={lichSuThamDinhND}
+                                setLichSuThamDinhND={setLichSuThamDinhND}
                             />
                         </div>
                     )}
@@ -391,7 +392,7 @@ function ApplicationAdd() {
                         </div>
                     )}
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
+                <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly}/>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>

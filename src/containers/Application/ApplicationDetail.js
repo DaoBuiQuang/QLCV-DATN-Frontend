@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
-import DocumentSection from "../../components/DocumentSection";
+import DocumentSection from "../../components/UpdateDocument/DocumentSection";
 import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication";
 import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination";
 import ReplyContentRating from "../../components/TrademarkRegistrationProcess/ReplyContentRating";

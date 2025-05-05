@@ -6,36 +6,55 @@ const ContentReview = ({
     setNgayKQThamDinhND_DuKien,
     ngayKQThamDinhND,
     setNgayKQThamDinhND,
-    ngayTraLoiKQTuChoiThamDinhND,
-    setNgayTraLoiKQTuChoiThamDinhND,
-    giaHanTraLoiKQTuChoiThamDinhNoiDung,
-    setGiaHanTraLoiKQTuChoiThamDinhNoiDung,
+    lichSuThamDinhND,
+    setLichSuThamDinhND,
     isViewOnly
 }) => {
-    const [biTuChoi, setBiTuChoi] = useState(false);
-    const originalNgayTraLoiRef = useRef("");
+    const handleFailure = () => {
+        const today = dayjs();
+        const hanTraLoi = today.add(2, 'month').format('YYYY-MM-DD');
 
-    // Ghi nhận ngày gốc ban đầu từ API
-    useEffect(() => {
-        if (ngayTraLoiKQTuChoiThamDinhND) {
-            setBiTuChoi(true);
-            originalNgayTraLoiRef.current = dayjs(ngayTraLoiKQTuChoiThamDinhND)
-                .subtract(giaHanTraLoiKQTuChoiThamDinhNoiDung ? 2 : 0, 'month')
-                .format('YYYY-MM-DD');
+        setLichSuThamDinhND(prev => [
+            ...prev,
+            {
+                loaiThamDinh: 'NoiDung',
+                lanThamDinh: prev.length + 1,
+                ngayBiTuChoiTDND: "",
+                hanTraLoi: hanTraLoi,
+                giaHan: false
+            }
+        ]);
+    };
+
+
+    const handleSuccess = () => {
+        const today = dayjs().format('YYYY-MM-DD');
+        setNgayKQThamDinhND(today);
+    };
+
+    const updateRefusal = (index, field, value) => {
+        const updated = [...lichSuThamDinhND];
+        updated[index][field] = value;
+
+        if (field === "giaHan") {
+            const refusal = updated[index];
+            let hanTraLoi = dayjs(refusal.hanTraLoi);
+
+            if (value) {
+                hanTraLoi = hanTraLoi.add(2, 'month');
+            } else {
+                hanTraLoi = hanTraLoi.subtract(2, 'month');
+            }
+            updated[index].hanTraLoi = hanTraLoi.format('YYYY-MM-DD');
         }
-    }, [ngayTraLoiKQTuChoiThamDinhND]);
 
-    // Cập nhật khi bật/tắt checkbox gia hạn
-    useEffect(() => {
-        const goc = originalNgayTraLoiRef.current;
-        if (!goc) return;
+        setLichSuThamDinhND(updated);
+    };
 
-        const updated = dayjs(goc)
-            .add(giaHanTraLoiKQTuChoiThamDinhNoiDung ? 2 : 0, 'month')
-            .format('YYYY-MM-DD');
-
-        setNgayTraLoiKQTuChoiThamDinhND(updated);
-    }, [giaHanTraLoiKQTuChoiThamDinhNoiDung]);
+    const deleteRefusal = (index) => {
+        const updated = lichSuThamDinhND.filter((_, i) => i !== index);
+        setLichSuThamDinhND(updated);
+    };
 
     return (
         <div className="flex-1">
@@ -66,54 +85,112 @@ const ContentReview = ({
                     />
                 </div>
             </div>
-
-            <div className="mt-4">
-                <label className="inline-flex items-center text-gray-700">
-                    <input
-                        type="checkbox"
-                        className="form-checkbox mr-2"
-                        checked={biTuChoi}
-                        onChange={(e) => setBiTuChoi(e.target.checked)}
+            {lichSuThamDinhND.length === 0 && (
+                <div className="mt-4 flex space-x-2">
+                    <button
+                        type="button"
+                        onClick={handleSuccess}
                         disabled={isViewOnly}
-                    />
-                    Bị từ chối thẩm định nội dung?
-                </label>
-            </div>
-
-            {biTuChoi && (
-                <>
-                    <div className="mt-2">
-                        <label className="inline-flex items-center text-gray-700">
-                            <input
-                                type="checkbox"
-                                className="form-checkbox mr-2"
-                                checked={giaHanTraLoiKQTuChoiThamDinhNoiDung}
-                                onChange={(e) => setGiaHanTraLoiKQTuChoiThamDinhNoiDung(e.target.checked)}
-                                disabled={isViewOnly}
-                            />
-                            Cho phép gia hạn trả lời từ chối thêm 2 tháng?
-                        </label>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label className="block text-gray-700 text-left text-left">
-                                Ngày trả lời từ chối thẩm định nội dung
-                            </label>
-                            <input
-                                type="date"
-                                value={ngayTraLoiKQTuChoiThamDinhND}
-                                onChange={(e) => {
-                                    setNgayTraLoiKQTuChoiThamDinhND(e.target.value);
-                                    originalNgayTraLoiRef.current = e.target.value;
-                                }}
-                                className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
-                                disabled={isViewOnly}
-                            />
-                        </div>
-                    </div>
-                </>
+                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
+                    >
+                        ✅ Đạt
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleFailure}
+                        disabled={isViewOnly}
+                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+                    >
+                        ❌ Không đạt
+                    </button>
+                </div>
             )}
+
+            {lichSuThamDinhND.length > 0 && (
+                <div className="mt-4 border">
+                    {lichSuThamDinhND.map((refusal, index) => {
+                        const baseHanTraLoi = dayjs(refusal.ngayBiTuChoiTDND).add(3, 'month');
+                        const hanTraLoi = refusal.giaHan
+                            ? baseHanTraLoi.add(2, 'month').format('YYYY-MM-DD')
+                            : baseHanTraLoi.format('YYYY-MM-DD');
+
+                        return (
+                            <div key={index} className="p-1  rounded-md bg-gray-50 text-sm">
+                                <div className="flex justify-between items-center ">
+                                    <span className="font-semibold text-gray-700">Lần từ chối #{index + 1}</span>
+                                    {!isViewOnly && (
+                                        <button
+                                            type="button"
+                                            onClick={() => deleteRefusal(index)}
+                                            className="text-red-500 hover:text-red-700 text-xs"
+                                        >
+                                            🗑 Xóa
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+                                    <div>
+                                        <label className="block text-gray-600">Ngày bị từ chối</label>
+                                        <input
+                                            type="date"
+                                            value={refusal.ngayBiTuChoiTDND}
+                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTDND', e.target.value)}
+                                            disabled={isViewOnly}
+                                            className="w-full p-2 mt-1 border rounded-md"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-600">Hạn trả lời kết quả</label>
+                                        <input
+                                            type="date"
+                                            value={hanTraLoi}
+                                            className="w-full p-2 mt-1 border rounded-md bg-gray-200"
+                                            disabled
+                                        />
+                                    </div>
+
+                                    <div className="mt-5 md:mt-6">
+                                        {!isViewOnly && (
+                                            <label className="inline-flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={refusal.giaHan}
+                                                    onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}
+                                                    className="mr-2"
+                                                />
+                                                Gia hạn
+                                            </label>
+                                        )}
+                                    </div>
+
+                                </div>
+
+                                {!isViewOnly && index === lichSuThamDinhND.length - 1 && (
+                                    <div className="flex space-x-2 mt-3">
+                                        <button
+                                            type="button"
+                                            onClick={handleSuccess}
+                                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-xs"
+                                        >
+                                            ✅ Đạt
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={handleFailure}
+                                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs"
+                                        >
+                                            ❌ Không đạt
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+
         </div>
     );
 };

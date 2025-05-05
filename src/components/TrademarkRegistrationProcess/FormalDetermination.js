@@ -6,26 +6,27 @@ const FormalDetermination = ({
     setNgayKQThamDinhHinhThuc_DuKien,
     ngayKQThamDinhHinhThuc,
     setNgayKQThamDinhHinhThuc,
-    lichSuThamDinh,
-    setLichSuThamDinh,
+    lichSuThamDinhHT,
+    setLichSuThamDinhHT,
     isViewOnly
 }) => {
     const handleFailure = () => {
         const today = dayjs();
         const hanTraLoi = today.add(2, 'month').format('YYYY-MM-DD');
-    
-        setLichSuThamDinh(prev => [
+
+        setLichSuThamDinhHT(prev => [
             ...prev,
             {
                 loaiThamDinh: 'HinhThuc',
                 lanThamDinh: prev.length + 1,
-                ngayTraLoi: today.format('YYYY-MM-DD'), 
+                ngayBiTuChoiTDHT: "",
                 hanTraLoi: hanTraLoi,
-                giaHan: false
+                giaHan: false,
+                ghiChu: ""
             }
         ]);
     };
-    
+
 
     const handleSuccess = () => {
         const today = dayjs().format('YYYY-MM-DD');
@@ -33,7 +34,7 @@ const FormalDetermination = ({
     };
 
     const updateRefusal = (index, field, value) => {
-        const updated = [...lichSuThamDinh];
+        const updated = [...lichSuThamDinhHT];
         updated[index][field] = value;
 
         if (field === "giaHan") {
@@ -48,12 +49,12 @@ const FormalDetermination = ({
             updated[index].hanTraLoi = hanTraLoi.format('YYYY-MM-DD');
         }
 
-        setLichSuThamDinh(updated);
+        setLichSuThamDinhHT(updated);
     };
 
     const deleteRefusal = (index) => {
-        const updated = lichSuThamDinh.filter((_, i) => i !== index);
-        setLichSuThamDinh(updated);
+        const updated = lichSuThamDinhHT.filter((_, i) => i !== index);
+        setLichSuThamDinhHT(updated);
     };
     return (
         <div className="flex-1">
@@ -61,7 +62,7 @@ const FormalDetermination = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày có kết quả trả lời thẩm định hình thức dự kiến</label>
+                    <label className="block text-gray-700 text-left">Ngày có kết quả trả lời thẩm định hình thức dự kiến</label>
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc_DuKien}
@@ -71,7 +72,7 @@ const FormalDetermination = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày chấp nhận đơn hợp lệ</label>
+                    <label className="block text-gray-700  text-left">Ngày chấp nhận đơn hợp lệ</label>
                     <input
                         type="date"
                         value={ngayKQThamDinhHinhThuc}
@@ -81,7 +82,7 @@ const FormalDetermination = ({
                     />
                 </div>
             </div>
-            {lichSuThamDinh.length === 0 && (
+            {lichSuThamDinhHT.length === 0 && (
                 <div className="mt-4 flex space-x-2">
                     <button
                         type="button"
@@ -102,10 +103,10 @@ const FormalDetermination = ({
                 </div>
             )}
 
-            {lichSuThamDinh.length > 0 && (
+            {lichSuThamDinhHT.length > 0 && (
                 <div className="mt-4 border">
-                    {lichSuThamDinh.map((refusal, index) => {
-                        const baseHanTraLoi = dayjs(refusal.ngayTraLoi).add(3, 'month');
+                    {lichSuThamDinhHT.map((refusal, index) => {
+                        const baseHanTraLoi = dayjs(refusal.ngayBiTuChoiTDHT).add(3, 'month');
                         const hanTraLoi = refusal.giaHan
                             ? baseHanTraLoi.add(2, 'month').format('YYYY-MM-DD')
                             : baseHanTraLoi.format('YYYY-MM-DD');
@@ -125,19 +126,19 @@ const FormalDetermination = ({
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
-                                    <div>
+                                <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
+                                    <div className="md:col-span-3">
                                         <label className="block text-gray-600">Ngày bị từ chối</label>
                                         <input
                                             type="date"
-                                            value={refusal.ngayTraLoi}
-                                            onChange={(e) => updateRefusal(index, 'ngayTraLoi', e.target.value)}
+                                            value={refusal.ngayBiTuChoiTDHT}
+                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTDHT', e.target.value)}
                                             disabled={isViewOnly}
                                             className="w-full p-2 mt-1 border rounded-md"
                                         />
                                     </div>
 
-                                    <div>
+                                    <div className="md:col-span-3">
                                         <label className="block text-gray-600">Hạn trả lời kết quả</label>
                                         <input
                                             type="date"
@@ -147,23 +148,34 @@ const FormalDetermination = ({
                                         />
                                     </div>
 
-                                    <div className="mt-5 md:mt-6">
-                                        {!isViewOnly && (
+                                    <div className="md:col-span-3">
+                                        <label className="block text-gray-600">Ghi chú</label>
+                                        <input
+                                            type="text"
+                                            value={refusal.ghiChu || ''}
+                                            onChange={(e) => updateRefusal(index, 'ghiChu', e.target.value)}
+                                            disabled={isViewOnly}
+                                            className="w-full p-2 mt-1 border rounded-md"
+                                        />
+                                    </div>
+
+                                    {!isViewOnly && refusal.ngayBiTuChoiTDHT && (
+                                        <div className="md:col-span-1">
                                             <label className="inline-flex items-center">
                                                 <input
                                                     type="checkbox"
                                                     checked={refusal.giaHan}
-                                                    onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}  
+                                                    onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}
                                                     className="mr-2"
                                                 />
                                                 Gia hạn
                                             </label>
-                                        )}
-                                    </div>
-
+                                        </div>
+                                    )}
                                 </div>
 
-                                {!isViewOnly && index === lichSuThamDinh.length - 1 && (
+
+                                {!isViewOnly && index === lichSuThamDinhHT.length - 1 && (
                                     <div className="flex space-x-2 mt-3">
                                         <button
                                             type="button"

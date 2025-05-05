@@ -33,8 +33,8 @@ function AddDocumentModal({
                     onChange={(e) => setStatus(e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-md mb-4"
                 >
-                    <option value="Đã tải lên">Đã tải lên</option>
-                    <option value="Chưa tải">Chưa tải</option>
+                    <option value="Đã tải lên">Đã nộp</option>
+                    <option value="Chưa tải">Chưa nộp</option>
                 </select>
 
                 <label className="block text-sm font-medium text-gray-700">Tệp tài liệu (không bắt buộc)</label>
