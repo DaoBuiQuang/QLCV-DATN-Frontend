@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import { showSuccess, showError } from "../../components/commom/Notification";
 function CountryAdd() {
   const navigate = useNavigate();
   const [maQuocGia, setMaQuocGia] = useState("");
@@ -30,11 +30,12 @@ function CountryAdd() {
           tenQuocGia,
         },
       });
-      alert("Thêm quốc gia thành công!");
+      await showSuccess("Thành công!", "Thêm quốc gia thành công!");
       setMaQuocGia("");
       setTenQuocGia("");
       setErrors({});
     } catch (error) {
+      showError("Thất bại!", "Đã xảy ra lỗi.", error);
       console.error("Lỗi khi thêm quốc gia!", error);
     }
   };

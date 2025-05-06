@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import { showSuccess, showError } from "../../components/commom/Notification";
 function PartnerAdd() {
   const navigate = useNavigate();
   const [maDoiTac, setMaDoiTac] = useState("");
@@ -9,6 +10,20 @@ function PartnerAdd() {
   const [maQuocGia, setMaQuocGia] = useState("");
   const [countries, setCountries] = useState([]);
 
+  const [errors, setErrors] = useState({});
+  const isFormValid = tenDoiTac.trim() !== "" && maQuocGia.trim() !== "" && maDoiTac.trim() !== "";
+  const validateField = (field, value) => {
+    let error = "";
+    if (!value.trim()) {
+      if (field === "maDoiTac") error = "Mã đối tác không được để trống";
+      if (field === "tenDoiTac") error = "Tên đối tác không được để trống";
+      if (field === "maQuocGia") error = "Tên quốc gia không được để trống";
+    }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: error,
+    }));
+  };
   // Fetch danh sách quốc gia
   const fetchCountries = async () => {
     try {
@@ -38,11 +53,12 @@ function PartnerAdd() {
           maQuocGia,
         },
       });
-      alert("Thêm đối tác thành công!");
+      await showSuccess("Thành công!", "Thêm đối tác thành công!");
       setMaDoiTac("");
       setTenDoiTac("");
       setMaQuocGia("");
     } catch (error) {
+      showError("Thất bại!", "Đã xảy ra lỗi.", error);
       console.error("Lỗi khi thêm đối tác!", error);
     }
   };
@@ -58,35 +74,54 @@ function PartnerAdd() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm đối tác mới</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700 text-left">Mã đối tác</label>
+            <label className="block text-gray-700 text-left">Mã đối tác <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={maDoiTac}
-              onChange={(e) => setMaDoiTac(e.target.value)}
+              onChange={(e) => {
+                setMaDoiTac(e.target.value)
+                validateField("maDoiTac", e.target.value);
+              }}
               placeholder="Nhập mã đối tác"
               className="w-full p-2 mt-1 border rounded-lg text-input"
             />
+            {errors.maDoiTac && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.maDoiTac}</p>
+            )}
           </div>
           <div>
-            <label className="block text-gray-700 text-left">Tên đối tác</label>
+            <label className="block text-gray-700 text-left">Tên đối tác <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={tenDoiTac}
-              onChange={(e) => setTenDoiTac(e.target.value)}
+              onChange={(e) => {
+                setTenDoiTac(e.target.value)
+                validateField("tenDoiTac", e.target.value);
+              }}
               placeholder="Nhập tên đối tác"
               className="w-full p-2 mt-1 border rounded-lg text-input"
             />
+            {errors.tenDoiTac && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.tenDoiTac}</p>
+            )}
           </div>
           <div>
-            <label className="block text-gray-700 text-left">Quốc gia</label>
+            <label className="block text-gray-700 text-left">Quốc gia <span className="text-red-500">*</span></label>
             <Select
               options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
               value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-              onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
+              onChange={(selectedOption) => {
+                const value = selectedOption?.value || "";
+                setMaQuocGia(value);
+                validateField("maQuocGia", value);
+              }}
               placeholder="Chọn quốc gia"
               className="w-full  mt-1  rounded-lg"
               isClearable
             />
+            {errors.maQuocGia && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
+            )}
           </div>
         </div>
 
@@ -99,7 +134,11 @@ function PartnerAdd() {
           </button>
           <button
             onClick={handleAddPartner}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+            disabled={!isFormValid}
+            className={`px-4 py-2 rounded-lg text-white ${isFormValid
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-blue-300 cursor-not-allowed"
+              }`}
           >
             Thêm đối tác
           </button>

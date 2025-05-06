@@ -46,6 +46,8 @@ import ProductAndServicesEdit from "../containers/ProductAndServices/ProductAndS
 import ProductAndServicesList from "../containers/ProductAndServices/ProductAndServicesList";
 import ProductAndServicesAdd from "../containers/ProductAndServices/ProductAndServicesAdd";
 import ProductAndServicesDetail from "../containers/ProductAndServices/ProductAndServicesDetail";
+import JobEdit from "../containers/Job/JobEdit";
+import JobDetail from "../containers/Job/JobDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -116,6 +118,8 @@ const AppRoutes = () => {
 
           <Route path="/joblist" element={<JobList></JobList>} />
           <Route path="/jobadd" element={<JobAdd></JobAdd>} />
+          <Route path="/jobedit/:maNganhNghe" element={<JobEdit></JobEdit>} />
+          <Route path="/jobdetail/:maNganhNghe" element={<JobDetail></JobDetail>} />
 
           <Route path="/partnerlist" element={<PartnerList></PartnerList>} />
           <Route path="/partneradd" element={<PartnerAdd></PartnerAdd>} />

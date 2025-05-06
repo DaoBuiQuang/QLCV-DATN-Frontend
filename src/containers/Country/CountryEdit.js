@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import { showSuccess, showError } from "../../components/commom/Notification";
 function CountryEdit() {
   const navigate = useNavigate();
   const { maQuocGia } = useParams();
@@ -37,7 +37,7 @@ function CountryEdit() {
         setTenQuocGia(response.tenQuocGia);
       } catch (error) {
         console.error("Lỗi khi lấy chi tiết quốc gia:", error);
-        alert("Không thể lấy dữ liệu quốc gia!");
+        showError("Thất bại!", "Đã xảy ra lỗi.");
       }
     };
 
@@ -58,11 +58,11 @@ function CountryEdit() {
         token: token,
       });
 
-      alert("Cập nhật thành công!");
+      await showSuccess("Thành công!", "Cập nhập quốc gia thành công!");
       navigate("/countrylist");
     } catch (error) {
       console.error("Lỗi khi cập nhật quốc gia:", error);
-      alert("Lỗi khi cập nhật quốc gia!");
+      showError("Thất bại!", "Đã xảy ra lỗi.", error);
     }
   };
   return (

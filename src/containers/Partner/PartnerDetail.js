@@ -42,24 +42,6 @@ function PartnerDetail() {
     fetchCountries();
     fetchPartnerDetails();
   }, [maDoiTac]);
-
-  //   const handleUpdatePartner = async () => {
-  //     try {
-  //       await callAPI({
-  //         method: "put",
-  //         endpoint: "/partner/update",
-  //         data: {
-  //           maDoiTac,
-  //           tenDoiTac,
-  //           maQuocGia,
-  //         },
-  //       });
-  //       alert("Cập nhật đối tác thành công!");
-  //       navigate(-1);
-  //     } catch (error) {
-  //       console.error("Lỗi khi cập nhật đối tác!", error);
-  //     }
-  //   };
   const formatOptions = (data, valueKey, labelKey) => {
     return data.map(item => ({
       value: item[valueKey],
@@ -72,7 +54,7 @@ function PartnerDetail() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa đối tác</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700 text-left">Mã đối tác</label>
+          <label className="block text-gray-700 text-left">Mã đối tác <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={maDoiTac}
@@ -81,7 +63,7 @@ function PartnerDetail() {
             />
           </div>
           <div>
-            <label className="block text-gray-700 text-left">Tên đối tác</label>
+          <label className="block text-gray-700 text-left">Tên đối tác <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={tenDoiTac}
@@ -91,7 +73,7 @@ function PartnerDetail() {
             />
           </div>
           <div>
-            <label className="block text-gray-700 text-left">Quốc gia</label>
+          <label className="block text-gray-700 text-left">Quốc gia <span className="text-red-500">*</span></label>
             <Select
               options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
               value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
