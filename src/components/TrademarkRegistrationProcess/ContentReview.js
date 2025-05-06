@@ -135,7 +135,7 @@ const ContentReview = ({
                                         <label className="block text-gray-600">Ngày bị từ chối</label>
                                         <input
                                             type="date"
-                                            value={refusal.ngayBiTuChoiTD}
+                                            value={refusal.ngayBiTuChoiTD ? dayjs(refusal.ngayBiTuChoiTD).format('YYYY-MM-DD') : ''}
                                             onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTD', e.target.value)}
                                             disabled={isViewOnly}
                                             className="w-full p-2 mt-1 border rounded-md"

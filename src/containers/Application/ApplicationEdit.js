@@ -169,6 +169,7 @@ function ApplicationEdit() {
     };
     const detailApplication = async () => {
         try {
+            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "application/detail",
@@ -186,6 +187,7 @@ function ApplicationEdit() {
                 setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
                 setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
                 setNgayKQThamDinhHinhThuc_DuKien(formatDate(response.ngayKQThamDinhHinhThuc_DuKien));
+                setLichSuThamDinhHT(response.lichSuThamDinhHT)
 
                 setNgayKQThamDinhHinhThuc(formatDate(response.ngayKQThamDinhHinhThuc));
                 setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
@@ -194,6 +196,7 @@ function ApplicationEdit() {
                 setNgayKQThamDinhND(formatDate(response.ngayKQThamDinhND));
                 setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKQThamDinhND_DuKien));
                 setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKQThamDinhND));
+                setLichSuThamDinhND(response.lichSuThamDinhND)
 
                 setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
                 setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
@@ -230,12 +233,12 @@ function ApplicationEdit() {
                     trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
                     ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien || null,
                     ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc || null,
-
+                    lichSuThamDinhHT: lichSuThamDinhHT,
                     ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
                     ngayCongBoDon: ngayCongBo || null,
                     ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien || null,
                     ngayKQThamDinhND: ngayKQThamDinhND || null,
-
+                    lichSuThamDinhND: lichSuThamDinhND,
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
                     ngayThongBaoCapBang: ngayThongBaoCapBang || null,

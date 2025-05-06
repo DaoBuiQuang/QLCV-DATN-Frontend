@@ -8,8 +8,8 @@ function AddDocumentModal({
     setFileName,
     file,
     setFile,
-    status,
-    setStatus,
+    // status,
+    // setStatus,
     editingIndex
 }) {
     if (!isOpen) return null;
@@ -27,7 +27,7 @@ function AddDocumentModal({
                     className="w-full p-2 border border-gray-300 rounded-md mb-4"
                 />
 
-                <label className="block text-sm font-medium text-gray-700">Trạng thái</label>
+                {/* <label className="block text-sm font-medium text-gray-700">Trạng thái</label>
                 <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
@@ -35,7 +35,7 @@ function AddDocumentModal({
                 >
                     <option value="Đã tải lên">Đã nộp</option>
                     <option value="Chưa tải">Chưa nộp</option>
-                </select>
+                </select> */}
 
                 <label className="block text-sm font-medium text-gray-700">Tệp tài liệu (không bắt buộc)</label>
                 <input

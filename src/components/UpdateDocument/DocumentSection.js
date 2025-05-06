@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AddDocumentModal from "../UpdateDocument/AddDocumentModal";
 
-const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
+const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly }) => {
     const [dsTaiLieu, setDsTaiLieu] = useState([]);
     const [modalState, setModalState] = useState({
         isOpen: false,
@@ -12,14 +12,19 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
     });
 
     useEffect(() => {
-        const defaultDocs = [
-            { tenTaiLieu: "Giấy ủy quyền", linkTaiLieu: "", trangThai: "Chưa nộp" },
-            { tenTaiLieu: "Tài liệu bổ sung", linkTaiLieu: "", trangThai: "Chưa nộp" },
-        ];
-        const docs = !initialTaiLieus?.length ? defaultDocs : initialTaiLieus;
+        let docs = [];
+        if (initialTaiLieus?.length) {
+            docs = initialTaiLieus;
+        } else if (isAddOnly) {
+            docs = [
+                { tenTaiLieu: "Giấy ủy quyền", linkTaiLieu: "", trangThai: "Chưa nộp" },
+                { tenTaiLieu: "Tài liệu bổ sung", linkTaiLieu: "", trangThai: "Chưa nộp" },
+            ];
+        }
         setDsTaiLieu(docs);
         onTaiLieuChange?.(docs);
-    }, [initialTaiLieus]);
+    }, [initialTaiLieus, isAddOnly]);
+
 
     const updateTaiLieuList = (newList) => {
         setDsTaiLieu(newList);
@@ -95,7 +100,18 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
                                             </a>
                                         ) : <span className="text-gray-400 italic">Không có</span>}
                                     </td>
-                                    <td className="px-4 py-2 border text-green-600 font-medium">{tl.trangThai}</td>
+                                    <td className="px-4 py-2 border text-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={tl.trangThai === "Đã nộp"}
+                                            onChange={() => {
+                                                const updatedList = [...dsTaiLieu];
+                                                updatedList[idx].trangThai = tl.trangThai === "Đã nộp" ? "Chưa nộp" : "Đã nộp";
+                                                updateTaiLieuList(updatedList);
+                                            }}
+                                        />
+                                    </td>
+
                                     <td className="px-4 py-2 border text-center">
                                         <button onClick={() => handleEdit(idx)} className="text-yellow-600 hover:text-yellow-800 text-xl mr-2" title="Chỉnh sửa">📝</button>
                                         <button onClick={() => handleDelete(idx)} className="text-red-600 hover:text-red-800 text-xl" title="Xóa">🗑️</button>
@@ -107,9 +123,10 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange }) => {
                 </div>
             )}
 
-            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md" onClick={() => setModalState({ ...modalState, isOpen: true })}>
-                ➕ Thêm tài liệu
+            <button className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 text-sm rounded" onClick={() => setModalState({ ...modalState, isOpen: true })}>
+                Thêm tài liệu
             </button>
+
 
             <AddDocumentModal
                 isOpen={modalState.isOpen}
