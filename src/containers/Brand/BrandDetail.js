@@ -55,7 +55,7 @@ function BrandDetail() {
                             value={maNhanHieu}
                             readOnly
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                         />
                     </div>
 
@@ -66,7 +66,7 @@ function BrandDetail() {
                             value={tenNhanHieu}
                             disabled
                             onChange={(e) => setTenNhanHieu(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                         />
                     </div>
 
@@ -76,7 +76,7 @@ function BrandDetail() {
                             value={moTa}
                             onChange={(e) => setMoTa(e.target.value)}
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg h-24 bg-gray-200"
+                            className="w-full p-2 mt-1 border rounded-lg text-input h-24 bg-gray-200"
                         ></textarea>
                     </div>
 
@@ -86,7 +86,7 @@ function BrandDetail() {
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                             disabled
                         /> */}
                         {preview && (

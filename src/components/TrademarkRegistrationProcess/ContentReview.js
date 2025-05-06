@@ -70,7 +70,7 @@ const ContentReview = ({
                         disabled
                         value={ngayKQThamDinhND_DuKien}
                         onChange={(e) => setNgayKQThamDinhND_DuKien(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                     />
                 </div>
                 <div>
@@ -81,7 +81,7 @@ const ContentReview = ({
                         type="date"
                         value={ngayKQThamDinhND}
                         onChange={(e) => setNgayKQThamDinhND(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>

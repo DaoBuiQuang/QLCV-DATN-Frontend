@@ -64,7 +64,7 @@ function PartnerAdd() {
               value={maDoiTac}
               onChange={(e) => setMaDoiTac(e.target.value)}
               placeholder="Nhập mã đối tác"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -74,7 +74,7 @@ function PartnerAdd() {
               value={tenDoiTac}
               onChange={(e) => setTenDoiTac(e.target.value)}
               placeholder="Nhập tên đối tác"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>

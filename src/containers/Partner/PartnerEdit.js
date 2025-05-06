@@ -77,7 +77,7 @@ function PartnerEdit() {
               type="text"
               value={maDoiTac}
               disabled
-              className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+              className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
             />
           </div>
           <div>
@@ -87,7 +87,7 @@ function PartnerEdit() {
               value={tenDoiTac}
               onChange={(e) => setTenDoiTac(e.target.value)}
               placeholder="Nhập tên đối tác"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>

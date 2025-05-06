@@ -40,7 +40,7 @@ function ApplicationTypeAdd() {
                             value={maLoaiDon}
                             onChange={(e) => setMaLoaiDon(e.target.value)}
                             placeholder="Nhập mã loại đơn"
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
                     <div>
@@ -50,7 +50,7 @@ function ApplicationTypeAdd() {
                             value={tenLoaiDon}
                             onChange={(e) => setTenLoaiDon(e.target.value)}
                             placeholder="Nhập tên loại đơn"
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
                     <div className="col-span-2">
@@ -59,7 +59,7 @@ function ApplicationTypeAdd() {
                             value={moTa}
                             onChange={(e) => setMoTa(e.target.value)}
                             placeholder="Nhập mô tả loại vụ việc"
-                            className="w-full p-2 mt-1 border rounded-lg h-24"
+                            className="w-full p-2 mt-1 border rounded-lg text-input h-24"
                         ></textarea>
                     </div>
                 </div>

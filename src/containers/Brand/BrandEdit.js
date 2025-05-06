@@ -72,7 +72,7 @@ function BrandEdit() {
                             type="text"
                             value={maNhanHieu}
                             readOnly
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                         />
                     </div>
 
@@ -82,7 +82,7 @@ function BrandEdit() {
                             type="text"
                             value={tenNhanHieu}
                             onChange={(e) => setTenNhanHieu(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 
@@ -91,7 +91,7 @@ function BrandEdit() {
                         <textarea
                             value={moTa}
                             onChange={(e) => setMoTa(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg h-24"
+                            className="w-full p-2 mt-1 border rounded-lg text-input h-24"
                         ></textarea>
                     </div>
 

@@ -58,7 +58,7 @@ function ApplicationTypeEdit() {
                             type="text"
                             value={maLoaiDon}
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-100 cursor-not-allowed"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 cursor-not-allowed"
                         />
                     </div>
                     <div>
@@ -68,7 +68,7 @@ function ApplicationTypeEdit() {
                             value={tenLoaiDon}
                             onChange={(e) => setTenLoaiDon(e.target.value)}
                             placeholder="Nhập tên loại đơn"
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
                     <div className="col-span-2">
@@ -77,7 +77,7 @@ function ApplicationTypeEdit() {
                             value={moTa}
                             onChange={(e) => setMoTa(e.target.value)}
                             placeholder="Nhập mô tả loại vụ việc"
-                            className="w-full p-2 mt-1 border rounded-lg h-24"
+                            className="w-full p-2 mt-1 border rounded-lg text-input h-24"
                         ></textarea>
                     </div>
                 </div>

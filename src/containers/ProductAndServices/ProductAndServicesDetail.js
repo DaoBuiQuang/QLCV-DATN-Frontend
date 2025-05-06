@@ -38,7 +38,7 @@ function ProductAndServicesDetail() {
               value={maSPDV}
               readOnly
               disabled
-              className="w-full p-2 mt-1 border rounded-lg bg-gray-200 text-gray-700 "
+              className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 text-gray-700 text-input"
             />
           </div>
           <div>
@@ -49,7 +49,7 @@ function ProductAndServicesDetail() {
               onChange={(e) => setTenSanPhamDichVu(e.target.value)}
               disabled
               placeholder="Nhập tên sản phẩm hoặc dịch vụ"
-              className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+              className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 text-input"
             />
           </div>
           <div className="col-span-2">
@@ -59,7 +59,7 @@ function ProductAndServicesDetail() {
               onChange={(e) => setMoTa(e.target.value)}
               placeholder="Nhập mô tả chi tiết"
               disabled
-              className="w-full p-2 mt-1 border rounded-lg h-24 bg-gray-200"
+              className="w-full p-2 mt-1 border rounded-lg text-input h-24 bg-gray-200"
             ></textarea>
           </div>
         </div>

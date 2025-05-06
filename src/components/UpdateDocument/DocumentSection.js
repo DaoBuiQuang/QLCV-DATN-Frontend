@@ -82,7 +82,7 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly }) => {
                 <div className="overflow-x-auto mb-4">
                     <table className="min-w-full bg-white border border-gray-200 text-sm">
                         <thead>
-                            <tr className="bg-gray-100 text-left">
+                            <tr className="bg-gray-100">
                                 <th className="px-4 py-2 border">Tên tài liệu</th>
                                 <th className="px-4 py-2 border">Link tài liệu</th>
                                 <th className="px-4 py-2 border">Trạng thái</th>

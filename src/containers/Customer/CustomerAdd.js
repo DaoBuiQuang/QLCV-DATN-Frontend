@@ -132,7 +132,7 @@ function CustomerAdd() {
                             type="text"
                             value={maKhachHang}
                             readOnly
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-100"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100"
                         />
                     </div>
 
@@ -142,7 +142,7 @@ function CustomerAdd() {
                             type="text"
                             value={tenVietTatKH}
                             onChange={handleTenVietTatKhachHangChange}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
                     <div>
@@ -152,7 +152,7 @@ function CustomerAdd() {
                             value={tenKhachHang}
 
                             onChange={(e) => setTenKhachHang(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 
@@ -195,12 +195,12 @@ function CustomerAdd() {
 
                     <div>
                         <label className="block text-gray-700 text-left">Địa chỉ</label>
-                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
+                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Số điện thoại</label>
-                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
+                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
 
                     <div>
@@ -217,17 +217,17 @@ function CustomerAdd() {
 
                     <div>
                         <label className="block text-gray-700 text-left">Mô tả</label>
-                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
+                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Ghi chú</label>
-                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
+                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Mã khách hàng cũ</label>
-                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg" />
+                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
                 </div>
 

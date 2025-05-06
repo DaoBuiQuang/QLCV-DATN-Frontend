@@ -196,7 +196,7 @@ function CaseAdd() {
                             value={maHoSoVuViec}
                             readOnly
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg h-10"
+                            className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                         />
                     </div>
 
@@ -218,7 +218,7 @@ function CaseAdd() {
                             type="text"
                             value={noiDungVuViec}
                             onChange={(e) => setNoiDungVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 
@@ -228,7 +228,7 @@ function CaseAdd() {
                             type="date"
                             value={ngayTiepNhan}
                             onChange={(e) => setNgayTiepNhan(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 
@@ -238,7 +238,7 @@ function CaseAdd() {
                             type="date"
                             value={ngayXuLy}
                             onChange={(e) => setNgayXuLy(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 

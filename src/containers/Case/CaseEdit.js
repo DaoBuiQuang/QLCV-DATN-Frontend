@@ -222,7 +222,7 @@ function CaseEdit() {
                             disabled
 
                             value={maHoSoVuViec}
-                            className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                            className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                         />
                     </div>
 
@@ -244,7 +244,7 @@ function CaseEdit() {
                             type="text"
                             value={noiDungVuViec}
                             onChange={(e) => setNoiDungVuViec(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 
@@ -254,7 +254,7 @@ function CaseEdit() {
                             type="date"
                             value={ngayTiepNhan}
                             onChange={(e) => setNgayTiepNhan(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 
@@ -264,7 +264,7 @@ function CaseEdit() {
                             type="date"
                             value={ngayXuLy}
                             onChange={(e) => setNgayXuLy(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg"
+                            className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 

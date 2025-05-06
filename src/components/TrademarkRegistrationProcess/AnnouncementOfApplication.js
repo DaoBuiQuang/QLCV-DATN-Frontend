@@ -18,7 +18,7 @@ const AnnouncementOfApplication = ({
                         type="date"
                         value={ngayCongBo_DuKien}
                         onChange={(e) => setNgayCongBo_DuKien(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                         disabled
                     />
                 </div>
@@ -28,7 +28,7 @@ const AnnouncementOfApplication = ({
                         type="date"
                         value={ngayCongBo}
                         onChange={(e) => setNgayCongBo(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>

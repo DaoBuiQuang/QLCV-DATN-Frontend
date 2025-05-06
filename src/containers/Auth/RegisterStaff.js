@@ -39,7 +39,7 @@ function RegisterStaff() {
             type="text"
             value={maNhanSu}
             disabled
-            className="w-full p-2 mt-1 border rounded-lg bg-gray-200 cursor-not-allowed"
+            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
           />
         </div>
         <div className="mb-4">
@@ -49,7 +49,7 @@ function RegisterStaff() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Nhập tên đăng nhập"
-            className="w-full p-2 mt-1 border rounded-lg"
+            className="w-full p-2 mt-1 border rounded-lg text-input"
           />
         </div>
         <div className="mb-4">
@@ -59,7 +59,7 @@ function RegisterStaff() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Nhập mật khẩu"
-            className="w-full p-2 mt-1 border rounded-lg"
+            className="w-full p-2 mt-1 border rounded-lg text-input"
           />
         </div>
         <div className="mb-4">
@@ -67,7 +67,7 @@ function RegisterStaff() {
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full p-2 mt-1 border rounded-lg"
+            className="w-full p-2 mt-1 border rounded-lg text-input"
           >
             <option value="user">Nhân viên</option>
             <option value="admin">Quản trị viên</option>

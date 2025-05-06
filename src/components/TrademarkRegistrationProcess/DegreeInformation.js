@@ -22,7 +22,7 @@ const DegreeInformation = ({
                         type="text"
                         value={soBang}
                         onChange={(e) => setSoBang(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>
@@ -32,7 +32,7 @@ const DegreeInformation = ({
                         type="date"
                         value={ngayCapBang}
                         onChange={(e) => setNgayCapBang(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>
@@ -42,7 +42,7 @@ const DegreeInformation = ({
                         type="date"
                         value={ngayHetHanBang}
                         onChange={(e) => setNgayHetHanBang(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>
@@ -52,7 +52,7 @@ const DegreeInformation = ({
                         type="date"
                         value={ngayGuiBangChoKH}
                         onChange={(e) => setNgayGuiBangChoKH(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>

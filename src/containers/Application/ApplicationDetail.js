@@ -231,7 +231,7 @@ function ApplicationDetail() {
                                 type="text"
                                 value={maHoSoVuViec}
                                 onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                                 disabled
                             />
                         </div>
@@ -241,7 +241,7 @@ function ApplicationDetail() {
                                 type="text"
                                 value={soDon}
                                 onChange={(e) => setSoDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                                 disabled
                             />
                         </div>
@@ -253,7 +253,7 @@ function ApplicationDetail() {
                                 value={trangThaiDon}
                                 disabled
                                 onChange={(e) => setTrangThaiDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                             />
                         </div>
                         <div>
@@ -262,7 +262,7 @@ function ApplicationDetail() {
                                 type="date"
                                 value={ngayNopDon}
                                 onChange={(e) => setNgayNopDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                                className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                                 disabled
                             />
                         </div>

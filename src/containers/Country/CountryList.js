@@ -4,6 +4,7 @@ import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
 function CountryList() {
   const role = useSelector((state) => state.auth.role);
+  console.log("role: ", role)
   const [countries, setCountries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);

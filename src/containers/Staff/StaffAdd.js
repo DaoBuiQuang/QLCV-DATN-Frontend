@@ -58,7 +58,7 @@ function StaffAdd() {
               value={maNhanSu}
               onChange={(e) => setMaNhanSu(e.target.value)}
               placeholder="Nhập mã nhân sự"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -68,7 +68,7 @@ function StaffAdd() {
               value={hoTen}
               onChange={(e) => setHoTen(e.target.value)}
               placeholder="Nhập họ tên"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -78,7 +78,7 @@ function StaffAdd() {
               value={chucVu}
               onChange={(e) => setChucVu(e.target.value)}
               placeholder="Nhập chức vụ"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -88,7 +88,7 @@ function StaffAdd() {
               value={phongBan}
               onChange={(e) => setPhongBan(e.target.value)}
               placeholder="Nhập phòng ban"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -98,7 +98,7 @@ function StaffAdd() {
               value={sdt}
               onChange={(e) => setSdt(e.target.value)}
               placeholder="Nhập số điện thoại"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -108,7 +108,7 @@ function StaffAdd() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Nhập email"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -117,7 +117,7 @@ function StaffAdd() {
               type="date"
               value={ngayThangNamSinh}
               onChange={(e) => setNgayThangNamSinh(e.target.value)}
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -127,7 +127,7 @@ function StaffAdd() {
               value={cccd}
               onChange={(e) => setCccd(e.target.value)}
               placeholder="Nhập CCCD"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -137,7 +137,7 @@ function StaffAdd() {
               value={bangCap}
               onChange={(e) => setBangCap(e.target.value)}
               placeholder="Nhập bằng cấp"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
         </div>

@@ -274,7 +274,7 @@ function ApplicationEdit() {
                                 type="text"
                                 value={maHoSoVuViec}
                                 onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                                 disabled
                             />
                         </div>
@@ -284,7 +284,7 @@ function ApplicationEdit() {
                                 type="text"
                                 value={soDon}
                                 onChange={(e) => setSoDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg h-10"
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                             />
                         </div>
 
@@ -295,7 +295,7 @@ function ApplicationEdit() {
                                 value={trangThaiDon}
                                 disabled
                                 onChange={(e) => setTrangThaiDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg h-10 bg-gray-200"
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                             />
                         </div>
                         <div>
@@ -304,7 +304,7 @@ function ApplicationEdit() {
                                 type="date"
                                 value={ngayNopDon}
                                 onChange={(e) => setNgayNopDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg"
+                                className="w-full p-2 mt-1 border rounded-lg text-input"
                             />
                         </div>
                         <div >

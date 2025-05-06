@@ -57,7 +57,7 @@ function BrandAdd() {
               value={maNhanHieu}
               onChange={(e) => setMaNhanHieu(e.target.value)}
               placeholder="Nhập mã nhãn hiệu"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -67,7 +67,7 @@ function BrandAdd() {
               value={tenNhanHieu}
               onChange={(e) => setTenNhanHieu(e.target.value)}
               placeholder="Nhập tên nhãn hiệu"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div className="col-span-2">
@@ -76,7 +76,7 @@ function BrandAdd() {
               value={moTa}
               onChange={(e) => setMoTa(e.target.value)}
               placeholder="Nhập mô tả nhãn hiệu"
-              className="w-full p-2 mt-1 border rounded-lg h-24"
+              className="w-full p-2 mt-1 border rounded-lg text-input h-24"
             ></textarea>
           </div>
           <div className="col-span-2">

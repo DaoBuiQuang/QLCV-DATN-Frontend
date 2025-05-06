@@ -41,7 +41,7 @@ function ProductAndServicesAdd() {
               value={maSPDV}
               onChange={(e) => setMaSPDV(e.target.value)}
               placeholder="Nhập mã sản phẩm / dịch vụ"
-              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 text-input"
             />
           </div>
           <div>
@@ -51,7 +51,7 @@ function ProductAndServicesAdd() {
               value={tenSPDV}
               onChange={(e) => setTenSPDV(e.target.value)}
               placeholder="Nhập tên sản phẩm / dịch vụ"
-              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 text-input"
             />
           </div>
           <div className="col-span-2">
@@ -65,10 +65,10 @@ function ProductAndServicesAdd() {
           </div>
         </div>
 
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-center gap-4 mt-4">
           <button
             onClick={() => navigate(-1)}
-            className="bg-gray-300 hover:bg-gray-400 px-5 py-3 rounded-lg text-gray-700 transition"
+            className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg"
           >
             Quay lại
           </button>

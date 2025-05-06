@@ -18,7 +18,7 @@ const ReplyContentRating = ({
                         disabled
                         value={ngayTraLoiKQThamDinhND_DuKien}
                         onChange={(e) => setNgayTraLoiKQThamDinhND_DuKien(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                     />
                 </div>
                 <div>
@@ -27,7 +27,7 @@ const ReplyContentRating = ({
                         type="date"
                         value={ngayTraLoiKQThamDinhND}
                         onChange={(e) => setNgayTraLoiKQThamDinhND(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>

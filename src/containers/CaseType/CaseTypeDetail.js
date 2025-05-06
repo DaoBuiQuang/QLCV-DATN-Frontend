@@ -36,7 +36,7 @@ function CaseTypeDetail() {
               type="text"
               value={maLoaiVuViec}
               readOnly
-              className="w-full p-2 mt-1 border rounded-lg bg-gray-100"
+              className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100"
             />
           </div>
           <div>
@@ -46,7 +46,7 @@ function CaseTypeDetail() {
               value={tenLoaiVuViec}
               readOnly
               onChange={(e) => setTenLoaiVuViec(e.target.value)}
-              className="w-full p-2 mt-1 border rounded-lg bg-gray-100"
+              className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100"
             />
           </div>
           <div className="col-span-2">
@@ -55,7 +55,7 @@ function CaseTypeDetail() {
               value={moTa}
               readOnly
               onChange={(e) => setMoTa(e.target.value)}
-              className="w-full p-2 mt-1 border rounded-lg h-24 bg-gray-100"
+              className="w-full p-2 mt-1 border rounded-lg text-input h-24 bg-gray-100"
             ></textarea>
           </div>
         </div>

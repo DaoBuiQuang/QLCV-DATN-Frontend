@@ -71,7 +71,7 @@ const FormalDetermination = ({
                         type="date"
                         value={ngayKQThamDinhHinhThuc_DuKien}
                         onChange={(e) => setNgayKQThamDinhHinhThuc_DuKien(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg bg-gray-200"
+                        className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                         disabled
                     />
                 </div>
@@ -81,7 +81,7 @@ const FormalDetermination = ({
                         type="date"
                         value={ngayKQThamDinhHinhThuc}
                         onChange={(e) => setNgayKQThamDinhHinhThuc(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                     />
                 </div>

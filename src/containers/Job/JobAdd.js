@@ -35,7 +35,7 @@ function JobAdd() {
               value={maNganhNghe}
               onChange={(e) => setMaNganhNghe(e.target.value)}
               placeholder="Nhập mã ngành nghề"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
           <div>
@@ -45,7 +45,7 @@ function JobAdd() {
               value={tenNganhNghe}
               onChange={(e) => setTenNganhNghe(e.target.value)}
               placeholder="Nhập tên ngành nghề"
-              className="w-full p-2 mt-1 border rounded-lg"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
           </div>
         </div>

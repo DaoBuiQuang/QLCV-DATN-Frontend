@@ -40,7 +40,7 @@ function ApplicationTypeDetail() {
                             type="text"
                             value={maLoaiDon}
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-100 cursor-not-allowed"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 cursor-not-allowed"
                         />
                     </div>
                     <div>
@@ -51,7 +51,7 @@ function ApplicationTypeDetail() {
                             onChange={(e) => setTenLoaiDon(e.target.value)}
                             placeholder="Nhập tên loại đơn"
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg bg-gray-100"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100"
                         />
                     </div>
                     <div className="col-span-2">
@@ -61,7 +61,7 @@ function ApplicationTypeDetail() {
                             onChange={(e) => setMoTa(e.target.value)}
                             placeholder="Nhập mô tả loại vụ việc"
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg h-24 bg-gray-100"
+                            className="w-full p-2 mt-1 border rounded-lg text-input h-24 bg-gray-100"
                         ></textarea>
                     </div>
                 </div>

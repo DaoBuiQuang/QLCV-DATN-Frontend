@@ -40,3 +40,35 @@
     transform: rotate(360deg);
   }
 }
+.text-input {
+  border: 1px solid #d1d5db; /* Màu xám nhạt */
+  padding: 8px 12px;
+  /* border-radius: 4px; */
+  outline: none; /* Loại bỏ viền khi focus */
+  height: 38px;
+}
+
+input:focus {
+  border-color: #3b82f6; 
+}
+
+input.error {
+  border-color: #f87171; /* Màu đỏ */
+}
+
+.css-13cymwt-control{
+  border-radius: 0.5rem !important;
+  border: 1px solid #d1d5db !important; 
+  /* height: 40px; */
+}
+
+/* .css-hlgwow{
+  border-radius: 0.5rem !important;
+}
+.css-1wy0on6{
+  border-radius: 0.5rem !important;
+} */
+.css-t3ipsp-control{
+  border-radius: 0.5rem !important;
+  border-color: #d1d5db !important;
+}
