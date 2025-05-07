@@ -98,7 +98,7 @@ function ProductAndServicesList() {
                                 <div className="flex gap-2 justify-center">
                                     <button
                                         onClick={() => navigate(`/productandservicesedit/${item.maSPDV}`)}
-                                        className="px-3 py-1 bg-yellow-200 text-yellow-800 rounded hover:bg-yellow-300"
+                                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
                                     >
                                         📝
                                     </button>

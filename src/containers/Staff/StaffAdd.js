@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import { showSuccess, showError } from "../../components/commom/Notification";
 function StaffAdd() {
   const navigate = useNavigate();
   const [maNhanSu, setMaNhanSu] = useState("");
@@ -14,6 +14,19 @@ function StaffAdd() {
   const [cccd, setCccd] = useState("");
   const [bangCap, setBangCap] = useState("");
 
+  const [errors, setErrors] = useState({});
+  const isFormValid = maNhanSu.trim() !== "" && hoTen.trim() !== "";
+  const validateField = (field, value) => {
+    let error = "";
+    if (!value.trim()) {
+      if (field === "maNhanSu") error = "Mã nhân sự không được để trống";
+      if (field === "hoTen") error = "Họ tên không được để trống";
+    }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: error,
+    }));
+  };
   const handleAddStaff = async () => {
     try {
       const response = await callAPI({
@@ -31,7 +44,7 @@ function StaffAdd() {
           bangCap,
         },
       });
-      alert("Thêm nhân sự thành công!");
+      await showSuccess("Thành công!", "Thêm nhân sự thành công!");
       setMaNhanSu("");
       setHoTen("");
       setChucVu("");
@@ -42,6 +55,7 @@ function StaffAdd() {
       setCccd("");
       setBangCap("");
     } catch (error) {
+      showError("Thất bại!", "Đã xảy ra lỗi.", error);
       console.error("Lỗi khi thêm nhân sự!", error);
     }
   };
@@ -52,24 +66,38 @@ function StaffAdd() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm nhân sự mới</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div>
-            <label className="block text-gray-700 text-left">Mã nhân sự</label>
+            <label className="block text-gray-700 text-left">Mã nhân sự <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={maNhanSu}
-              onChange={(e) => setMaNhanSu(e.target.value)}
+              onChange={(e) => {
+                setMaNhanSu(e.target.value)
+                validateField("maNhanSu", e.target.value);
+              }}
               placeholder="Nhập mã nhân sự"
               className="w-full p-2 mt-1 border rounded-lg text-input"
+
             />
+            {errors.maNhanSu && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanSu}</p>
+            )}
           </div>
           <div>
-            <label className="block text-gray-700 text-left">Họ tên</label>
+            <label className="block text-gray-700 text-left">Họ tên <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={hoTen}
-              onChange={(e) => setHoTen(e.target.value)}
+              onChange={(e) => {
+                setHoTen(e.target.value)
+                validateField("hoTen", e.target.value);
+              }}
               placeholder="Nhập họ tên"
               className="w-full p-2 mt-1 border rounded-lg text-input"
+
             />
+            {errors.hoTen && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.hoTen}</p>
+            )}
           </div>
           <div>
             <label className="block text-gray-700 text-left">Chức vụ</label>
@@ -147,7 +175,10 @@ function StaffAdd() {
           </button>
           <button
             onClick={handleAddStaff}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+            className={`px-4 py-2 rounded-lg text-white ${isFormValid
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-blue-300 cursor-not-allowed"
+              }`}
           >
             Thêm nhân sự
           </button>

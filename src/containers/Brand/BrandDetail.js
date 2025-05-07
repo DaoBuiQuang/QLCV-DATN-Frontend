@@ -49,7 +49,7 @@ function BrandDetail() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa nhãn hiệu</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="block text-gray-700 text-left">Mã nhãn hiệu</label>
+                    <label className="block text-gray-700 text-left">Mã nhãn hiệu <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={maNhanHieu}
@@ -60,7 +60,7 @@ function BrandDetail() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Tên nhãn hiệu</label>
+                    <label className="block text-gray-700 text-left">Tên nhãn hiệu <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenNhanHieu}
@@ -76,7 +76,7 @@ function BrandDetail() {
                             value={moTa}
                             onChange={(e) => setMoTa(e.target.value)}
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg text-input h-24 bg-gray-200"
+                            className="w-full p-2 mt-1 border rounded-lg h-24 bg-gray-200"
                         ></textarea>
                     </div>
 

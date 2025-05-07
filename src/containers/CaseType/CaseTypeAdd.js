@@ -1,13 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import { showSuccess, showError } from "../../components/commom/Notification";
 function CaseTypeAdd() {
   const navigate = useNavigate();
   const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
   const [tenLoaiVuViec, setTenLoaiVuViec] = useState("");
   const [moTa, setMoTa] = useState("");
 
+  const [errors, setErrors] = useState({});
+  const isFormValid = maLoaiVuViec.trim() !== "" && tenLoaiVuViec.trim() !== "";
+  const validateField = (field, value) => {
+    let error = "";
+    if (!value.trim()) {
+      if (field === "maLoaiVuViec") error = "Mã loại vụ việc không được để trống";
+      if (field === "tenLoaiVuViec") error = "Tên loại vụ việc không được để trống";
+    }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: error,
+    }));
+  };
   const handleAddCaseType = async () => {
     try {
       const response = await callAPI({
@@ -19,11 +32,12 @@ function CaseTypeAdd() {
           moTa,
         },
       });
-      alert("Thêm loại vụ việc thành công!");
+      await showSuccess("Thành công!", "Thêm loại vụ việc thành công!");
       setMaLoaiVuViec("");
       setTenLoaiVuViec("");
       setMoTa("");
     } catch (error) {
+      showError("Thất bại!", "Đã xảy ra lỗi.", error);
       console.error("Lỗi khi thêm loại vụ việc!", error);
     }
   };
@@ -34,24 +48,36 @@ function CaseTypeAdd() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm loại vụ việc mới</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700 text-left">Mã loại vụ việc</label>
+            <label className="block text-gray-700 text-left">Mã loại vụ việc <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={maLoaiVuViec}
-              onChange={(e) => setMaLoaiVuViec(e.target.value)}
+              onChange={(e) => {
+                setMaLoaiVuViec(e.target.value)
+                validateField("maLoaiVuViec", e.target.value);
+              }}
               placeholder="Nhập mã loại vụ việc"
               className="w-full p-2 mt-1 border rounded-lg text-input"
             />
+            {errors.maLoaiVuViec && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiVuViec}</p>
+            )}
           </div>
           <div>
-            <label className="block text-gray-700 text-left">Tên loại vụ việc</label>
+            <label className="block text-gray-700 text-left">Tên loại vụ việc <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={tenLoaiVuViec}
-              onChange={(e) => setTenLoaiVuViec(e.target.value)}
+              onChange={(e) => {
+                setTenLoaiVuViec(e.target.value)
+                validateField("tenLoaiVuViec", e.target.value);
+              }}
               placeholder="Nhập tên loại vụ việc"
               className="w-full p-2 mt-1 border rounded-lg text-input"
             />
+            {errors.tenLoaiVuViec && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.tenLoaiVuViec}</p>
+            )}
           </div>
           <div className="col-span-2">
             <label className="block text-gray-700 text-left">Mô tả</label>
@@ -59,7 +85,7 @@ function CaseTypeAdd() {
               value={moTa}
               onChange={(e) => setMoTa(e.target.value)}
               placeholder="Nhập mô tả loại vụ việc"
-              className="w-full p-2 mt-1 border rounded-lg text-input h-24"
+              className="w-full p-2 mt-1 border rounded-lg h-24"
             ></textarea>
           </div>
         </div>
@@ -70,7 +96,11 @@ function CaseTypeAdd() {
           </button>
           <button
             onClick={handleAddCaseType}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+            disabled={!isFormValid}
+            className={`px-4 py-2 rounded-lg text-white ${isFormValid
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-blue-300 cursor-not-allowed"
+              }`}
           >
             Thêm loại vụ việc
           </button>

@@ -49,11 +49,11 @@ function StaffDetail() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa nhân sự</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="block text-gray-700 text-left">Mã nhân sự</label>
+                    <label className="block text-gray-700 text-left">Mã nhân sự <span className="text-red-500">*</span></label>
                         <input type="text" value={maNhanSu} disabled className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Họ tên</label>
+                    <label className="block text-gray-700 text-left">Họ tên <span className="text-red-500">*</span></label>
                         <input type="text" value={hoTen} onChange={(e) => setHoTen(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
                     </div>
                     <div>
