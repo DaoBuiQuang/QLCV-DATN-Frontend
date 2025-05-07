@@ -38,7 +38,6 @@ function ProductAndServicesAdd() {
       setMoTa("");
     } catch (error) {
       showError("Thất bại!", "Đã xảy ra lỗi.", error);
-      alert("Lỗi khi thêm sản phẩm/dịch vụ. Vui lòng kiểm tra lại!");
     }
   };
 

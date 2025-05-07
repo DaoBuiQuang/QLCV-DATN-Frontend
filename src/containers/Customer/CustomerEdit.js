@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import { showSuccess, showError } from "../../components/commom/Notification";
 function CustomerEdit() {
     const navigate = useNavigate();
     const { maKhachHang } = useParams();
@@ -23,6 +24,20 @@ function CustomerEdit() {
         return data.map(item => ({
             value: item[valueKey],
             label: item[labelKey]
+        }));
+    };
+    const [errors, setErrors] = useState({});
+    const isFormValid = maKhachHang.trim() !== "" && tenVietTatKH.trim() !== "" && tenKhachHang.trim() !== "";
+    const validateField = (field, value) => {
+        let error = "";
+        if (!value.trim()) {
+            if (field === "maKhachHang") error = "Mã khách hàng không được để trống";
+            if (field === "tenVietTatKH") error = "Tên viết tắt của khách hàng không được để trống";
+            if (field === "tenKhachHang") error = "Tên khách hàng không được để trống";
+        }
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: error,
         }));
     };
     useEffect(() => {
@@ -118,9 +133,10 @@ function CustomerEdit() {
                     maNganhNghe
                 },
             });
-            alert("Sửa khách hàng thành công!");
+            await showSuccess("Thành công!", "Cập nhập khách hàng thành công!");
             navigate(-1);
         } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
             console.error("Lỗi khi thêm khách hàng!", error);
         }
     };
@@ -135,7 +151,7 @@ function CustomerEdit() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
                     <div>
-                        <label className="block text-gray-700 text-left">Mã khách hàng</label>
+                    <label className="block text-gray-700 text-left">Mã khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={maKhachHang}
@@ -144,7 +160,7 @@ function CustomerEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Tên viết tắt khách hàng</label>
+                    <label className="block text-gray-700 text-left">Tên viết tắt khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenVietTatKH}
@@ -153,17 +169,20 @@ function CustomerEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Tên khách hàng</label>
+                        <label className="block text-gray-700 text-left">Tên khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenKhachHang}
-                            
-                            onChange={(e) => setTenKhachHang(e.target.value)}
+                            onChange={(e) => {
+                                setTenKhachHang(e.target.value)
+                                validateField("tenKhachHang", e.target.value);
+                            }}
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
+                        {errors.tenKhachHang && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.tenKhachHang}</p>
+                        )}
                     </div>
-
-
                     <div>
                         <label className="block text-gray-700 text-left">Đối tác</label>
                         <Select
@@ -187,7 +206,6 @@ function CustomerEdit() {
                             isClearable
                         />
                     </div>
-
                     <div>
                         <label className="block text-gray-700 text-left">Ngành nghề</label>
                         <Select
@@ -199,8 +217,6 @@ function CustomerEdit() {
                             isClearable
                         />
                     </div>
-
-
                     <div>
                         <label className="block text-gray-700 text-left">Địa chỉ</label>
                         <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
@@ -237,7 +253,7 @@ function CustomerEdit() {
                         <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
                 </div>
-                        
+
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleEditCustomer} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa khách hàng</button>

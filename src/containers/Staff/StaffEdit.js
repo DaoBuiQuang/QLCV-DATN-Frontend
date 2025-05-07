@@ -138,7 +138,11 @@ function StaffEdit() {
                     <button className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg" onClick={() => navigate(-1)}>
                         Quay lại
                     </button>
-                    <button onClick={handleEditStaff} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    <button onClick={handleEditStaff} disabled={!isFormValid}
+                        className={`px-4 py-2 rounded-lg text-white ${isFormValid
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-blue-300 cursor-not-allowed"
+                            }`}>
                         Cập nhật nhân sự
                     </button>
                 </div>

@@ -7,6 +7,8 @@ function StaffList() {
   console.log("role: ", role)
   const [staffs, setStaffs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [staffToDelete, setStaffToDelete] = useState(null);
   const navigate = useNavigate();
 
   const fetchStaffs = async (searchValue) => {
@@ -23,7 +25,20 @@ function StaffList() {
       console.error("Lỗi khi lấy dữ liệu nhân viên:", error);
     }
   };
-
+  const handleDeleteStaff = async () => {
+    try {
+      await callAPI({
+        method: "post",
+        endpoint: "/staff/delete",
+        data: { maNhanSu: staffToDelete },
+      });
+      setShowDeleteModal(false);
+      setStaffToDelete(null);
+      fetchStaffs(searchTerm); // load lại danh sách
+    } catch (error) {
+      console.error("Lỗi khi xóa đối tác:", error);
+    }
+  };
   useEffect(() => {
     fetchStaffs("");
   }, []);
@@ -94,7 +109,12 @@ function StaffList() {
                   >
                     📝
                   </button>
-                  <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300">
+                  <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                     onClick={() => {
+                      setStaffToDelete(staff.maNhanSu);
+                      setShowDeleteModal(true);
+                    }}
+                  >
                     🗑️
                   </button>
                 </div>
@@ -103,6 +123,28 @@ function StaffList() {
           ))}
         </tbody>
       </table>
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md w-80">
+            <h3 className="text-lg font-semibold mb-4 text-center">Xác nhận xóa</h3>
+            <p className="mb-4 text-center">Bạn có chắc chắn muốn xóa đối tác này không?</p>
+            <div className="flex justify-between">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Hủy
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                onClick={handleDeleteStaff}
+              >
+                Xác nhận xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

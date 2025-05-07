@@ -108,7 +108,7 @@ function CustomerDetail() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
                     <div>
-                        <label className="block text-gray-700 text-left">Mã khách hàng</label>
+                        <label className="block text-gray-700 text-left">Mã khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={maKhachHang}
@@ -117,17 +117,17 @@ function CustomerDetail() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Tên viết tắt khách hàng</label>
+                        <label className="block text-gray-700 text-left">Tên viết tắt khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenVietTatKH}
-                    
+
                             className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 cursor-not-allowed"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Tên khách hàng</label>
+                        <label className="block text-gray-700 text-left">Tên khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenKhachHang}
@@ -175,7 +175,7 @@ function CustomerDetail() {
 
                     <div>
                         <label className="block text-gray-700 text-left">Địa chỉ</label>
-                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 " readOnly  />
+                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 " readOnly />
                     </div>
 
                     <div>
@@ -197,19 +197,19 @@ function CustomerDetail() {
 
                     <div>
                         <label className="block text-gray-700 text-left">Mô tả</label>
-                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly/>
+                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Ghi chú</label>
-                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly/>
+                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Mã khách hàng cũ</label>
-                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly/>
+                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly />
                     </div>
                 </div>
-                        
+
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                 </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import { showSuccess, showError } from "../../components/commom/Notification";
 function CustomerAdd() {
     const navigate = useNavigate();
     const [maKhachHang, setMaKhachHang] = useState("");
@@ -19,6 +20,21 @@ function CustomerAdd() {
     const [countries, setCountries] = useState([]);
     const [partners, setPartners] = useState([]);
     const [industries, setIndustries] = useState([]);
+
+    const [errors, setErrors] = useState({});
+    const isFormValid = maKhachHang.trim() !== "" && tenVietTatKH.trim() !== "" && tenKhachHang.trim() !== "";
+    const validateField = (field, value) => {
+        let error = "";
+        if (!value.trim()) {
+            if (field === "maKhachHang") error = "Mã khách hàng không được để trống";
+            if (field === "tenVietTatKH") error = "Tên viết tắt của khách hàng không được để trống";
+            if (field === "tenKhachHang") error = "Tên khách hàng không được để trống";
+        }
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: error,
+        }));
+    };
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
             value: item[valueKey],
@@ -70,7 +86,6 @@ function CustomerAdd() {
         fetchIndustries();
     }, []);
 
-    // Add customer
     const handleAddCustomer = async () => {
         try {
             await callAPI({
@@ -91,16 +106,17 @@ function CustomerAdd() {
                     maKhachHangCu
                 },
             });
-            alert("Thêm khách hàng thành công!");
+            await showSuccess("Thành công!", "Thêm khách hàng thành công!");
             navigate(-1);
         } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
             console.error("Lỗi khi thêm khách hàng!", error);
         }
     };
     const handleTenVietTatKhachHangChange = async (e) => {
         const value = e.target.value;
         setTenVietTatKH(value);
-
+        validateField("tenVietTatKH", value);
         if (value.trim() !== "") {
             try {
                 const response = await callAPI({
@@ -113,7 +129,7 @@ function CustomerAdd() {
                 console.error("Lỗi khi sinh mã khách hàng:", error);
             }
         } else {
-            setMaKhachHang(""); // Nếu xóa tên thì cũng xóa mã
+            setMaKhachHang("");
         }
     };
     const trangThaiOptions = [
@@ -125,9 +141,8 @@ function CustomerAdd() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm khách hàng mới</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
                     <div>
-                        <label className="block text-gray-700 text-left">Mã khách hàng</label>
+                        <label className="block text-gray-700 text-left">Mã khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={maKhachHang}
@@ -137,7 +152,7 @@ function CustomerAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Tên viết tắt khách hàng</label>
+                        <label className="block text-gray-700 text-left">Tên viết tắt khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenVietTatKH}
@@ -146,16 +161,20 @@ function CustomerAdd() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Tên khách hàng</label>
+                        <label className="block text-gray-700 text-left">Tên khách hàng <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenKhachHang}
-
-                            onChange={(e) => setTenKhachHang(e.target.value)}
+                            onChange={(e) => {
+                                setTenKhachHang(e.target.value)
+                                validateField("tenKhachHang", e.target.value);
+                            }}
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
+                        {errors.tenKhachHang && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.tenKhachHang}</p>
+                        )}
                     </div>
-
 
                     <div>
                         <label className="block text-gray-700 text-left">Đối tác</label>
@@ -233,7 +252,11 @@ function CustomerAdd() {
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleAddCustomer} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm khách hàng</button>
+                    <button onClick={handleAddCustomer} disabled={!isFormValid}
+                        className={`px-4 py-2 rounded-lg text-white ${isFormValid
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-blue-300 cursor-not-allowed"
+                            }`}>Thêm khách hàng</button>
                 </div>
             </div>
         </div>
