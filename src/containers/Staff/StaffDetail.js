@@ -17,9 +17,7 @@ function StaffDetail() {
     const [taiKhoan, setTaiKhoan] = useState(null)
     useEffect(() => {
         const fetchStaffDetails = async () => {
-
             try {
-                debugger
                 const response = await callAPI({
                     method: "post",
                     endpoint: `/staff/detail`,

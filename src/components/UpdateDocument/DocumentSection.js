@@ -74,33 +74,33 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly }) => {
 
     return (
         <div className="mt-6">
-            <h3 className="text-lg font-medium mb-2">📁 Danh sách tài liệu</h3>
+            <h3 className="text-sm font-medium mb-2">Danh sách tài liệu</h3>
 
             {dsTaiLieu.length === 0 ? (
-                <p className="text-gray-500">Chưa có tài liệu nào.</p>
+                <p className="text-sm text-gray-500">Chưa có tài liệu nào.</p>
             ) : (
-                <div className="overflow-x-auto mb-4">
-                    <table className="min-w-full bg-white border border-gray-200 text-sm">
+                <div className="overflow-x-auto mb-2">
+                    <table className="min-w-full bg-white border border-gray-200 text-xs">
                         <thead>
                             <tr className="bg-gray-100">
-                                <th className="px-4 py-2 border">Tên tài liệu</th>
-                                <th className="px-4 py-2 border">Link tài liệu</th>
-                                <th className="px-4 py-2 border">Trạng thái</th>
-                                <th className="px-4 py-2 border text-center">Thao tác</th>
+                                <th className="px-4 py-1 border">Tên tài liệu</th>
+                                <th className="px-4 py-1 border">Link tài liệu</th>
+                                <th className="px-4 py-1 border">Trạng thái</th>
+                                <th className="px-4 py-1 border text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             {dsTaiLieu.map((tl, idx) => (
                                 <tr key={idx} className="hover:bg-gray-50">
-                                    <td className="px-4 py-2 border">{tl.tenTaiLieu}</td>
-                                    <td className="px-4 py-2 border">
+                                    <td className="px-4 py-1 border">{tl.tenTaiLieu}</td>
+                                    <td className="px-4 py-1 border">
                                         {tl.linkTaiLieu ? (
                                             <a href={tl.linkTaiLieu} target="_blank" rel="noopener noreferrer" download={tl.tenTaiLieu} className="text-blue-600 hover:underline">
                                                 Xem file
                                             </a>
                                         ) : <span className="text-gray-400 italic">Không có</span>}
                                     </td>
-                                    <td className="px-4 py-2 border text-center">
+                                    <td className="px-4 py-1 border text-center">
                                         <input
                                             type="checkbox"
                                             checked={tl.trangThai === "Đã nộp"}
@@ -112,7 +112,7 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly }) => {
                                         />
                                     </td>
 
-                                    <td className="px-4 py-2 border text-center">
+                                    <td className="px-4 py-1 border text-center">
                                         <button onClick={() => handleEdit(idx)} className="text-yellow-600 hover:text-yellow-800 text-xl mr-2" title="Chỉnh sửa">📝</button>
                                         <button onClick={() => handleDelete(idx)} className="text-red-600 hover:text-red-800 text-xl" title="Xóa">🗑️</button>
                                     </td>

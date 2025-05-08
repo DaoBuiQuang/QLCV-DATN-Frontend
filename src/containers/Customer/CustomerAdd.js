@@ -100,9 +100,9 @@ function CustomerAdd() {
                     diaChi,
                     sdt,
                     ghiChu,
-                    maQuocGia,
+                    maQuocGia: maQuocGia === "" ? null : maQuocGia,
                     trangThai,
-                    maNganhNghe,
+                    maNganhNghe: maNganhNghe === "" ? null : maNganhNghe,
                     maKhachHangCu
                 },
             });
@@ -159,6 +159,9 @@ function CustomerAdd() {
                             onChange={handleTenVietTatKhachHangChange}
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
+                        {errors.tenVietTatKH && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.tenVietTatKH}</p>
+                        )}
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Tên khách hàng <span className="text-red-500">*</span></label>

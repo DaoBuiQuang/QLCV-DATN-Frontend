@@ -11,6 +11,8 @@ import DiphimaProcess from "../../components/TrademarkRegistrationProcess/Diphim
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
+import DonProgress from "../../components/commom/DonProgess.js";
+import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 function ApplicationDetail() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
@@ -27,16 +29,14 @@ function ApplicationDetail() {
 
     const [ngayKQThamDinhHinhThuc_DuKien, setNgayKQThamDinhHinhThuc_DuKien] = useState(null);
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
-    const [ngayTraLoiKQTuChoiThamDinhHinhThuc, setNgayTraLoiKQTuChoiThamDinhHinhThuc] = useState(null);
-    const [giaHanTraLoiKQTuChoiThamDinhHinhThuc, setGiaHanTraLoiKQTuChoiThamDinhHinhThuc] = useState(false)
+    const [lichSuThamDinhHT, setLichSuThamDinhHT] = useState([])
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
 
     const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
-    const [ngayTraLoiKQTuChoiThamDinhND, setNgayTraLoiKQTuChoiThamDinhND] = useState(null);
-    const [giaHanTraLoiKQTuChoiThamDinhNoiDung, setGiaHanTraLoiKQTuChoiThamDinhNoiDung] = useState(false)
+    const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
@@ -170,6 +170,7 @@ function ApplicationDetail() {
     };
     const detailApplication = async () => {
         try {
+            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "application/detail",
@@ -187,18 +188,16 @@ function ApplicationDetail() {
                 setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
                 setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
                 setNgayKQThamDinhHinhThuc_DuKien(formatDate(response.ngayKQThamDinhHinhThuc_DuKien));
+                setLichSuThamDinhHT(response.lichSuThamDinhHT)
 
                 setNgayKQThamDinhHinhThuc(formatDate(response.ngayKQThamDinhHinhThuc));
-                setNgayTraLoiKQTuChoiThamDinhHinhThuc(formatDate(response.ngayTraLoiKQTuChoiThamDinhHinhThuc));
-                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc(response.giaHanTraLoiKQTuChoiThamDinhHinhThuc);
                 setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
                 setNgayCongBo(formatDate(response.ngayCongBoDon));
                 setNgayKQThamDinhND_DuKien(formatDate(response.ngayKQThamDinhND_DuKien));
                 setNgayKQThamDinhND(formatDate(response.ngayKQThamDinhND));
-                setNgayTraLoiKQTuChoiThamDinhND(formatDate(response.ngayTraLoiKQTuChoiThamDinhND));
-                setGiaHanTraLoiKQTuChoiThamDinhNoiDung(response.giaHanTraLoiKQTuChoiThamDinhNoiDung);
                 setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKQThamDinhND_DuKien));
                 setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKQThamDinhND));
+                setLichSuThamDinhND(response.lichSuThamDinhND)
 
                 setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
                 setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
@@ -208,10 +207,54 @@ function ApplicationDetail() {
                 setNgayCapBang(formatDate(response.ngayCapBang));
                 setNgayHetHanBang(formatDate(response.ngayHetHanBang));
                 setTrangThaiDon(response.trangThaiDon);
-                setTaiLieuList(response.taiLieus)
+                setTaiLieuList(response.taiLieu)
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
+        }
+    };
+    const handleApplication = async () => {
+        try {
+            await callAPI({
+                method: "put",
+
+                endpoint: "/application/edit",
+                data: {
+                    maDonDangKy: maDonDangKy,
+                    maHoSoVuViec: maHoSoVuViec,
+                    soDon: soDon,
+                    maNhanHieu: maNhanHieu,
+                    maSPDVList: maSPDVList,
+                    trangThaiDon: trangThaiDon,
+
+                    ngayNopDon: ngayNopDon || null,
+                    ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien || null,
+                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL || null,
+                    trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
+                    ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien || null,
+                    ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc || null,
+                    lichSuThamDinhHT: lichSuThamDinhHT,
+                    ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
+                    ngayCongBoDon: ngayCongBo || null,
+                    ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien || null,
+                    ngayKQThamDinhND: ngayKQThamDinhND || null,
+                    lichSuThamDinhND: lichSuThamDinhND,
+                    ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
+                    ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
+                    ngayThongBaoCapBang: ngayThongBaoCapBang || null,
+                    ngayNopPhiCapBang: ngayNopPhiCapBang || null,
+                    ngayNhanBang: ngayNhanBang || null,
+                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
+                    ngayCapBang: ngayCapBang || null,
+                    ngayHetHanBang: ngayHetHanBang || null,
+                    soBang: soBang,
+                    taiLieus: taiLieuList
+                },
+            });
+            alert("Sửa hồ sơ vụ việc thành công!");
+            navigate(-1);
+        } catch (error) {
+            console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
     /////
@@ -221,6 +264,7 @@ function ApplicationDetail() {
 
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
+            <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -267,15 +311,15 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Tên nhãn hiệu</label>
+                            <label className="block text-gray-700 text-left text-left">Mã nhãn hiệu</label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
                                 onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
                                 placeholder="Chọn mã nhãn hiệu"
-                                className="w-full mt-1 rounded-lg h-1"
-                                isDisabled
+                                className="w-full mt-1 rounded-lg h-10 text-left bg-gray-200"
                                 isClearable
+                                isDisabled
                             />
                         </div>
                         <div >
@@ -289,7 +333,7 @@ function ApplicationDetail() {
                                 }
                                 onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
                                 placeholder="Chọn mã nhãn hiệu"
-                                className="w-full mt-1 rounded-lg h-10 text-left"
+                                className="w-full mt-1 rounded-lg h-10 text-left bg-gray-200"
                                 isClearable
                                 isMulti
                                 isDisabled
@@ -299,7 +343,6 @@ function ApplicationDetail() {
                     {daChonNgayNopDon && (
                         <div className="col-span-2">
                             <CompleteDocumentation
-                                isViewOnly={isViewOnly}
                                 ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
                                 setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
                                 ngayHoanThanhHSTL={ngayHoanThanhHSTL}
@@ -307,78 +350,80 @@ function ApplicationDetail() {
                                 trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
                                 setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
                                 formatOptions={formatOptions}
+                                isViewOnly={isViewOnly}
                             />
                         </div>
                     )}
+                    {daChonNgayNopDon && (
+                        <div className="col-span-2">
+                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} />
+                        </div>
+                    )}
+
                     {daChonNgayHoanThanhHSTL && (
                         <div className="col-span-2">
                             <FormalDetermination
-                                isViewOnly={isViewOnly}
                                 ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
                                 setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
                                 ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
                                 setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
-                                ngayTraLoiKQTuChoiThamDinhHinhThuc={ngayTraLoiKQTuChoiThamDinhHinhThuc}
-                                setNgayTraLoiKQTuChoiThamDinhHinhThuc={setNgayTraLoiKQTuChoiThamDinhHinhThuc}
-                                giaHanTraLoiKQTuChoiThamDinhHinhThuc={giaHanTraLoiKQTuChoiThamDinhHinhThuc}
-                                setGiaHanTraLoiKQTuChoiThamDinhHinhThuc={setGiaHanTraLoiKQTuChoiThamDinhHinhThuc}
+                                lichSuThamDinhHT={lichSuThamDinhHT}
+                                setLichSuThamDinhHT={setLichSuThamDinhHT}
+                                isViewOnly={isViewOnly}
                             />
                         </div>
                     )}
                     {daChonNgayThamDinhHinhThuc && (
                         <div className="col-span-2">
                             <AnnouncementOfApplication
-                                isViewOnly={isViewOnly}
                                 ngayCongBo_DuKien={ngayCongBo_DuKien}
                                 setNgayCongBo_DuKien={setNgayCongBo_DuKien}
                                 ngayCongBo={ngayCongBo}
                                 setNgayCongBo={setNgayCongBo}
+                                isViewOnly={isViewOnly}
                             />
                         </div>
                     )}
                     {daChonNgayCongBoDon && (
                         <div className="col-span-2">
                             <ContentReview
-                                isViewOnly={isViewOnly}
                                 ngayKQThamDinhND_DuKien={ngayKQThamDinhND_DuKien}
                                 setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
                                 ngayKQThamDinhND={ngayKQThamDinhND}
                                 setNgayKQThamDinhND={setNgayKQThamDinhND}
-                                ngayTraLoiKQTuChoiThamDinhND={ngayTraLoiKQTuChoiThamDinhND}
-                                setNgayTraLoiKQTuChoiThamDinhND={setNgayTraLoiKQTuChoiThamDinhND}
-                                giaHanTraLoiKQTuChoiThamDinhNoiDung={giaHanTraLoiKQTuChoiThamDinhNoiDung}
-                                setGiaHanTraLoiKQTuChoiThamDinhNoiDung={setGiaHanTraLoiKQTuChoiThamDinhNoiDung}
+                                lichSuThamDinhND={lichSuThamDinhND}
+                                setLichSuThamDinhND={setLichSuThamDinhND}
+                                isViewOnly={isViewOnly}
                             />
                         </div>
                     )}
                     {daChonNgayThamDinhNoiDung && (
                         <div className="col-span-2">
                             <ReplyContentRating
-                                isViewOnly={isViewOnly}
                                 ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
                                 setNgayTraLoiKQThamDinhND_DuKien={setNgayTraLoiKQThamDinhND_DuKien}
                                 ngayTraLoiKQThamDinhND={ngayTraLoiKQThamDinhND}
                                 setNgayTraLoiKQThamDinhND={setNgayTraLoiKQThamDinhND}
+                                isViewOnly={isViewOnly}
                             />
                         </div>
                     )}
                     {daChonNgayTraLoiThamDinhNoiDung && (
                         <div className="col-span-2">
                             <DiphimaProcess
-                                isViewOnly={isViewOnly}
                                 ngayThongBaoCapBang={ngayThongBaoCapBang}
                                 setNgayThongBaoCapBang={setNgayThongBaoCapBang}
                                 ngayNopPhiCapBang={ngayNopPhiCapBang}
                                 setNgayNopPhiCapBang={setNgayNopPhiCapBang}
                                 ngayNhanBang={ngayNhanBang}
                                 setNgayNhanBang={setNgayNhanBang}
+                                isViewOnly={isViewOnly}
                             />
                         </div>
                     )}
                     {daChonHoanTatThuTucNhapBang && (
                         <div className="col-span-2">
                             <DegreeInformation
-                                isViewOnly={isViewOnly}
                                 soBang={soBang}
                                 setSoBang={setSoBang}
                                 ngayCapBang={ngayCapBang}
@@ -387,14 +432,35 @@ function ApplicationDetail() {
                                 setNgayHetHanBang={setNgayHetHanBang}
                                 ngayGuiBangChoKH={ngayGuiBangChoKH}
                                 setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                                isViewOnly={isViewOnly}
                             />
                         </div>
                     )}
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange} />
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                 </div>
+                <div className="mt-4">
+                    <ExportWordButton
+                        data={{
+                            maHoSoVuViec: maHoSoVuViec,
+                            soDon: soDon,
+                            trangThaiDon: trangThaiDon,
+                            ngayNopDon: ngayNopDon,
+                            maNhanHieu: maNhanHieu,
+                            ngayHoanThanhHSTL_DuKien: ngayHoanThanhHSTL_DuKien,
+                            ngayHoanThanhHSTL: ngayHoanThanhHSTL,
+                            ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien,
+                            ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc,
+
+                            ngayCongBo_DuKien: ngayCongBo_DuKien,
+                            ngayCongBo: ngayCongBo,
+
+                        }}
+                        fileName={`ThongDonDangKy_${maDonDangKy}`}
+                    />
+                </div>
+
             </div>
         </div>
     );

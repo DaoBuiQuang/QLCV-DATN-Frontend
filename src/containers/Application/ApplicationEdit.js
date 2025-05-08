@@ -11,7 +11,7 @@ import DiphimaProcess from "../../components/TrademarkRegistrationProcess/Diphim
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
-
+import DonProgress from "../../components/commom/DonProgess.js";
 import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 function ApplicationEdit() {
     const navigate = useNavigate();
@@ -214,7 +214,6 @@ function ApplicationEdit() {
     };
     const handleApplication = async () => {
         try {
-            debugger
             await callAPI({
                 method: "put",
 
@@ -264,6 +263,7 @@ function ApplicationEdit() {
 
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
+            <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -348,6 +348,12 @@ function ApplicationEdit() {
                             />
                         </div>
                     )}
+                    {daChonNgayNopDon && (
+                        <div className="col-span-2">
+                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} />
+                        </div>
+                    )}
+
                     {daChonNgayHoanThanhHSTL && (
                         <div className="col-span-2">
                             <FormalDetermination
@@ -419,7 +425,6 @@ function ApplicationEdit() {
                         </div>
                     )}
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} />
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>

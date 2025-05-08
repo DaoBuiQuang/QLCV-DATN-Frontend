@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
+
+import { showSuccess, showError } from "../../components/commom/Notification";
+import { DatePicker } from 'antd';
+
+import dayjs from 'dayjs';  // Import dayjs
+import 'dayjs/locale/vi';
 function CaseAdd() {
     const navigate = useNavigate();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
@@ -25,6 +31,36 @@ function CaseAdd() {
     const [partners, setPartners] = useState([]);
     const [staffs, setStaffs] = useState([]);
     const [applicationtypes, setApplicationTypes] = useState([]);
+
+    const [errors, setErrors] = useState({});
+    const isFormValid =
+        (maKhachHang || "").trim() !== "" &&
+        ngayTiepNhan != null &&
+        (maLoaiVuViec || "").trim() !== "" &&
+        (maHoSoVuViec || "").trim() !== "" &&
+        (maLoaiDon || "").trim() !== "" &&
+        (maQuocGia || "").trim() !== "" &&
+        (noiDungVuViec || "").trim() !== "";
+    const validateField = (field, value) => {
+        let error = "";
+        if (
+            (typeof value === "string" && !value.trim()) ||
+            (value === null || value === undefined)
+        ) {
+            if (field === "maKhachHang") error = "Khách hàng không được để trống";
+            if (field === "ngayTiepNhan") error = "Ngày tiếp nhận không được để trống";
+            if (field === "maLoaiVuViec") error = "Loại vụ việc không được để trống";
+            if (field === "maHoSoVuViec") error = "Mã hồ sơ vụ việc không được để trống";
+            if (field === "maLoaiDon") error = "Loại đơn không được để trống";
+            if (field === "maQuocGia") error = "Quốc gia không được để trống";
+            if (field === "noiDungVuViec") error = "Nội dung vụ việc không được để trống";
+        }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: error,
+        }));
+    };
     const processSteps = [
         { value: "buoc_1", label: "Bước 1: Tiếp nhận" },
         { value: "buoc_2", label: "Bước 2: Xử lý" },
@@ -46,9 +82,9 @@ function CaseAdd() {
 
     const handleSelectChange = (selectedOption, vaiTro) => {
         setNhanSuVuViec(prevState => {
-            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro); 
+            const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro);
             if (selectedOption) {
-                updatedList.push({ maNhanSu: selectedOption.value, vaiTro }); 
+                updatedList.push({ maNhanSu: selectedOption.value, vaiTro });
             }
             return updatedList;
         });
@@ -157,9 +193,10 @@ function CaseAdd() {
                     nhanSuVuViec
                 },
             });
-            alert("Thêm hồ sơ vụ việc thành công!");
+            await showSuccess("Thành công!", "Thêm hồ sơ vụ việc thành công!");
             navigate(-1);
         } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
@@ -167,7 +204,7 @@ function CaseAdd() {
         if (selectedOption) {
             const value = selectedOption.value;
             setMaKhachHang(value);
-    
+            validateField("maKhachHang", value);
             try {
                 const response = await callAPI({
                     method: "post",
@@ -181,16 +218,17 @@ function CaseAdd() {
         } else {
             setMaKhachHang("");
             setMaHoSoVuViec("");
+            validateField("maKhachHang", "");
         }
     };
-    
+
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={maHoSoVuViec}
@@ -201,7 +239,7 @@ function CaseAdd() {
                     </div>
 
                     <div className="flex-1">
-                        <label className="block text-gray-700 text-left text-left">Tên khách hàng </label>
+                        <label className="block text-gray-700 text-left ">Chọn khách hàng <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                             value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
@@ -210,71 +248,134 @@ function CaseAdd() {
                             className="w-full mt-1 rounded-lg h-10 text-left"
                             isClearable
                         />
+                        {errors.maKhachHang && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maKhachHang}</p>
+                        )}
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Nội dung vụ việc</label>
+                        <label className="block text-gray-700 text-left">Nội dung vụ việc <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={noiDungVuViec}
-                            onChange={(e) => setNoiDungVuViec(e.target.value)}
+                            onChange={(e) => {
+                                setNoiDungVuViec(e.target.value)
+                                validateField("noiDungVuViec", e.target.value)
+                            }}
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
+                        {errors.noiDungVuViec && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.noiDungVuViec}</p>
+                        )}
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Ngày tiếp nhận</label>
-                        <input
-                            type="date"
-                            value={ngayTiepNhan}
-                            onChange={(e) => setNgayTiepNhan(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg text-input"
-                        />
+                        <label className="block text-gray-700 text-left">Ngày tiếp nhận <span className="text-red-500">*</span></label>
+                        <div style={{ width: '100%' }}>
+                            <DatePicker
+                                value={ngayTiepNhan}
+                                onChange={(date) => {
+                                    if (dayjs.isDayjs(date) && date.isValid()) {
+                                      setNgayTiepNhan(date);
+                                      validateField("ngayTiepNhan", date.format("YYYY-MM-DD"));
+                                    } else {
+                                      setNgayTiepNhan(null);
+                                      validateField("ngayTiepNhan", null);
+                                    }
+                                  }}
+                                  
+                                format="DD/MM/YYYY" // hiển thị kiểu này
+                                placeholder="Chọn ngày tiếp nhận"
+                            />
+                        </div>
+
+                        {errors.ngayTiepNhan && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.ngayTiepNhan}</p>
+                        )}
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Ngày xử lý</label>
+                        <label className="block text-gray-700 text-left">Ngày xử lý </label>
                         <input
                             type="date"
                             value={ngayXuLy}
+                            placeholder="Ngày xử lý"
                             onChange={(e) => setNgayXuLy(e.target.value)}
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Loại vụ việc</label>
+                        <label className="block text-gray-700 text-left ">Loại vụ việc <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
                             value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
-                            onChange={selectedOption => setMaLoaiVuViec(selectedOption?.value)}
+                            onChange={selectedOption => {
+                                setMaLoaiVuViec(selectedOption?.value)
+                                const value = selectedOption?.value || "";
+                                validateField("maLoaiVuViec", value);
+                            }}
                             placeholder="Chọn loại vụ việc"
                             className="w-full  mt-1  rounded-lg"
                             isClearable
                         />
+                        {errors.maLoaiVuViec && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiVuViec}</p>
+                        )}
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Loại đơn đăng kí</label>
+                        <label className="block text-gray-700 text-left text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                             value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
-                            onChange={selectedOption => setMaLoaiDon(selectedOption?.value)}
+                            onChange={selectedOption => {
+                                setMaLoaiDon(selectedOption?.value)
+                                const value = selectedOption?.value || "";
+                                validateField("maLoaiDon", value);
+                            }}
                             placeholder="Chọn loại đơn đăng kí"
                             className="w-full mt-1 rounded-lg h-10 text-left"
                             isClearable
                         />
+                        {errors.maLoaiDon && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiDon}</p>
+                        )}
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc</label>
+                        <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                             value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
+                            onChange={selectedOption => {
+                                setMaQuocGia(selectedOption?.value)
+                                const value = selectedOption?.value || "";
+                                validateField("maQuocGia", value);
+                            }}
                             placeholder="Chọn quốc gia"
                             className="w-full  mt-1  rounded-lg"
                             isClearable
                         />
+                        {errors.maQuocGia && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
+                        )}
                     </div>
+                    {/* <div>
+                        <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGƯia").find(opt => opt.value === maQuocGia) : null}
+                            onChange={selectedOption => {
+                                setMaQuocGia(selectedOption?.value)
+                                validateField("maQuocGia", selectedOption?.value);
+                            }}
+                            placeholder="Chọn quốc gia"
+                            className="w-full  mt-1  rounded-lg"
+                            isClearable
+                        />
+                        {errors.maQuocGia && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
+                        )}
+                    </div> */}
                     <div>
                         <label className="block text-gray-700 text-left text-left">Đối tác</label>
                         <Select
@@ -340,7 +441,11 @@ function CaseAdd() {
                 </div>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleAddCase} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm hồ sơ vụ việc</button>
+                    <button onClick={handleAddCase} disabled={!isFormValid}
+                        className={`px-4 py-2 rounded-lg text-white ${isFormValid
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-blue-300 cursor-not-allowed"
+                            }`}>Thêm hồ sơ vụ việc</button>
                 </div>
             </div>
         </div>

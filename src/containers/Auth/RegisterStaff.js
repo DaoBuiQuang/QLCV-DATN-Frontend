@@ -69,7 +69,7 @@ function RegisterStaff() {
             onChange={(e) => setRole(e.target.value)}
             className="w-full p-2 mt-1 border rounded-lg text-input"
           >
-            <option value="user">Nhân viên</option>
+            <option value="staff">Nhân viên</option>
             <option value="admin">Quản trị viên</option>
             <option value="trainee">Thực tập sinh - học việc</option>
           </select>

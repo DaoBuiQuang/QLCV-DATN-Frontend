@@ -143,6 +143,7 @@ const AppRoutes = () => {
 
           <Route path="/applicationlist" element={<ApplicationList></ApplicationList>} />
           <Route path="/applicationadd/:maHoSoVuViec" element={<ApplicationAdd></ApplicationAdd>} />
+          <Route path="/applicationadd" element={<ApplicationAdd />} />
           <Route path="/applicationedit/:maDonDangKy" element={<ApplicationEdit></ApplicationEdit>} />
           <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetail></ApplicationDetail>} />
 

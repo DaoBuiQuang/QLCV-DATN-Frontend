@@ -133,7 +133,14 @@ function ApplicationList() {
                 <td className="p-2">{app.trangThaiDon}</td>
                 <td className="p-2">
                   <div className="flex flex-col items-center">
-                    <span>{app.trangThaiHoanThienHoSoTaiLieu}</span>
+                    <span>
+                      {app.trangThaiHoanThienHoSoTaiLieu === "hoan_thanh"
+                        ? "Hoàn thành"
+                        : app.trangThaiHoanThienHoSoTaiLieu === "chua_hoan_thanh"
+                          ? "Chưa hoàn thành"
+                          : app.trangThaiHoanThienHoSoTaiLieu}
+                    </span>
+
                     {app.ngayHoanThanhHoSoTaiLieu_DuKien && app.trangThaiHoanThienHoSoTaiLieu !== "hoan_thanh" && (
                       (() => {
                         const today = new Date();
@@ -155,6 +162,7 @@ function ApplicationList() {
                       })()
                     )}
                   </div>
+
                 </td>
 
                 <td className="p-2">

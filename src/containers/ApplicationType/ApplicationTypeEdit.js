@@ -72,7 +72,7 @@ function ApplicationTypeEdit() {
                             type="text"
                             value={maLoaiDon}
                             disabled
-                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 cursor-not-allowed"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
                         />
                     </div>
                     <div>

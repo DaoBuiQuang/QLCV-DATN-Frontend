@@ -33,7 +33,7 @@ function ApplicationTypeList() {
       });
       setShowDeleteModal(false);
       setApplicationTypeToDelete(null);
-      fetchApplicationTypes(searchTerm);
+      fetchApplicationTypes();
     } catch (error) {
       console.error("Lỗi khi xóa đối tác:", error);
     }
@@ -43,20 +43,20 @@ function ApplicationTypeList() {
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách loại đơn đăng kí</h2>
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-          {/* <input
+          <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="🔍 Nhập tên ngành nghề"
+            placeholder="🔍 Nhập tên loại đơn đăng ký hoặc mô tả"
             className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          /> */}
+          />
           <div className="flex gap-3">
-            {/* <button
-              onClick={() => fetchCaseTypes(searchTerm)}
+            <button
+              onClick={() => fetchApplicationTypes(searchTerm)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               🔎 Tìm kiếm
-            </button> */}
+            </button>
             <button
               onClick={() => navigate("/applicationtypeadd")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"

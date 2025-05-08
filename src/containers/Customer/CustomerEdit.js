@@ -256,7 +256,11 @@ function CustomerEdit() {
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleEditCustomer} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa khách hàng</button>
+                    <button onClick={handleEditCustomer} disabled={!isFormValid}
+                        className={`px-4 py-2 rounded-lg text-white ${isFormValid
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-blue-300 cursor-not-allowed"
+                            }`}>Sửa khách hàng</button>
                 </div>
             </div>
         </div>

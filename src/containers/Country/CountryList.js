@@ -59,7 +59,7 @@ function CountryList() {
             >
               🔎 Tìm kiếm
             </button>
-            {(role === 'admin' || role === 'user') && (
+            {(role === 'admin' || role === 'staff') && (
               <button
                 onClick={() => navigate("/countryadd")}
                 className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
@@ -101,7 +101,7 @@ function CountryList() {
               <td className="p-2">{country.tenQuocGia}</td>
               <td className="p-2">
                 <div className="flex gap-2">
-                  {(role === 'admin' || role === 'user') && (
+                  {(role === 'admin' || role === 'staff') && (
                     <div className="flex gap-2">
                       <button
                         className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"

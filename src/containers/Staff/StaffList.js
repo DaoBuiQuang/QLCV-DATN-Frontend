@@ -85,6 +85,7 @@ function StaffList() {
             <th className="p-2">Phòng Ban</th>
             <th className="p-2">SĐT</th>
             <th className="p-2">Email</th>
+            <th className="p-2">Tên tài khoản</th>
             <th className="p-2 text-center"></th>
           </tr>
         </thead>
@@ -101,6 +102,7 @@ function StaffList() {
               <td className="p-2">{staff.phongBan}</td>
               <td className="p-2">{staff.sdt}</td>
               <td className="p-2">{staff.email}</td>
+              <td className="p-2">{staff.Username}</td>
               <td className="p-2">
                 <div className="flex gap-2">
                   <button

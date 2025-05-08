@@ -11,6 +11,7 @@ import DiphimaProcess from "../../components/TrademarkRegistrationProcess/Diphim
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
+import DonProgress from "../../components/commom/DonProgess.js";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const { maHoSoVuViec } = useParams();
@@ -207,12 +208,13 @@ function ApplicationAdd() {
 
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
+            <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc</label>
+                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                             <input
                                 type="text"
                                 value={maHoSoVuViec}
@@ -222,7 +224,7 @@ function ApplicationAdd() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Số đơn</label>
+                            <label className="block text-gray-700 text-left ">Số đơn</label>
                             <input
                                 type="text"
                                 value={soDon}
@@ -232,7 +234,7 @@ function ApplicationAdd() {
                         </div>
 
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Trạng thái đơn</label>
+                            <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                             <input
                                 type="text"
                                 value={trangThaiDon}
@@ -242,7 +244,7 @@ function ApplicationAdd() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Tên nhãn hiệu</label>
+                            <label className="block text-gray-700 text-left">Tên nhãn hiệu</label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
@@ -290,6 +292,11 @@ function ApplicationAdd() {
                                 setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
                                 formatOptions={formatOptions}
                             />
+                        </div>
+                    )}
+                    {daChonNgayNopDon && (
+                        <div className="col-span-2">
+                            <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly} />
                         </div>
                     )}
                     {daChonNgayHoanThanhHSTL && (
@@ -379,7 +386,7 @@ function ApplicationAdd() {
                         </div>
                     )}
                 </div>
-                <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly} />
+
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                     <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
