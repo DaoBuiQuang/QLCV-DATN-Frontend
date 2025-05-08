@@ -194,7 +194,21 @@ function CaseAdd() {
                 },
             });
             await showSuccess("Thành công!", "Thêm hồ sơ vụ việc thành công!");
-            navigate(-1);
+             setMaHoSoVuViec("");
+        setMaKhachHang("");
+        setMaDoiTac("");
+        setMaLoaiDon("");
+        setNoiDungVuViec("");
+        setNgayTiepNhan(null);
+        setNgayXuLy(null);
+        setMaLoaiVuViec("");
+        setMaQuocGia("");
+        setTrangThaiVuViec("");
+        setBuocXuLyHienTai("");
+        setNhanSuVuViec([]);
+        setNguoiXuLyChinh(null);
+        setNguoiXuLyPhu(null);
+            // navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
@@ -271,23 +285,22 @@ function CaseAdd() {
 
                     <div>
                         <label className="block text-gray-700 text-left">Ngày tiếp nhận <span className="text-red-500">*</span></label>
-                        <div style={{ width: '100%' }}>
-                            <DatePicker
-                                value={ngayTiepNhan}
-                                onChange={(date) => {
-                                    if (dayjs.isDayjs(date) && date.isValid()) {
-                                      setNgayTiepNhan(date);
-                                      validateField("ngayTiepNhan", date.format("YYYY-MM-DD"));
-                                    } else {
-                                      setNgayTiepNhan(null);
-                                      validateField("ngayTiepNhan", null);
-                                    }
-                                  }}
-                                  
-                                format="DD/MM/YYYY" // hiển thị kiểu này
-                                placeholder="Chọn ngày tiếp nhận"
-                            />
-                        </div>
+                        <DatePicker
+                            value={ngayTiepNhan ? dayjs(ngayTiepNhan) : null}
+                            onChange={(date) => {
+                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                    setNgayTiepNhan(date.format("YYYY-MM-DD"));
+                                    validateField("ngayTiepNhan", date.format("YYYY-MM-DD"));
+                                } else {
+                                    setNgayTiepNhan(null);
+                                    validateField("ngayTiepNhan", null);
+                                }
+                            }}
+
+                            format="DD/MM/YYYY"
+                            placeholder="Chọn ngày tiếp nhận"
+                            className=" mt-1 w-full"
+                        />
 
                         {errors.ngayTiepNhan && (
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.ngayTiepNhan}</p>
@@ -296,12 +309,19 @@ function CaseAdd() {
 
                     <div>
                         <label className="block text-gray-700 text-left">Ngày xử lý </label>
-                        <input
-                            type="date"
-                            value={ngayXuLy}
-                            placeholder="Ngày xử lý"
-                            onChange={(e) => setNgayXuLy(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg text-input"
+                        <DatePicker
+                            value={ngayXuLy ? dayjs(ngayXuLy) : null}
+                            onChange={(date) => {
+                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                    setNgayXuLy(date.format("YYYY-MM-DD"));
+                                } else {
+                                    setNgayXuLy(null);
+                                }
+                            }}
+                            format="DD/MM/YYYY"
+                            placeholder="Chọn ngày xử lý"
+                            className="mt-1 w-full"
+                            style={{ height: "38px" }}
                         />
                     </div>
 
@@ -316,7 +336,7 @@ function CaseAdd() {
                                 validateField("maLoaiVuViec", value);
                             }}
                             placeholder="Chọn loại vụ việc"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg  text-left"
                             isClearable
                         />
                         {errors.maLoaiVuViec && (
@@ -352,7 +372,7 @@ function CaseAdd() {
                                 validateField("maQuocGia", value);
                             }}
                             placeholder="Chọn quốc gia"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg  text-left"
                             isClearable
                         />
                         {errors.maQuocGia && (
@@ -383,7 +403,7 @@ function CaseAdd() {
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
                             onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
                             placeholder="Chọn đối tác"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg  text-left"
                             isClearable
                         />
                     </div>
@@ -394,7 +414,7 @@ function CaseAdd() {
                             value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
                             onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
                             placeholder="Chọn trạng thái"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg  text-left"
                             isClearable
                         />
                     </div>
@@ -406,12 +426,12 @@ function CaseAdd() {
                             value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
                             onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
                             placeholder="Chọn bước xử lý"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Người xử lí chính</label>
+                        <label className="block text-gray-700 text-left">Người xử lí chính</label>
                         <Select
                             options={formatOptions(staffs, "maNhanSu", "hoTen")}
                             value={nguoiXuLyChinh}
@@ -420,7 +440,7 @@ function CaseAdd() {
                                 handleSelectChange(selectedOption, "Chính");
                             }}
                             placeholder="Chọn người xử lí chính"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg  text-left"
                             isClearable
                         />
                     </div>
@@ -434,7 +454,7 @@ function CaseAdd() {
                                 handleSelectChange(selectedOption, "Phụ");
                             }}
                             placeholder="Chọn người xử lí phụ"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg  text-left"
                             isClearable
                         />
                     </div>

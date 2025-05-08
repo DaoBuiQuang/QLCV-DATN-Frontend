@@ -3,6 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
 import { showSuccess, showError } from "../../components/commom/Notification";
+import { DatePicker } from 'antd';
+
+import dayjs from 'dayjs';  // Import dayjs
+import 'dayjs/locale/vi';
 function CaseEdit() {
     const navigate = useNavigate();
     const { maHoSoVuViec } = useParams();
@@ -244,7 +248,7 @@ function CaseEdit() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ vụ việc</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="flex-1">
-                    <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             disabled
@@ -255,7 +259,7 @@ function CaseEdit() {
                     </div>
 
                     <div className="flex-1">
-                    <label className="block text-gray-700 text-left ">Chọn khách hàng <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left ">Chọn khách hàng <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                             value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
@@ -279,7 +283,7 @@ function CaseEdit() {
                                 setNoiDungVuViec(e.target.value)
                                 validateField("noiDungVuViec", e.target.value)
                             }}
-                            className="w-full p-2 mt-1 border rounded-lg text-input"
+                            className="w-full p-2 mt-1 border rounded-lg text-input text-left"
                         />
                         {errors.noiDungVuViec && (
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.noiDungVuViec}</p>
@@ -288,14 +292,21 @@ function CaseEdit() {
 
                     <div>
                         <label className="block text-gray-700 text-left">Ngày tiếp nhận <span className="text-red-500">*</span></label>
-                        <input
-                            type="date"
-                            value={ngayTiepNhan}
-                            onChange={(e) => {
-                                setNgayTiepNhan(e.target.value)
-                                validateField("ngayTiepNhan", e.target.value)
+                        <DatePicker
+                            value={ngayTiepNhan ? dayjs(ngayTiepNhan) : null}
+                            onChange={(date) => {
+                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                    setNgayTiepNhan(date.format("YYYY-MM-DD"));
+                                    validateField("ngayTiepNhan", date.format("YYYY-MM-DD"));
+                                } else {
+                                    setNgayTiepNhan(null);
+                                    validateField("ngayTiepNhan", null);
+                                }
                             }}
-                            className="w-full p-2 mt-1 border rounded-lg text-input"
+
+                            format="DD/MM/YYYY"
+                            placeholder="Chọn ngày tiếp nhận"
+                            className=" mt-1 w-full"
                         />
                         {errors.ngayTiepNhan && (
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.ngayTiepNhan}</p>
@@ -304,11 +315,19 @@ function CaseEdit() {
 
                     <div>
                         <label className="block text-gray-700 text-left text-left">Ngày xử lý</label>
-                        <input
-                            type="date"
-                            value={ngayXuLy}
-                            onChange={(e) => setNgayXuLy(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded-lg text-input"
+                        <DatePicker
+                            value={ngayXuLy ? dayjs(ngayXuLy) : null}
+                            onChange={(date) => {
+                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                    setNgayXuLy(date.format("YYYY-MM-DD"));
+                                } else {
+                                    setNgayXuLy(null);
+                                }
+                            }}
+                            format="DD/MM/YYYY"
+                            placeholder="Chọn ngày xử lý"
+                            className="mt-1 w-full"
+                            style={{ height: "38px" }}
                         />
                     </div>
 
@@ -323,7 +342,7 @@ function CaseEdit() {
                                 validateField("maLoaiVuViec", value);
                             }}
                             placeholder="Chọn loại vụ việc"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg text-left"
                             isClearable
                         />
                         {errors.maLoaiVuViec && (
@@ -359,7 +378,7 @@ function CaseEdit() {
                                 validateField("maQuocGia", value);
                             }}
                             placeholder="Chọn quốc gia"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg text-left"
                             isClearable
                         />
                         {errors.maQuocGia && (
@@ -373,7 +392,7 @@ function CaseEdit() {
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
                             onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
                             placeholder="Chọn đối tác"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg text-left"
                             isClearable
                         />
                     </div>
@@ -384,7 +403,7 @@ function CaseEdit() {
                             value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
                             onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
                             placeholder="Chọn trạng thái"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>
@@ -396,7 +415,7 @@ function CaseEdit() {
                             value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
                             onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
                             placeholder="Chọn bước xử lý"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>
@@ -411,7 +430,7 @@ function CaseEdit() {
                                 handleSelectChange(selectedOption, "Chính");
                             }}
                             placeholder="Chọn người xử lí chính"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>
@@ -425,7 +444,7 @@ function CaseEdit() {
                                 handleSelectChange(selectedOption, "Phụ");
                             }}
                             placeholder="Chọn người xử lí phụ"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>

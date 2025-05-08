@@ -186,7 +186,7 @@ function CustomerAdd() {
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
                             onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
                             placeholder="Chọn đối tác"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg text-left"
                             isClearable
                         />
                     </div>
@@ -198,7 +198,7 @@ function CustomerAdd() {
                             value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
                             onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
                             placeholder="Chọn quốc gia"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg text-left"
                             isClearable
                         />
                     </div>
@@ -210,7 +210,7 @@ function CustomerAdd() {
                             value={maNganhNghe ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === maNganhNghe) : null}
                             onChange={selectedOption => setMaNganhNghe(selectedOption?.value)}
                             placeholder="Chọn ngành nghề"
-                            className="w-full  mt-1  rounded-lg"
+                            className="w-full  mt-1  rounded-lg text-left"
                             isClearable
                         />
                     </div>
@@ -232,7 +232,7 @@ function CustomerAdd() {
                             value={trangThaiOptions.find(option => option.value === trangThai)}
                             onChange={(selectedOption) => setTrangThai(selectedOption?.value)}
                             placeholder="Chọn trạng thái"
-                            className="w-full mt-1 rounded-lg"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>

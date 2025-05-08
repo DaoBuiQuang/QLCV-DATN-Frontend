@@ -72,3 +72,27 @@ input.error {
   border-radius: 0.5rem !important;
   border-color: #d1d5db !important;
 }
+.ant-picker{
+  height: 38px;
+  border-radius: 0.5rem;
+  /* border: 1px solid #3b82f6 !important; */
+}
+.ant-picker:focus{
+  border-color: #3b82f6; 
+}
+.ant-picker-input{
+  font-size: 16px !important;
+}
+.ant-picker-input input{
+  font-size: 16px !important;
+}
+/* input{
+  font-size: 14px !important;
+}
+.css-1dimb5e-singleValue{
+  font-size: 14px !important;
+} */
+.css-3iigni-container div{
+  border-radius: 0.5rem !important;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1)) !important;
+}

@@ -12,6 +12,8 @@ import DegreeInformation from "../../components/TrademarkRegistrationProcess/Deg
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 import DonProgress from "../../components/commom/DonProgess.js";
+import { DatePicker } from 'antd';
+import 'dayjs/locale/vi';
 function ApplicationAdd() {
     const navigate = useNavigate();
     const { maHoSoVuViec } = useParams();
@@ -214,7 +216,7 @@ function ApplicationAdd() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
-                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
+                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 value={maHoSoVuViec}
@@ -244,7 +246,7 @@ function ApplicationAdd() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left">Tên nhãn hiệu</label>
+                            <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
@@ -255,7 +257,7 @@ function ApplicationAdd() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Chọn danh sách sản phẩm dịch vụ</label>
+                            <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                                 value={
@@ -272,11 +274,24 @@ function ApplicationAdd() {
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left text-left">Ngày nộp đơn</label>
-                            <input
+                            {/* <input
                                 type="date"
                                 value={ngayNopDon}
                                 onChange={(e) => setNgayNopDon(e.target.value)}
                                 className="w-full p-2 mt-1 border rounded-lg text-input"
+                            /> */}
+                            <DatePicker
+                                value={ngayNopDon ? dayjs(ngayNopDon) : null}
+                                onChange={(date) => {
+                                    if (dayjs.isDayjs(date) && date.isValid()) {
+                                        setNgayNopDon(date.format("YYYY-MM-DD"));
+                                    } else {
+                                        setNgayNopDon(null);
+                                    }
+                                }}
+                                format="DD/MM/YYYY"
+                                placeholder="Chọn ngày nộp đơn"
+                                className="mt-1 w-full"
                             />
                         </div>
                     </div>
