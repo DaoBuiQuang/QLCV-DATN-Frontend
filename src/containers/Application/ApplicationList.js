@@ -17,7 +17,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { search: searchValue },
+        data: { searchText: searchValue },
       });
       setApplications(response);
     } catch (error) {
