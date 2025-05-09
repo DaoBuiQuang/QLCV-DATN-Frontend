@@ -72,8 +72,8 @@ function ApplicationDetail() {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/brand/list",
-                data: { search: searchValue },
+                endpoint: "/brand/shortlist",
+                data: {},
             });
             setBrands(response);
         } catch (error) {
@@ -270,7 +270,7 @@ function ApplicationDetail() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc</label>
+                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                             <input
                                 type="text"
                                 value={maHoSoVuViec}
@@ -311,7 +311,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Mã nhãn hiệu</label>
+                        <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
@@ -323,7 +323,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Chọn danh sách sản phẩm dịch vụ</label>
+                        <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                                 value={

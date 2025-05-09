@@ -75,7 +75,7 @@ const CompleteDocumentation = ({
                         value={trangThaiHoanThanhHSTL ? processStatus.find(opt => opt.value === trangThaiHoanThanhHSTL) : null}
                         onChange={selectedOption => setTrangThaiHoanThanhHSTL(selectedOption?.value)}
                         placeholder="Chọn trạng thái hoàn thành hồ sơ vụ việc"
-                        className="w-full mt-1 rounded-lg"
+                        className="w-full mt-1 rounded-lg text-left"
                         isClearable
                         isDisabled={isViewOnly}
                     />

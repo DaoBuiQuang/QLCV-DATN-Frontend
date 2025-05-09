@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-
+import { DatePicker } from 'antd';
+import 'dayjs/locale/vi';
 const ContentReview = ({
     ngayKQThamDinhND_DuKien,
     setNgayKQThamDinhND_DuKien,
@@ -62,7 +63,7 @@ const ContentReview = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thẩm định nội dung</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left text-left">
+                    <label className="block text-gray-700 text-left">
                         Ngày kết quả thẩm định nội dung đơn dự kiến
                     </label>
                     <input
@@ -72,17 +73,25 @@ const ContentReview = ({
                         onChange={(e) => setNgayKQThamDinhND_DuKien(e.target.value)}
                         className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                     />
+
                 </div>
                 <div>
                     <label className="block text-gray-700 text-left text-left">
                         Ngày kết quả thẩm định nội dung đơn
                     </label>
-                    <input
-                        type="date"
-                        value={ngayKQThamDinhND}
-                        onChange={(e) => setNgayKQThamDinhND(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
-                        disabled={isViewOnly}
+                    
+                    <DatePicker
+                        value={ngayKQThamDinhND ? dayjs(ngayKQThamDinhND) : null}
+                        onChange={(date) => {
+                            if (dayjs.isDayjs(date) && date.isValid()) {
+                                setNgayKQThamDinhND(date.format("YYYY-MM-DD"));
+                            } else {
+                                setNgayKQThamDinhND(null);
+                            }
+                        }}
+                        format="DD/MM/YYYY"
+                        placeholder="Chọn ngày kết quả thẩm định nội dung"
+                        className="mt-1 w-full"
                     />
                 </div>
             </div>
@@ -133,12 +142,19 @@ const ContentReview = ({
                                 <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
                                     <div className="md:col-span-3">
                                         <label className="block text-gray-600">Ngày bị từ chối</label>
-                                        <input
-                                            type="date"
-                                            value={refusal.ngayBiTuChoiTD ? dayjs(refusal.ngayBiTuChoiTD).format('YYYY-MM-DD') : ''}
-                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTD', e.target.value)}
+                                        <DatePicker
+                                            value={refusal.ngayBiTuChoiTD ? dayjs(refusal.ngayBiTuChoiTD) : null}
+                                            onChange={(date) => {
+                                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                                    updateRefusal(index, 'ngayBiTuChoiTD', date.format("YYYY-MM-DD"));
+                                                } else {
+                                                    updateRefusal(index, 'ngayBiTuChoiTD', null);
+                                                }
+                                            }}
+                                            format="DD/MM/YYYY"
+                                            placeholder="Chọn ngày bị từ chối thẩm định nội dung"
                                             disabled={isViewOnly}
-                                            className="w-full p-2 mt-1 border rounded-md"
+                                            className="mt-1 w-full"
                                         />
                                     </div>
 

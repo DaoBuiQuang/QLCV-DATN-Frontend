@@ -13,6 +13,9 @@ import ContentReview from "../../components/TrademarkRegistrationProcess/Content
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 import DonProgress from "../../components/commom/DonProgess.js";
 import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
+import { DatePicker } from 'antd';
+import 'dayjs/locale/vi';
+import { showSuccess, showError } from "../../components/commom/Notification";
 function ApplicationEdit() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
@@ -54,11 +57,28 @@ function ApplicationEdit() {
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
 
-    const statusOptions = [
-        { value: "dang_xu_ly", label: "Đang xử lý" },
-        { value: "hoan_thanh", label: "Hoàn thành" },
-        { value: "tam_dung", label: "Tạm dừng" }
-    ];
+    const [errors, setErrors] = useState({});
+    const isFormValid = (maHoSoVuViec || "").trim() !== "" && (maNhanHieu || "").trim() !== "" && Array.isArray(maSPDVList) &&
+        maSPDVList.length > 0;
+    const validateField = (field, value) => {
+        let error = "";
+        if (field === "maHoSoVuViec" || field === "maNhanHieu") {
+            if (!value || typeof value !== "string" || value.trim() === "") {
+                if (field === "maHoSoVuViec") error = "Mã hồ sơ vụ việc không được để trống";
+                if (field === "maNhanHieu") error = "Nhãn hiệu không được để trống";
+            }
+        }
+
+        if (field === "maSPDVList") {
+            if (!Array.isArray(value) || value.length === 0) {
+                error = "Sản phẩm dịch vụ không được để trống";
+            }
+        }
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: error,
+        }));
+    };
     const [daChonNgayNopDon, setDaChonNgayNopDon] = useState(false);
     const [daChonNgayHoanThanhHSTL, setDaChonNgayHoanThanhHSTL] = useState(false);
     const [daChonNgayThamDinhHinhThuc, setDaChonNgayThamDinhHinhThuc] = useState(false);
@@ -67,12 +87,12 @@ function ApplicationEdit() {
     const [daChonNgayTraLoiThamDinhNoiDung, setDaChonNgayTraLoiThamDinhNoiDung] = useState(false)
     const [daChonHoanTatThuTucNhapBang, setDaChonHoanTatThuTucNhapBang] = useState(false)
 
-    const fetchBrands = async (searchValue) => {
+    const fetchBrands = async () => {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/brand/list",
-                data: { search: searchValue },
+                endpoint: "/brand/shortlist",
+                data: {  },
             });
             setBrands(response);
         } catch (error) {
@@ -250,9 +270,10 @@ function ApplicationEdit() {
                     taiLieus: taiLieuList
                 },
             });
-            alert("Sửa hồ sơ vụ việc thành công!");
+             await showSuccess("Thành công!", "Cập nhập đơn đăng ký nhãn hiệu thành công!");
             navigate(-1);
         } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
@@ -308,18 +329,25 @@ function ApplicationEdit() {
                             />
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Mã nhãn hiệu</label>
+                            <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
-                                onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
-                                placeholder="Chọn mã nhãn hiệu"
+                                onChange={selectedOption => {
+                                    setMaNhanHieu(selectedOption?.value)
+                                    const value = selectedOption?.value || "";
+                                    validateField("maNhanHieu", value);
+                                }}
+                                placeholder="Chọn tên nhãn hiệu"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                             />
+                            {errors.maNhanHieu && (
+                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanHieu}</p>
+                            )}
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Chọn danh sách sản phẩm dịch vụ</label>
+                            <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                                 value={
@@ -327,12 +355,20 @@ function ApplicationEdit() {
                                         ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
                                         : []
                                 }
-                                onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
+                                onChange={(selectedOptions) => {
+                                    const selectedValues = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
+                                    setMaSPDVList(selectedValues);
+                                    validateField("maSPDVList", selectedValues);
+                                }}
                                 placeholder="Chọn mã nhãn hiệu"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                                 isMulti
                             />
+                            {errors.maSPDVList && (
+                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maSPDVList}</p>
+                            )}
+
                         </div>
                     </div>
                     {daChonNgayNopDon && (
@@ -350,7 +386,7 @@ function ApplicationEdit() {
                     )}
                     {daChonNgayNopDon && (
                         <div className="col-span-2">
-                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} />
+                            <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} />
                         </div>
                     )}
 

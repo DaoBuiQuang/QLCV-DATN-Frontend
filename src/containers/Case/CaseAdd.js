@@ -194,20 +194,20 @@ function CaseAdd() {
                 },
             });
             await showSuccess("Thành công!", "Thêm hồ sơ vụ việc thành công!");
-             setMaHoSoVuViec("");
-        setMaKhachHang("");
-        setMaDoiTac("");
-        setMaLoaiDon("");
-        setNoiDungVuViec("");
-        setNgayTiepNhan(null);
-        setNgayXuLy(null);
-        setMaLoaiVuViec("");
-        setMaQuocGia("");
-        setTrangThaiVuViec("");
-        setBuocXuLyHienTai("");
-        setNhanSuVuViec([]);
-        setNguoiXuLyChinh(null);
-        setNguoiXuLyPhu(null);
+            setMaHoSoVuViec("");
+            setMaKhachHang("");
+            setMaDoiTac("");
+            setMaLoaiDon("");
+            setNoiDungVuViec("");
+            setNgayTiepNhan(null);
+            setNgayXuLy(null);
+            setMaLoaiVuViec("");
+            setMaQuocGia("");
+            setTrangThaiVuViec("");
+            setBuocXuLyHienTai("");
+            setNhanSuVuViec([]);
+            setNguoiXuLyChinh(null);
+            setNguoiXuLyPhu(null);
             // navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);

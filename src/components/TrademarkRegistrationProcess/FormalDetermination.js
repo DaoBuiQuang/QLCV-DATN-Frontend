@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
-
+import { DatePicker } from 'antd';
+import 'dayjs/locale/vi';
 const FormalDetermination = ({
     ngayKQThamDinhHinhThuc_DuKien,
     setNgayKQThamDinhHinhThuc_DuKien,
@@ -77,12 +78,18 @@ const FormalDetermination = ({
                 </div>
                 <div>
                     <label className="block text-gray-700  text-left">Ngày chấp nhận đơn hợp lệ</label>
-                    <input
-                        type="date"
-                        value={ngayKQThamDinhHinhThuc}
-                        onChange={(e) => setNgayKQThamDinhHinhThuc(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
-                        disabled={isViewOnly}
+                    <DatePicker
+                        value={ngayKQThamDinhHinhThuc ? dayjs(ngayKQThamDinhHinhThuc) : null}
+                        onChange={(date) => {
+                            if (dayjs.isDayjs(date) && date.isValid()) {
+                                setNgayKQThamDinhHinhThuc(date.format("YYYY-MM-DD"));
+                            } else {
+                                setNgayKQThamDinhHinhThuc(null);
+                            }
+                        }}
+                        format="DD/MM/YYYY"
+                        placeholder="Chọn ngày chấp nhận đơn hợp lệ"
+                        className="mt-1 w-full"
                     />
                 </div>
             </div>
@@ -133,13 +140,21 @@ const FormalDetermination = ({
                                 <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
                                     <div className="md:col-span-3">
                                         <label className="block text-gray-600">Ngày bị từ chối</label>
-                                        <input
-                                            type="date"
-                                            value={refusal.ngayBiTuChoiTD ? dayjs(refusal.ngayBiTuChoiTD).format('YYYY-MM-DD') : ''}
-                                            onChange={(e) => updateRefusal(index, 'ngayBiTuChoiTD', e.target.value)}
+                                        <DatePicker
+                                            value={refusal.ngayBiTuChoiTD ? dayjs(refusal.ngayBiTuChoiTD) : null}
+                                            onChange={(date) => {
+                                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                                    updateRefusal(index, 'ngayBiTuChoiTD', date.format("YYYY-MM-DD"));
+                                                } else {
+                                                    updateRefusal(index, 'ngayBiTuChoiTD', null);
+                                                }
+                                            }}
+                                            format="DD/MM/YYYY"
+                                            placeholder="Chọn ngày bị từ chối thẩm định hình thức"
                                             disabled={isViewOnly}
-                                            className="w-full p-2 mt-1 border rounded-md"
+                                            className="mt-1 w-full"
                                         />
+
 
                                     </div>
 

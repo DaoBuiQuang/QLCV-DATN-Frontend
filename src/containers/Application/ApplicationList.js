@@ -8,6 +8,10 @@ function ApplicationList() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  const [brands, setBrands] = useState([]);
+  const [productAndService, setProductAndService] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedProductAndService, setSelectedProductAndService] = useState("");
   const fetchApplications = async (searchValue) => {
     try {
       const response = await callAPI({
@@ -20,6 +24,30 @@ function ApplicationList() {
       console.error("Lỗi khi lấy danh sách đơn đăng ký:", error);
     }
   };
+  const fetchBrands = async () => {
+    try {
+      const response = await callAPI({
+        method: "post",
+        endpoint: "/brand/shortlist",
+        data: {},
+      });
+      setBrands(response);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu nhãn hiệu:", error);
+    }
+  };
+  const fetchItems = async () => {
+    try {
+      const response = await callAPI({
+        method: "post",
+        endpoint: "/productsandservices/list",
+        data: {},
+      });
+      setProductAndService(response);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách sản phẩm/dịch vụ:", error);
+    }
+  };
   const formatOptions = (data, valueKey, labelKey) => {
     return data.map(item => ({
       value: item[valueKey],
@@ -28,6 +56,8 @@ function ApplicationList() {
   };
   useEffect(() => {
     fetchApplications("");
+    fetchBrands();
+    fetchItems();
   }, []);
   const columns = [
     { label: "Mã đơn đăng ký", key: "maDonDangKy" },
@@ -84,6 +114,24 @@ function ApplicationList() {
             </button> */}
           </div>
 
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Select
+            options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
+            value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
+            onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
+            placeholder="Chọn nhãn hiệu"
+            className="w-full md:w-1/6 text-left"
+            isClearable
+          />
+          <Select
+            options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
+            value={selectedProductAndService ? formatOptions(productAndService, "maSPDV", "tenSPDV").find(opt => opt.value === selectedProductAndService) : null}
+            onChange={selectedOption => setSelectedProductAndService(selectedOption?.value)}
+            placeholder="Chọn sản phẩm/dịch vụ"
+            className="w-full md:w-1/6 text-left"
+            isClearable
+          />
         </div>
 
       </div>

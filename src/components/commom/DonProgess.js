@@ -4,6 +4,7 @@ import { Steps } from "antd";
 const { Step } = Steps;
 
 const steps = [
+    "Nộp đơn",
     "Hoàn thành hồ sơ tài liệu",
     "Thẩm định hình thức",
     "Công bố đơn",

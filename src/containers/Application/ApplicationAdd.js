@@ -14,6 +14,7 @@ import CompleteDocumentation from "../../components/TrademarkRegistrationProcess
 import DonProgress from "../../components/commom/DonProgess.js";
 import { DatePicker } from 'antd';
 import 'dayjs/locale/vi';
+import { showSuccess, showError } from "../../components/commom/Notification";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const { maHoSoVuViec } = useParams();
@@ -49,17 +50,34 @@ function ApplicationAdd() {
     const [ngayCapBang, setNgayCapBang] = useState(null);
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
-    const [trangThaiDon, setTrangThaiDon] = useState("");
+    const [trangThaiDon, setTrangThaiDon] = useState("Nộp đơn");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
 
-    const statusOptions = [
-        { value: "dang_xu_ly", label: "Đang xử lý" },
-        { value: "hoan_thanh", label: "Hoàn thành" },
-        { value: "tam_dung", label: "Tạm dừng" }
-    ];
+    const [errors, setErrors] = useState({});
+    const isFormValid = (maHoSoVuViec || "").trim() !== "" && (maNhanHieu || "").trim() !== "" && Array.isArray(maSPDVList) &&
+        maSPDVList.length > 0;
+    const validateField = (field, value) => {
+        let error = "";
+        if (field === "maHoSoVuViec" || field === "maNhanHieu") {
+            if (!value || typeof value !== "string" || value.trim() === "") {
+                if (field === "maHoSoVuViec") error = "Mã hồ sơ vụ việc không được để trống";
+                if (field === "maNhanHieu") error = "Nhãn hiệu không được để trống";
+            }
+        }
+
+        if (field === "maSPDVList") {
+            if (!Array.isArray(value) || value.length === 0) {
+                error = "Sản phẩm dịch vụ không được để trống";
+            }
+        }
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: error,
+        }));
+    };
     const [daChonNgayNopDon, setDaChonNgayNopDon] = useState(false);
     const [daChonNgayHoanThanhHSTL, setDaChonNgayHoanThanhHSTL] = useState(false);
     const [daChonNgayThamDinhHinhThuc, setDaChonNgayThamDinhHinhThuc] = useState(false);
@@ -68,12 +86,12 @@ function ApplicationAdd() {
     const [daChonNgayTraLoiThamDinhNoiDung, setDaChonNgayTraLoiThamDinhNoiDung] = useState(false)
     const [daChonHoanTatThuTucNhapBang, setDaChonHoanTatThuTucNhapBang] = useState(false)
 
-    const fetchBrands = async (searchValue) => {
+    const fetchBrands = async () => {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/brand/list",
-                data: { search: searchValue },
+                endpoint: "/brand/shortlist",
+                data: { },
             });
             setBrands(response);
         } catch (error) {
@@ -97,6 +115,7 @@ function ApplicationAdd() {
         fetchItems();
     }, [])
     useEffect(() => {
+
         if (ngayNopDon) {
             const ngayHoanThanhHoSoTaiLieu = dayjs(ngayNopDon).add(1, 'month');
             setNgayHoanThanhHSTL_DuKien(ngayHoanThanhHoSoTaiLieu.format('YYYY-MM-DD'));
@@ -198,10 +217,11 @@ function ApplicationAdd() {
                     taiLieus: taiLieuList
                 },
             });
-            alert("Thêm hồ sơ vụ việc thành công!");
+            await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
             navigate(-1);
         } catch (error) {
-            console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
+            console.error("Lỗi khi thêm đơn đăng ký!", error);
         }
     };
     const handleTaiLieuChange = (list) => {
@@ -250,11 +270,18 @@ function ApplicationAdd() {
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
-                                onChange={selectedOption => setMaNhanHieu(selectedOption?.value)}
+                                onChange={selectedOption => {
+                                    setMaNhanHieu(selectedOption?.value)
+                                    const value = selectedOption?.value || "";
+                                    validateField("maNhanHieu", value);
+                                }}
                                 placeholder="Chọn tên nhãn hiệu"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                             />
+                            {errors.maNhanHieu && (
+                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanHieu}</p>
+                            )}
                         </div>
                         <div >
                             <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
@@ -265,12 +292,20 @@ function ApplicationAdd() {
                                         ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
                                         : []
                                 }
-                                onChange={selectedOptions => setMaSPDVList(selectedOptions ? selectedOptions.map(opt => opt.value) : [])}
+                                onChange={(selectedOptions) => {
+                                    const selectedValues = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
+                                    setMaSPDVList(selectedValues);
+                                    validateField("maSPDVList", selectedValues);
+                                }}
                                 placeholder="Chọn mã nhãn hiệu"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                                 isMulti
                             />
+                            {errors.maSPDVList && (
+                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maSPDVList}</p>
+                            )}
+
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left text-left">Ngày nộp đơn</label>
@@ -404,7 +439,11 @@ function ApplicationAdd() {
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Thêm đơn đăng ký</button>
+                    <button onClick={handleApplication} disabled={!isFormValid}
+                        className={`px-4 py-2 rounded-lg text-white ${isFormValid
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-blue-300 cursor-not-allowed"
+                            }`}>Thêm đơn đăng ký</button>
                 </div>
             </div>
         </div>

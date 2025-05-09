@@ -1,5 +1,7 @@
 import React from 'react';
-
+import dayjs from 'dayjs';
+import { DatePicker } from 'antd';
+import 'dayjs/locale/vi';
 const ReplyContentRating = ({
     ngayTraLoiKQThamDinhND_DuKien,
     setNgayTraLoiKQThamDinhND_DuKien,
@@ -12,7 +14,7 @@ const ReplyContentRating = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Trả lời kết quả thẩm định nội dung</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày kết quả thẩm định nội dung đơn dự kiến</label>
+                    <label className="block text-gray-700 text-left text-left">Ngày trả lời kết quả thẩm định nội dung đơn dự kiến</label>
                     <input
                         type="date"
                         disabled
@@ -22,13 +24,21 @@ const ReplyContentRating = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày kết quả thẩm định nội dung đơn</label>
-                    <input
-                        type="date"
-                        value={ngayTraLoiKQThamDinhND}
-                        onChange={(e) => setNgayTraLoiKQThamDinhND(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
+                    <label className="block text-gray-700 text-left text-left">Ngày trả lời kết quả thẩm định nội dung đơn</label>
+                    
+                    <DatePicker
+                        value={ngayTraLoiKQThamDinhND ? dayjs(ngayTraLoiKQThamDinhND) : null}
+                        onChange={(date) => {
+                            if (dayjs.isDayjs(date) && date.isValid()) {
+                                setNgayTraLoiKQThamDinhND(date.format("YYYY-MM-DD"));
+                            } else {
+                                setNgayTraLoiKQThamDinhND(null);
+                            }
+                        }}
+                        format="DD/MM/YYYY"
+                        placeholder="Chọn ngày kết quả thẩm định nội dung đơn"
                         disabled={isViewOnly}
+                        className="mt-1 w-full"
                     />
                 </div>
             </div>
