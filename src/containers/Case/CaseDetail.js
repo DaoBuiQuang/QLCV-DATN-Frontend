@@ -208,38 +208,9 @@ function CaseDetail() {
         fetchApplicationTypes();
     }, []);
 
-    // Add case
-    const handleEditCase = async () => {
-        try {
-            debugger
-            await callAPI({
-                method: "put",
-                endpoint: "/case/edit",
-                data: {
-                    maHoSoVuViec,
-                    maKhachHang,
-                    noiDungVuViec,
-                    ngayTiepNhan,
-                    ngayXuLy: ngayXuLy || null,
-                    maLoaiDon,
-                    maLoaiVuViec,
-                    maQuocGiaVuViec: maQuocGia,
-                    trangThaiVuViec,
-                    // ngayTao,
-                    // ngayCapNhap,
-                    buocXuLyHienTai,
-                    nhanSuVuViec
-                },
-            });
-            await showSuccess("Thành công!", "Cập nhập hồ sơ vụ việc thành công!");
-            navigate(-1);
-        } catch (error) {
-            showError("Thất bại!", "Đã xảy ra lỗi.", error);
-            console.error("Lỗi khi cập nhập hồ sơ vụ việc!", error);
-        }
-    };
+
     const handleApplicationAdd = () => {
-        navigate("/applicationadd");
+        navigate(`/applicationadd/${maHoSoVuViec}`);
     };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
@@ -404,7 +375,7 @@ function CaseDetail() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Trạng thái vụ việc</label>
+                        <label className="block text-gray-700 text-left ">Trạng thái vụ việc</label>
                         <Select
                             options={formatOptions(statusOptions, "value", "label")}
                             value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
@@ -462,9 +433,12 @@ function CaseDetail() {
                 </div>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                        Tạo đơn đăng kí
-                    </button>
+                    {maLoaiVuViec?.startsWith("NH") && (
+                        <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                            Tạo đơn đăng kí
+                        </button>
+                    )}
+
                 </div>
             </div>
         </div>

@@ -239,7 +239,7 @@ function CaseEdit() {
         }
     };
     const handleApplicationAdd = () => {
-        navigate("/applicationadd");
+        navigate(`/applicationadd/${maHoSoVuViec}`);
     };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
@@ -435,7 +435,7 @@ function CaseEdit() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Người xử lí phụ</label>
+                        <label className="block text-gray-700 text-left">Người xử lí phụ</label>
                         <Select
                             options={formatOptions(staffs, "maNhanSu", "hoTen")}
                             value={formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === nguoiXuLyPhu)}
@@ -456,9 +456,11 @@ function CaseEdit() {
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-blue-300 cursor-not-allowed"
                             }`}>Sửa hồ sơ vụ việc</button>
-                    <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                        Tạo đơn đăng kí
-                    </button>
+                    {maLoaiVuViec?.startsWith("NH") && (
+                        <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                            Tạo đơn đăng kí
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

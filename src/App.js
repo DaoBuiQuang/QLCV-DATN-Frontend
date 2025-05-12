@@ -9,12 +9,14 @@ import { jwtDecode } from 'jwt-decode';
 export default function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
+ useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        dispatch(setAuth({ authId: decoded.id, role: decoded.role }));
+        dispatch(setAuth({ authId: decoded.id, role: decoded.role, maNhanSu: decoded.maNhanSu }));
+        localStorage.setItem("maNhanSu", decoded.maNhanSu);
+
       } catch (error) {
         console.error("Token không hợp lệ:", error);
       }

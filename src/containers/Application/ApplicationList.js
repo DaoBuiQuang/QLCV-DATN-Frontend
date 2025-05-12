@@ -9,15 +9,15 @@ function ApplicationList() {
   const navigate = useNavigate();
 
   const [brands, setBrands] = useState([]);
-  const [productAndService, setProductAndService] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectedProductAndService, setSelectedProductAndService] = useState("");
+  const [productAndService, setProductAndService] = useState([]);
+  const [selectedProductAndService, setSelectedProductAndService] = useState([]);
   const fetchApplications = async (searchValue) => {
     try {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue },
+        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService },
       });
       setApplications(response);
     } catch (error) {
@@ -126,12 +126,18 @@ function ApplicationList() {
           />
           <Select
             options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
-            value={selectedProductAndService ? formatOptions(productAndService, "maSPDV", "tenSPDV").find(opt => opt.value === selectedProductAndService) : null}
-            onChange={selectedOption => setSelectedProductAndService(selectedOption?.value)}
+            value={formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt =>
+              selectedProductAndService?.includes(opt.value)
+            )}
+            onChange={selectedOptions =>
+              setSelectedProductAndService(selectedOptions ? selectedOptions.map(opt => opt.value) : [])
+            }
             placeholder="Chọn sản phẩm/dịch vụ"
-            className="w-full md:w-1/6 text-left"
+            className="w-full md:w-1/4 text-left"
             isClearable
+            isMulti
           />
+
         </div>
 
       </div>

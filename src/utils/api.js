@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useSelector } from 'react-redux';
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
     headers: {
@@ -40,11 +40,12 @@ api.interceptors.response.use(
  * @returns {Promise} - Trả về kết quả API
  */
 const callAPI = async ({ method = "get", endpoint, data = null, params = null }) => {
+    const maNhanSu = localStorage.getItem("maNhanSu");
     try {
         const response = await api({
             method,
             url: endpoint,
-            data,
+            data: { ...data, maNhanSuCapNhap: maNhanSu, },
             params,
         });
         if (

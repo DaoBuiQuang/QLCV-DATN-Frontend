@@ -211,6 +211,7 @@ function CaseList() {
                         <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
                             <th className="p-2">STT</th>
                             <th className="p-2">Mã hồ sơ</th>
+                            <th className="p-2">Mã đơn đăng ký</th>
                             <th className="p-2">Nội dung vụ việc</th>
                             <th className="p-2">Trạng thái</th>
                             <th className="p-2">Bước xử lý hiện tại</th>
@@ -237,6 +238,18 @@ function CaseList() {
                                 >
                                     {caseItem.maHoSoVuViec}
                                 </td>
+                                <td
+                                    className={`p-2 ${caseItem.maDonDangKy ? 'text-blue-500 cursor-pointer hover:underline' : 'text-gray-500'}`}
+                                    onClick={(e) => {
+                                        if (caseItem.maDonDangKy) {
+                                            e.stopPropagation();
+                                            navigate(`/applicationdetail/${caseItem.maDonDangKy}`);
+                                        }
+                                    }}
+                                >
+                                    {caseItem.maDonDangKy ? caseItem.maDonDangKy : "Không có đơn đăng ký"}
+                                </td>
+
                                 <td className="p-2">{caseItem.noiDungVuViec}</td>
                                 <td className="p-2">{caseItem.trangThaiVuViec}</td>
                                 <td className="p-2">{caseItem.buocXuLyHienTai}</td>
@@ -261,12 +274,7 @@ function CaseList() {
                                         >
                                             📝
                                         </button>
-                                        <button
-                                            className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
-                                            onClick={() => navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)}
-                                        >
-                                            📄
-                                        </button>
+
                                         <button
                                             className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                                             onClick={() => {
@@ -276,6 +284,17 @@ function CaseList() {
                                         >
                                             🗑️
                                         </button>
+                                        <button
+                                            className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
+                                            onClick={() =>
+                                                caseItem.maDonDangKy
+                                                    ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
+                                                    : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
+                                            }
+                                        >
+                                            📄
+                                        </button>
+
                                     </div>
                                 </td>
 
