@@ -12,8 +12,16 @@ const FormalDetermination = ({
     isViewOnly
 }) => {
     useEffect(() => {
-        console.log(lichSuThamDinhHT)
-    });
+        lichSuThamDinhHT.forEach((item, index) => {
+            if (item.hanKhieuNaiCSHTT && !item.showKhieuNaiCSHCTForm) {
+                updateRefusal(index, 'showKhieuNaiCSHCTForm', true);
+            }
+            if (item.hanKhieuNaiBKHCN && !item.showKhieuNaiBKHCNForm) {
+                updateRefusal(index, 'showKhieuNaiCSHCTForm', true);
+            }
+        });
+    }, [lichSuThamDinhHT]);
+
 
     const handleThatBaiure = () => {
         const today = dayjs();
@@ -24,7 +32,7 @@ const FormalDetermination = ({
             {
                 loaiThamDinh: 'HinhThuc',
                 lanThamDinh: prev.length + 1,
-                ngayBiTuChoiTD: "",
+                ngayNhanThongBaoTuChoiTD: "",
                 hanTraLoi: hanTraLoi,
                 giaHan: false,
                 ghiChu: ""
@@ -55,7 +63,22 @@ const FormalDetermination = ({
             }
             updated[index].hanTraLoi = hanTraLoi.format('YYYY-MM-DD');
         }
-
+        if (field === 'showKhieuNaiCSHCTForm' && value === true) {
+            const ngayTuChoi = updated[index].ngayNhanQuyetDinhTuChoi;
+            if (ngayTuChoi) {
+                // Sử dụng dayjs để cộng 3 tháng
+                const newHan = dayjs(ngayTuChoi).add(3, 'month').format('YYYY-MM-DD');
+                updated[index].hanKhieuNaiCSHTT = newHan;
+            }
+        }
+         if (field === 'showKhieuNaiBKHCNForm' && value === true) {
+            const ngayTuChoi = updated[index].ngayNhanKQKNThatBaiCSHTT;
+            if (ngayTuChoi) {
+                // Sử dụng dayjs để cộng 3 tháng
+                const newHan = dayjs(ngayTuChoi).add(3, 'month').format('YYYY-MM-DD');
+                updated[index].hanKhieuNaiBKHCN = newHan;
+            }
+        }
         setLichSuThamDinhHT(updated);
     };
 
@@ -63,6 +86,23 @@ const FormalDetermination = ({
         const updated = lichSuThamDinhHT.filter((_, i) => i !== index);
         setLichSuThamDinhHT(updated);
     };
+    const resetKhieuNaiBKHCN = (updateRefusal, index) => {
+        updateRefusal(index, 'showKhieuNaiBKHCNForm', false);
+        updateRefusal(index, 'hanKhieuNaiBKHCN', null);
+        updateRefusal(index, 'ngayKhieuNaiBKHCN', null);
+        updateRefusal(index, 'ketQuaKhieuNaiBKHCN', '');
+        updateRefusal(index, 'ngayNhanKQKNThatBaiBKHCN', null);
+        updateRefusal(index, 'ghiChuThatBaiBKHCN', '');
+    };
+    const resetKhieuNaiCSHTT = (updateRefusal, index) => {
+        updateRefusal(index, 'showKhieuNaiCSHCTForm', false);
+        updateRefusal(index, 'hanKhieuNaiCSHTT', null);
+        updateRefusal(index, 'ngayKhieuNaiCSHTT', null);
+        updateRefusal(index, 'ketQuaKhieuNaiCSHTT', '');
+        updateRefusal(index, 'ngayNhanKQKNThatBaiCSHTT', null);
+        updateRefusal(index, 'ghiChuThatBaiCSHTT', '');
+    };
+
     return (
         <div className="flex-1">
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thẩm định hình thức</h3>
@@ -119,11 +159,13 @@ const FormalDetermination = ({
             {lichSuThamDinhHT.length > 0 && (
                 <div className="mt-4 border">
                     {lichSuThamDinhHT.map((refusal, index) => {
-                        const baseHanTraLoi = dayjs(refusal.ngayBiTuChoiTD).add(3, 'month');
+                        const baseHanTraLoi = dayjs(refusal.ngayNhanThongBaoTuChoiTD).add(3, 'month');
                         const ngayTraLoi = refusal.ngayTraLoi;
-                        const hanTraLoi = refusal.giaHan
-                            ? baseHanTraLoi.add(2, 'month').format('YYYY-MM-DD')
-                            : baseHanTraLoi.format('YYYY-MM-DD');
+                        const hanTraLoi = baseHanTraLoi.format('YYYY-MM-DD');
+
+                        const hanTraLoiGiaHan = refusal.giaHan
+                            ? baseHanTraLoi.clone().add(2, 'month').format('YYYY-MM-DD')
+                            : hanTraLoi;
 
                         return (
                             <div key={index} className="p-1  rounded-md bg-gray-50 text-sm">
@@ -144,12 +186,12 @@ const FormalDetermination = ({
                                     <div className="md:col-span-3">
                                         <label className="block text-gray-600">Ngày nhận thông báo từ từ chối</label>
                                         <DatePicker
-                                            value={refusal.ngayBiTuChoiTD ? dayjs(refusal.ngayBiTuChoiTD) : null}
+                                            value={refusal.ngayNhanThongBaoTuChoiTD ? dayjs(refusal.ngayNhanThongBaoTuChoiTD) : null}
                                             onChange={(date) => {
                                                 if (dayjs.isDayjs(date) && date.isValid()) {
-                                                    updateRefusal(index, 'ngayBiTuChoiTD', date.format("YYYY-MM-DD"));
+                                                    updateRefusal(index, 'ngayNhanThongBaoTuChoiTD', date.format("YYYY-MM-DD"));
                                                 } else {
-                                                    updateRefusal(index, 'ngayBiTuChoiTD', null);
+                                                    updateRefusal(index, 'ngayNhanThongBaoTuChoiTD', null);
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
@@ -196,22 +238,34 @@ const FormalDetermination = ({
                                         />
                                     </div>
 
-                                    {!isViewOnly && refusal.ngayBiTuChoiTD && (
-                                        <div className="md:col-span-1">
-                                            <label className="inline-flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={refusal.giaHan}
-                                                    onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}
-                                                    className="mr-2"
-                                                />
-                                                Gia hạn
-                                            </label>
-                                        </div>
+                                    {!isViewOnly && refusal.ngayNhanThongBaoTuChoiTD && (
+                                        <>
+                                            <div className="md:col-span-1">
+                                                <label className="inline-flex items-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={refusal.giaHan}
+                                                        onChange={(e) => updateRefusal(index, 'giaHan', e.target.checked)}
+                                                        className="mr-2"
+                                                    />
+                                                    Gia hạn
+                                                </label>
+                                            </div>
+
+                                            {refusal.giaHan && (
+                                                <div className="md:col-span-3">
+                                                    <label className="block text-gray-600">Hạn trả lời sau khi gia hạn</label>
+                                                    <input
+                                                        type="date"
+                                                        value={hanTraLoiGiaHan}
+                                                        className="w-full p-2 mt-1 border rounded-md bg-gray-200"
+                                                        disabled
+                                                    />
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
-
-
                                 {!isViewOnly && index === lichSuThamDinhHT.length - 1 && !refusal.showKhieuNaiForm && (
                                     <div className="flex space-x-2 mt-3">
                                         <button
@@ -250,7 +304,6 @@ const FormalDetermination = ({
                                                 className="w-full"
                                             />
                                         </div>
-
                                         <div className="mt-8 flex justify-between items-center col-span-2">
                                             <button
                                                 type="button"
@@ -259,10 +312,11 @@ const FormalDetermination = ({
                                             >
                                                 Khiếu nại cục sở hữu trí tuệ
                                             </button>
-
                                             <button
                                                 type="button"
                                                 onClick={() => {
+                                                    resetKhieuNaiCSHTT(updateRefusal, index);
+                                                    resetKhieuNaiBKHCN(updateRefusal, index);
                                                     updateRefusal(index, 'trangThaiBiNhanQuyetDinhTuChoi', false);
                                                     updateRefusal(index, 'showKhieuNaiCSHCTForm', false);
                                                 }}
@@ -277,6 +331,7 @@ const FormalDetermination = ({
                                 {!isViewOnly && (
                                     <div className="mt-4">
                                         {refusal.showKhieuNaiCSHCTForm && (
+
                                             <div className="mt-3 p-3 border rounded bg-white shadow-sm">
                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                     <div>
@@ -303,7 +358,10 @@ const FormalDetermination = ({
                                                     </div>
                                                     <button
                                                         type="button"
-                                                        onClick={() => { updateRefusal(index, 'showKhieuNaiCSHCTForm', false); }}
+                                                        onClick={() => {
+                                                            resetKhieuNaiCSHTT(updateRefusal, index);
+                                                            resetKhieuNaiBKHCN(updateRefusal, index);
+                                                        }}
                                                         className="text-red-500 hover:text-red-700 text-xs ml-auto"
                                                     >
                                                         🗑 Xóa
@@ -405,9 +463,7 @@ const FormalDetermination = ({
                                                             </div>
                                                             <button
                                                                 type="button"
-                                                                onClick={() => {
-                                                                    updateRefusal(index, 'showKhieuNaiBKHCNForm', false);
-                                                                }}
+                                                                onClick={() => resetKhieuNaiBKHCN(updateRefusal, index)}
                                                                 className="text-red-500 hover:text-red-700 text-xs ml-auto"
                                                             >
                                                                 🗑 Xóa
@@ -484,7 +540,7 @@ const FormalDetermination = ({
                 onClick={() => {
                     testSubmit();
                 }}
-             
+
             >
                 test
             </button>
