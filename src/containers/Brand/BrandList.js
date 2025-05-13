@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
-
+import { useSelector } from 'react-redux';
 function BrandList() {
+    const role = useSelector((state) => state.auth.role);
     const [brands, setBrands] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
@@ -100,22 +101,24 @@ function BrandList() {
                             </td>
 
                             <td className="p-2">
-                                <div className="flex gap-2 justify-center">
-                                    <button
-                                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                        onClick={() => navigate(`/brandedit/${brand.maNhanHieu}`)}
-                                    >
-                                        📝
-                                    </button>
-                                    <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                        onClick={() => {
-                                            setShowDeleteModal(true);
-                                            setBrandToDelete(brand.maNhanHieu);
-                                        }}
-                                    >
-                                        🗑️
-                                    </button>
-                                </div>
+                                {(role === 'admin' || role === 'staff') && (
+                                    <div className="flex gap-2 justify-center">
+                                        <button
+                                            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                            onClick={() => navigate(`/brandedit/${brand.maNhanHieu}`)}
+                                        >
+                                            📝
+                                        </button>
+                                        <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                            onClick={() => {
+                                                setShowDeleteModal(true);
+                                                setBrandToDelete(brand.maNhanHieu);
+                                            }}
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
+                                )}
                             </td>
                         </tr>
                     ))}

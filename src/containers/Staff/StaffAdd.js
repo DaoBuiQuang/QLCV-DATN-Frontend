@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import { showSuccess, showError } from "../../components/commom/Notification";
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs'; 
+import 'dayjs/locale/vi';
 function StaffAdd() {
   const navigate = useNavigate();
   const [maNhanSu, setMaNhanSu] = useState("");
@@ -141,11 +144,25 @@ function StaffAdd() {
           </div>
           <div>
             <label className="block text-gray-700 text-left">Ngày sinh</label>
-            <input
+            {/* <input
               type="date"
               value={ngayThangNamSinh}
               onChange={(e) => setNgayThangNamSinh(e.target.value)}
               className="w-full p-2 mt-1 border rounded-lg text-input"
+            /> */}
+            <DatePicker
+              value={ngayThangNamSinh ? dayjs(ngayThangNamSinh) : null}
+              onChange={(date) => {
+                if (dayjs.isDayjs(date) && date.isValid()) {
+                  setNgayThangNamSinh(date.format("YYYY-MM-DD"));
+                } else {
+                  setNgayThangNamSinh(null);
+                }
+              }}
+              format="DD/MM/YYYY"
+              placeholder="Chọn ngày sinh"
+              className="mt-1 w-full"
+              style={{ height: "38px" }}
             />
           </div>
           <div>

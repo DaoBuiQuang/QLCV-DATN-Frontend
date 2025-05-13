@@ -12,7 +12,7 @@ const ContentReview = ({
     isViewOnly
 }) => {
     const [daDat, setDaDat] = useState(false);
-    const [showLichSu, setShowLichSu] = useState(false);
+    const [showLichSu, setShowLichSu] = useState(true);
 
     useEffect(() => {
         lichSuThamDinhND.forEach((item, index) => {
@@ -140,15 +140,16 @@ const ContentReview = ({
                     </div>
                 )}
             </div>
-            <button
-                type="button"
-                onClick={() => setShowLichSu(!showLichSu)} // <-- đúng
-                className="text-blue-600 underline text-sm"
-            >
-                {showLichSu ? "Ẩn lịch sử thẩm định" : "Hiển thị lịch sử thẩm định"}
-            </button>
-
-            {lichSuThamDinhND.length === 0 && (
+            {lichSuThamDinhND.length > 0 && (
+                <button
+                    type="button"
+                    onClick={() => setShowLichSu(!showLichSu)} // <-- đúng
+                    className="text-blue-600 underline text-sm"
+                >
+                    {showLichSu ? "Ẩn lịch sử thẩm định" : "Hiển thị lịch sử thẩm định"}
+                </button>
+            )}
+            {lichSuThamDinhND.length === 0 && !isViewOnly && (
                 <div className="mt-4 flex space-x-2">
                     <button
                         type="button"
@@ -158,7 +159,7 @@ const ContentReview = ({
                         disabled={isViewOnly}
                         className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
                     >
-                        ✅ Đạt
+                        Đạt
                     </button>
                     <button
                         type="button"
@@ -166,11 +167,10 @@ const ContentReview = ({
                         disabled={isViewOnly}
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
                     >
-                        ❌ Không đạt
+                        Không đạt
                     </button>
                 </div>
             )}
-
             {lichSuThamDinhND.length > 0 && showLichSu && (
                 <div className="mt-4 border">
                     {lichSuThamDinhND.map((refusal, index) => {
@@ -199,7 +199,7 @@ const ContentReview = ({
 
                                 <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
                                     <div className="md:col-span-3">
-                                        <label className="block text-gray-600">Ngày nhận thông báo từ từ chối</label>
+                                        <label className="block text-gray-600 text-left">Ngày nhận thông báo từ từ chối</label>
                                         <DatePicker
                                             value={refusal.ngayNhanThongBaoTuChoiTD ? dayjs(refusal.ngayNhanThongBaoTuChoiTD) : null}
                                             onChange={(date) => {
@@ -216,7 +216,7 @@ const ContentReview = ({
                                         />
                                     </div>
                                     <div className="md:col-span-3">
-                                        <label className="block text-gray-600">Hạn trả lời</label>
+                                        <label className="block text-gray-600 text-left">Hạn trả lời</label>
                                         <input
                                             type="date"
                                             value={hanTraLoi}
@@ -226,7 +226,7 @@ const ContentReview = ({
                                     </div>
 
                                     <div className="md:col-span-3">
-                                        <label className="block text-gray-600">Ngày trả lời</label>
+                                        <label className="block text-gray-600 text-left">Ngày trả lời</label>
                                         <DatePicker
                                             value={refusal.ngayTraLoi ? dayjs(refusal.ngayTraLoi) : null}
                                             onChange={(date) => {
@@ -243,7 +243,7 @@ const ContentReview = ({
                                         />
                                     </div>
                                     <div className="md:col-span-3">
-                                        <label className="block text-gray-600">Ghi chú</label>
+                                        <label className="block text-gray-600 text-left">Ghi chú</label>
                                         <input
                                             type="text"
                                             value={refusal.ghiChu || ''}
@@ -269,7 +269,7 @@ const ContentReview = ({
 
                                             {refusal.giaHan && (
                                                 <div className="md:col-span-3">
-                                                    <label className="block text-gray-600">Hạn trả lời sau khi gia hạn</label>
+                                                    <label className="block text-gray-600 text-left">Hạn trả lời sau khi gia hạn</label>
                                                     <input
                                                         type="date"
                                                         value={hanTraLoiGiaHan}
@@ -314,7 +314,7 @@ const ContentReview = ({
                                     refusal.trangThaiBiNhanQuyetDinhTuChoi && (
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             <div className="mt-3">
-                                                <label className="block text-gray-600">Ngày nhận quyết định từ chối</label>
+                                                <label className="block text-gray-600 text-left">Ngày nhận quyết định từ chối</label>
                                                 <DatePicker
                                                     value={refusal.ngayNhanQuyetDinhTuChoi ? dayjs(refusal.ngayNhanQuyetDinhTuChoi) : null}
                                                     onChange={(date) =>
@@ -357,7 +357,7 @@ const ContentReview = ({
                                                 <span className="font-semibold text-gray-700 text-left">Khiếu nại Cục sở hữu trí tuệ</span>
                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                     <div>
-                                                        <label className="block text-gray-600">Hạn khiếu nại</label>
+                                                        <label className="block text-gray-600 text-left">Hạn khiếu nại</label>
 
 
                                                         <DatePicker
@@ -371,7 +371,7 @@ const ContentReview = ({
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block text-gray-600">Ngày khiếu nại</label>
+                                                        <label className="block text-gray-600 text-left">Ngày khiếu nại</label>
                                                         <DatePicker
                                                             value={refusal.ngayKhieuNaiCSHTT ? dayjs(refusal.ngayKhieuNaiCSHTT) : null}
                                                             onChange={(date) =>
@@ -396,7 +396,7 @@ const ContentReview = ({
                                                 <div className="mt-3">
 
                                                     <div className="flex space-x-4 mt-1">
-                                                        <label className="block text-gray-600">Kết quả khiếu nại: </label>
+                                                        <label className="block text-gray-600 text-left">Kết quả khiếu nại: </label>
                                                         <label className="flex items-center">
                                                             <input
                                                                 type="radio"
@@ -429,7 +429,7 @@ const ContentReview = ({
                                                     {refusal.ketQuaKhieuNaiCSHTT === 'ThatBai' && (
                                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                             <div className="mt-3">
-                                                                <label className="block text-gray-600">Ngày nhận kết quả khiếu nại</label>
+                                                                <label className="block text-gray-600 text-left">Ngày nhận kết quả khiếu nại</label>
                                                                 <DatePicker
                                                                     value={refusal.ngayNhanKQKNThatBaiCSHTT ? dayjs(refusal.ngayNhanKQKNThatBaiCSHTT) : null}
                                                                     onChange={(date) =>
@@ -441,7 +441,7 @@ const ContentReview = ({
                                                             </div>
 
                                                             <div className="mt-3">
-                                                                <label className="block text-gray-600">Ghi chú </label>
+                                                                <label className="block text-gray-600 text-left">Ghi chú </label>
                                                                 <input
                                                                     value={refusal.ghiChuKetQuaKNCSHTT || ''}
                                                                     onChange={(e) => updateRefusal(index, 'ghiChuKetQuaKNCSHTT', e.target.value)}
@@ -468,7 +468,7 @@ const ContentReview = ({
                                                         <span className="font-semibold text-gray-700 mt-4">Khiếu nại bộ khoa học và Công nghệ</span>
                                                         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                                                             <div>
-                                                                <label className="block text-gray-600">Hạn khiếu nại</label>
+                                                                <label className="block text-gray-600 text-left">Hạn khiếu nại</label>
                                                                 <DatePicker
                                                                     value={refusal.hanKhieuNaiBKHCN ? dayjs(refusal.hanKhieuNaiBKHCN) : null}
                                                                     onChange={(date) =>
@@ -480,7 +480,7 @@ const ContentReview = ({
                                                                 />
                                                             </div>
                                                             <div>
-                                                                <label className="block text-gray-600">Ngày khiếu nại</label>
+                                                                <label className="block text-gray-600 text-left">Ngày khiếu nại</label>
                                                                 <DatePicker
                                                                     value={refusal.ngayKhieuNaiBKHCN ? dayjs(refusal.ngayKhieuNaiBKHCN) : null}
                                                                     onChange={(date) =>
@@ -500,7 +500,7 @@ const ContentReview = ({
                                                         </div>
                                                         <div className="mt-3">
                                                             <div className="flex space-x-4 mt-1">
-                                                                <label className="block text-gray-600">Kết quả khiếu nại</label>
+                                                                <label className="block text-gray-600 ">Kết quả khiếu nại</label>
                                                                 <label className="flex items-center">
                                                                     <input
                                                                         type="radio"
@@ -531,7 +531,7 @@ const ContentReview = ({
                                                             {refusal.ketQuaKhieuNaiBKHCN === 'ThatBai' && (
                                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                                     <div className="mt-3">
-                                                                        <label className="block text-gray-600">Ngày nhận kết quả khiếu nại</label>
+                                                                        <label className="block text-gray-600 text-left">Ngày nhận kết quả khiếu nại</label>
                                                                         <DatePicker
                                                                             value={refusal.ngayNhanKQKNThatBaiBKHCN ? dayjs(refusal.ngayNhanKQKNThatBaiBKHCN) : null}
                                                                             onChange={(date) =>
@@ -543,7 +543,7 @@ const ContentReview = ({
                                                                     </div>
 
                                                                     <div className="mt-3">
-                                                                        <label className="block text-gray-600">Ghi chú kết quả thất bại</label>
+                                                                        <label className="block text-gray-600 text-left">Ghi chú kết quả thất bại</label>
                                                                         <input
                                                                             value={refusal.ghiChuKetQuaKNBKHCN || ''}
                                                                             onChange={(e) => updateRefusal(index, 'ghiChuKetQuaKNBKHCN', e.target.value)}

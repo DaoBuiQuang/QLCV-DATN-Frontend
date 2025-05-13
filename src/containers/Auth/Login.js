@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import { useDispatch } from 'react-redux';
 import { setAuth } from "../../features/authSlice";
-
+import { showSuccess, showError } from "../../components/commom/Notification";
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -12,10 +12,10 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleLogin = async (e) => {
-        // e.preventDefault();
+    const handleLogin = async () => {
         setError("");
         try {
+            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "/login",
@@ -26,13 +26,13 @@ const Login = () => {
                 localStorage.setItem("token", response.token);
                 const decoded = jwtDecode(response.token);
                 dispatch(setAuth({ authId: decoded.id, role: decoded.role }));
-                alert("Đăng nhập thành công!");
+                 await showSuccess("Thành công!", "Đăng nhập thành công!");
                 navigate("/");
             } else {
                 throw new Error("Đăng nhập thất bại. Không nhận được token.");
             }
         } catch (err) {
-            console.error("Đăng nhập lỗi:", err);  // Giúp debug dễ hơn
+              showError("Thất bại!", "Đăng nhập không thành công.", err);
             setError(err?.response?.data?.message || err.message || "Đăng nhập thất bại!");
         }
     };

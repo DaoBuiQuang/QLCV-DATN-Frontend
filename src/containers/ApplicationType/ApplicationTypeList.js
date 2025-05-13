@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
+import { useSelector } from 'react-redux';
 function ApplicationTypeList() {
+  const role = useSelector((state) => state.auth.role);
   const [applicationtypes, setApplicationTypes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -97,22 +99,24 @@ function ApplicationTypeList() {
               <td className="p-2">{applicationtype.tenLoaiDon}</td>
               <td className="p-2">{applicationtype.moTa}</td>
               <td className="p-2">
-                <div className="flex gap-2">
-                  <button
-                    className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                    onClick={() => navigate(`/applicationtypeedit/${applicationtype.maLoaiDon}`)}
-                  >
-                    📝
-                  </button>
-                  <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                {(role === 'admin' || role === 'staff') && (
+                  <div className="flex gap-2">
+                    <button
+                      className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                      onClick={() => navigate(`/applicationtypeedit/${applicationtype.maLoaiDon}`)}
+                    >
+                      📝
+                    </button>
+                    <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
 
-                    onClick={() => {
-                      setApplicationTypeToDelete(applicationtype.maLoaiDon);
-                      setShowDeleteModal(true);
-                    }}>
-                    🗑️
-                  </button>
-                </div>
+                      onClick={() => {
+                        setApplicationTypeToDelete(applicationtype.maLoaiDon);
+                        setShowDeleteModal(true);
+                      }}>
+                      🗑️
+                    </button>
+                  </div>
+                )}
               </td>
             </tr>
           ))}

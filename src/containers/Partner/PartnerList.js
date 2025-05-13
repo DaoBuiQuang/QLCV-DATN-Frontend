@@ -2,7 +2,9 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import { useSelector } from 'react-redux';
 function PartnerList() {
+  const role = useSelector((state) => state.auth.role);
   const [partners, setPartners] = useState([]);
   const [countries, setCountries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -128,23 +130,25 @@ function PartnerList() {
               <td className="p-2">{partner.tenDoiTac}</td>
               <td className="p-2">{partner.tenQuocGia}</td>
               <td className="p-2">
-                <div className="flex gap-2 justify-center">
-                  <button
-                    className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                    onClick={() => navigate(`/partneredit/${partner.maDoiTac}`)}
-                  >
-                    📝
-                  </button>
-                  <button
-                    className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                    onClick={() => {
-                      setPartnerToDelete(partner.maDoiTac);
-                      setShowDeleteModal(true);
-                    }}
-                  >
-                    🗑️
-                  </button>
-                </div>
+                {(role === 'admin' || role === 'staff') && (
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                      onClick={() => navigate(`/partneredit/${partner.maDoiTac}`)}
+                    >
+                      📝
+                    </button>
+                    <button
+                      className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                      onClick={() => {
+                        setPartnerToDelete(partner.maDoiTac);
+                        setShowDeleteModal(true);
+                      }}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                )}
               </td>
             </tr>
           ))}

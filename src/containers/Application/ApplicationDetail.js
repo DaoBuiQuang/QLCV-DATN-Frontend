@@ -218,7 +218,7 @@ function ApplicationDetail() {
     };
 
     return (
-        <div className="p-1 bg-gray-100 flex items-center justify-center">
+        <div className="p-1 bg-gray-100 flex flex-col items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thông tin đơn đăng ký</h2>
@@ -311,7 +311,7 @@ function ApplicationDetail() {
                     )}
                     {daChonNgayNopDon && (
                         <div className="col-span-2">
-                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} />
+                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} isViewOnly={isViewOnly}/>
                         </div>
                     )}
 

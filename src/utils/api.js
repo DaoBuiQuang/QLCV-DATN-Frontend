@@ -39,7 +39,7 @@ api.interceptors.response.use(
  * @param {Object} params - Tham số query (dành cho get, delete)
  * @returns {Promise} - Trả về kết quả API
  */
-const callAPI = async ({ method = "get", endpoint, data = null, params = null }) => {
+const callAPI = async ({ method = "post", endpoint, data = null, params = null }) => {
     const maNhanSu = localStorage.getItem("maNhanSu");
     try {
         const response = await api({

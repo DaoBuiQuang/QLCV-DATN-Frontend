@@ -2,7 +2,9 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import Select from "react-select";
+import { useSelector } from 'react-redux';
 function CaseList() {
+    const role = useSelector((state) => state.auth.role);
     const [cases, setCases] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -267,35 +269,37 @@ function CaseList() {
                                     ))}
                                 </td>
                                 <td className="p-2">
-                                    <div className="flex gap-2 justify-center">
-                                        <button
-                                            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                            onClick={() => navigate(`/caseedit/${caseItem.maHoSoVuViec}`)}
-                                        >
-                                            📝
-                                        </button>
+                                    {(role === 'admin' || role === 'staff') && (
+                                        <div className="flex gap-2 justify-center">
+                                            <button
+                                                className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                                onClick={() => navigate(`/caseedit/${caseItem.maHoSoVuViec}`)}
+                                            >
+                                                📝
+                                            </button>
 
-                                        <button
-                                            className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                            onClick={() => {
-                                                setCaseToDelete(caseItem.maHoSoVuViec);
-                                                setShowDeleteModal(true);
-                                            }}
-                                        >
-                                            🗑️
-                                        </button>
-                                        <button
-                                            className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
-                                            onClick={() =>
-                                                caseItem.maDonDangKy
-                                                    ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
-                                                    : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
-                                            }
-                                        >
-                                            📄
-                                        </button>
+                                            <button
+                                                className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                                onClick={() => {
+                                                    setCaseToDelete(caseItem.maHoSoVuViec);
+                                                    setShowDeleteModal(true);
+                                                }}
+                                            >
+                                                🗑️
+                                            </button>
+                                            <button
+                                                className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
+                                                onClick={() =>
+                                                    caseItem.maDonDangKy
+                                                        ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
+                                                        : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
+                                                }
+                                            >
+                                                📄
+                                            </button>
 
-                                    </div>
+                                        </div>
+                                    )}
                                 </td>
 
                             </tr>

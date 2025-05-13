@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AddDocumentModal from "../UpdateDocument/AddDocumentModal";
 
-const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly }) => {
+const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOnly }) => {
     const [dsTaiLieu, setDsTaiLieu] = useState([]);
     const [modalState, setModalState] = useState({
         isOpen: false,
@@ -122,12 +122,11 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly }) => {
                     </table>
                 </div>
             )}
-
-            <button className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 text-sm rounded" onClick={() => setModalState({ ...modalState, isOpen: true })}>
-                Thêm tài liệu
-            </button>
-
-
+            {!isViewOnly && (
+                <button className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 text-sm rounded" onClick={() => setModalState({ ...modalState, isOpen: true })}>
+                    Thêm tài liệu
+                </button>
+            )}
             <AddDocumentModal
                 isOpen={modalState.isOpen}
                 onClose={() => setModalState({ ...modalState, isOpen: false })}

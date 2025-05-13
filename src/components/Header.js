@@ -1,12 +1,12 @@
-import { Menu } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAuth } from "../../src/features/authSlice";
 import callAPI from "../utils/api";
+import { Menu, Bell } from "lucide-react";
 
-function Header({ toggleMenu,isMenuOpen  }) {
+function Header({ toggleMenu, isMenuOpen }) {
   const [username, setUsername] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false); // 👈 Modal state
   const authId = useSelector((state) => state.auth.authId);
@@ -64,14 +64,20 @@ function Header({ toggleMenu,isMenuOpen  }) {
         {username && (
           <div className="flex items-center gap-4">
             <span className="text-gray-700 font-medium">{username}</span>
+            <div className="relative cursor-pointer">
+              <Bell size={22} className="text-gray-600 hover:text-blue-600" />
+              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
+            </div>
+
             <button
-              onClick={() => setShowLogoutModal(true)} // 👈 mở modal
+              onClick={() => setShowLogoutModal(true)}
               className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
             >
               Đăng xuất
             </button>
           </div>
         )}
+
       </header>
       {showLogoutModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -86,7 +92,7 @@ function Header({ toggleMenu,isMenuOpen  }) {
                 Hủy
               </button>
               <button
-                onClick={handleLogout} 
+                onClick={handleLogout}
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
               >
                 Đăng xuất

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import { showSuccess, showError } from "../../components/commom/Notification";
 function RegisterStaff() {
   const navigate = useNavigate();
   const { maNhanSu } = useParams();
@@ -21,11 +21,11 @@ function RegisterStaff() {
           role,
         },
       });
-      alert("Tạo tài khoản thành công!");
+      await showSuccess("Thành công!", "Tạo tài khoản thành công!");
       navigate(-1);
     } catch (error) {
       console.error("Lỗi khi tạo tài khoản!", error);
-      alert("Đã có lỗi xảy ra khi tạo tài khoản.");
+      showError("Thất bại!", "Đã xảy ra lỗi.", error);
     }
   };
 

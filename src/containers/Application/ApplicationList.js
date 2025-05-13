@@ -185,7 +185,7 @@ function ApplicationList() {
                 <td className="p-2">{app.maHoSoVuViec}</td>
                 <td className="p-2">{app.maNhanHieu}</td>
                 <td className="p-2">{app.trangThaiDon}</td>
-                <td className="p-2">
+                <td className="p-2 min-w-[120px]">
                   <div className="flex flex-col items-center">
                     <span>
                       {app.trangThaiHoanThienHoSoTaiLieu === "hoan_thanh"
@@ -203,15 +203,25 @@ function ApplicationList() {
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                         const textColor = diffDays < 0 ? "text-red-500" : "text-yellow-500";
-
                         return (
-                          <span className={`text-xs ${textColor}`}>
-                            {diffDays > 0
-                              ? `Còn ${diffDays} ngày`
-                              : diffDays === 0
-                                ? "Hạn là hôm nay"
-                                : `Quá hạn ${Math.abs(diffDays)} ngày`}
-                          </span>
+                          <div>
+                            <span className={`text-xs ${textColor}`}>
+                              {diffDays > 0
+                                ? `Còn ${diffDays} ngày`
+                                : diffDays === 0
+                                  ? "Hạn là hôm nay"
+                                  : `Quá hạn ${Math.abs(diffDays)} ngày`}
+                            </span>
+
+                            {/* Danh sách tài liệu chưa nộp */}
+                            {app.taiLieuChuaNop && app.taiLieuChuaNop.length > 0 && (
+                              <ul className="mt-1 list-disc list-inside text-xs text-gray-600">
+                                {app.taiLieuChuaNop.map((tl, index) => (
+                                  <li key={index}>{tl.tenTaiLieu}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
                         );
                       })()
                     )}

@@ -108,3 +108,12 @@ input.error {
 .css-b62m3t-container{
   height: fit-content;
 }
+
+.don-progress .ant-steps-horizontal {
+  flex-wrap: wrap; /* Cho phép xuống dòng */
+}
+
+.don-progress .ant-steps-item {
+  flex: 0 0 25%; /* 4 bước mỗi dòng, có thể đổi thành 20% cho 5 bước mỗi dòng */
+  max-width: 25%;
+}

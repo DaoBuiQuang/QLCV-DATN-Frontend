@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
-
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 function StaffDetail() {
     const navigate = useNavigate();
     const { maNhanSu } = useParams();
@@ -47,44 +49,58 @@ function StaffDetail() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa nhân sự</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                    <label className="block text-gray-700 text-left">Mã nhân sự <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">Mã nhân sự <span className="text-red-500">*</span></label>
                         <input type="text" value={maNhanSu} disabled className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
                     </div>
                     <div>
-                    <label className="block text-gray-700 text-left">Họ tên <span className="text-red-500">*</span></label>
-                        <input type="text" value={hoTen} onChange={(e) => setHoTen(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <label className="block text-gray-700 text-left">Họ tên <span className="text-red-500">*</span></label>
+                        <input type="text" value={hoTen} onChange={(e) => setHoTen(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Chức vụ</label>
-                        <input type="text" value={chucVu} onChange={(e) => setChucVu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <input type="text" value={chucVu} onChange={(e) => setChucVu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Phòng ban</label>
-                        <input type="text" value={phongBan} onChange={(e) => setPhongBan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <input type="text" value={phongBan} onChange={(e) => setPhongBan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Số điện thoại</label>
-                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Email</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Ngày sinh</label>
-                        <input type="date" value={ngayThangNamSinh} onChange={(e) => setNgayThangNamSinh(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <DatePicker
+                            value={ngayThangNamSinh ? dayjs(ngayThangNamSinh) : null}
+                            onChange={(date) => {
+                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                    setNgayThangNamSinh(date.format("YYYY-MM-DD"));
+                                } else {
+                                    setNgayThangNamSinh(null);
+                                }
+                            }}
+                            format="DD/MM/YYYY"
+                            placeholder="Chọn ngày sinh"
+                            className="mt-1 w-full"
+                            disabled
+                            style={{ height: "38px" }}
+                        />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">CCCD</label>
-                        <input type="text" value={cccd} onChange={(e) => setCccd(e.target.value)} className="w-full p-2 mt-1 border rounded-l bg-gray-100" disabled readOnly />
+                        <input type="text" value={cccd} onChange={(e) => setCccd(e.target.value)} className="w-full p-2 mt-1 border rounded-lg bg-gray-200" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Bằng cấp</label>
-                        <input type="text" value={bangCap} onChange={(e) => setBangCap(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <input type="text" value={bangCap} onChange={(e) => setBangCap(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" disabled readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Tên tài khoản</label>
-                        <input type="text" value={taiKhoan} onChange={(e) => setTaiKhoan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" disabled readOnly />
+                        <input type="text" value={taiKhoan} onChange={(e) => setTaiKhoan(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" disabled readOnly />
                     </div>
                 </div>
                 <div className="flex justify-center gap-4 mt-4">

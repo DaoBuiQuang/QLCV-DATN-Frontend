@@ -1,8 +1,12 @@
+import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings, Tag, ShoppingCart } from "lucide-react";
-
+import { useSelector } from 'react-redux';
+import {Key, User } from "lucide-react";
 function MenuLeft() {
     const location = useLocation(); // Lấy đường dẫn hiện tại
+    const role = useSelector((state) => state.auth.role);
+    const [openSettingSubmenu, setOpenSettingSubmenu] = useState(false);
 
     return (
         <aside className="bg-white w-56 h-screen shadow-md flex flex-col">
@@ -72,16 +76,6 @@ function MenuLeft() {
                             <span>Quốc gia</span>
                         </NavLink>
                     </li>
-                    <li>
-                        <NavLink
-                            to="/stafflist"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/stafflist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                                }`}
-                        >
-                            <UserCheck size={16} />
-                            <span>Nhân sự</span>
-                        </NavLink>
-                    </li>
 
                     <li>
                         <NavLink
@@ -99,7 +93,7 @@ function MenuLeft() {
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/applicationtypelist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                                 }`}
                         >
-                             <Briefcase size={16} />
+                            <Briefcase size={16} />
                             <span>Loại đơn đăng kí</span>
                         </NavLink>
                     </li>
@@ -123,16 +117,62 @@ function MenuLeft() {
                             <span>Sản phẩm và dịch vụ</span>
                         </NavLink>
                     </li>
+                    {(role === 'admin' || role === 'staff') && (
+                        <li>
+                            <NavLink
+                                to="/stafflist"
+                                className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/stafflist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                    }`}
+                            >
+                                <UserCheck size={16} />
+                                <span>Nhân sự</span>
+                            </NavLink>
+                        </li>
+                    )}
                     <li>
-                        <NavLink
-                            to="/settings"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                        <button
+                            onClick={() => setOpenSettingSubmenu(!openSettingSubmenu)}
+                            className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${location.pathname.startsWith("/settings") ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                                 }`}
                         >
-                            <Settings size={16} />
-                            <span>Cài đặt</span>
-                        </NavLink>
+                            <div className="flex items-center space-x-2">
+                                <Settings size={16} />
+                                <span>Cài đặt</span>
+                            </div>
+                            <span>{openSettingSubmenu ? "▲" : "▼"}</span>
+                        </button>
+
+                        {/* Submenu */}
+                        {openSettingSubmenu && (
+                            <ul className="ml-6 mt-1 space-y-1 text-sm">
+                                <li>
+                                    <NavLink
+                                        to="/changepassword"
+                                        className={({ isActive }) =>
+                                            `flex items-center space-x-2 p-2 rounded-lg w-full transition ${isActive ? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
+                                            }`
+                                        }
+                                    >
+                                        <Key size={14} />
+                                        <span>Đổi mật khẩu</span>
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink
+                                        to="/profile"
+                                        className={({ isActive }) =>
+                                            `flex items-center space-x-2 p-2 rounded-lg w-full transition ${isActive ? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
+                                            }`
+                                        }
+                                    >
+                                        <User size={14} />
+                                        <span>Thông tin tài khoản</span>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        )}
                     </li>
+
                 </ul>
             </nav>
 

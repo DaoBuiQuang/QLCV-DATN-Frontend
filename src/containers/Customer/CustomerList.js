@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
 import Select from "react-select";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 
 function CustomerList() {
@@ -211,23 +209,25 @@ function CustomerList() {
                                 <td className="p-2">{customer.tenQuocGia}</td>
                                 <td className="p-2">{customer.tenNganhNghe}</td>
                                 <td className="p-2">
-                                    <div className="flex gap-2 justify-center">
-                                        <button
-                                            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                            onClick={() => navigate(`/customeredit/${customer.maKhachHang}`)}
-                                        >
-                                            📝
-                                        </button>
-                                        <button
-                                            className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                            onClick={() => {
-                                                setCustomerToDelete(customer.maKhachHang);
-                                                setShowDeleteModal(true);
-                                            }}
-                                        >
-                                            🗑️
-                                        </button>
-                                    </div>
+                                    {(role === 'admin' || role === 'staff') && (
+                                        <div className="flex gap-2 justify-center">
+                                            <button
+                                                className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                                onClick={() => navigate(`/customeredit/${customer.maKhachHang}`)}
+                                            >
+                                                📝
+                                            </button>
+                                            <button
+                                                className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                                onClick={() => {
+                                                    setCustomerToDelete(customer.maKhachHang);
+                                                    setShowDeleteModal(true);
+                                                }}
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    )}
                                 </td>
                             </tr>
                         ))}

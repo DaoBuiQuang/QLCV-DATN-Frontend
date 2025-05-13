@@ -48,6 +48,8 @@ import ProductAndServicesAdd from "../containers/ProductAndServices/ProductAndSe
 import ProductAndServicesDetail from "../containers/ProductAndServices/ProductAndServicesDetail";
 import JobEdit from "../containers/Job/JobEdit";
 import JobDetail from "../containers/Job/JobDetail";
+import ChangePassword from "../containers/Auth/ChangePassword";
+import Profile from "../containers/Auth/Profile";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -156,6 +158,9 @@ const AppRoutes = () => {
           <Route path="/productandservicesadd" element={<ProductAndServicesAdd></ProductAndServicesAdd>} />
           <Route path="/productandservicesedit/:maSPDV" element={<ProductAndServicesEdit></ProductAndServicesEdit>} />
           <Route path="/productandservicesdetail/:maSPDV" element={<ProductAndServicesDetail></ProductAndServicesDetail>} />
+
+          <Route path="/changepassword" element={<ChangePassword></ChangePassword>} />
+          <Route path="/profile" element={<Profile></Profile>} />
         </Route>
         <Route path="/login" element={<Login />} />
 
