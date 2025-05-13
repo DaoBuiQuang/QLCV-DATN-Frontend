@@ -4,7 +4,7 @@ import {
   Eye,
   EyeOff
 } from "lucide-react"; 
-
+import { showSuccess, showError } from "../../components/commom/Notification";
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -53,12 +53,13 @@ const ChangePassword = () => {
         endpoint: "/changepassword",
         data: { oldPassword, newPassword },
       });
-
+        await showSuccess("Thành công!", "Đổi mật khẩu thành công!");
       setMessage(response.message || "Đổi mật khẩu thành công");
       setOldPassword("");
       setNewPassword("");
       setConfirmNewPassword("");
     } catch (err) {
+        showError("Thất bại!", "Đã xảy ra lỗi.", error);
       setError(err.response?.data?.message || "Có lỗi xảy ra khi đổi mật khẩu.");
     }
   };
