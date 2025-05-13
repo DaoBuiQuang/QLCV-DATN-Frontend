@@ -96,3 +96,15 @@ input.error {
   border-radius: 0.5rem !important;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1)) !important;
 }
+
+/* Ghi đè style của ô input trong DatePicker */
+.ant-picker-disabled{
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1)) !important;
+}
+.ant-picker-input input[disabled] {
+    color: #000 !important;                 /* Màu chữ đen */
+}
+
+.css-b62m3t-container{
+  height: fit-content;
+}

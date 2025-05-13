@@ -13,7 +13,7 @@ const Login = () => {
     const [error, setError] = useState("");
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         setError("");
         try {
             const response = await callAPI({
@@ -22,28 +22,30 @@ const Login = () => {
                 data: { username, password },
             });
 
-            if (response.token) {
+            if (response && response.token) {
                 localStorage.setItem("token", response.token);
                 const decoded = jwtDecode(response.token);
                 dispatch(setAuth({ authId: decoded.id, role: decoded.role }));
                 alert("Đăng nhập thành công!");
                 navigate("/");
             } else {
-                throw new Error("Không nhận được token từ server!");
+                throw new Error("Đăng nhập thất bại. Không nhận được token.");
             }
-        } catch (error) {
-            setError(error.message || "Đăng nhập thất bại!");
+        } catch (err) {
+            console.error("Đăng nhập lỗi:", err);  // Giúp debug dễ hơn
+            setError(err?.response?.data?.message || err.message || "Đăng nhập thất bại!");
         }
     };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 px-4">
             <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
                 {/* Logo */}
                 <div className="flex justify-center mb-6">
-                    <img 
-                        src="https://ipac.vn/image/catalog/logo/rsz_1logo.jpg" 
-                        alt="Logo" 
+                    <img
+                        src="https://ipac.vn/image/catalog/logo/rsz_1logo.jpg"
+                        alt="Logo"
                         className="w-28"
                     />
                 </div>
@@ -61,10 +63,10 @@ const Login = () => {
                 )}
 
                 {/* Form đăng nhập */}
-                <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-4">
                     <div>
                         <label className="block text-gray-700 text-left text-sm font-medium mb-1">Tài khoản</label>
-                        <input 
+                        <input
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -74,7 +76,7 @@ const Login = () => {
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left text-sm font-medium mb-1">Mật khẩu</label>
-                        <input 
+                        <input
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -82,13 +84,15 @@ const Login = () => {
                             placeholder="Nhập mật khẩu"
                         />
                     </div>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="button"
+                        onClick={handleLogin}
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-semibold transition duration-200"
                     >
                         Đăng nhập
                     </button>
-                </form>
+                </div>
+
 
                 {/* Đăng ký & Quên mật khẩu */}
                 <div className="mt-6 text-center text-sm text-gray-600 space-y-1">

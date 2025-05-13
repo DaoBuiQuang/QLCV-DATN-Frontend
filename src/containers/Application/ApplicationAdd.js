@@ -230,7 +230,7 @@ function ApplicationAdd() {
 
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
-            <DonProgress trangThaiDon={trangThaiDon} />
+            {/* <DonProgress trangThaiDon={trangThaiDon} /> */}
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

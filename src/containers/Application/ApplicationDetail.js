@@ -169,8 +169,7 @@ function ApplicationDetail() {
         return new Date(dateString).toISOString().split("T")[0];
     };
     const detailApplication = async () => {
-        try {
-            debugger
+        try {        
             const response = await callAPI({
                 method: "post",
                 endpoint: "application/detail",
@@ -213,51 +212,7 @@ function ApplicationDetail() {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
         }
     };
-    const handleApplication = async () => {
-        try {
-            await callAPI({
-                method: "put",
-
-                endpoint: "/application/edit",
-                data: {
-                    maDonDangKy: maDonDangKy,
-                    maHoSoVuViec: maHoSoVuViec,
-                    soDon: soDon,
-                    maNhanHieu: maNhanHieu,
-                    maSPDVList: maSPDVList,
-                    trangThaiDon: trangThaiDon,
-
-                    ngayNopDon: ngayNopDon || null,
-                    ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien || null,
-                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL || null,
-                    trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
-                    ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien || null,
-                    ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc || null,
-                    lichSuThamDinhHT: lichSuThamDinhHT,
-                    ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
-                    ngayCongBoDon: ngayCongBo || null,
-                    ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien || null,
-                    ngayKQThamDinhND: ngayKQThamDinhND || null,
-                    lichSuThamDinhND: lichSuThamDinhND,
-                    ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
-                    ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
-                    ngayThongBaoCapBang: ngayThongBaoCapBang || null,
-                    ngayNopPhiCapBang: ngayNopPhiCapBang || null,
-                    ngayNhanBang: ngayNhanBang || null,
-                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
-                    ngayCapBang: ngayCapBang || null,
-                    ngayHetHanBang: ngayHetHanBang || null,
-                    soBang: soBang,
-                    taiLieus: taiLieuList
-                },
-            });
-            alert("Sửa hồ sơ vụ việc thành công!");
-            navigate(-1);
-        } catch (error) {
-            console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
-        }
-    };
-    /////
+ 
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
     };
@@ -266,7 +221,7 @@ function ApplicationDetail() {
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ đơn đăng ký mới</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thông tin đơn đăng ký</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
