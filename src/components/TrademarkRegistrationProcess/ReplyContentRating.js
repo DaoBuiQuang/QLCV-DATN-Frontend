@@ -26,7 +26,7 @@ const ReplyContentRating = ({
                         }}
                         format="DD/MM/YYYY"
                         placeholder="Chọn ngày kết quả thẩm định nội dung đơn"
-                        disabled={isViewOnly}
+                        disabled
                         className="mt-1 w-full"
                     />
                 </div>

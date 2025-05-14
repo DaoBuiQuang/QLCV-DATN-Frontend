@@ -9,9 +9,12 @@ const ContentReview = ({
     setNgayKQThamDinhND,
     lichSuThamDinhND,
     setLichSuThamDinhND,
+    ngayKQThamDinhND_DK_SauKN,
+    setNgayKQThamDinhND_DK_SauKN,
     isViewOnly
 }) => {
     const [daDat, setDaDat] = useState(false);
+    const [daKNThanhCong, setDaKNThanhCong] = useState(false);
     const [showLichSu, setShowLichSu] = useState(true);
 
     useEffect(() => {
@@ -21,6 +24,9 @@ const ContentReview = ({
             }
             if (item.hanKhieuNaiBKHCN && !item.showKhieuNaiBKHCNForm) {
                 updateRefusal(index, 'showKhieuNaiBKHCNForm', true);
+            }
+            if (item.ketQuaKhieuNaiBKHCN === true || item.ketQuaKhieuNaiCSHTT === true) {
+                handleKNThanhCong();
             }
         });
     }, [lichSuThamDinhND]);
@@ -41,12 +47,20 @@ const ContentReview = ({
         ]);
     };
 
-    const handleThanhCong = () => {
+    const handleDat = () => {
         const today = dayjs().format('YYYY-MM-DD');
         setNgayKQThamDinhND(today);
         setDaDat(true);
     };
-
+    const handleKNThanhCong = () => {
+        setDaKNThanhCong(true);
+        setDaDat(true);
+    };
+    const handleKNThatBai = () => {
+        setDaKNThanhCong(false);
+        setDaDat(false);
+        setNgayKQThamDinhND_DK_SauKN(null);
+    };
     const updateRefusal = (index, field, value) => {
         const updated = [...lichSuThamDinhND];
         updated[index][field] = value;
@@ -124,25 +138,46 @@ const ContentReview = ({
                     />
                 </div>
                 {(daDat || ngayKQThamDinhND) && (
-                    <div>
-                        <label className="block text-gray-700 text-left">
-                            Ngày kết quả thẩm định nội dung đơn
-                        </label>
+                    <>
+                        {(daKNThanhCong || ngayKQThamDinhND_DK_SauKN) && (
+                            <div>
+                                <label className="block text-gray-700 text-left">
+                                    Ngày có kết quả trả lời thẩm định nội dung sau khiếu nại dự kiến
+                                </label>
+                                <DatePicker
+                                    value={ngayKQThamDinhND_DK_SauKN ? dayjs(ngayKQThamDinhND_DK_SauKN) : null}
+                                    onChange={(date) => {
+                                        if (dayjs.isDayjs(date) && date.isValid()) {
+                                            setNgayKQThamDinhND_DK_SauKN(date.format("YYYY-MM-DD"));
+                                        } else {
+                                            setNgayKQThamDinhND_DK_SauKN(null);
+                                        }
+                                    }}
+                                    format="DD/MM/YYYY"
+                                    className="mt-1 w-full"
+                                />
+                            </div>
+                        )}
+                        <div>
+                            <label className="block text-gray-700 text-left">
+                                Ngày kết quả thẩm định nội dung đơn
+                            </label>
 
-                        <DatePicker
-                            value={ngayKQThamDinhND ? dayjs(ngayKQThamDinhND) : null}
-                            onChange={(date) => {
-                                if (dayjs.isDayjs(date) && date.isValid()) {
-                                    setNgayKQThamDinhND(date.format("YYYY-MM-DD"));
-                                } else {
-                                    setNgayKQThamDinhND(null);
-                                }
-                            }}
-                            format="DD/MM/YYYY"
-                            placeholder="Chọn ngày kết quả thẩm định nội dung"
-                            className="mt-1 w-full"
-                        />
-                    </div>
+                            <DatePicker
+                                value={ngayKQThamDinhND ? dayjs(ngayKQThamDinhND) : null}
+                                onChange={(date) => {
+                                    if (dayjs.isDayjs(date) && date.isValid()) {
+                                        setNgayKQThamDinhND(date.format("YYYY-MM-DD"));
+                                    } else {
+                                        setNgayKQThamDinhND(null);
+                                    }
+                                }}
+                                format="DD/MM/YYYY"
+                                placeholder="Chọn ngày kết quả thẩm định nội dung"
+                                className="mt-1 w-full"
+                            />
+                        </div>
+                    </>
                 )}
             </div>
             {lichSuThamDinhND.length > 0 && (
@@ -159,7 +194,7 @@ const ContentReview = ({
                     <button
                         type="button"
                         onClick={() => {
-                            handleThanhCong(); // gọi logic cũ nếu cần 
+                            handleDat(); // gọi logic cũ nếu cần 
                         }}
                         disabled={isViewOnly}
                         className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
@@ -310,7 +345,7 @@ const ContentReview = ({
                                             <>
                                                 <button
                                                     type="button"
-                                                    onClick={handleThanhCong}
+                                                    onClick={handleDat}
                                                     className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-xs"
                                                 >
                                                     Đạt
@@ -382,8 +417,6 @@ const ContentReview = ({
                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                     <div>
                                                         <label className="block text-gray-600 text-left">Hạn khiếu nại</label>
-
-
                                                         <DatePicker
                                                             value={refusal.hanKhieuNaiCSHTT ? dayjs(refusal.hanKhieuNaiCSHTT) : null}
                                                             onChange={(date) =>
@@ -432,7 +465,7 @@ const ContentReview = ({
                                                                     updateRefusal(index, 'ngayNhanKetQuaThatBaiCSHTT', null);
                                                                     updateRefusal(index, 'ghiChuKetQuaKNCSHTT', '');
                                                                     updateRefusal(index, 'showKhieuNaiBKHCNForm', false);
-                                                                    handleThanhCong();
+                                                                    handleDat();
                                                                     resetKhieuNaiBKHCN(updateRefusal, index); // gọi luôn hàm reset của BKH&CN nếu có
                                                                 }}
                                                                 className="mr-2"
@@ -445,20 +478,24 @@ const ContentReview = ({
                                                                 name={`ketQuaCSHTT_NoiDung-${index}`}
                                                                 value="ThatBai"
                                                                 checked={refusal.ketQuaKhieuNaiCSHTT === 'ThatBai'}
-                                                                onChange={() => updateRefusal(index, 'ketQuaKhieuNaiCSHTT', 'ThatBai')}
+                                                                onChange={() => { updateRefusal(index, 'ketQuaKhieuNaiCSHTT', 'ThatBai'); handleKNThatBai(); }}
                                                                 className="mr-2"
                                                             />
                                                             Thất bại
                                                         </label>
                                                     </div>
-                                                    {refusal.ketQuaKhieuNaiCSHTT === 'ThatBai' && (
+                                                    {['ThatBai', 'ThanhCong'].includes(refusal.ketQuaKhieuNaiCSHTT) && (
                                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                             <div className="mt-3">
-                                                                <label className="block text-gray-600 text-left">Ngày nhận kết quả khiếu nại</label>
+                                                                <label className="block text-gray-600 text-left">
+                                                                    {refusal.ketQuaKhieuNaiCSHTT === 'ThatBai'
+                                                                        ? 'Ngày nhận kết quả khiếu nại thất bại'
+                                                                        : 'Ngày quyết định khiếu nại thành công'}
+                                                                </label>
                                                                 <DatePicker
-                                                                    value={refusal.ngayNhanKQKNThatBaiCSHTT ? dayjs(refusal.ngayNhanKQKNThatBaiCSHTT) : null}
+                                                                    value={refusal.ngayKQ_KN_CSHTT ? dayjs(refusal.ngayKQ_KN_CSHTT) : null}
                                                                     onChange={(date) =>
-                                                                        updateRefusal(index, 'ngayNhanKQKNThatBaiCSHTT', date?.format('YYYY-MM-DD'))
+                                                                        updateRefusal(index, 'ngayKQ_KN_CSHTT', date?.format('YYYY-MM-DD'))
                                                                     }
                                                                     format="DD/MM/YYYY"
                                                                     className="w-full mt-1 "
@@ -470,20 +507,41 @@ const ContentReview = ({
                                                                 <input
                                                                     value={refusal.ghiChuKetQuaKNCSHTT || ''}
                                                                     onChange={(e) => updateRefusal(index, 'ghiChuKetQuaKNCSHTT', e.target.value)}
-                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md text-input"
+                                                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
                                                                     rows={3}
                                                                     placeholder="Nhập ghi chú..."
                                                                 />
                                                             </div>
-                                                            <div className="mt-8 flex justify-between items-center col-span-1">
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => updateRefusal(index, 'showKhieuNaiBKHCNForm', true)}
-                                                                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs"
-                                                                >
-                                                                    Khiếu nại Bộ khoa học và công nghệ
-                                                                </button>
-                                                            </div>
+                                                            {refusal.ketQuaKhieuNaiCSHTT === 'ThatBai' ? (
+                                                                <>
+                                                                    <div className="mt-8 flex justify-between items-center col-span-1">
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => updateRefusal(index, 'showKhieuNaiBKHCNForm', true)}
+                                                                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs"
+                                                                        >
+                                                                            Khiếu nại Bộ khoa học và công nghệ
+                                                                        </button>
+                                                                    </div>
+
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <div className="mt-3">
+                                                                        <label className="block text-gray-600 text-left">
+                                                                            Ngày nộp yêu cầu chấp nhận đơn hợp lệ
+                                                                        </label>
+                                                                        <DatePicker
+                                                                            value={refusal.ngayNopYeuCCNDHLSauKN ? dayjs(refusal.ngayNopYeuCCNDHLSauKN) : null}
+                                                                            onChange={(date) =>
+                                                                                updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
+                                                                            }
+                                                                            format="DD/MM/YYYY"
+                                                                            className="w-full mt-1"
+                                                                        />
+                                                                    </div>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     )}
 
@@ -536,7 +594,7 @@ const ContentReview = ({
                                                                             updateRefusal(index, 'ketQuaKhieuNaiBKHCN', 'ThanhCong');
                                                                             updateRefusal(index, 'ngayNhanKQKNThatBaiBKHCN', null);
                                                                             updateRefusal(index, 'ghiChuKetQuaKNBKHCN', '');
-                                                                            handleThanhCong();
+                                                                            handleDat();
                                                                         }}
                                                                         className="mr-2"
                                                                     />
@@ -548,20 +606,27 @@ const ContentReview = ({
                                                                         name={`ketQuaBKHCN_NoiDung-${index}`}
                                                                         value="ThatBai"
                                                                         checked={refusal.ketQuaKhieuNaiBKHCN === 'ThatBai'}
-                                                                        onChange={() => updateRefusal(index, 'ketQuaKhieuNaiBKHCN', 'ThatBai')}
+                                                                        onChange={() => {
+                                                                            updateRefusal(index, 'ketQuaKhieuNaiBKHCN', 'ThatBai');
+                                                                            handleKNThatBai();
+                                                                        }}
                                                                         className="mr-2"
                                                                     />
                                                                     Thất bại
                                                                 </label>
                                                             </div>
-                                                            {refusal.ketQuaKhieuNaiBKHCN === 'ThatBai' && (
+                                                            {['ThatBai', 'ThanhCong'].includes(refusal.ketQuaKhieuNaiBKHCN) && (
                                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                                     <div className="mt-3">
-                                                                        <label className="block text-gray-600 text-left">Ngày nhận kết quả khiếu nại</label>
+                                                                        <label className="block text-gray-600 text-left">
+                                                                            {refusal.ketQuaKhieuNaiBKHCN === 'ThatBai'
+                                                                                ? 'Ngày nhận kết quả khiếu nại thất bại'
+                                                                                : 'Ngày quyết định khiếu nại thành công'}
+                                                                        </label>
                                                                         <DatePicker
-                                                                            value={refusal.ngayNhanKQKNThatBaiBKHCN ? dayjs(refusal.ngayNhanKQKNThatBaiBKHCN) : null}
+                                                                            value={refusal.ngayKQ_KN_BKHCN ? dayjs(refusal.ngayKQ_KN_BKHCN) : null}
                                                                             onChange={(date) =>
-                                                                                updateRefusal(index, 'ngayNhanKQKNThatBaiBKHCN', date?.format('YYYY-MM-DD'))
+                                                                                updateRefusal(index, 'ngayKQ_KN_BKHCN', date?.format('YYYY-MM-DD'))
                                                                             }
                                                                             format="DD/MM/YYYY"
                                                                             className="w-full mt-1 "
@@ -569,7 +634,7 @@ const ContentReview = ({
                                                                     </div>
 
                                                                     <div className="mt-3">
-                                                                        <label className="block text-gray-600 text-left">Ghi chú kết quả thất bại</label>
+                                                                        <label className="block text-gray-600 text-left">Ghi chú kết quả</label>
                                                                         <input
                                                                             value={refusal.ghiChuKetQuaKNBKHCN || ''}
                                                                             onChange={(e) => updateRefusal(index, 'ghiChuKetQuaKNBKHCN', e.target.value)}
@@ -578,6 +643,19 @@ const ContentReview = ({
                                                                             placeholder="Nhập ghi chú..."
                                                                         />
                                                                     </div>
+                                                                    {(refusal.ketQuaKhieuNaiBKHCN === 'ThanhCong' || refusal.ketQuaKhieuNaiCSHTT === 'ThanhCong') && (
+                                                                        <div className="mt-3">
+                                                                            <label className="block text-gray-600 text-left">Ngày nộp yêu cầu chấp nhận đơn hợp lệ</label>
+                                                                            <DatePicker
+                                                                                value={refusal.ngayNopYeuCCNDHLSauKN ? dayjs(refusal.ngayNopYeuCCNDHLSauKN) : null}
+                                                                                onChange={(date) =>
+                                                                                    updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
+                                                                                }
+                                                                                format="DD/MM/YYYY"
+                                                                                className="w-full mt-1 "
+                                                                            />
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             )}
 

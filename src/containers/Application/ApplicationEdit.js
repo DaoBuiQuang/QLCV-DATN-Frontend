@@ -32,13 +32,16 @@ function ApplicationEdit() {
     const [ngayKQThamDinhHinhThuc_DuKien, setNgayKQThamDinhHinhThuc_DuKien] = useState(null);
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
     const [lichSuThamDinhHT, setLichSuThamDinhHT] = useState([])
+    const [ngayKQThamDinhHinhThuc_DK_SauKN, setNgayKQThamDinhHinhThuc_DK_SauKN] = useState(null)
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
 
     const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
-    const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
+    const [lichSuThamDinhND, setLichSuThamDinhND] = useState([]);
+    const [ngayKQThamDinhND_DK_SauKN, setNgayKQThamDinhND_DK_SauKN] = useState(null)
+    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(false)
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
@@ -92,7 +95,7 @@ function ApplicationEdit() {
             const response = await callAPI({
                 method: "post",
                 endpoint: "/brand/shortlist",
-                data: {  },
+                data: {},
             });
             setBrands(response);
         } catch (error) {
@@ -207,6 +210,7 @@ function ApplicationEdit() {
                 setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
                 setNgayKQThamDinhHinhThuc_DuKien(formatDate(response.ngayKQThamDinhHinhThuc_DuKien));
                 setLichSuThamDinhHT(response.lichSuThamDinhHT)
+                setNgayKQThamDinhHinhThuc_DK_SauKN(response.ngayKQThamDinhHinhThuc_DK_SauKN)
 
                 setNgayKQThamDinhHinhThuc(formatDate(response.ngayKQThamDinhHinhThuc));
                 setNgayCongBo_DuKien(formatDate(response.ngayCongBoDonDuKien));
@@ -216,6 +220,8 @@ function ApplicationEdit() {
                 setNgayTraLoiKQThamDinhND_DuKien(formatDate(response.ngayTraLoiKQThamDinhND_DuKien));
                 setNgayTraLoiKQThamDinhND(formatDate(response.ngayTraLoiKQThamDinhND));
                 setLichSuThamDinhND(response.lichSuThamDinhND)
+                setNgayKQThamDinhND_DK_SauKN(response.ngayKQThamDinhND_DK_SauKN);
+                setTrangThaiTraLoiKQThamDinhND(response.trangThaiTraLoiKQThamDinhND);
 
                 setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
                 setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
@@ -252,11 +258,14 @@ function ApplicationEdit() {
                     ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien || null,
                     ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc || null,
                     lichSuThamDinhHT: lichSuThamDinhHT,
+                    ngayKQThamDinhHinhThuc_DK_SauKN: ngayKQThamDinhHinhThuc_DK_SauKN,
                     ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
                     ngayCongBoDon: ngayCongBo || null,
                     ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien || null,
                     ngayKQThamDinhND: ngayKQThamDinhND || null,
                     lichSuThamDinhND: lichSuThamDinhND,
+                    ngayKQThamDinhND_DK_SauKN: ngayKQThamDinhND_DK_SauKN,
+                    trangThaiTraLoiKQThamDinhND: trangThaiTraLoiKQThamDinhND,
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
                     ngayThongBaoCapBang: ngayThongBaoCapBang || null,
@@ -269,7 +278,7 @@ function ApplicationEdit() {
                     taiLieus: taiLieuList
                 },
             });
-             await showSuccess("Thành công!", "Cập nhập đơn đăng ký nhãn hiệu thành công!");
+            await showSuccess("Thành công!", "Cập nhập đơn đăng ký nhãn hiệu thành công!");
             navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
@@ -399,6 +408,8 @@ function ApplicationEdit() {
                                 setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
                                 lichSuThamDinhHT={lichSuThamDinhHT}
                                 setLichSuThamDinhHT={setLichSuThamDinhHT}
+                                ngayKQThamDinhHinhThuc_DK_SauKN={ngayKQThamDinhHinhThuc_DK_SauKN}
+                                setNgayKQThamDinhHinhThuc_DK_SauKN={setNgayKQThamDinhHinhThuc_DK_SauKN}
                             />
                         </div>
                     )}
@@ -421,10 +432,24 @@ function ApplicationEdit() {
                                 setNgayKQThamDinhND={setNgayKQThamDinhND}
                                 lichSuThamDinhND={lichSuThamDinhND}
                                 setLichSuThamDinhND={setLichSuThamDinhND}
+                                ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
+                                setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
                             />
                         </div>
                     )}
-                    {daChonNgayThamDinhNoiDung && (
+                    {(daChonNgayThamDinhNoiDung) && (
+                        <div>
+                            {!trangThaiTraLoiKQThamDinhND && (
+                                <p
+                                    onClick={() => setTrangThaiTraLoiKQThamDinhND(true)}
+                                    className="text-blue-600 underline cursor-pointer hover:text-blue-800 transition"
+                                >
+                                    Phản hồi kết quả thẩm định nội dung?
+                                </p>
+                            )}
+                        </div>
+                    )}
+                    {daChonNgayThamDinhNoiDung && trangThaiTraLoiKQThamDinhND && (
                         <div className="col-span-2">
                             <ReplyContentRating
                                 ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
@@ -434,7 +459,7 @@ function ApplicationEdit() {
                             />
                         </div>
                     )}
-                    {daChonNgayTraLoiThamDinhNoiDung && (
+                    {(daChonNgayTraLoiThamDinhNoiDung || (!trangThaiTraLoiKQThamDinhND && daChonNgayThamDinhNoiDung)) && (
                         <div className="col-span-2">
                             <DiphimaProcess
                                 ngayThongBaoCapBang={ngayThongBaoCapBang}
