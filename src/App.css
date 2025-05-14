@@ -117,3 +117,19 @@ input.error {
   flex: 0 0 25%; /* 4 bước mỗi dòng, có thể đổi thành 20% cho 5 bước mỗi dòng */
   max-width: 25%;
 }
+.don-progress .ant-steps-horizontal {
+  flex-wrap: wrap; /* Cho phép xuống dòng khi không đủ chỗ */
+  row-gap: 8px;     /* Khoảng cách giữa các hàng */
+  column-gap: 12px; /* Khoảng cách giữa các bước */
+  justify-content: center; /* Căn giữa các bước */
+}
+
+.don-progress .ant-steps-item {
+  flex: 1 1 auto; /* Cho phép các bước co giãn linh hoạt */
+  min-width: 100px; /* Giới hạn tối thiểu chiều rộng mỗi bước */
+}
+
+.don-progress .ant-steps-item-title {
+  white-space: normal !important; /* Cho phép xuống dòng trong tiêu đề */
+  text-align: center;
+}

@@ -15,14 +15,21 @@ const AnnouncementOfApplication = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Công bố đơn</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày công bố đơn dự kiến</label>
-                    <input
-                        type="date"
-                        value={ngayCongBo_DuKien}
-                        onChange={(e) => setNgayCongBo_DuKien(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
+                    <label className="block text-gray-700 text-left">Ngày công bố đơn dự kiến</label>
+                      <DatePicker
+                        value={ngayCongBo_DuKien ? dayjs(ngayCongBo_DuKien) : null}
+                        onChange={(date) => {
+                            if (dayjs.isDayjs(date) && date.isValid()) {
+                                setNgayCongBo_DuKien(date.format("YYYY-MM-DD"));
+                            } else {
+                                setNgayCongBo_DuKien(null);
+                            }
+                        }}
+                        format="DD/MM/YYYY"
+                        className="mt-1 w-full"
                         disabled
                     />
+                    
                 </div>
                 <div>
                     <label className="block text-gray-700 text-left text-left">Ngày công bố đơn</label>

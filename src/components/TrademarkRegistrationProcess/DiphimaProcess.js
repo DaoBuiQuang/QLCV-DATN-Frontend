@@ -35,12 +35,18 @@ const DiphimaProcess = ({
                 </div>
                 <div>
                     <label className="block text-gray-700 text-left">Ngày nộp phí cấp bằng</label>
-                    <input
-                        type="date"
-                        value={ngayNopPhiCapBang}
-                        onChange={(e) => setNgayNopPhiCapBang(e.target.value)}
-                        className={`w-full p-2 mt-1 border rounded-lg text-input bg-gray-200`}
-                        disabled
+                    <DatePicker
+                        value={ngayNopPhiCapBang ? dayjs(ngayNopPhiCapBang) : null}
+                        onChange={(date) => {
+                            if (dayjs.isDayjs(date) && date.isValid()) {
+                                setNgayNopPhiCapBang(date.format("YYYY-MM-DD"));
+                            } else {
+                                setNgayNopPhiCapBang(null);
+                            }
+                        }}
+                        format="DD/MM/YYYY"
+                        disabled={isViewOnly}
+                        className="mt-1 w-full"
                     />
                 </div>
                 <div>
