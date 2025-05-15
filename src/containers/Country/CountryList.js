@@ -4,6 +4,7 @@ import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
 function CountryList() {
+   const { t } = useTranslation();
   const role = useSelector((state) => state.auth.role);
   console.log("role: ", role)
   const [countries, setCountries] = useState([]);
@@ -58,7 +59,7 @@ function CountryList() {
               onClick={() => fetchCountries(searchTerm)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              🔎 Tìm kiếm
+              🔎 {t("search")}
             </button>
             {(role === 'admin' || role === 'staff') && (
               <button

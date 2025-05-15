@@ -13,7 +13,7 @@ import ContentReview from "../../components/TrademarkRegistrationProcess/Content
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 import DonProgress from "../../components/commom/DonProgess.js";
 import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
-import { DatePicker } from 'antd';
+import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
 function ApplicationEdit() {
@@ -47,6 +47,12 @@ function ApplicationEdit() {
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
+    const [trangThaiCapBang, setTrangThaiCapBang] = useState(null);
+    const [ngayNopYKien, setNgayNopYKien] = useState(null);
+    const [ngayNhanKQYKien, setNgayNhanKQYKien] = useState(null);
+    const [ketQuaYKien, setKetQuaYKien] = useState(null);
+    const [ngayPhanHoiKQYKien, setNgayPhanHoiKQYKien] = useState(null);
+
     const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
     const [ngayGuiBangChoKH, setNgayGuiBangChoKH] = useState(null);
@@ -224,6 +230,12 @@ function ApplicationEdit() {
                 setTrangThaiTraLoiKQThamDinhND(response.trangThaiTraLoiKQThamDinhND);
 
                 setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
+                setTrangThaiCapBang(response.trangThaiCapBang);
+                setNgayNopYKien(formatDate(response.ngayNopYKien));
+                setNgayNhanKQYKien(formatDate(response.ngayNhanKQYKien));
+                setKetQuaYKien(response.ketQuaYKien);
+                setNgayPhanHoiKQYKien(formatDate(response.ngayPhanHoiKQYKien));
+
                 setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
                 setNgayNhanBang(formatDate(response.ngayNhanBang));
                 setNgayGuiBangChoKH(formatDate(response.ngayGuiBangChoKhachHang));
@@ -269,6 +281,12 @@ function ApplicationEdit() {
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
                     ngayThongBaoCapBang: ngayThongBaoCapBang || null,
+                    trangThaiCapBang: trangThaiCapBang || null,
+                    ngayNopYKien: ngayNopYKien || null,
+                    ngayNhanKQYKien: ngayNhanKQYKien || null,
+                    ketQuaYKien: ketQuaYKien || null,
+                    ngayPhanHoiKQYKien: ngayPhanHoiKQYKien || null,
+
                     ngayNopPhiCapBang: ngayNopPhiCapBang || null,
                     ngayNhanBang: ngayNhanBang || null,
                     ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
@@ -285,7 +303,6 @@ function ApplicationEdit() {
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
         }
     };
-    /////
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
     };
@@ -330,11 +347,18 @@ function ApplicationEdit() {
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left text-left">Ngày nộp đơn</label>
-                            <input
-                                type="date"
-                                value={ngayNopDon}
-                                onChange={(e) => setNgayNopDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg text-input"
+                            <DatePicker
+                                value={ngayNopDon ? dayjs(ngayNopDon) : null}
+                                onChange={(date) => {
+                                    if (dayjs.isDayjs(date) && date.isValid()) {
+                                        setNgayNopDon(date.format("YYYY-MM-DD"));
+                                    } else {
+                                        setNgayNopDon(null);
+                                    }
+                                }}
+                                format="DD/MM/YYYY"
+                                placeholder="Chọn ngày nộp đơn"
+                                className="mt-1 w-full"
                             />
                         </div>
                         <div >
@@ -437,18 +461,20 @@ function ApplicationEdit() {
                             />
                         </div>
                     )}
-                    {(daChonNgayThamDinhNoiDung) && (
+                    {daChonNgayThamDinhNoiDung && (
                         <div>
-                            {!trangThaiTraLoiKQThamDinhND && (
-                                <p
-                                    onClick={() => setTrangThaiTraLoiKQThamDinhND(true)}
-                                    className="text-blue-600 underline cursor-pointer hover:text-blue-800 transition"
-                                >
-                                    Phản hồi kết quả thẩm định nội dung?
-                                </p>
-                            )}
+                            <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label>
+                            <Radio.Group
+                                onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
+                                value={trangThaiTraLoiKQThamDinhND}
+                                className="mt-2"
+                            >
+                                <Radio value={true}>Phản hồi</Radio>
+                                <Radio value={false}>Chờ nhận đơn</Radio>
+                            </Radio.Group>
                         </div>
                     )}
+
                     {daChonNgayThamDinhNoiDung && trangThaiTraLoiKQThamDinhND && (
                         <div className="col-span-2">
                             <ReplyContentRating
@@ -468,6 +494,16 @@ function ApplicationEdit() {
                                 setNgayNopPhiCapBang={setNgayNopPhiCapBang}
                                 ngayNhanBang={ngayNhanBang}
                                 setNgayNhanBang={setNgayNhanBang}
+                                trangThaiCapBang={trangThaiCapBang}
+                                setTrangThaiCapBang={setTrangThaiCapBang}
+                                ngayNopYKien={ngayNopYKien}
+                                setNgayNopYKien={setNgayNopYKien}
+                                ngayNhanKQYKien={ngayNhanKQYKien}
+                                setNgayNhanKQYKien={setNgayNhanKQYKien}
+                                ketQuaYKien={ketQuaYKien}
+                                setKetQuaYKien={setKetQuaYKien}
+                                ngayPhanHoiKQYKien={ngayPhanHoiKQYKien}
+                                setNgayPhanHoiKQYKien={setNgayPhanHoiKQYKien}
                             />
                         </div>
                     )}

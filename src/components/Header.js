@@ -5,45 +5,53 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearAuth } from "../../src/features/authSlice";
 import callAPI from "../utils/api";
 import { Menu, Bell } from "lucide-react";
+import vietnam from "../assets/image/VietNam.png";
+import england from "../assets/image/Anh.png";
+import i18n from "../components/MultiLang/i18n.js";           // đường dẫn tới file cấu hình i18n của bạn
+import { useTranslation } from "react-i18next";
 
 function Header({ toggleMenu, isMenuOpen }) {
   const [username, setUsername] = useState(null);
-  const [showLogoutModal, setShowLogoutModal] = useState(false); // 👈 Modal state
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showLangModal, setShowLangModal] = useState(false);
+  const [currentLang, setCurrentLang] = useState(i18n.language || "vi");
   const authId = useSelector((state) => state.auth.authId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
+    // Lấy token và username như trước
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-        if (decoded.exp && decoded.exp > currentTime) {
-          setUsername(decoded.tenNhanSu || "Người dùng");
+        const now = Date.now() / 1000;
+        if (decoded.exp && decoded.exp > now) {
+          setUsername(decoded.tenNhanSu || t("username"));
         } else {
           localStorage.removeItem("token");
           window.location.href = "/login";
         }
-      } catch (error) {
-        console.error("Token không hợp lệ");
+      } catch {
         localStorage.removeItem("token");
         navigate("/login");
       }
     } else {
       navigate("/login");
     }
+    const saved = localStorage.getItem("language");
+    if (saved) {
+      i18n.changeLanguage(saved);
+      setCurrentLang(saved);
+    }
   }, []);
 
   const handleLogout = async () => {
     try {
-      await callAPI({
-        method: "post",
-        endpoint: "/logout",
-        data: { authId: authId },
-      });
-    } catch (error) {
-      console.error("Lỗi đăng xuất:", error);
+      await callAPI({ method: "post", endpoint: "/logout", data: { authId } });
+    } catch (err) {
+      console.error(err);
     } finally {
       localStorage.removeItem("token");
       dispatch(clearAuth());
@@ -51,19 +59,79 @@ function Header({ toggleMenu, isMenuOpen }) {
     }
   };
 
+  const toggleLangModal = (e) => {
+    e.stopPropagation();
+    setShowLangModal(!showLangModal);
+  };
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setCurrentLang(lng);
+    localStorage.setItem("language", lng);
+    setShowLangModal(false);
+  };
+
+  const getFlag = (lng) => (lng === "en" ? england : vietnam);
+
   return (
     <>
       <header
-        className="bg-white shadow-md px-6 py-3 flex items-center justify-between w-full"
-        style={{ width: isMenuOpen && window.innerWidth >= 1024 ? "calc(100vw - 224px)" : "100vw" }}
+        className="bg-white shadow-md px-6 py-3 flex items-center justify-between"
+        style={{
+          width:
+            isMenuOpen && window.innerWidth >= 1024
+              ? "calc(100vw - 224px)"
+              : "100vw",
+        }}
       >
-
-        <button className="text-gray-600 hover:text-gray-800" onClick={toggleMenu}>
+        <button
+          className="text-gray-600 hover:text-gray-800"
+          onClick={toggleMenu}
+        >
           <Menu size={24} />
         </button>
+
         {username && (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 relative">
+            {/* Hiển thị cờ hiện tại */}
+            <div
+              className="cursor-pointer"
+              onClick={toggleLangModal}
+            >
+              <img
+                src={getFlag(currentLang)}
+                alt="Lang"
+                className="w-6 h-6 rounded-full border"
+              />
+            </div>
+
+            {/* Modal chọn ngôn ngữ */}
+            {showLangModal && (
+              <div
+                className="absolute top-8 right-0 bg-white shadow-lg rounded z-50"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ul>
+                  <li
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => changeLanguage("vi")}
+                  >
+                    <img src={vietnam} alt="VN" className="w-5 h-5" />
+                    Tiếng Việt
+                  </li>
+                  <li
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => changeLanguage("en")}
+                  >
+                    <img src={england} alt="EN" className="w-5 h-5" />
+                    English
+                  </li>
+                </ul>
+              </div>
+            )}
+
             <span className="text-gray-700 font-medium">{username}</span>
+
             <div className="relative cursor-pointer">
               <Bell size={22} className="text-gray-600 hover:text-blue-600" />
               <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
@@ -73,29 +141,32 @@ function Header({ toggleMenu, isMenuOpen }) {
               onClick={() => setShowLogoutModal(true)}
               className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
             >
-              Đăng xuất
+              {t("logout")}
             </button>
           </div>
         )}
-
       </header>
+
+      {/* Modal xác nhận đăng xuất */}
       {showLogoutModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-80">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Xác nhận đăng xuất</h2>
-            <p className="text-gray-600 mb-6">Bạn có chắc chắn muốn đăng xuất không?</p>
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">
+              {t("logoutTitle")}
+            </h2>
+            <p className="text-gray-600 mb-6">{t("confirmLogout")}</p>
             <div className="flex justify-end gap-3">
               <button
-                onClick={() => setShowLogoutModal(false)} // 👈 hủy modal
+                onClick={() => setShowLogoutModal(false)}
                 className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
               >
-                Hủy
+                {t("cancel")}
               </button>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
               >
-                Đăng xuất
+                {t("logout")}
               </button>
             </div>
           </div>

@@ -12,7 +12,7 @@ import DegreeInformation from "../../components/TrademarkRegistrationProcess/Deg
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 import DonProgress from "../../components/commom/DonProgess.js";
-import { DatePicker } from 'antd';
+import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
 function ApplicationAdd() {
@@ -40,11 +40,18 @@ function ApplicationAdd() {
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
     const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
     const [ngayKQThamDinhND_DK_SauKN, setNgayKQThamDinhND_DK_SauKN] = useState(null)
+    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(false)
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
+    const [trangThaiCapBang, setTrangThaiCapBang] = useState(null);
+    const [ngayNopYKien, setNgayNopYKien] = useState(null);
+    const [ngayNhanKQYKien, setNgayNhanKQYKien] = useState(null);
+    const [ketQuaYKien, setKetQuaYKien] = useState(null);
+    const [ngayPhanHoiKQYKien, setNgayPhanHoiKQYKien] = useState(null);
+
     const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
     const [ngayGuiBangChoKH, setNgayGuiBangChoKH] = useState(null);
@@ -93,7 +100,7 @@ function ApplicationAdd() {
             const response = await callAPI({
                 method: "post",
                 endpoint: "/brand/shortlist",
-                data: { },
+                data: {},
             });
             setBrands(response);
         } catch (error) {
@@ -202,16 +209,23 @@ function ApplicationAdd() {
                     ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien,
                     ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc,
                     lichSuThamDinhHT: lichSuThamDinhHT,
-                    ngayKQThamDinhHinhThuc_DK_SauKN:ngayKQThamDinhHinhThuc_DK_SauKN,
+                    ngayKQThamDinhHinhThuc_DK_SauKN: ngayKQThamDinhHinhThuc_DK_SauKN,
                     ngayCongBoDonDuKien: ngayCongBo_DuKien,
                     ngayCongBoDon: ngayCongBo,
                     ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien,
                     ngayKQThamDinhND: ngayKQThamDinhND,
                     lichSuThamDinhND: lichSuThamDinhND,
-                    ngayKQThamDinhND_DK_SauKN:ngayKQThamDinhND_DK_SauKN,
+                    ngayKQThamDinhND_DK_SauKN: ngayKQThamDinhND_DK_SauKN,
+                    trangtrangThaiTraLoiKQThamDinhND: trangThaiTraLoiKQThamDinhND,
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND,
                     ngayThongBaoCapBang: ngayThongBaoCapBang,
+                    trangThaiCapBang: trangThaiCapBang || null,
+                    ngayNopYKien: ngayNopYKien || null,
+                    ngayNhanKQYKien: ngayNhanKQYKien || null,
+                    ketQuaYKien: ketQuaYKien || null,
+                    ngayPhanHoiKQYKien: ngayPhanHoiKQYKien || null,
+
                     ngayNopPhiCapBang: ngayNopPhiCapBang,
                     ngayNhanBang: ngayNhanBang,
                     ngayGuiBangChoKhachHang: ngayGuiBangChoKH,
@@ -233,7 +247,7 @@ function ApplicationAdd() {
     };
 
     return (
-         <div className="p-1 bg-gray-100 flex flex-col items-center justify-center space-y-4">
+        <div className="p-1 bg-gray-100 flex flex-col items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
@@ -314,12 +328,6 @@ function ApplicationAdd() {
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left text-left">Ngày nộp đơn</label>
-                            {/* <input
-                                type="date"
-                                value={ngayNopDon}
-                                onChange={(e) => setNgayNopDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg text-input"
-                            /> */}
                             <DatePicker
                                 value={ngayNopDon ? dayjs(ngayNopDon) : null}
                                 onChange={(date) => {
@@ -393,6 +401,20 @@ function ApplicationAdd() {
                         </div>
                     )}
                     {daChonNgayThamDinhNoiDung && (
+                        <div>
+                            <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label>
+                            <Radio.Group
+                                onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
+                                value={trangThaiTraLoiKQThamDinhND}
+                                className="mt-2"
+                            >
+                                <Radio value={true}>Phản hồi</Radio>
+                                <Radio value={false}>Chờ nhận đơn</Radio>
+                            </Radio.Group>
+                        </div>
+                    )}
+
+                    {daChonNgayThamDinhNoiDung && (
                         <div className="col-span-2">
                             <ReplyContentRating
                                 ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
@@ -411,6 +433,16 @@ function ApplicationAdd() {
                                 setNgayNopPhiCapBang={setNgayNopPhiCapBang}
                                 ngayNhanBang={ngayNhanBang}
                                 setNgayNhanBang={setNgayNhanBang}
+                                trangThaiCapBang={trangThaiCapBang}
+                                setTrangThaiCapBang={setTrangThaiCapBang}
+                                ngayNopYKien={ngayNopYKien}
+                                setNgayNopYKien={setNgayNopYKien}
+                                ngayNhanKQYKien={ngayNhanKQYKien}
+                                setNgayNhanKQYKien={setNgayNhanKQYKien}
+                                ketQuaYKien={ketQuaYKien}
+                                setKetQuaYKien={setKetQuaYKien}
+                                ngayPhanHoiKQYKien={ngayPhanHoiKQYKien}
+                                setNgayPhanHoiKQYKien={setNgayPhanHoiKQYKien}
                             />
                         </div>
                     )}
