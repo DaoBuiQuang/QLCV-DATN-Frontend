@@ -60,6 +60,7 @@ function ApplicationAdd() {
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
     const [trangThaiDon, setTrangThaiDon] = useState("Nộp đơn");
+    const [buocXuLy, setBuocXuLy] = useState("");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
     const [brands, setBrands] = useState([]);
@@ -94,7 +95,6 @@ function ApplicationAdd() {
     const [daChonNgayThamDinhNoiDung, setDaChonNgayThamDinhNoiDung] = useState(false);
     const [daChonNgayTraLoiThamDinhNoiDung, setDaChonNgayTraLoiThamDinhNoiDung] = useState(false)
     const [daChonHoanTatThuTucNhapBang, setDaChonHoanTatThuTucNhapBang] = useState(false)
-
     const fetchBrands = async () => {
         try {
             const response = await callAPI({
@@ -124,7 +124,6 @@ function ApplicationAdd() {
         fetchItems();
     }, [])
     useEffect(() => {
-
         if (ngayNopDon) {
             const ngayHoanThanhHoSoTaiLieu = dayjs(ngayNopDon).add(1, 'month');
             setNgayHoanThanhHSTL_DuKien(ngayHoanThanhHoSoTaiLieu.format('YYYY-MM-DD'));
@@ -220,7 +219,7 @@ function ApplicationAdd() {
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND,
                     ngayThongBaoCapBang: ngayThongBaoCapBang,
-                    trangThaiCapBang: trangThaiCapBang || null,
+                    trangThaiDYTBCapBang: trangThaiCapBang || null,
                     ngayNopYKien: ngayNopYKien || null,
                     ngayNhanKQYKien: ngayNhanKQYKien || null,
                     ketQuaYKien: ketQuaYKien || null,
@@ -413,8 +412,7 @@ function ApplicationAdd() {
                             </Radio.Group>
                         </div>
                     )}
-
-                    {daChonNgayThamDinhNoiDung && (
+                    {daChonNgayThamDinhNoiDung && trangThaiTraLoiKQThamDinhND === true && (
                         <div className="col-span-2">
                             <ReplyContentRating
                                 ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}

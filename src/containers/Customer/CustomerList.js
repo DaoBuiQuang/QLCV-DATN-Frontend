@@ -4,7 +4,7 @@ import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
 import Select from "react-select";
 import { exportToExcel } from "../../components/ExportFile/ExportExcel";
-
+import FieldSelector from "../../components/FieldSelector";
 function CustomerList() {
     const role = useSelector((state) => state.auth.role);
     const [customers, setCustomers] = useState([]);
@@ -17,6 +17,27 @@ function CustomerList() {
     const [selectedPartner, setSelectedPartner] = useState("");
     const [industries, setIndustries] = useState([]);
     const [selectedIndustry, setSelectedIndustry] = useState("");
+    const [showFieldModal, setShowFieldModal] = useState(false);
+    const [selectedFields, setSelectedFields] = useState([
+        "maKhachHang",
+        "tenKhachHang",
+        "diaChi",
+        "sdt",
+        "tenDoiTac",
+        "tenQuocGia",
+        "tenNganhNghe",
+    ]);
+
+    const allFieldOptions = [
+        { key: "maKhachHang", label: "Mã KH" },
+        { key: "tenKhachHang", label: "Tên KH" },
+        { key: "diaChi", label: "Địa chỉ" },
+        { key: "sdt", label: "SĐT" },
+        { key: "tenDoiTac", label: "Đối tác" },
+        { key: "tenQuocGia", label: "Quốc gia" },
+        { key: "tenNganhNghe", label: "Ngành nghề" },
+    ];
+
     const navigate = useNavigate();
 
     const fetchCustomers = async (searchValue, partnerId, countryId, industryId) => {
@@ -29,6 +50,7 @@ function CustomerList() {
                     maDoiTac: partnerId,
                     maQuocGia: countryId,
                     maNganhNghe: industryId,
+                    fields: selectedFields,
                 },
             });
             setCustomers(response);
@@ -38,41 +60,20 @@ function CustomerList() {
     };
 
     const fetchCountries = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/country/list",
-                data: {},
-            });
-            setCountries(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
-        }
+        const res = await callAPI({ method: "post", endpoint: "/country/list", data: {} });
+        setCountries(res);
     };
+
     const fetchPartners = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/partner/list",
-                data: {},
-            });
-            setPartners(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
-        }
+        const res = await callAPI({ method: "post", endpoint: "/partner/list", data: {} });
+        setPartners(res);
     };
+
     const fetchIndustries = async () => {
-        try {
-            const response = await callAPI({
-                method: "post",
-                endpoint: "/industry/list",
-                data: {},
-            });
-            setIndustries(response);
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
-        }
+        const res = await callAPI({ method: "post", endpoint: "/industry/list", data: {} });
+        setIndustries(res);
     };
+
     useEffect(() => {
         fetchCustomers("");
         fetchCountries();
@@ -81,34 +82,17 @@ function CustomerList() {
     }, []);
 
     const handleDeleteCustomer = async () => {
-        try {
-            await callAPI({
-                method: "post",
-                endpoint: "/customer/delete",
-                data: { maKhachHang: customerToDelete },
-            });
-            setShowDeleteModal(false);
-            setCustomerToDelete(null);
-            fetchCustomers(searchTerm);
-        } catch (error) {
-            console.error("Lỗi khi xóa khách hàng:", error);
-        }
+        await callAPI({ method: "post", endpoint: "/customer/delete", data: { maKhachHang: customerToDelete } });
+        setShowDeleteModal(false);
+        setCustomerToDelete(null);
+        fetchCustomers(searchTerm);
     };
-    const formatOptions = (data, valueKey, labelKey) => {
-        return data.map(item => ({
-            value: item[valueKey],
-            label: item[labelKey]
-        }));
-    };
-    const columns = [
-        { label: "Mã KH", key: "maKhachHang" },
-        { label: "Tên KH", key: "tenKhachHang" },
-        { label: "Địa chỉ", key: "diaChi" },
-        { label: "SĐT", key: "sdt" },
-        { label: "Đối tác", key: "tenDoiTac" },
-        { label: "Quốc gia", key: "tenQuocGia" },
-        { label: "Ngành nghề", key: "tenNganhNghe" },
-    ];
+
+    const formatOptions = (data, valueKey, labelKey) => data.map(item => ({ value: item[valueKey], label: item[labelKey] }));
+
+    const columns = allFieldOptions
+        .filter(field => selectedFields.includes(field.key))
+        .map(field => ({ label: field.label, key: field.key }));
 
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
@@ -129,7 +113,6 @@ function CustomerList() {
                         >
                             🔎 Tìm kiếm
                         </button>
-
                         <button
                             onClick={() => navigate("/customeradd")}
                             className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
@@ -142,90 +125,44 @@ function CustomerList() {
                         >
                             📁 Xuất Excel
                         </button>
-
+                        <button
+                            onClick={() => setShowFieldModal(true)}
+                            className="bg-purple-500 hover:bg-purple-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+                        >
+                            Chọn cột hiển thị
+                        </button>
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <Select
-                        options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                        value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
-                        onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
-                        placeholder="Chọn quốc gia"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-                    <Select
-                        options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
-                        value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
-                        onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
-                        placeholder="Chọn đối tác"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-
-                    {/* Select ngành nghề */}
-                    <Select
-                        options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
-                        value={selectedIndustry ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === selectedIndustry) : null}
-                        onChange={selectedOption => setSelectedIndustry(selectedOption?.value)}
-                        placeholder="Chọn ngành nghề"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
+                    <Select options={formatOptions(countries, "maQuocGia", "tenQuocGia")} onChange={opt => setSelectedCountry(opt?.value)} placeholder="Chọn quốc gia" isClearable className="w-full md:w-1/6" />
+                    <Select options={formatOptions(partners, "maDoiTac", "tenDoiTac")} onChange={opt => setSelectedPartner(opt?.value)} placeholder="Chọn đối tác" isClearable className="w-full md:w-1/6" />
+                    <Select options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")} onChange={opt => setSelectedIndustry(opt?.value)} placeholder="Chọn ngành nghề" isClearable className="w-full md:w-1/6" />
                 </div>
             </div>
-            <div class="overflow-x-auto">
-                <table className="w-full border-collapse bg-white text-sm mt-4">
+
+            <div className="overflow-x-auto mt-4">
+                <table className="w-full border-collapse bg-white text-sm">
                     <thead>
                         <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
                             <th className="p-2">STT</th>
-                            <th className="p-2">Mã KH</th>
-                            <th className="p-2">Tên KH</th>
-                            <th className="p-2">Địa chỉ</th>
-                            <th className="p-2">SĐT</th>
-                            <th className="p-2">Đối tác</th>
-                            <th className="p-2">Quốc gia</th>
-                            <th className="p-2">Ngành nghề</th>
+                            {columns.map(col => (
+                                <th key={col.key} className="p-2">{col.label}</th>
+                            ))}
                             <th className="p-2"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {customers.map((customer, index) => (
-                            <tr key={customer.maKhachHang} className="hover:bg-gray-100 text-center border-b">
-                                <td className="p-2">{index + 1}</td>
-                                <td
-                                    className="p-2 text-blue-500 cursor-pointer hover:underline"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate(`/customerdetail/${customer.maKhachHang}`);
-                                    }}
-                                >
-                                    {customer.maKhachHang}
-                                </td>
-                                <td className="p-2">{customer.tenKhachHang}</td>
-                                <td className="p-2">{customer.diaChi}</td>
-                                <td className="p-2">{customer.sdt}</td>
-                                <td className="p-2">{customer.tenDoiTac}</td>
-                                <td className="p-2">{customer.tenQuocGia}</td>
-                                <td className="p-2">{customer.tenNganhNghe}</td>
+                        {customers.map((cus, idx) => (
+                            <tr key={cus.maKhachHang} className="hover:bg-gray-100 text-center border-b">
+                                <td className="p-2">{idx + 1}</td>
+                                {columns.map(col => (
+                                    <td key={col.key} className="p-2">{cus[col.key]}</td>
+                                ))}
                                 <td className="p-2">
                                     {(role === 'admin' || role === 'staff') && (
                                         <div className="flex gap-2 justify-center">
-                                            <button
-                                                className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                onClick={() => navigate(`/customeredit/${customer.maKhachHang}`)}
-                                            >
-                                                📝
-                                            </button>
-                                            <button
-                                                className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                                onClick={() => {
-                                                    setCustomerToDelete(customer.maKhachHang);
-                                                    setShowDeleteModal(true);
-                                                }}
-                                            >
-                                                🗑️
-                                            </button>
+                                            <button className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300" onClick={() => navigate(`/customeredit/${cus.maKhachHang}`)}>📝</button>
+                                            <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300" onClick={() => { setCustomerToDelete(cus.maKhachHang); setShowDeleteModal(true); }}>🗑️</button>
                                         </div>
                                     )}
                                 </td>
@@ -234,24 +171,27 @@ function CustomerList() {
                     </tbody>
                 </table>
             </div>
+
+            {showFieldModal && (
+                <FieldSelector
+                    allFieldOptions={allFieldOptions}
+                    selectedFields={selectedFields}
+                    setSelectedFields={setSelectedFields}
+                    onClose={() => setShowFieldModal(false)}
+                    onConfirm={() => {
+                        setShowFieldModal(false);
+                        fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry);
+                    }}
+                />
+            )}       
             {showDeleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-md w-80">
                         <h3 className="text-lg font-semibold mb-4 text-center">Xác nhận xóa</h3>
                         <p className="mb-4 text-center">Bạn có chắc chắn muốn xóa khách hàng này không?</p>
                         <div className="flex justify-between">
-                            <button
-                                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-                                onClick={() => setShowDeleteModal(false)}
-                            >
-                                Hủy
-                            </button>
-                            <button
-                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                onClick={handleDeleteCustomer}
-                            >
-                                Xác nhận xóa
-                            </button>
+                            <button className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded" onClick={() => setShowDeleteModal(false)}>Hủy</button>
+                            <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded" onClick={handleDeleteCustomer}>Xác nhận xóa</button>
                         </div>
                     </div>
                 </div>

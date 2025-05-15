@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker, Select, Radio } from 'antd';
 import 'dayjs/locale/vi';
@@ -24,7 +24,9 @@ const DiphimaProcess = ({
     ngayPhanHoiKQYKien,
     setNgayPhanHoiKQYKien,
 }) => {
-  
+    useEffect(()=>{
+        console.log("Trạng thái cấp bằng:", trangThaiCapBang)   
+    }, [trangThaiCapBang])
     const showOptions = !!ngayThongBaoCapBang;
 
     const showNgayYKienVaKetQua = trangThaiCapBang === 'MOT_PHAN';

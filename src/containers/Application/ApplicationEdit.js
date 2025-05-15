@@ -41,13 +41,17 @@ function ApplicationEdit() {
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
     const [lichSuThamDinhND, setLichSuThamDinhND] = useState([]);
     const [ngayKQThamDinhND_DK_SauKN, setNgayKQThamDinhND_DK_SauKN] = useState(null)
-    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(false)
+    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(null)
 
+  
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
     const [trangThaiCapBang, setTrangThaiCapBang] = useState(null);
+      useEffect(() => {
+        console.log('trangThaiCapBang test:', trangThaiCapBang)
+    },[trangThaiCapBang])
     const [ngayNopYKien, setNgayNopYKien] = useState(null);
     const [ngayNhanKQYKien, setNgayNhanKQYKien] = useState(null);
     const [ketQuaYKien, setKetQuaYKien] = useState(null);
@@ -230,7 +234,7 @@ function ApplicationEdit() {
                 setTrangThaiTraLoiKQThamDinhND(response.trangThaiTraLoiKQThamDinhND);
 
                 setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
-                setTrangThaiCapBang(response.trangThaiCapBang);
+                setTrangThaiCapBang(response.trangThaiDYTBCapBang);
                 setNgayNopYKien(formatDate(response.ngayNopYKien));
                 setNgayNhanKQYKien(formatDate(response.ngayNhanKQYKien));
                 setKetQuaYKien(response.ketQuaYKien);
@@ -281,7 +285,8 @@ function ApplicationEdit() {
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
                     ngayThongBaoCapBang: ngayThongBaoCapBang || null,
-                    trangThaiCapBang: trangThaiCapBang || null,
+                    trangThaiDYTBCapBang: trangThaiCapBang || null,
+                    
                     ngayNopYKien: ngayNopYKien || null,
                     ngayNhanKQYKien: ngayNhanKQYKien || null,
                     ketQuaYKien: ketQuaYKien || null,
@@ -474,8 +479,7 @@ function ApplicationEdit() {
                             </Radio.Group>
                         </div>
                     )}
-
-                    {daChonNgayThamDinhNoiDung && trangThaiTraLoiKQThamDinhND && (
+                    {daChonNgayThamDinhNoiDung && trangThaiTraLoiKQThamDinhND === true && (
                         <div className="col-span-2">
                             <ReplyContentRating
                                 ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}

@@ -3,11 +3,12 @@ import { NavLink, useLocation } from "react-router-dom";
 import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings, Tag, ShoppingCart } from "lucide-react";
 import { useSelector } from 'react-redux';
 import {Key, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 function MenuLeft() {
     const location = useLocation(); // Lấy đường dẫn hiện tại
     const role = useSelector((state) => state.auth.role);
     const [openSettingSubmenu, setOpenSettingSubmenu] = useState(false);
-
+    const { t } = useTranslation();
     return (
         <aside className="bg-white w-56 h-screen shadow-md flex flex-col">
             {/* Logo */}
@@ -23,7 +24,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <Users size={16} />
-                            <span>Khách hàng</span>
+                            <span>{t("khachHang")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -33,7 +34,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <FileText size={16} />
-                            <span>Hồ sơ vụ việc</span>
+                            <span>{t("hoSoVuViec")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -43,7 +44,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <PieChart size={16} />
-                            <span>Đơn đăng kí</span>
+                            <span>{t("donDangKy")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -53,7 +54,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <Briefcase size={16} />
-                            <span>Ngành nghề</span>
+                            <span>{t("nganhNghe")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -63,7 +64,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <Handshake size={16} />
-                            <span>Đối tác</span>
+                            <span>{t("doiTac")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -73,7 +74,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <Globe size={16} />
-                            <span>Quốc gia</span>
+                            <span>{t("quocGia")}</span>
                         </NavLink>
                     </li>
 
@@ -84,7 +85,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <Layers size={16} />
-                            <span>Loại vụ việc</span>
+                            <span>{t("loaiVuViec")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -94,7 +95,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <Briefcase size={16} />
-                            <span>Loại đơn đăng kí</span>
+                            <span>{t("loaiDonDangKy")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -104,7 +105,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <Tag size={16} />
-                            <span>Nhãn hiệu</span>
+                            <span>{t("nhanHieu")}</span>
                         </NavLink>
                     </li>
                     <li>
@@ -114,7 +115,7 @@ function MenuLeft() {
                                 }`}
                         >
                             <ShoppingCart size={16} />
-                            <span>Sản phẩm và dịch vụ</span>
+                            <span>{t("sanPhamDichVu")}</span>
                         </NavLink>
                     </li>
                     {(role === 'admin' || role === 'staff') && (
@@ -125,7 +126,7 @@ function MenuLeft() {
                                     }`}
                             >
                                 <UserCheck size={16} />
-                                <span>Nhân sự</span>
+                                <span>{t("nhanSu")}</span>
                             </NavLink>
                         </li>
                     )}
@@ -137,7 +138,7 @@ function MenuLeft() {
                         >
                             <div className="flex items-center space-x-2">
                                 <Settings size={16} />
-                                <span>Cài đặt</span>
+                                <span>{t("caiDat")}</span>
                             </div>
                             <span>{openSettingSubmenu ? "▲" : "▼"}</span>
                         </button>
@@ -154,7 +155,7 @@ function MenuLeft() {
                                         }
                                     >
                                         <Key size={14} />
-                                        <span>Đổi mật khẩu</span>
+                                        <span>{t("doiMatKhau")}</span>
                                     </NavLink>
                                 </li>
                                 <li>
@@ -166,7 +167,7 @@ function MenuLeft() {
                                         }
                                     >
                                         <User size={14} />
-                                        <span>Thông tin tài khoản</span>
+                                        <span>{t("thongTinTaiKhoan")}</span>
                                     </NavLink>
                                 </li>
                             </ul>

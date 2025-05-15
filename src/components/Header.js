@@ -7,7 +7,7 @@ import callAPI from "../utils/api";
 import { Menu, Bell } from "lucide-react";
 import vietnam from "../assets/image/VietNam.png";
 import england from "../assets/image/Anh.png";
-import i18n from "../components/MultiLang/i18n.js";           // đường dẫn tới file cấu hình i18n của bạn
+import i18n from "../components/MultiLang/i18n.js";
 import { useTranslation } from "react-i18next";
 
 function Header({ toggleMenu, isMenuOpen }) {
@@ -92,10 +92,10 @@ function Header({ toggleMenu, isMenuOpen }) {
         </button>
 
         {username && (
-          <div className="flex items-center gap-4 relative">
+          <div className="flex items-center gap-4 ">
             {/* Hiển thị cờ hiện tại */}
             <div
-              className="cursor-pointer"
+              className="cursor-pointer relative w-max"
               onClick={toggleLangModal}
             >
               <img
@@ -103,32 +103,31 @@ function Header({ toggleMenu, isMenuOpen }) {
                 alt="Lang"
                 className="w-6 h-6 rounded-full border"
               />
-            </div>
+              {showLangModal && (
+                <div
+                  className="absolute top-8 right-0 bg-white border border-gray-300 shadow-[0_2px_8px_rgba(0,0,0,0.15)] rounded w-max z-50"
+                  onClick={(e) => e.stopPropagation()}
+                >
 
-            {/* Modal chọn ngôn ngữ */}
-            {showLangModal && (
-              <div
-                className="absolute top-8 right-0 bg-white shadow-lg rounded z-50"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ul>
-                  <li
-                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => changeLanguage("vi")}
-                  >
-                    <img src={vietnam} alt="VN" className="w-5 h-5" />
-                    Tiếng Việt
-                  </li>
-                  <li
-                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => changeLanguage("en")}
-                  >
-                    <img src={england} alt="EN" className="w-5 h-5" />
-                    English
-                  </li>
-                </ul>
-              </div>
-            )}
+                  <ul>
+                    <li
+                      className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => changeLanguage("vi")}
+                    >
+                      <img src={vietnam} alt="VN" className="w-5 h-5" />
+                      Tiếng Việt
+                    </li>
+                    <li
+                      className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => changeLanguage("en")}
+                    >
+                      <img src={england} alt="EN" className="w-5 h-5" />
+                      Tiếng Anh
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
 
             <span className="text-gray-700 font-medium">{username}</span>
 

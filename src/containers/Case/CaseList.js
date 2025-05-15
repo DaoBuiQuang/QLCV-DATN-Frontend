@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import Select from "react-select";
 import { useSelector } from 'react-redux';
+import FieldSelector from "../../components/FieldSelector";
 function CaseList() {
     const role = useSelector((state) => state.auth.role);
     const [cases, setCases] = useState([]);
@@ -20,7 +21,36 @@ function CaseList() {
     const [casetypes, setCasetypes] = useState([]);
     const [selectedCasetype, setSelectedCasetype] = useState("");
     const navigate = useNavigate();
+    const [showFieldModal, setShowFieldModal] = useState(false);
+    const [selectedFields, setSelectedFields] = useState([
+        "maHoSoVuViec",
+        "maDonDangKy",
+        "noiDungVuViec",
+        "trangThaiVuViec",
+        "buocXuLyHienTai",
+        "ngayTiepNhan",
+        "ngayTao",
+        "ngayCapNhap",
+        "tenKhachHang",
+        "tenQuocGia",
+        "tenLoaiVuViec",
+        "nhanSuXuLy",
+    ]);
 
+    const allFieldOptions = [
+        { key: "maHoSoVuViec", label: "Mã hồ sơ" },
+        { key: "maDonDangKy", label: "Mã đơn đăng ký" },
+        { key: "noiDungVuViec", label: "Nội dung vụ việc" },
+        { key: "trangThaiVuViec", label: "Trạng thái" },
+        { key: "buocXuLyHienTai", label: "Bước xử lý hiện tại" },
+        { key: "ngayTiepNhan", label: "Ngày tiếp nhận" },
+        { key: "ngayTao", label: "Ngày tạo" },
+        { key: "ngayCapNhap", label: "Ngày cập nhập" },
+        { key: "tenKhachHang", label: "Tên khách hàng" },
+        { key: "tenQuocGia", label: "Quốc gia" },
+        { key: "tenLoaiVuViec", label: "Loại vụ việc" },
+        { key: "nhanSuXuLy", label: "Nhân sự xử lý" },
+    ];
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
             value: item[valueKey],
@@ -38,6 +68,7 @@ function CaseList() {
                     maQuocGia: countryId,
                     maKhachHang: customerId,
                     maLoaiVuViec: casetypeId,
+                    fields: selectedFields,
                 },
             });
             setCases(response);
@@ -131,7 +162,9 @@ function CaseList() {
             console.error("Lỗi khi xóa hồ sơ vụ việc:", error);
         }
     };
-
+    const columns = allFieldOptions
+        .filter(field => selectedFields.includes(field.key))
+        .map(field => ({ label: field.label, key: field.key }));
     return (
         <div className="p-1 bg-gray-100 ">
             <div className="bg-white p-4 rounded-lg shadow-md">
@@ -157,6 +190,12 @@ function CaseList() {
                             className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             ➕ Thêm mới
+                        </button>
+                        <button
+                            onClick={() => setShowFieldModal(true)}
+                            className="bg-purple-500 hover:bg-purple-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+                        >
+                            Chọn cột hiển thị
                         </button>
                     </div>
                 </div>
@@ -212,18 +251,9 @@ function CaseList() {
                     <thead>
                         <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
                             <th className="p-2">STT</th>
-                            <th className="p-2">Mã hồ sơ</th>
-                            <th className="p-2">Mã đơn đăng ký</th>
-                            <th className="p-2">Nội dung vụ việc</th>
-                            <th className="p-2">Trạng thái</th>
-                            <th className="p-2">Bước xử lý hiện tại</th>
-                            <th className="p-2">Ngày tiếp nhận</th>
-                            <th className="p-2">Ngày tạo</th>
-                            <th className="p-2">Ngày cập nhật</th>
-                            <th className="p-2">Tên khách hàng</th>
-                            <th className="p-2">Quốc gia</th>
-                            <th className="p-2">Loại vụ việc</th>
-                            <th className="p-2">Nhân sự xử lý</th>
+                            {columns.map(col => (
+                                <th key={col.key} className="p-2">{col.label}</th>
+                            ))}
                             <th className="p-2"></th>
                         </tr>
                     </thead>
@@ -231,43 +261,70 @@ function CaseList() {
                         {cases.map((caseItem, index) => (
                             <tr key={caseItem.maHoSoVuViec} className="hover:bg-gray-100 text-center border-b">
                                 <td className="p-2">{index + 1}</td>
-                                <td
-                                    className="p-2 text-blue-500 cursor-pointer hover:underline"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
-                                    }}
-                                >
-                                    {caseItem.maHoSoVuViec}
-                                </td>
-                                <td
-                                    className={`p-2 ${caseItem.maDonDangKy ? 'text-blue-500 cursor-pointer hover:underline' : 'text-gray-500'}`}
-                                    onClick={(e) => {
-                                        if (caseItem.maDonDangKy) {
-                                            e.stopPropagation();
-                                            navigate(`/applicationdetail/${caseItem.maDonDangKy}`);
-                                        }
-                                    }}
-                                >
-                                    {caseItem.maDonDangKy ? caseItem.maDonDangKy : "Không có đơn đăng ký"}
-                                </td>
+                                {columns.map(col => {
+                                    let content = caseItem[col.key];
+                                    if (
+                                        col.key === "ngayTiepNhan" ||
+                                        col.key === "ngayTao" ||
+                                        col.key === "ngayCapNhap"
+                                    ) {
+                                        content = content ? new Date(content).toLocaleDateString("vi-VN") : "";
+                                    }
+                                    if (col.key === "maHoSoVuViec") {
+                                        return (
+                                            <td
+                                                key={col.key}
+                                                className="p-2 text-blue-500 cursor-pointer hover:underline"
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
+                                                }}
+                                            >
+                                                {content}
+                                            </td>
+                                        );
+                                    }
+                                    if (col.key === "maDonDangKy") {
+                                        return (
+                                            <td
+                                                key={col.key}
+                                                className={`p-2 ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
+                                                onClick={e => {
+                                                    if (content) {
+                                                        e.stopPropagation();
+                                                        navigate(`/applicationdetail/${content}`);
+                                                    }
+                                                }}
+                                            >
+                                                {content ? content : "Không có đơn đăng ký"}
+                                            </td>
+                                        );
+                                    }
+                                    if (col.key === "nhanSuXuLy") {
+                                        return (
+                                            <td className="p-2" key={col.key}>
+                                                {Array.isArray(caseItem.nhanSuXuLy) ? (
+                                                    caseItem.nhanSuXuLy.map((person, idx) => (
+                                                        <div key={idx}>
+                                                            {person.tenNhanSu} ({person.vaiTro})
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <span>—</span> // hoặc để trống
+                                                )}
+                                            </td>
+                                        );
+                                    }
 
-                                <td className="p-2">{caseItem.noiDungVuViec}</td>
-                                <td className="p-2">{caseItem.trangThaiVuViec}</td>
-                                <td className="p-2">{caseItem.buocXuLyHienTai}</td>
-                                <td className="p-2">{new Date(caseItem.ngayTiepNhan).toLocaleDateString('vi-VN')}</td>
-                                <td className="p-2">{new Date(caseItem.ngayTao).toLocaleDateString('vi-VN')}</td>
-                                <td className="p-2">{new Date(caseItem.ngayCapNhap).toLocaleDateString('vi-VN')}</td>
-                                <td className="p-2">{caseItem.tenKhachHang}</td>
-                                <td className="p-2">{caseItem.tenQuocGia}</td>
-                                <td className="p-2">{caseItem.tenLoaiVuViec}</td>
-                                <td className="p-2">
+                                    return <td key={col.key} className="p-2">{content}</td>;
+                                })}
+                                {/* <td className="p-2">
                                     {caseItem.nhanSuXuLy.map((person, idx) => (
                                         <div key={idx}>
                                             {person.tenNhanSu} ({person.vaiTro})
                                         </div>
                                     ))}
-                                </td>
+                                </td> */}
                                 <td className="p-2">
                                     {(role === 'admin' || role === 'staff') && (
                                         <div className="flex gap-2 justify-center">
@@ -307,6 +364,18 @@ function CaseList() {
                     </tbody>
                 </table>
             </div>
+            {showFieldModal && (
+                <FieldSelector
+                    allFieldOptions={allFieldOptions}
+                    selectedFields={selectedFields}
+                    setSelectedFields={setSelectedFields}
+                    onClose={() => setShowFieldModal(false)}
+                    onConfirm={() => {
+                        setShowFieldModal(false);
+                        fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype)
+                    }}
+                />
+            )}
             {showDeleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-md w-80">
