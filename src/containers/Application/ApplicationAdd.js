@@ -201,6 +201,7 @@ function ApplicationAdd() {
                     maNhanHieu: maNhanHieu,
                     maSPDVList: maSPDVList,
                     trangThaiDon: trangThaiDon,
+                    buocXuLy: buocXuLy,
                     ngayNopDon: ngayNopDon,
                     ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien,
                     ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL,
@@ -283,6 +284,16 @@ function ApplicationAdd() {
                                 className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                             />
                         </div>
+                        <div>
+                            <label className="block text-gray-700 text-left">Bước xử lý</label>
+                            <input
+                                type="text"
+                                value={buocXuLy}
+                                disabled
+                                onChange={(e) => setBuocXuLy(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
+                            />
+                        </div>
                         <div >
                             <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
                             <Select
@@ -302,7 +313,7 @@ function ApplicationAdd() {
                             )}
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                                 value={
@@ -326,7 +337,7 @@ function ApplicationAdd() {
 
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Ngày nộp đơn</label>
+                            <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
                             <DatePicker
                                 value={ngayNopDon ? dayjs(ngayNopDon) : null}
                                 onChange={(date) => {
@@ -372,6 +383,8 @@ function ApplicationAdd() {
                                 setLichSuThamDinhHT={setLichSuThamDinhHT}
                                 ngayKQThamDinhHinhThuc_DK_SauKN={ngayKQThamDinhHinhThuc_DK_SauKN}
                                 setNgayKQThamDinhHinhThuc_DK_SauKN={setNgayKQThamDinhHinhThuc_DK_SauKN}
+                                buocXuLy={buocXuLy}
+                                setBuocXuLy={setBuocXuLy}
                             />
                         </div>
                     )}

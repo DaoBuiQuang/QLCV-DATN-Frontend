@@ -13,6 +13,17 @@ function ApplicationList() {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [productAndService, setProductAndService] = useState([]);
   const [selectedProductAndService, setSelectedProductAndService] = useState([]);
+  const [selectedTrangThaiDon, setSelectedTrangThaiDon] = useState(null);
+  const trangThaiDonOptions = [
+    { value: "Nộp đơn", label: "Nộp đơn" },
+    { value: "Hoàn thành hồ sơ tài liệu", label: "Hoàn thành hồ sơ tài liệu" },
+    { value: "Thẩm định hình thức", label: "Thẩm định hình thức" },
+    { value: "Công bố đơn", label: "Công bố đơn" },
+    { value: "Thẩm định nội dung", label: "Thẩm định nội dung" },
+    { value: "Trả lời thẩm định nội dung", label: "Trả lời thẩm định nội dung" },
+    { value: "Hoàn thành nhận bằng", label: "Hoàn thành nhận bằng" },
+    { value: "Chờ nhận bằng", label: "Chờ nhận bằng" },
+  ];
 
   const allFieldOptions = [
     { label: "Mã đơn đăng ký", key: "maDonDangKy" },
@@ -42,7 +53,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, fields: selectedFields, },
+        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService,trangThaiDon: selectedTrangThaiDon, fields: selectedFields, },
       });
       setApplications(response);
     } catch (error) {
@@ -166,11 +177,20 @@ function ApplicationList() {
               setSelectedProductAndService(selectedOptions ? selectedOptions.map(opt => opt.value) : [])
             }
             placeholder="Chọn sản phẩm/dịch vụ"
-            className="w-full md:w-1/4 text-left"
+            className="w-full md:w-1/5 text-left"
             isClearable
             isMulti
           />
-
+          <Select
+            options={trangThaiDonOptions}
+            value={trangThaiDonOptions.find(opt => opt.value === selectedTrangThaiDon)}
+            onChange={selectedOption =>
+              setSelectedTrangThaiDon(selectedOption ? selectedOption.value : null)
+            }
+            placeholder="Chọn trạng thái đơn"
+            className="w-full md:w-1/6 text-left"
+            isClearable
+          />
         </div>
 
       </div>

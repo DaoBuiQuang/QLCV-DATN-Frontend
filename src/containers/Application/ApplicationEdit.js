@@ -49,9 +49,6 @@ function ApplicationEdit() {
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
     const [trangThaiCapBang, setTrangThaiCapBang] = useState(null);
-      useEffect(() => {
-        console.log('trangThaiCapBang test:', trangThaiCapBang)
-    },[trangThaiCapBang])
     const [ngayNopYKien, setNgayNopYKien] = useState(null);
     const [ngayNhanKQYKien, setNgayNhanKQYKien] = useState(null);
     const [ketQuaYKien, setKetQuaYKien] = useState(null);
@@ -65,7 +62,7 @@ function ApplicationEdit() {
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
-
+     const [buocXuLy, setBuocXuLy] = useState("");
     const [taiLieuList, setTaiLieuList] = useState([]);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
@@ -213,6 +210,7 @@ function ApplicationEdit() {
                 setSoDon(response.soDon)
                 setMaNhanHieu(response.maNhanHieu);
                 setTrangThaiDon(response.trangThaiDon);
+                setBuocXuLy(response.buocXuLy);
                 setMaSPDVList(response.maSPDVList)
                 setNgayNopDon(formatDate(response.ngayNopDon));
                 setNgayHoanThanhHSTL_DuKien(formatDate(response.ngayHoanThanhHoSoTaiLieu_DuKien));
@@ -266,6 +264,7 @@ function ApplicationEdit() {
                     maNhanHieu: maNhanHieu,
                     maSPDVList: maSPDVList,
                     trangThaiDon: trangThaiDon,
+                    buocXuLy: buocXuLy,
 
                     ngayNopDon: ngayNopDon || null,
                     ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien || null,
@@ -347,6 +346,16 @@ function ApplicationEdit() {
                                 value={trangThaiDon}
                                 disabled
                                 onChange={(e) => setTrangThaiDon(e.target.value)}
+                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
+                            />
+                        </div>
+                         <div>
+                            <label className="block text-gray-700 text-left">Bước xử lý</label>
+                            <input
+                                type="text"
+                                value={buocXuLy}
+                                disabled
+                                onChange={(e) => setBuocXuLy(e.target.value)}
                                 className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                             />
                         </div>
@@ -439,6 +448,8 @@ function ApplicationEdit() {
                                 setLichSuThamDinhHT={setLichSuThamDinhHT}
                                 ngayKQThamDinhHinhThuc_DK_SauKN={ngayKQThamDinhHinhThuc_DK_SauKN}
                                 setNgayKQThamDinhHinhThuc_DK_SauKN={setNgayKQThamDinhHinhThuc_DK_SauKN}
+                                buocXuLy={buocXuLy}
+                                setBuocXuLy={setBuocXuLy}
                             />
                         </div>
                     )}

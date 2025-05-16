@@ -9,7 +9,7 @@ function FieldSelector({
 }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-            <div className="bg-white rounded-lg p-6 w-96">
+            <div className="bg-white rounded-lg p-6">
                 <h3 className="text-lg font-semibold mb-4 text-center text-gray-700">
                     Chọn cột muốn hiển thị
                 </h3>

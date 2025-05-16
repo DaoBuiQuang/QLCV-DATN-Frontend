@@ -102,7 +102,7 @@ const ContentReview = ({
         updateRefusal(index, 'showKhieuNaiBKHCNForm', false);
         updateRefusal(index, 'hanKhieuNaiBKHCN', null);
         updateRefusal(index, 'ngayKhieuNaiBKHCN', null);
-        updateRefusal(index, 'ketQuaKhieuNaiBKHCN', '');
+        updateRefusal(index, 'ketQuaKhieuNaiBKHCN', null);
         updateRefusal(index, 'ngayNhanKQKNThatBaiBKHCN', null);
         updateRefusal(index, 'ghiChuKetQuaKNBKHCN', '');
     };
@@ -110,7 +110,7 @@ const ContentReview = ({
         updateRefusal(index, 'showKhieuNaiCSHCTForm', false);
         updateRefusal(index, 'hanKhieuNaiCSHTT', null);
         updateRefusal(index, 'ngayKhieuNaiCSHTT', null);
-        updateRefusal(index, 'ketQuaKhieuNaiCSHTT', '');
+        updateRefusal(index, 'ketQuaKhieuNaiCSHTT', null);
         updateRefusal(index, 'ngayNhanKQKNThatBaiCSHTT', null);
         updateRefusal(index, 'ghiChuKetQuaKNCSHTT', '');
     };
@@ -466,6 +466,7 @@ const ContentReview = ({
                                                                     updateRefusal(index, 'ghiChuKetQuaKNCSHTT', '');
                                                                     updateRefusal(index, 'showKhieuNaiBKHCNForm', false);
                                                                     handleDat();
+                                                                    handleKNThanhCong();
                                                                     resetKhieuNaiBKHCN(updateRefusal, index); // gọi luôn hàm reset của BKH&CN nếu có
                                                                 }}
                                                                 className="mr-2"

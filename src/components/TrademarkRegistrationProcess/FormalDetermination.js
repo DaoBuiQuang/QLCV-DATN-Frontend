@@ -11,13 +11,15 @@ const FormalDetermination = ({
     setLichSuThamDinhHT,
     ngayKQThamDinhHinhThuc_DK_SauKN,
     setNgayKQThamDinhHinhThuc_DK_SauKN,
+    buocXuLy,
+    setBuocXuLy,
     isViewOnly
 }) => {
     const [daDat, setDaDat] = useState(false);
     const [daKNThanhCong, setDaKNThanhCong] = useState(false);
     const [showLichSu, setShowLichSu] = useState(true);
     useEffect(() => {
-
+        
         lichSuThamDinhHT.forEach((item, index) => {
             if (item.hanKhieuNaiCSHTT && !item.showKhieuNaiCSHCTForm) {
                 updateRefusal(index, 'showKhieuNaiCSHCTForm', true);
@@ -27,6 +29,16 @@ const FormalDetermination = ({
             }
             if(item.ketQuaKhieuNaiBKHCN === true || item.ketQuaKhieuNaiCSHTT === true){
                 handleKNThanhCong();
+            }
+            debugger
+            if(item.ngayNhanThongBaoTuChoiTD && !item.ngayNhanQuyetDinhTuChoi && !item.trangThaiBiNhanQuyetDinhTuChoi && !item.ngayTraLoiThongBaoTuChoi){
+                setBuocXuLy("Chờ trả lời thông báo từ chối thẩm định hình thức lần:", item.lanThamDinh);
+            }
+            if((item.ketQuaKhieuNaiCSHTT === false || !item.ketQuaKhieuNaiCSHTT) && item.ngayKhieuNaiCSHTT){
+                setBuocXuLy("Chờ kết quả khiếu nại cục sở hữu trí tuệ");
+            }
+            if((item.ketQuaKhieuNaiBKHCN === false || !item.ketQuaKhieuNaiBKHCN) && item.ngayKhieuNaiBKHCN){
+                setBuocXuLy("Chờ kết quả khiếu nại bộ khoa học và công nghệ");
             }
         });
     }, [lichSuThamDinhHT]);
@@ -178,7 +190,7 @@ const FormalDetermination = ({
             {lichSuThamDinhHT.length > 0 && (
                 <button
                     type="button"
-                    onClick={() => setShowLichSu(!showLichSu)} // <-- đúng
+                    onClick={() => setShowLichSu(!showLichSu)} 
                     className="text-blue-600 underline text-sm"
                 >
                     {showLichSu ? "Ẩn lịch sử thẩm định" : "Hiển thị lịch sử thẩm định"}
