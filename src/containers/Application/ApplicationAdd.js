@@ -409,6 +409,8 @@ function ApplicationAdd() {
                                 setLichSuThamDinhND={setLichSuThamDinhND}
                                 ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
                                 setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
+                                buocXuLy={buocXuLy}
+                                setBuocXuLy={setBuocXuLy}
                             />
                         </div>
                     )}

@@ -43,7 +43,7 @@ function ApplicationEdit() {
     const [ngayKQThamDinhND_DK_SauKN, setNgayKQThamDinhND_DK_SauKN] = useState(null)
     const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(null)
 
-  
+
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
 
@@ -62,7 +62,7 @@ function ApplicationEdit() {
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
-     const [buocXuLy, setBuocXuLy] = useState("");
+    const [buocXuLy, setBuocXuLy] = useState("");
     const [taiLieuList, setTaiLieuList] = useState([]);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
@@ -285,7 +285,7 @@ function ApplicationEdit() {
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
                     ngayThongBaoCapBang: ngayThongBaoCapBang || null,
                     trangThaiDYTBCapBang: trangThaiCapBang || null,
-                    
+
                     ngayNopYKien: ngayNopYKien || null,
                     ngayNhanKQYKien: ngayNhanKQYKien || null,
                     ketQuaYKien: ketQuaYKien || null,
@@ -349,7 +349,7 @@ function ApplicationEdit() {
                                 className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                             />
                         </div>
-                         <div>
+                        <div>
                             <label className="block text-gray-700 text-left">Bước xử lý</label>
                             <input
                                 type="text"
@@ -474,6 +474,8 @@ function ApplicationEdit() {
                                 setLichSuThamDinhND={setLichSuThamDinhND}
                                 ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
                                 setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
+                                buocXuLy={buocXuLy}
+                                setBuocXuLy={setBuocXuLy}
                             />
                         </div>
                     )}

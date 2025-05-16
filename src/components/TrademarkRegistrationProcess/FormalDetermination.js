@@ -30,9 +30,13 @@ const FormalDetermination = ({
             if(item.ketQuaKhieuNaiBKHCN === true || item.ketQuaKhieuNaiCSHTT === true){
                 handleKNThanhCong();
             }
-            debugger
+            
             if(item.ngayNhanThongBaoTuChoiTD && !item.ngayNhanQuyetDinhTuChoi && !item.trangThaiBiNhanQuyetDinhTuChoi && !item.ngayTraLoiThongBaoTuChoi){
-                setBuocXuLy("Chờ trả lời thông báo từ chối thẩm định hình thức lần:", item.lanThamDinh);
+                setBuocXuLy(`Chờ trả lời thông báo từ chối thẩm định hình thức lần: ${item.lanThamDinh}`);
+            }
+            
+            if(item.ngayNhanThongBaoTuChoiTD  && !item.trangThaiBiNhanQuyetDinhTuChoi && item.ngayTraLoiThongBaoTuChoi){
+                setBuocXuLy(`Chờ cục phản hồi trả lời thông báo từ chối thẩm định hình thức lần: ${item.lanThamDinh}`);
             }
             if((item.ketQuaKhieuNaiCSHTT === false || !item.ketQuaKhieuNaiCSHTT) && item.ngayKhieuNaiCSHTT){
                 setBuocXuLy("Chờ kết quả khiếu nại cục sở hữu trí tuệ");
@@ -152,7 +156,7 @@ const FormalDetermination = ({
                         {(daKNThanhCong || ngayKQThamDinhHinhThuc_DK_SauKN) && (
                             <div>
                                 <label className="block text-gray-700 text-left">
-                                    Ngày có kết quả trả lời thẩm định hình thức sau khiếu nại dự kiến
+                                    Ngày có KQ trả lời thẩm định hình thức sau KN dự kiến
                                 </label>
                                 <DatePicker
                                     value={ngayKQThamDinhHinhThuc_DK_SauKN ? dayjs(ngayKQThamDinhHinhThuc_DK_SauKN) : null}
@@ -222,7 +226,7 @@ const FormalDetermination = ({
                 <div className="mt-4 border">
                     {lichSuThamDinhHT.map((refusal, index) => {
                         const baseHanTraLoi = dayjs(refusal.ngayNhanThongBaoTuChoiTD).add(3, 'month');
-                        const ngayTraLoi = refusal.ngayTraLoi;
+                        const ngayTraLoiThongBaoTuChoi = refusal.ngayTraLoiThongBaoTuChoi;
                         const hanTraLoi = baseHanTraLoi.format('YYYY-MM-DD');
                         //  const baseNgayYeuCauGiaHan= dayjs(refusal.ngayYeuCauGiaHan).add(3, 'month');
                         const hanTraLoiGiaHan = refusal.giaHan && refusal.ngayYeuCauGiaHan
@@ -328,12 +332,12 @@ const FormalDetermination = ({
                                     <div className="md:col-span-3">
                                         <label className="block text-gray-600 text-left">Ngày trả lời</label>
                                         <DatePicker
-                                            value={refusal.ngayTraLoi ? dayjs(refusal.ngayTraLoi) : null}
+                                            value={refusal.ngayTraLoiThongBaoTuChoi ? dayjs(refusal.ngayTraLoiThongBaoTuChoi) : null}
                                             onChange={(date) => {
                                                 if (dayjs.isDayjs(date) && date.isValid()) {
-                                                    updateRefusal(index, 'ngayTraLoi', date.format("YYYY-MM-DD"));
+                                                    updateRefusal(index, 'ngayTraLoiThongBaoTuChoi', date.format("YYYY-MM-DD"));
                                                 } else {
-                                                    updateRefusal(index, 'ngayTraLoi', null);
+                                                    updateRefusal(index, 'ngayTraLoiThongBaoTuChoi', null);
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
