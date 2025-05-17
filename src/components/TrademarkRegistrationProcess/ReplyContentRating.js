@@ -11,10 +11,10 @@ const ReplyContentRating = ({
 }) => {
     return (
         <div className="flex-1">
-            <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Trả lời kết quả thẩm định nội dung</h3>
+            <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Phàn hồi kết quả thẩm định nội dung</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung đơn dự kiến</label>
+                    <label className="block text-gray-700 text-left">Hạn phản hồi kết quả thẩm định nội dung đơn dự kiến</label>
                     <DatePicker
                         value={ngayTraLoiKQThamDinhND_DuKien ? dayjs(ngayTraLoiKQThamDinhND_DuKien) : null}
                         onChange={(date) => {
@@ -31,7 +31,7 @@ const ReplyContentRating = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày trả lời kết quả thẩm định nội dung đơn</label>
+                    <label className="block text-gray-700 text-left">Ngày phản hồi kết quả thẩm định nội dung đơn</label>
                     
                     <DatePicker
                         value={ngayTraLoiKQThamDinhND ? dayjs(ngayTraLoiKQThamDinhND) : null}

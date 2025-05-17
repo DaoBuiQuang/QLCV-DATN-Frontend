@@ -15,6 +15,7 @@ import DonProgress from "../../components/commom/DonProgess.js";
 import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
+import BrandBasicForm from "../../components/BrandBasicForm";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const { maHoSoVuViec } = useParams();
@@ -22,6 +23,8 @@ function ApplicationAdd() {
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [maNhanHieu, setMaNhanHieu] = useState("");
+    const [tenNhanHieu, setTenNhanHieu] = useState("");
+    const [linkAnh, setLinkAnh] = useState("");
     const [maSPDVList, setMaSPDVList] = useState([]);
 
     const [ngayHoanThanhHSTL_DuKien, setNgayHoanThanhHSTL_DuKien] = useState(null);
@@ -40,7 +43,7 @@ function ApplicationAdd() {
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
     const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
     const [ngayKQThamDinhND_DK_SauKN, setNgayKQThamDinhND_DK_SauKN] = useState(null)
-    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(false)
+    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(null)
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
@@ -190,6 +193,25 @@ function ApplicationAdd() {
             label: item[labelKey]
         }));
     };
+    const handleAddBrand = async () => {
+        try {
+            await callAPI({
+                method: "post",
+                endpoint: "/brand/add",
+                data: {
+                    maNhanHieu,
+                    tenNhanHieu,
+                    linkAnh,
+                },
+            });
+            return true; 
+        } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi khi thêm nhãn hiệu.", error);
+            console.error("Lỗi khi thêm nhãn hiệu!", error);
+            throw error; 
+        }
+    };
+
     const handleApplication = async () => {
         try {
             await callAPI({
@@ -242,6 +264,15 @@ function ApplicationAdd() {
             console.error("Lỗi khi thêm đơn đăng ký!", error);
         }
     };
+    const handleSubmit = async () => {
+        try {
+            await handleAddBrand(); // nếu lỗi sẽ nhảy vào catch
+            await handleApplication(); // chỉ gọi nếu thêm brand thành công
+        } catch (err) {
+            console.log("Dừng lại vì lỗi trong thêm brand hoặc application");
+        }
+    };
+
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
     };
@@ -294,7 +325,7 @@ function ApplicationAdd() {
                                 className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                             />
                         </div>
-                        <div >
+                        {/* <div >
                             <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
@@ -311,6 +342,18 @@ function ApplicationAdd() {
                             {errors.maNhanHieu && (
                                 <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanHieu}</p>
                             )}
+                        </div> */}
+                        <div className="col-span-2">
+                            <BrandBasicForm
+                                maNhanHieu={maNhanHieu}
+                                setMaNhanHieu={setMaNhanHieu}
+                                tenNhanHieu={tenNhanHieu}
+                                setTenNhanHieu={setTenNhanHieu}
+                                linkAnh={linkAnh}
+                                setLinkAnh={setLinkAnh}
+                                errors={errors}
+                                validateField={validateField}
+                            />
                         </div>
                         <div >
                             <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
@@ -416,7 +459,7 @@ function ApplicationAdd() {
                     )}
                     {daChonNgayThamDinhNoiDung && (
                         <div>
-                            <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label>
+                            {/* <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label> */}
                             <Radio.Group
                                 onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
                                 value={trangThaiTraLoiKQThamDinhND}
@@ -437,7 +480,7 @@ function ApplicationAdd() {
                             />
                         </div>
                     )}
-                    {daChonNgayTraLoiThamDinhNoiDung && (
+                    {(daChonNgayTraLoiThamDinhNoiDung || (trangThaiTraLoiKQThamDinhND === false && daChonNgayThamDinhNoiDung)) && (
                         <div className="col-span-2">
                             <DiphimaProcess
                                 ngayThongBaoCapBang={ngayThongBaoCapBang}
@@ -477,7 +520,7 @@ function ApplicationAdd() {
 
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleApplication} disabled={!isFormValid}
+                    <button onClick={handleSubmit} disabled={!isFormValid}
                         className={`px-4 py-2 rounded-lg text-white ${isFormValid
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-blue-300 cursor-not-allowed"

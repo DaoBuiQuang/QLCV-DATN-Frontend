@@ -13,6 +13,7 @@ import ContentReview from "../../components/TrademarkRegistrationProcess/Content
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 import DonProgress from "../../components/commom/DonProgess.js";
 import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
+import { DatePicker, Radio } from 'antd';
 function ApplicationDetail() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
@@ -30,6 +31,7 @@ function ApplicationDetail() {
     const [ngayKQThamDinhHinhThuc_DuKien, setNgayKQThamDinhHinhThuc_DuKien] = useState(null);
     const [ngayKQThamDinhHinhThuc, setNgayKQThamDinhHinhThuc] = useState(null);
     const [lichSuThamDinhHT, setLichSuThamDinhHT] = useState([])
+    const [ngayKQThamDinhHinhThuc_DK_SauKN, setNgayKQThamDinhHinhThuc_DK_SauKN] = useState(null)
 
     const [ngayCongBo_DuKien, setNgayCongBo_DuKien] = useState(null);
     const [ngayCongBo, setNgayCongBo] = useState(null);
@@ -37,11 +39,19 @@ function ApplicationDetail() {
     const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
     const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
     const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
+    const [ngayKQThamDinhND_DK_SauKN, setNgayKQThamDinhND_DK_SauKN] = useState(null)
+    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(null)
 
     const [ngayTraLoiKQThamDinhND_DuKien, setNgayTraLoiKQThamDinhND_DuKien] = useState(null);
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
+    const [trangThaiCapBang, setTrangThaiCapBang] = useState(null);
+    const [ngayNopYKien, setNgayNopYKien] = useState(null);
+    const [ngayNhanKQYKien, setNgayNhanKQYKien] = useState(null);
+    const [ketQuaYKien, setKetQuaYKien] = useState(null);
+    const [ngayPhanHoiKQYKien, setNgayPhanHoiKQYKien] = useState(null);
+
     const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
     const [ngayGuiBangChoKH, setNgayGuiBangChoKH] = useState(null);
@@ -50,7 +60,7 @@ function ApplicationDetail() {
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
-
+    const [buocXuLy, setBuocXuLy] = useState("");
     const [taiLieuList, setTaiLieuList] = useState([]);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
@@ -169,7 +179,7 @@ function ApplicationDetail() {
         return new Date(dateString).toISOString().split("T")[0];
     };
     const detailApplication = async () => {
-        try {        
+        try {
             const response = await callAPI({
                 method: "post",
                 endpoint: "application/detail",
@@ -212,7 +222,7 @@ function ApplicationDetail() {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
         }
     };
- 
+
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
     };
@@ -225,7 +235,7 @@ function ApplicationDetail() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
-                        <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
+                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                             <input
                                 type="text"
                                 value={maHoSoVuViec}
@@ -266,7 +276,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                        <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
                                 value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
@@ -278,7 +288,7 @@ function ApplicationDetail() {
                             />
                         </div>
                         <div >
-                        <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                                 value={
@@ -311,7 +321,7 @@ function ApplicationDetail() {
                     )}
                     {daChonNgayNopDon && (
                         <div className="col-span-2">
-                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} isViewOnly={isViewOnly}/>
+                            <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} isViewOnly={isViewOnly} />
                         </div>
                     )}
 
@@ -324,6 +334,10 @@ function ApplicationDetail() {
                                 setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
                                 lichSuThamDinhHT={lichSuThamDinhHT}
                                 setLichSuThamDinhHT={setLichSuThamDinhHT}
+                                ngayKQThamDinhHinhThuc_DK_SauKN={ngayKQThamDinhHinhThuc_DK_SauKN}
+                                setNgayKQThamDinhHinhThuc_DK_SauKN={setNgayKQThamDinhHinhThuc_DK_SauKN}
+                                buocXuLy={buocXuLy}
+                                setBuocXuLy={setBuocXuLy}
                                 isViewOnly={isViewOnly}
                             />
                         </div>
@@ -349,10 +363,28 @@ function ApplicationDetail() {
                                 lichSuThamDinhND={lichSuThamDinhND}
                                 setLichSuThamDinhND={setLichSuThamDinhND}
                                 isViewOnly={isViewOnly}
+                                ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
+                                setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
+                                buocXuLy={buocXuLy}
+                                setBuocXuLy={setBuocXuLy}
                             />
                         </div>
                     )}
                     {daChonNgayThamDinhNoiDung && (
+                        <div>
+                            {/* <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label> */}
+                            <Radio.Group
+                                onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
+                                value={trangThaiTraLoiKQThamDinhND}
+                                className="mt-2"
+                                
+                            >
+                                <Radio value={true}>Phản hồi</Radio>
+                                <Radio value={false}>Chờ nhận đơn</Radio>
+                            </Radio.Group>
+                        </div>
+                    )}
+                    {daChonNgayThamDinhNoiDung && trangThaiTraLoiKQThamDinhND === true && (
                         <div className="col-span-2">
                             <ReplyContentRating
                                 ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
@@ -372,6 +404,16 @@ function ApplicationDetail() {
                                 setNgayNopPhiCapBang={setNgayNopPhiCapBang}
                                 ngayNhanBang={ngayNhanBang}
                                 setNgayNhanBang={setNgayNhanBang}
+                                trangThaiCapBang={trangThaiCapBang}
+                                setTrangThaiCapBang={setTrangThaiCapBang}
+                                ngayNopYKien={ngayNopYKien}
+                                setNgayNopYKien={setNgayNopYKien}
+                                ngayNhanKQYKien={ngayNhanKQYKien}
+                                setNgayNhanKQYKien={setNgayNhanKQYKien}
+                                ketQuaYKien={ketQuaYKien}
+                                setKetQuaYKien={setKetQuaYKien}
+                                ngayPhanHoiKQYKien={ngayPhanHoiKQYKien}
+                                setNgayPhanHoiKQYKien={setNgayPhanHoiKQYKien}
                                 isViewOnly={isViewOnly}
                             />
                         </div>

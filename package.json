@@ -13,6 +13,7 @@
     "docx": "^9.4.1",
     "docxtemplater": "^3.61.1",
     "file-saver": "^2.0.5",
+    "firebase": "^11.7.3",
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^6.1.8",
     "jwt-decode": "^4.0.0",

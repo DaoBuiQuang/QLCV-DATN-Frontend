@@ -23,7 +23,7 @@ i18next
                     hoSoVuViec: "Case File",
                     donDangKy: "Application",
                     nganhNghe: "Industry",
-                    doiTac: "Partner",
+                    doiTac: "Instructing Firm",
                     quocGia: "Country",
                     loaiVuViec: "Case Type",
                     loaiDonDangKy: "Application Type",

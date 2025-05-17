@@ -394,7 +394,7 @@ function ApplicationEdit() {
                             )}
                         </div>
                         <div >
-                            <label className="block text-gray-700 text-left text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
                                 value={
@@ -481,7 +481,7 @@ function ApplicationEdit() {
                     )}
                     {daChonNgayThamDinhNoiDung && (
                         <div>
-                            <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label>
+                            {/* <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label> */}
                             <Radio.Group
                                 onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
                                 value={trangThaiTraLoiKQThamDinhND}
