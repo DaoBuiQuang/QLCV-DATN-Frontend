@@ -15,7 +15,6 @@ const Login = () => {
     const handleLogin = async () => {
         setError("");
         try {
-            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "/login",

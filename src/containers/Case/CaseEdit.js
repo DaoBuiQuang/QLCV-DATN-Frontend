@@ -211,7 +211,6 @@ function CaseEdit() {
     // Add case
     const handleEditCase = async () => {
         try {
-            debugger
             await callAPI({
                 method: "put",
                 endpoint: "/case/edit",

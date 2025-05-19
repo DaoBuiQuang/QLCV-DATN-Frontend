@@ -16,13 +16,17 @@ import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
+import BrandBasicForm from "../../components/BrandBasicForm";
 function ApplicationEdit() {
     const navigate = useNavigate();
     const { maDonDangKy } = useParams();
+    const isEditOnly = true
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [maNhanHieu, setMaNhanHieu] = useState("");
+    const [tenNhanHieu, setTenNhanHieu] = useState("");
+    const [linkAnh, setLinkAnh] = useState("");
     const [maSPDVList, setMaSPDVList] = useState([]);
 
     const [ngayHoanThanhHSTL_DuKien, setNgayHoanThanhHSTL_DuKien] = useState(null);
@@ -208,7 +212,9 @@ function ApplicationEdit() {
             if (response) {
                 setMaHoSoVuViec(response.maHoSoVuViec);
                 setSoDon(response.soDon)
-                setMaNhanHieu(response.maNhanHieu);
+                setMaNhanHieu(response.nhanHieu.maNhanHieu);
+                setTenNhanHieu(response.nhanHieu.tenNhanHieu);
+                setLinkAnh(response.nhanHieu.linkAnh);
                 setTrangThaiDon(response.trangThaiDon);
                 setBuocXuLy(response.buocXuLy);
                 setMaSPDVList(response.maSPDVList)
@@ -251,6 +257,24 @@ function ApplicationEdit() {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
         }
     };
+    const handleEditBrand = async () => {
+        try {
+            await callAPI({
+                method: "put",
+                endpoint: "/brand/edit",
+                data: {
+                    maNhanHieu,
+                    tenNhanHieu,
+                    linkAnh, // Gửi ảnh lên server
+                },
+            });
+        } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
+            console.error("Lỗi khi cập nhật nhãn hiệu!", error);
+            throw error; 
+        }
+    };
+
     const handleApplication = async () => {
         try {
             await callAPI({
@@ -305,6 +329,14 @@ function ApplicationEdit() {
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
             console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
+        }
+    };
+    const handleSubmit = async () => {
+        try {
+            await handleEditBrand(); 
+            await handleApplication(); 
+        } catch (err) {
+            console.log("Dừng lại vì lỗi trong thêm brand hoặc application");
         }
     };
     const handleTaiLieuChange = (list) => {
@@ -375,23 +407,18 @@ function ApplicationEdit() {
                                 className="mt-1 w-full"
                             />
                         </div>
-                        <div >
-                            <label className="block text-gray-700 text-left">Nhãn hiệu <span className="text-red-500">*</span></label>
-                            <Select
-                                options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
-                                value={maNhanHieu ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === maNhanHieu) : null}
-                                onChange={selectedOption => {
-                                    setMaNhanHieu(selectedOption?.value)
-                                    const value = selectedOption?.value || "";
-                                    validateField("maNhanHieu", value);
-                                }}
-                                placeholder="Chọn tên nhãn hiệu"
-                                className="w-full mt-1 rounded-lg h-10 text-left"
-                                isClearable
+                        <div className="col-span-2">
+                            <BrandBasicForm
+                                maNhanHieu={maNhanHieu}
+                                setMaNhanHieu={setMaNhanHieu}
+                                tenNhanHieu={tenNhanHieu}
+                                setTenNhanHieu={setTenNhanHieu}
+                                linkAnh={linkAnh}
+                                setLinkAnh={setLinkAnh}
+                                errors={errors}
+                                validateField={validateField}
+                                isEditOnly
                             />
-                            {errors.maNhanHieu && (
-                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanHieu}</p>
-                            )}
                         </div>
                         <div >
                             <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
@@ -541,7 +568,7 @@ function ApplicationEdit() {
                 </div>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleApplication} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
+                    <button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
                 </div>
                 <div className="mt-4">
                     <ExportWordButton

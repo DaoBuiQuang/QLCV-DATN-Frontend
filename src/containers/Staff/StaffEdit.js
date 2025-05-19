@@ -34,7 +34,6 @@ function StaffEdit() {
         const fetchStaffDetails = async () => {
 
             try {
-                debugger
                 const response = await callAPI({
                     method: "post",
                     endpoint: `/staff/detail`,

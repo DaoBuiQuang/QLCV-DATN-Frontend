@@ -9,6 +9,7 @@ function BrandBasicForm({
   setLinkAnh,
   errors,
   validateField,
+  isEditOnly
 }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -35,6 +36,7 @@ function BrandBasicForm({
             setMaNhanHieu(e.target.value);
             validateField("maNhanHieu", e.target.value);
           }}
+          disabled={isEditOnly}
           placeholder="Nhập mã nhãn hiệu"
           className="w-full p-2 mt-1 border rounded-lg text-input"
         />

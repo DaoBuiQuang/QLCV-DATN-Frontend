@@ -50,6 +50,7 @@ import JobEdit from "../containers/Job/JobEdit";
 import JobDetail from "../containers/Job/JobDetail";
 import ChangePassword from "../containers/Auth/ChangePassword";
 import Profile from "../containers/Auth/Profile";
+import NotificationDetail from "../containers/Notification/NotificationDetail";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -161,6 +162,8 @@ const AppRoutes = () => {
 
           <Route path="/changepassword" element={<ChangePassword></ChangePassword>} />
           <Route path="/profile" element={<Profile></Profile>} />
+
+          <Route path="/notificationdetail/:id" element={<NotificationDetail></NotificationDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 
