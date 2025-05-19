@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearAuth } from "../../src/features/authSlice";
 import callAPI from "../utils/api";
 import { Menu, Bell } from "lucide-react";
-import vietnam from "../assets/image/VietNam.png";
-import england from "../assets/image/Anh.png";
 import i18n from "../components/MultiLang/i18n.js";
 import { useTranslation } from "react-i18next";
+import LanguageSelector from "./LanguageSelector.js";
+import NotificationDropdown from "./NotificationDropdown";
 
 function Header({ toggleMenu, isMenuOpen }) {
   const [username, setUsername] = useState(null);
@@ -58,21 +58,6 @@ function Header({ toggleMenu, isMenuOpen }) {
       navigate("/login");
     }
   };
-
-  const toggleLangModal = (e) => {
-    e.stopPropagation();
-    setShowLangModal(!showLangModal);
-  };
-
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    setCurrentLang(lng);
-    localStorage.setItem("language", lng);
-    setShowLangModal(false);
-  };
-
-  const getFlag = (lng) => (lng === "en" ? england : vietnam);
-
   return (
     <>
       <header
@@ -94,46 +79,14 @@ function Header({ toggleMenu, isMenuOpen }) {
         {username && (
           <div className="flex items-center gap-4 ">
             {/* Hiển thị cờ hiện tại */}
-            <div
-              className="cursor-pointer relative w-max"
-              onClick={toggleLangModal}
-            >
-              <img
-                src={getFlag(currentLang)}
-                alt="Lang"
-                className="w-6 h-6 rounded-full border"
-              />
-              {showLangModal && (
-                <div
-                  className="absolute top-8 right-0 bg-white border border-gray-300 shadow-[0_2px_8px_rgba(0,0,0,0.15)] rounded w-max z-50"
-                  onClick={(e) => e.stopPropagation()}
-                >
-
-                  <ul>
-                    <li
-                      className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => changeLanguage("vi")}
-                    >
-                      <img src={vietnam} alt="VN" className="w-5 h-5" />
-                      Tiếng Việt
-                    </li>
-                    <li
-                      className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => changeLanguage("en")}
-                    >
-                      <img src={england} alt="EN" className="w-5 h-5" />
-                      Tiếng Anh
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
+            <LanguageSelector />
             <span className="text-gray-700 font-medium">{username}</span>
 
             <div className="relative cursor-pointer">
-              <Bell size={22} className="text-gray-600 hover:text-blue-600" />
-              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
+              <NotificationDropdown />
+
+              {/* <Bell size={22} className="text-gray-600 hover:text-blue-600" />
+              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span> */}
             </div>
 
             <button

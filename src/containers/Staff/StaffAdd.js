@@ -13,7 +13,7 @@ function StaffAdd() {
   const [phongBan, setPhongBan] = useState("");
   const [sdt, setSdt] = useState("");
   const [email, setEmail] = useState("");
-  const [ngayThangNamSinh, setNgayThangNamSinh] = useState("");
+  const [ngayThangNamSinh, setNgayThangNamSinh] = useState(null);
   const [cccd, setCccd] = useState("");
   const [bangCap, setBangCap] = useState("");
 
@@ -42,7 +42,7 @@ function StaffAdd() {
           phongBan,
           sdt,
           email,
-          ngayThangNamSinh,
+          ngayThangNamSinh:ngayThangNamSinh || null,
           cccd,
           bangCap,
         },
