@@ -9,9 +9,11 @@ import { ToastContainer } from "react-toastify";
 import { jwtDecode } from 'jwt-decode';
 import axios from "axios";
 import { messaging, getToken, onMessage } from './firebase';
+import NotificationPopup from "./containers/Notification/NotificationPopup";
+import { triggerNotificationRefresh } from "./features/notificationSlice";
 export default function App() {
   const dispatch = useDispatch();
-
+  const [notification, setNotification] = useState(null);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -66,7 +68,9 @@ export default function App() {
     });
     onMessage(messaging, (payload) => {
       console.log("📨 Đã nhận được thông báo:", payload);
-      toast.info(`${payload.notification.title}\n${payload.notification.body}`, { position: "top-right", autoClose: 3000 });
+      const { title, body } = payload.notification;
+      dispatch(triggerNotificationRefresh());
+      setNotification({ title, body });
     });
   }, []);
   return (
@@ -74,6 +78,13 @@ export default function App() {
       {/* <AuthProvider> */}
       <ToastContainer />
       <AppRoutes />
+      {notification && (
+        <NotificationPopup
+          title={notification.title}
+          body={notification.body}
+          onClose={() => setNotification(null)}
+        />
+      )}
       {/* </AuthProvider> */}
     </div>
   );

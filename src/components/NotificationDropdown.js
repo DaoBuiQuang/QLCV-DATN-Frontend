@@ -3,11 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import callAPI from "../utils/api";
 import dayjs from "dayjs"; // Cần cài thư viện này: npm install dayjs
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const NotificationDropdown = () => {
+  const refreshTrigger = useSelector((state) => state.notification.refreshTrigger);
+  console.log("refreshTrigger", refreshTrigger);
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchNotifications(); 
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [refreshTrigger]);
+
   const fetchNotifications = async () => {
     const maNhanSu = localStorage.getItem("maNhanSu");
     try {
