@@ -4,6 +4,8 @@ import callAPI from "../../utils/api";
 import Select from "react-select";
 import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 import FieldSelector from "../../components/FieldSelector";
+import dayjs from 'dayjs';
+import { DatePicker, Radio } from 'antd';
 function ApplicationList() {
   const [applications, setApplications] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +55,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService,trangThaiDon: selectedTrangThaiDon, fields: selectedFields, },
+        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, },
       });
       setApplications(response);
     } catch (error) {
@@ -119,6 +121,16 @@ function ApplicationList() {
   const columns = allFieldOptions
     .filter(field => selectedFields.includes(field.key))
     .map(field => ({ label: field.label, key: field.key }));
+  const [selectedField, setSelectedField] = useState(""); // Trường ngày muốn lọc
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  
+  const fieldOptions = [
+  { value: "ngayTao", label: "Ngày tạo" },
+  { value: "ngayCapNhat", label: "Ngày cập nhật" },
+  // Thêm trường khác nếu cần
+];
+
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
@@ -191,6 +203,40 @@ function ApplicationList() {
             className="w-full md:w-1/6 text-left"
             isClearable
           />
+          {/* <div className="flex flex-col md:flex-row gap-3 items-center"> */}
+            {/* Select dùng react-select */}
+            <div className="w-full md:w-1/4">
+              <Select
+                options={fieldOptions}
+                value={selectedField}
+                onChange={(option) => setSelectedField(option)}
+                placeholder="Chọn trường ngày"
+                isClearable
+              />
+            </div>
+
+            {/* Từ ngày */}
+            <DatePicker
+              value={fromDate ? dayjs(fromDate) : null}
+              onChange={(date) =>
+                setFromDate(dayjs.isDayjs(date) && date.isValid() ? date.format("YYYY-MM-DD") : null)
+              }
+              format="DD/MM/YYYY"
+              placeholder="Từ ngày"
+              className="w-full md:w-1/4"
+            />
+
+            {/* Đến ngày */}
+            <DatePicker
+              value={toDate ? dayjs(toDate) : null}
+              onChange={(date) =>
+                setToDate(dayjs.isDayjs(date) && date.isValid() ? date.format("YYYY-MM-DD") : null)
+              }
+              format="DD/MM/YYYY"
+              placeholder="Đến ngày"
+              className="w-full md:w-1/4"
+            />
+          {/* </div> */}
         </div>
 
       </div>
