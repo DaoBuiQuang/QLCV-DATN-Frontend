@@ -16,6 +16,15 @@ function ApplicationList() {
   const [productAndService, setProductAndService] = useState([]);
   const [selectedProductAndService, setSelectedProductAndService] = useState([]);
   const [selectedTrangThaiDon, setSelectedTrangThaiDon] = useState(null);
+
+  const [selectedField, setSelectedField] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const filterCondition = {
+    selectedField: selectedField?.value || "", 
+    fromDate,
+    toDate,
+  };
   const trangThaiDonOptions = [
     { value: "Nộp đơn", label: "Nộp đơn" },
     { value: "Hoàn thành hồ sơ tài liệu", label: "Hoàn thành hồ sơ tài liệu" },
@@ -47,6 +56,7 @@ function ApplicationList() {
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
     { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
     { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
+    { label: "Hạn xử lý", key: "hanXuLy" },
   ];
   const [showFieldModal, setShowFieldModal] = useState(false);
   const [selectedFields, setSelectedFields] = useState(allFieldOptions.map(field => field.key));
@@ -55,7 +65,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, },
+        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition },
       });
       setApplications(response);
     } catch (error) {
@@ -117,19 +127,26 @@ function ApplicationList() {
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
     { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
     { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
+    
   ];
   const columns = allFieldOptions
     .filter(field => selectedFields.includes(field.key))
     .map(field => ({ label: field.label, key: field.key }));
-  const [selectedField, setSelectedField] = useState(""); // Trường ngày muốn lọc
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  
+
+
   const fieldOptions = [
-  { value: "ngayTao", label: "Ngày tạo" },
-  { value: "ngayCapNhat", label: "Ngày cập nhật" },
-  // Thêm trường khác nếu cần
-];
+    { value: "ngayNopDon", label: "Ngày nộp đơn" },
+    { value: "ngayHoanThanhHoSoTaiLieu", label: "Ngày hoàn thành hồ sơ tài liệu" },
+    { value: "ngayKQThamDinhHinhThuc", label: "Ngày chấp nhận đơn hợp lệ" },
+    { value: "ngayCongBoDon", label: "Ngày công bố đơn" },
+    { value: "ngayKQThamDinhND", label: "Ngày kết quả thẩm định nội dung đơn" },
+    { value: "ngayThongBaoCapBang", label: "Ngày thông báo cấp bằng" },
+    { value: "ngayNopPhiCapBang", label: "Ngày nộp phí cấp bằng" },
+    { value: "ngayGuiBangChoKhachHang", label: "Ngày gửi bằng cho khách hàng" },
+    { value: "ngayHetHanBang", label: "Ngày hết hạn bằng" },
+    // Thêm trường khác nếu cần
+  ];
+  const [showFilters, setShowFilters] = useState(false);
 
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
@@ -171,73 +188,87 @@ function ApplicationList() {
           </div>
 
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Select
-            options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
-            value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
-            onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
-            placeholder="Chọn nhãn hiệu"
-            className="w-full md:w-1/6 text-left"
-            isClearable
-          />
-          <Select
-            options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
-            value={formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt =>
-              selectedProductAndService?.includes(opt.value)
-            )}
-            onChange={selectedOptions =>
-              setSelectedProductAndService(selectedOptions ? selectedOptions.map(opt => opt.value) : [])
-            }
-            placeholder="Chọn sản phẩm/dịch vụ"
-            className="w-full md:w-1/5 text-left"
-            isClearable
-            isMulti
-          />
-          <Select
-            options={trangThaiDonOptions}
-            value={trangThaiDonOptions.find(opt => opt.value === selectedTrangThaiDon)}
-            onChange={selectedOption =>
-              setSelectedTrangThaiDon(selectedOption ? selectedOption.value : null)
-            }
-            placeholder="Chọn trạng thái đơn"
-            className="w-full md:w-1/6 text-left"
-            isClearable
-          />
-          {/* <div className="flex flex-col md:flex-row gap-3 items-center"> */}
-            {/* Select dùng react-select */}
-            <div className="w-full md:w-1/4">
-              <Select
-                options={fieldOptions}
-                value={selectedField}
-                onChange={(option) => setSelectedField(option)}
-                placeholder="Chọn trường ngày"
-                isClearable
-              />
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="bg-gray-600 hover:bg-gray-700 text-white px-5 py-1 rounded-lg shadow-md transition"
+        >
+          {showFilters ? "Ẩn bộ lọc" : "🔽 Bộ lọc nâng cao"}
+        </button>
+
+        {showFilters && (
+          <div className="flex flex-wrap gap-3 mt-4">
+            {/* Dòng 1: Select nhãn hiệu, sản phẩm, trạng thái */}
+            <Select
+              options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
+              value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
+              onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
+              placeholder="Chọn nhãn hiệu"
+              className="w-full md:w-1/5 text-left"
+              isClearable
+            />
+            <Select
+              options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
+              value={formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt =>
+                selectedProductAndService?.includes(opt.value)
+              )}
+              onChange={selectedOptions =>
+                setSelectedProductAndService(selectedOptions ? selectedOptions.map(opt => opt.value) : [])
+              }
+              placeholder="Chọn sản phẩm/dịch vụ"
+              className="w-full md:w-1/5 text-left"
+              isClearable
+              isMulti
+            />
+            <Select
+              options={trangThaiDonOptions}
+              value={trangThaiDonOptions.find(opt => opt.value === selectedTrangThaiDon)}
+              onChange={selectedOption =>
+                setSelectedTrangThaiDon(selectedOption ? selectedOption.value : null)
+              }
+              placeholder="Chọn trạng thái đơn"
+              className="w-full md:w-1/5 text-left"
+              isClearable
+            />
+
+            {/* Dòng 2: Trường ngày + từ ngày + đến ngày */}
+            <div className="w-full">
+              <label className="block text-gray-500 font-medium text-sm mb-2">
+                📅 Lọc theo mốc thời gian
+              </label>
+
+              <div className="flex flex-wrap gap-3 w-full">
+                <div className="w-full md:w-1/4">
+                  <Select
+                    options={fieldOptions}
+                    value={selectedField}
+                    onChange={(option) => setSelectedField(option)}
+                    placeholder="Chọn trường ngày"
+                    isClearable
+                  />
+                </div>
+                <DatePicker
+                  value={fromDate ? dayjs(fromDate) : null}
+                  onChange={(date) =>
+                    setFromDate(dayjs.isDayjs(date) && date.isValid() ? date.format("YYYY-MM-DD") : null)
+                  }
+                  format="DD/MM/YYYY"
+                  placeholder="Từ ngày"
+                  className="w-full md:w-1/6"
+                />
+                <DatePicker
+                  value={toDate ? dayjs(toDate) : null}
+                  onChange={(date) =>
+                    setToDate(dayjs.isDayjs(date) && date.isValid() ? date.format("YYYY-MM-DD") : null)
+                  }
+                  format="DD/MM/YYYY"
+                  placeholder="Đến ngày"
+                  className="w-full md:w-1/6"
+                />
+              </div>
             </div>
 
-            {/* Từ ngày */}
-            <DatePicker
-              value={fromDate ? dayjs(fromDate) : null}
-              onChange={(date) =>
-                setFromDate(dayjs.isDayjs(date) && date.isValid() ? date.format("YYYY-MM-DD") : null)
-              }
-              format="DD/MM/YYYY"
-              placeholder="Từ ngày"
-              className="w-full md:w-1/4"
-            />
-
-            {/* Đến ngày */}
-            <DatePicker
-              value={toDate ? dayjs(toDate) : null}
-              onChange={(date) =>
-                setToDate(dayjs.isDayjs(date) && date.isValid() ? date.format("YYYY-MM-DD") : null)
-              }
-              format="DD/MM/YYYY"
-              placeholder="Đến ngày"
-              className="w-full md:w-1/4"
-            />
-          {/* </div> */}
-        </div>
+          </div>
+        )}
 
       </div>
       <div class="overflow-x-auto">

@@ -11,7 +11,7 @@ const ContentReview = ({
     setLichSuThamDinhND,
     ngayKQThamDinhND_DK_SauKN,
     setNgayKQThamDinhND_DK_SauKN,
-     buocXuLy,
+    buocXuLy,
     setBuocXuLy,
     isViewOnly
 }) => {
