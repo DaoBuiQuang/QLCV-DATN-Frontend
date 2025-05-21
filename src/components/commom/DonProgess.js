@@ -10,9 +10,9 @@ const steps = [
   "Thẩm định hình thức",
   "Công bố đơn",
   "Thẩm định nội dung",
-  "Trả lời thẩm định nội dung",
   "Hoàn thành nhận bằng",
-  "Chờ nhận bằng",
+  "Gửi bằng cho khách hàng",
+  "Đơn đăng ký thành công",
 ];
 
 const DonProgress = ({ trangThaiDon }) => {

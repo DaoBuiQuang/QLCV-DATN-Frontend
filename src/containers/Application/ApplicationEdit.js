@@ -169,18 +169,19 @@ function ApplicationEdit() {
             const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
             setNgayTraLoiKQThamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
             setDaChonNgayThamDinhNoiDung(true);
-            setTrangThaiDon("Trả lời thẩm định nội dung")
+            // setTrangThaiDon("Trả lời thẩm định nội dung")
         } else {
             setNgayTraLoiKQThamDinhND_DuKien(null);
         }
         if (ngayTraLoiKQThamDinhND) {
             setTrangThaiDon("Hoàn thành nhận bằng")
             setDaChonNgayTraLoiThamDinhNoiDung(true)
-        } else {
-
+        }
+        if (daChonNgayTraLoiThamDinhNoiDung || (trangThaiTraLoiKQThamDinhND === false && daChonNgayThamDinhNoiDung)) {
+            setTrangThaiDon("Hoàn thành nhận bằng")
         }
         if (ngayThongBaoCapBang) {
-            setTrangThaiDon("Chờ nhận bằng")
+            setTrangThaiDon("Gửi bằng cho khách hàng")
             const ngayNopPhiCapBang = dayjs(ngayThongBaoCapBang).add(3, 'month');
             setNgayNopPhiCapBang(ngayNopPhiCapBang.format('YYYY-MM-DD'));
         } else {
@@ -189,7 +190,10 @@ function ApplicationEdit() {
         if (ngayNhanBang) {
             setDaChonHoanTatThuTucNhapBang(true);
         }
-    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang]);
+        if (ngayGuiBangChoKH) {
+            setTrangThaiDon("Đơn đăng ký thành công")
+        }
+    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang, daChonNgayTraLoiThamDinhNoiDung, trangThaiTraLoiKQThamDinhND, daChonNgayThamDinhNoiDung, ngayGuiBangChoKH]);
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -271,7 +275,7 @@ function ApplicationEdit() {
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
             console.error("Lỗi khi cập nhật nhãn hiệu!", error);
-            throw error; 
+            throw error;
         }
     };
 
@@ -333,8 +337,8 @@ function ApplicationEdit() {
     };
     const handleSubmit = async () => {
         try {
-            await handleEditBrand(); 
-            await handleApplication(); 
+            await handleEditBrand();
+            await handleApplication();
         } catch (err) {
             console.log("Dừng lại vì lỗi trong thêm brand hoặc application");
         }

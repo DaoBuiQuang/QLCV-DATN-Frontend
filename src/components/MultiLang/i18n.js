@@ -32,7 +32,8 @@ i18next
                     nhanSu: "Personnel",
                     caiDat: "Settings",
                     doiMatKhau: "Change Password",
-                    thongTinTaiKhoan: "Account Information"
+                    thongTinTaiKhoan: "Account Information",
+                    dashboard: "Dashboard"
                 },
             },
             vi: {
@@ -59,6 +60,7 @@ i18next
                     caiDat: "Cài đặt",
                     doiMatKhau: "Đổi mật khẩu",
                     thongTinTaiKhoan: "Thông tin tài khoản",
+                    dashboard: "Thống kê"
                 },
             },
         },

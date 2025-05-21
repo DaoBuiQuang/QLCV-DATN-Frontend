@@ -51,6 +51,7 @@ import JobDetail from "../containers/Job/JobDetail";
 import ChangePassword from "../containers/Auth/ChangePassword";
 import Profile from "../containers/Auth/Profile";
 import NotificationDetail from "../containers/Notification/NotificationDetail";
+import Dashboard from "../containers/Dashboard/Dashboard";
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -103,7 +104,7 @@ const AppRoutes = () => {
     <Router>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<CustomerList />} />
+          <Route path="/customerlist" element={<CustomerList />} />
           <Route path="/customeradd" element={<CustomerAdd></CustomerAdd>} />
           <Route path="/customeredit/:maKhachHang" element={<CustomerEdit></CustomerEdit>} />
           <Route path="/customerdetail/:maKhachHang" element={<CustomerDetail></CustomerDetail>} />
@@ -164,6 +165,7 @@ const AppRoutes = () => {
           <Route path="/profile" element={<Profile></Profile>} />
 
           <Route path="/notificationdetail/:id" element={<NotificationDetail></NotificationDetail>} />
+          <Route path="/" element={<Dashboard></Dashboard>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

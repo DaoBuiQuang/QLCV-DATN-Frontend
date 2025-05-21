@@ -12,6 +12,8 @@
     "axios": "^1.8.4",
     "docx": "^9.4.1",
     "docxtemplater": "^3.61.1",
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.2",
     "file-saver": "^2.0.5",
     "firebase": "^11.7.3",
     "i18next": "^21.10.0",
@@ -28,6 +30,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.10.1",
     "react-toastify": "^11.0.5",
+    "recharts": "^2.15.3",
     "sweetalert2": "^11.21.0",
     "web-vitals": "^2.1.0",
     "xlsx": "^0.18.5"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings, Tag, ShoppingCart } from "lucide-react";
+import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings, Tag, ShoppingCart,LayoutDashboard  } from "lucide-react";
 import { useSelector } from 'react-redux';
 import {Key, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,16 @@ function MenuLeft() {
                         <NavLink
                             to="/"
                             className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                                }`}
+                        >
+                            <LayoutDashboard  size={16} />
+                            <span>{t("dashboard")}</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/customerlist"
+                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/customerlist" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                                 }`}
                         >
                             <Users size={16} />
