@@ -20,10 +20,17 @@ function ApplicationList() {
   const [selectedField, setSelectedField] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [selectedHanXuLy, setSelectedHanXuLy] = useState(null);
+
+  useEffect(() => {
+    console.log("Selected field:", selectedHanXuLy);
+  }, [selectedHanXuLy]);
+
   const filterCondition = {
-    selectedField: selectedField?.value || "", 
+    selectedField: selectedField?.value || "",
     fromDate,
     toDate,
+    hanXuLyFilter: selectedHanXuLy?.value || "",
   };
   const trangThaiDonOptions = [
     { value: "Nộp đơn", label: "Nộp đơn" },
@@ -41,7 +48,9 @@ function ApplicationList() {
     { label: "Số Đơn", key: "soDon" },
     { label: "Mã hồ sơ vụ việc", key: "maHoSoVuViec" },
     { label: "Mã nhãn hiệu", key: "maNhanHieu" },
+    { label: "Danh sách SPDV", key: "dsSPDV" },
     { label: "Trạng thái đơn", key: "trangThaiDon" },
+    { label: "Hạn xử lý", key: "hanXuLy" },
     { label: "Trạng thái hoàn thành hồ sơ tài liệu", key: "trangThaiHoanThienHoSoTaiLieu" },
     { label: "Ngày nộp đơn", key: "ngayNopDon" },
     { label: "Ngày hoàn thành hồ sơ tài liệu", key: "ngayHoanThanhHoSoTaiLieu" },
@@ -56,10 +65,23 @@ function ApplicationList() {
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
     { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
     { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
-    { label: "Hạn xử lý", key: "hanXuLy" },
+
+  ];
+  const hiddenFieldKeys = [
+    "soBang",
+    "ngayCapBang",
+    "ngayHetHanBang",
+    "ngayGuiBangChoKhachHang",
+    "ngayNhanBang",
+    "ngayTraLoiKQThamDinhND",
+    "dsSPDV"
   ];
   const [showFieldModal, setShowFieldModal] = useState(false);
-  const [selectedFields, setSelectedFields] = useState(allFieldOptions.map(field => field.key));
+  const [selectedFields, setSelectedFields] = useState(
+    allFieldOptions
+      .filter(field => !hiddenFieldKeys.includes(field.key))
+      .map(field => field.key)
+  );
   const fetchApplications = async (searchValue) => {
     try {
       const response = await callAPI({
@@ -103,32 +125,10 @@ function ApplicationList() {
     }));
   };
   useEffect(() => {
-    fetchApplications("");
+    // fetchApplications("");
     fetchBrands();
     fetchItems();
   }, []);
-  const columnFiles = [
-    { label: "Mã đơn đăng ký", key: "maDonDangKy" },
-    { label: "Số Đơn", key: "soDon" },
-    { label: "Mã hồ sơ vụ việc", key: "maHoSoVuViec" },
-    { label: "Mã nhãn hiệu", key: "maNhanHieu" },
-    { label: "Trạng thái đơn", key: "trangThaiDon" },
-    { label: "Trạng thái hoàn thành hồ sơ tài liệu", key: "trangThaiHoanThienHoSoTaiLieu" },
-    { label: "Ngày nộp đơn", key: "ngayNopDon" },
-    { label: "Ngày hoàn thành hồ sơ tài liệu", key: "ngayHoanThanhHoSoTaiLieu" },
-    { label: "Ngày có kết quả thẩm định hình thức", key: "ngayKQThamDinhHinhThuc" },
-    { label: "Ngày công bố đơn", key: "ngayCongBoDon" },
-    { label: "Ngày có kết quả thẩm định nội dung", key: "ngayKQThamDinhND" },
-    { label: "Ngày trả lời kết quả thẩm định nội dung", key: "ngayTraLoiKQThamDinhND" },
-    { label: "Ngày thông báo cấp bằng", key: "ngayThongBaoCapBang" },
-    { label: "Ngày nộp phí cấp bằng", key: "ngayNopPhiCapBang" },
-    { label: "Ngày nhận bằng", key: "ngayNhanBang" },
-    { label: "Số bằng", key: "soBang" },
-    { label: "Ngày cấp bằng", key: "ngayCapBang" },
-    { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
-    { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
-    
-  ];
   const columns = allFieldOptions
     .filter(field => selectedFields.includes(field.key))
     .map(field => ({ label: field.label, key: field.key }));
@@ -146,7 +146,23 @@ function ApplicationList() {
     { value: "ngayHetHanBang", label: "Ngày hết hạn bằng" },
     // Thêm trường khác nếu cần
   ];
+  const hanXuLyOptions = [
+    { value: "<7", label: "Còn hạn dưới 7 ngày" },
+    { value: "<3", label: "Còn hạn dưới 3 ngày" },
+    { value: "overdue", label: "Đã quá hạn" }
+  ];
+
   const [showFilters, setShowFilters] = useState(false);
+  const getTenSPDVChuoi = (spdvList) => {
+    if (!Array.isArray(spdvList) || spdvList.length === 0) return "";
+
+    return spdvList
+      .map(sp => {
+        const found = productAndService.find(p => p.maSPDV === sp.maSPDV);
+        return found?.tenSPDV || `${sp.maSPDV}`;
+      })
+      .join(", ");
+  };
 
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
@@ -168,7 +184,7 @@ function ApplicationList() {
               🔎 Tìm kiếm
             </button>
             <button
-              onClick={() => exportToExcel(applications, columnFiles, "DanhSachĐonK")}
+              onClick={() => exportToExcel(applications, allFieldOptions, "DanhSachĐonK")}
               className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               📁 Xuất Excel
@@ -264,6 +280,15 @@ function ApplicationList() {
                   placeholder="Đến ngày"
                   className="w-full md:w-1/6"
                 />
+                <Select
+                  options={hanXuLyOptions}
+                  value={selectedHanXuLy}
+                  onChange={(option) => setSelectedHanXuLy(option)}
+                  placeholder="Lọc theo hạn xử lý"
+                  isClearable
+                />
+
+
               </div>
             </div>
 
@@ -320,7 +345,11 @@ function ApplicationList() {
                       </td>
                     );
                   }
-
+                  if (col.key === "dsSPDV") {
+                    return (
+                      <td>{getTenSPDVChuoi(app.dsSPDV)}</td>
+                    );
+                  }
                   // Special logic for trangThaiHoanThienHoSoTaiLieu
                   if (col.key === "trangThaiHoanThienHoSoTaiLieu") {
                     return (
@@ -402,7 +431,7 @@ function ApplicationList() {
           onClose={() => setShowFieldModal(false)}
           onConfirm={() => {
             setShowFieldModal(false);
-            fetchApplications(searchTerm)
+            // fetchApplications(searchTerm)
           }}
         />
       )}
