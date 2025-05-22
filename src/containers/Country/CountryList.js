@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
+import { Modal } from "antd";
 function CountryList() {
-   const { t } = useTranslation();
+  const { t } = useTranslation();
   const role = useSelector((state) => state.auth.role);
   console.log("role: ", role)
   const [countries, setCountries] = useState([]);
@@ -37,7 +38,7 @@ function CountryList() {
       });
       setShowDeleteModal(false);
       setCountryToDelete(null);
-      fetchCountries(searchTerm); 
+      fetchCountries(searchTerm);
     } catch (error) {
       console.error("Lỗi khi xóa đối tác:", error);
     }
@@ -88,7 +89,7 @@ function CountryList() {
           {countries.map((country, index) => (
             <tr
               key={country.id}
-              className="hover:bg-gray-100 text-center border-b"
+              className="group hover:bg-gray-100 text-center border-b relative"
             >
               <td className="p-2">{index + 1}</td>
               <td
@@ -101,55 +102,44 @@ function CountryList() {
                 {country.maQuocGia}
               </td>
               <td className="p-2">{country.tenQuocGia}</td>
-              <td className="p-2">
-                <div className="flex gap-2">
-                  {(role === 'admin' || role === 'staff') && (
-                    <div className="flex gap-2">
-                      <button
-                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                        onClick={() => navigate(`/countryedit/${country.maQuocGia}`)}
-                      >
-                        📝
-                      </button>
-                      <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                         onClick={() => {
-                          setCountryToDelete(country.maQuocGia);
-                          setShowDeleteModal(true);
-                        }}
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  )}
+              <td className="p-2 relative">
 
-                </div>
+                {(role === 'admin' || role === 'staff') && (
+                  <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
+                    <button
+                      className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                      onClick={() => navigate(`/countryedit/${country.maQuocGia}`)}
+                    >
+                      📝
+                    </button>
+                    <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                      onClick={() => {
+                        setCountryToDelete(country.maQuocGia);
+                        setShowDeleteModal(true);
+                      }}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {showDeleteModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-md w-80">
-            <h3 className="text-lg font-semibold mb-4 text-center">Xác nhận xóa</h3>
-            <p className="mb-4 text-center">Bạn có chắc chắn muốn xóa quốc gia này không?</p>
-            <div className="flex justify-between">
-              <button
-                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                Hủy
-              </button>
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                onClick={handleDeleteCountry}
-              >
-                Xác nhận xóa
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        title="Xác nhận xóa"
+        open={showDeleteModal}
+        onOk={handleDeleteCountry}
+        onCancel={() => setShowDeleteModal(false)}
+        okText="Xác nhận xóa"
+        cancelText="Hủy"
+        okButtonProps={{
+          className: "bg-red-500 hover:bg-red-600 text-white",
+        }}
+      >
+        <p>Bạn có chắc chắn muốn xóa quốc gia này không?</p>
+      </Modal>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
+import { Modal } from "antd";
 function BrandList() {
     const role = useSelector((state) => state.auth.role);
     const [brands, setBrands] = useState([]);
@@ -80,7 +81,7 @@ function BrandList() {
                 </thead>
                 <tbody>
                     {brands.map((brand, index) => (
-                        <tr key={brand.maNhanHieu} className="hover:bg-gray-100 text-center border-b">
+                        <tr key={brand.maNhanHieu} className="group hover:bg-gray-100 text-center border-b relative">
                             <td className="p-2">{index + 1}</td>
                             <td
                                 className="p-2 text-blue-500 cursor-pointer hover:underline"
@@ -100,9 +101,9 @@ function BrandList() {
                                 )}
                             </td>
 
-                            <td className="p-2">
+                            <td className="p-2 relative">
                                 {(role === 'admin' || role === 'staff') && (
-                                    <div className="flex gap-2 justify-center">
+                                    <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                                         <button
                                             className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
                                             onClick={() => navigate(`/brandedit/${brand.maNhanHieu}`)}
@@ -124,28 +125,19 @@ function BrandList() {
                     ))}
                 </tbody>
             </table>
-            {showDeleteModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-md w-80">
-                        <h3 className="text-lg font-semibold mb-4 text-center">Xác nhận xóa</h3>
-                        <p className="mb-4 text-center">Bạn có chắc chắn muốn xóa nhãn hiệu này không?</p>
-                        <div className="flex justify-between">
-                            <button
-                                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
-                                onClick={() => setShowDeleteModal(false)}
-                            >
-                                Hủy
-                            </button>
-                            <button
-                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                onClick={handleDeleteBrand}
-                            >
-                                Xác nhận xóa
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <Modal
+                title="Xác nhận xóa"
+                open={showDeleteModal}
+                onOk={handleDeleteBrand}
+                onCancel={() => setShowDeleteModal(false)}
+                okText="Xác nhận xóa"
+                cancelText="Hủy"
+                okButtonProps={{
+                    className: "bg-red-500 hover:bg-red-600 text-white",
+                }}
+            >
+                <p>Bạn có chắc chắn muốn xóa nhãn hiệu này không?</p>
+            </Modal>
         </div>
     );
 }

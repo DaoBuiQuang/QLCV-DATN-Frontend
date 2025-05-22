@@ -5,9 +5,13 @@ import Select from "react-select";
 import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 import FieldSelector from "../../components/FieldSelector";
 import dayjs from 'dayjs';
-import { DatePicker, Radio } from 'antd';
+import { useSelector } from 'react-redux';
+import { DatePicker, Radio, Modal } from 'antd';
 function ApplicationList() {
+  const role = useSelector((state) => state.auth.role);
   const [applications, setApplications] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [applicationToDelete, setApplicationToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -163,7 +167,12 @@ function ApplicationList() {
       })
       .join(", ");
   };
-
+  const handleDeleteApplication = async () => {
+    await callAPI({ method: "post", endpoint: "/application/delete", data: { maDonDangKy: applicationToDelete } });
+    setShowDeleteModal(false);
+    setApplicationToDelete(null);
+    fetchApplications(searchTerm);
+  };
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
@@ -287,8 +296,6 @@ function ApplicationList() {
                   placeholder="Lọc theo hạn xử lý"
                   isClearable
                 />
-
-
               </div>
             </div>
 
@@ -309,7 +316,7 @@ function ApplicationList() {
           </thead>
           <tbody>
             {applications.map((app, index) => (
-              <tr key={app.maDonDangKy} className="hover:bg-gray-100 text-center border-b">
+              <tr key={app.maDonDangKy} className="group hover:bg-gray-100 text-center border-b relative">
                 <td className="p-2">{index + 1}</td>
                 {columns.map(col => {
                   let content = app[col.key];
@@ -406,17 +413,19 @@ function ApplicationList() {
                 })}
 
                 <td className="p-2">
-                  <div className="flex gap-2 justify-center">
-                    <button
-                      className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                      onClick={() => navigate(`/applicationedit/${app.maDonDangKy}`)}
-                    >
-                      📝
-                    </button>
-                    <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300">
-                      🗑️
-                    </button>
-                  </div>
+                  {(role === "admin" || role === "staff") && (
+                    <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
+                      <button
+                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                        onClick={() => navigate(`/applicationedit/${app.maDonDangKy}`)}
+                      >
+                        📝
+                      </button>
+                      <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300" onClick={() => { setApplicationToDelete(app.maDonDangKy); setShowDeleteModal(true); }}>
+                        🗑️
+                      </button>
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}
@@ -435,6 +444,19 @@ function ApplicationList() {
           }}
         />
       )}
+      <Modal
+        title="Xác nhận xóa"
+        open={showDeleteModal}
+        onOk={handleDeleteApplication}
+        onCancel={() => setShowDeleteModal(false)}
+        okText="Xác nhận xóa"
+        cancelText="Hủy"
+        okButtonProps={{
+          className: "bg-red-500 hover:bg-red-600 text-white",
+        }}
+      >
+        <p>Bạn có chắc chắn muốn xóa đơn đăng ký này không?</p>
+      </Modal>
     </div>
   );
 }

@@ -113,7 +113,7 @@ function CustomerDetail() {
                             type="text"
                             value={maKhachHang}
                             readOnly
-                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 cursor-not-allowed"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
                         />
                     </div>
                     <div>
@@ -122,7 +122,7 @@ function CustomerDetail() {
                             type="text"
                             value={tenVietTatKH}
 
-                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 cursor-not-allowed"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
                         />
                     </div>
 
@@ -132,7 +132,7 @@ function CustomerDetail() {
                             type="text"
                             value={tenKhachHang}
                             readOnly
-                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 cursor-not-allowed"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
                         />
                     </div>
 
@@ -146,6 +146,7 @@ function CustomerDetail() {
                             placeholder="Chọn đối tác"
                             className="w-full  mt-1  rounded-lg text-left"
                             isClearable
+                            isDisabled
                         />
                     </div>
 
@@ -158,6 +159,7 @@ function CustomerDetail() {
                             placeholder="Chọn quốc gia"
                             className="w-full  mt-1  rounded-lg text-left"
                             isClearable
+                            isDisabled
                         />
                     </div>
 
@@ -170,17 +172,18 @@ function CustomerDetail() {
                             placeholder="Chọn ngành nghề"
                             className="w-full  mt-1  rounded-lg text-left"
                             isClearable
+                            isDisabled
                         />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Địa chỉ</label>
-                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100 " readOnly />
+                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 " readOnly />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Số điện thoại</label>
-                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly />
+                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
                     </div>
 
                     <div>
@@ -192,21 +195,22 @@ function CustomerDetail() {
                             placeholder="Chọn trạng thái"
                             className="w-full mt-1 rounded-lg text-left"
                             isClearable
+                            isDisabled
                         />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Mô tả</label>
-                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly />
+                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">Ghi chú</label>
-                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly />
+                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Mã khách hàng cũ</label>
-                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100" readOnly />
+                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
                     </div>
                 </div>
 

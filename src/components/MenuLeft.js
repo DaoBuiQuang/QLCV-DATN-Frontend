@@ -186,11 +186,6 @@ function MenuLeft() {
 
                 </ul>
             </nav>
-
-            {/* Đăng xuất */}
-            {/* <div className="p-4 border-t flex items-center space-x-2 text-[#B1B1B1] text-sm">
-                <span>Bùi Quang Đạo</span>
-            </div> */}
         </aside>
     );
 }

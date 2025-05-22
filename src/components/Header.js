@@ -9,6 +9,7 @@ import i18n from "../components/MultiLang/i18n.js";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector.js";
 import NotificationDropdown from "./NotificationDropdown";
+import { Modal } from "antd";
 
 function Header({ toggleMenu, isMenuOpen }) {
   const [username, setUsername] = useState(null);
@@ -100,30 +101,17 @@ function Header({ toggleMenu, isMenuOpen }) {
       </header>
 
       {/* Modal xác nhận đăng xuất */}
-      {showLogoutModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-80">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">
-              {t("logoutTitle")}
-            </h2>
-            <p className="text-gray-600 mb-6">{t("confirmLogout")}</p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowLogoutModal(false)}
-                className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-              >
-                {t("cancel")}
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                {t("logout")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        title={t("logoutTitle")}
+        open={showLogoutModal}
+        onOk={handleLogout}
+        onCancel={() => setShowLogoutModal(false)}
+        okText={t("logout")}
+        cancelText={t("cancel")}
+        okButtonProps={{ className: "bg-red-500 hover:bg-red-600 text-white" }}
+      >
+        <p>{t("confirmLogout")}</p>
+      </Modal>
     </>
   );
 }

@@ -4,6 +4,8 @@ import callAPI from "../../utils/api";
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
+import { Modal, Input, message } from 'antd';
+import { showSuccess, showError } from "../../components/commom/Notification";
 function StaffDetail() {
     const navigate = useNavigate();
     const { maNhanSu } = useParams();
@@ -17,6 +19,10 @@ function StaffDetail() {
     const [cccd, setCccd] = useState("");
     const [bangCap, setBangCap] = useState("");
     const [taiKhoan, setTaiKhoan] = useState(null)
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newPassword, setNewPassword] = useState("");
+
     useEffect(() => {
         const fetchStaffDetails = async () => {
             try {
@@ -42,6 +48,32 @@ function StaffDetail() {
         };
         fetchStaffDetails();
     }, [maNhanSu]);
+    const handleResetPassword = async () => {
+        if (!newPassword) {
+            message.warning("Vui lòng nhập mật khẩu mới.");
+            return;
+        }
+
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/reset-password",
+                data: {
+                    username: taiKhoan,
+                    newPassword: newPassword
+                }
+            });
+
+            message.success(response.message || "Mật khẩu đã được đặt lại.");
+            await showSuccess("Thành công!", "Lấy lại mật khẩu thành công!");
+            setIsModalOpen(false);
+            setNewPassword("");
+        } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
+            console.error("Reset password error:", error);
+            message.error(error?.response?.data?.message || "Lỗi khi đặt lại mật khẩu.");
+        }
+    };
 
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
@@ -115,9 +147,32 @@ function StaffDetail() {
                             Tạo tài khoản
                         </button>
                     )}
-
+                    {taiKhoan && (
+                        <button
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg"
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            Lấy lại mật khẩu
+                        </button>
+                    )}
                 </div>
             </div>
+            <Modal
+                title={`Đặt lại mật khẩu cho tài khoản ${taiKhoan}`}
+                open={isModalOpen}
+                onOk={handleResetPassword}
+                onCancel={() => setIsModalOpen(false)}
+                okText="Xác nhận"
+                cancelText="Hủy"
+            >
+                <label className="block text-left mb-2 text-gray-700">Mật khẩu mới</label>
+                <Input.Password
+                    placeholder="Nhập mật khẩu mới"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                />
+            </Modal>
+
         </div>
     );
 }

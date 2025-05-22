@@ -156,7 +156,7 @@ function CustomerEdit() {
                             type="text"
                             value={maKhachHang}
                             readOnly
-                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100"
+                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
                         />
                     </div>
                     <div>

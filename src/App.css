@@ -133,3 +133,7 @@ input.error {
   white-space: normal !important; /* Cho phép xuống dòng trong tiêu đề */
   text-align: center;
 }
+
+.css-hlgwow div{
+  color: #000 !important;
+}
