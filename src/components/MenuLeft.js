@@ -10,7 +10,8 @@ function MenuLeft() {
     const [openSettingSubmenu, setOpenSettingSubmenu] = useState(false);
     const { t } = useTranslation();
     return (
-        <aside className="bg-white w-56 h-screen shadow-md flex flex-col">
+        <aside className="bg-white w-56 h-screen shadow-md flex flex-col overflow-y-auto">
+
             {/* Logo */}
             <div className="p-2 flex justify-center">
                 <img src="https://ipac.vn/image/catalog/Logo-Slogan-PNG.png" alt="Logo" className="w-32" />
