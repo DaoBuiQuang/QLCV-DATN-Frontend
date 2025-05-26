@@ -6,7 +6,9 @@ import Select from "react-select";
 import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 import FieldSelector from "../../components/FieldSelector";
 import { Modal } from "antd";
+import { useTranslation } from "react-i18next";
 function CustomerList() {
+    const { t } = useTranslation();
     const role = useSelector((state) => state.auth.role);
     const [customers, setCustomers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -30,14 +32,15 @@ function CustomerList() {
     ]);
 
     const allFieldOptions = [
-        { key: "maKhachHang", label: "Mã KH" },
-        { key: "tenKhachHang", label: "Tên KH" },
-        { key: "diaChi", label: "Địa chỉ" },
-        { key: "sdt", label: "SĐT" },
-        { key: "tenDoiTac", label: "Đối tác" },
-        { key: "tenQuocGia", label: "Quốc gia" },
-        { key: "tenNganhNghe", label: "Ngành nghề" },
+        { key: "maKhachHang", label: t("maKhachHang") },
+        { key: "tenKhachHang", label: t("tenKhachHang") },
+        { key: "diaChi", label: t("diaChi") },
+        { key: "sdt", label: t("sdt") },
+        { key: "tenDoiTac", label: t("tenDoiTac") },
+        { key: "tenQuocGia", label: t("tenQuocGia") },
+        { key: "tenNganhNghe", label: t("tenNganhNghe") },
     ];
+
 
     const navigate = useNavigate();
 
@@ -98,7 +101,7 @@ function CustomerList() {
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách khách hàng</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">{t("danhSachKhachHang")}</h2>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
                     <input
                         type="text"
@@ -112,32 +115,32 @@ function CustomerList() {
                             onClick={() => fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry)}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
-                            🔎 Tìm kiếm
+                            {t("timKiem")}
                         </button>
                         <button
                             onClick={() => navigate("/customeradd")}
                             className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
-                            ➕ Thêm mới
+                            {t("themMoi")}
                         </button>
                         <button
                             onClick={() => exportToExcel(customers, columns, "DanhSachKhachHang")}
                             className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
-                            📁 Xuất Excel
+                            {t("xuatExcel")}
                         </button>
                         <button
                             onClick={() => setShowFieldModal(true)}
                             className="bg-purple-500 hover:bg-purple-600 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
-                            Chọn cột hiển thị
+                            {t("chonCotHienThi")}
                         </button>
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <Select options={formatOptions(countries, "maQuocGia", "tenQuocGia")} onChange={opt => setSelectedCountry(opt?.value)} placeholder="Chọn quốc gia" isClearable className="w-full md:w-1/6" />
-                    <Select options={formatOptions(partners, "maDoiTac", "tenDoiTac")} onChange={opt => setSelectedPartner(opt?.value)} placeholder="Chọn đối tác" isClearable className="w-full md:w-1/6" />
-                    <Select options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")} onChange={opt => setSelectedIndustry(opt?.value)} placeholder="Chọn ngành nghề" isClearable className="w-full md:w-1/6" />
+                    <Select options={formatOptions(countries, "maQuocGia", "tenQuocGia")} onChange={opt => setSelectedCountry(opt?.value)} placeholder={t("chonQuocGia")} isClearable className="w-full md:w-1/6" />
+                    <Select options={formatOptions(partners, "maDoiTac", "tenDoiTac")} onChange={opt => setSelectedPartner(opt?.value)} placeholder={t("chonDoiTac")} isClearable className="w-full md:w-1/6" />
+                    <Select options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")} onChange={opt => setSelectedIndustry(opt?.value)} placeholder={t("chonNganhNghe")} isClearable className="w-full md:w-1/6" />
                 </div>
             </div>
 
@@ -145,7 +148,7 @@ function CustomerList() {
                 <table className="w-full border-collapse bg-white text-sm">
                     <thead>
                         <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                            <th className="p-2">STT</th>
+                            <th className="p-2">{t("stt")}</th>
                             {columns.map(col => (
                                 <th key={col.key} className="p-2">{col.label}</th>
                             ))}
@@ -201,17 +204,17 @@ function CustomerList() {
                 />
             )}
             <Modal
-                title="Xác nhận xóa"
+                title={t("xacNhanXoa")}
                 open={showDeleteModal}
                 onOk={handleDeleteCustomer}
                 onCancel={() => setShowDeleteModal(false)}
-                okText="Xác nhận xóa"
-                cancelText="Hủy"
+                okText={t("xacNhan")}
+                cancelText={t("huy")}
                 okButtonProps={{
                     className: "bg-red-500 hover:bg-red-600 text-white",
                 }}
             >
-                <p>Bạn có chắc chắn muốn xóa khách hàng này không?</p>
+                <p>{t("cauHoiXacNhanXoa")}</p>
             </Modal>
         </div>
     );
