@@ -1,7 +1,7 @@
 // src/components/LanguageSelector.jsx
 import { useState, useEffect } from "react";
 import vietnam from "../assets/image/VietNam.png";
-import england from "../assets/image/Anh.png";
+import england from "../assets/image/Anh.svg";
 import i18n from "./MultiLang/i18n";
 
 const LanguageSelector = () => {

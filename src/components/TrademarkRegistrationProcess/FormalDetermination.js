@@ -169,6 +169,7 @@ const FormalDetermination = ({
                                     }}
                                     format="DD/MM/YYYY"
                                     className="mt-1 w-full"
+                                     disabled={isViewOnly}
                                 />
                             </div>
                         )}
@@ -186,6 +187,7 @@ const FormalDetermination = ({
                                 format="DD/MM/YYYY"
                                 placeholder="Chọn ngày chấp nhận đơn hợp lệ"
                                 className="mt-1 w-full"
+                                 disabled={isViewOnly}
                             />
                         </div>
                     </>
@@ -241,6 +243,7 @@ const FormalDetermination = ({
                                             type="button"
                                             onClick={() => deleteRefusal(index)}
                                             className="text-red-500 hover:text-red-700 text-xs"
+                                            disabled={isViewOnly}
                                         >
                                             🗑 Xóa
                                         </button>
@@ -248,7 +251,7 @@ const FormalDetermination = ({
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
                                     <div className="md:col-span-3">
-                                        <label className="block text-gray-600 text-left">Ngày nhận thông báo từ từ chối</label>
+                                        <label className="block text-gray-600 text-left">Ngày nhận thông báo từ chối</label>
                                         <DatePicker
                                             value={refusal.ngayNhanThongBaoTuChoiTD ? dayjs(refusal.ngayNhanThongBaoTuChoiTD) : null}
                                             onChange={(date) => {
@@ -259,7 +262,7 @@ const FormalDetermination = ({
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
-                                            placeholder="Chọn ngày nhận thông báo từ từ chối"
+                                            placeholder="Chọn ngày nhận thông báo từ chối"
                                             disabled={isViewOnly}
                                             className="mt-1 w-full text-left"
                                         />
@@ -387,6 +390,7 @@ const FormalDetermination = ({
                                                 format="DD/MM/YYYY"
                                                 placeholder='Chọn ngày nhận quyết định từ chối'
                                                 className="w-full"
+                                                disabled={isViewOnly}
                                             />
                                         </div>
                                         <div className="mt-8 flex justify-between items-center col-span-2">
@@ -406,6 +410,7 @@ const FormalDetermination = ({
                                                     updateRefusal(index, 'showKhieuNaiCSHCTForm', false);
                                                 }}
                                                 className="text-red-500 hover:text-red-700 text-xs ml-auto"
+                                                disabled={isViewOnly}
                                             >
                                                 🗑 Xóa
                                             </button>
@@ -440,6 +445,7 @@ const FormalDetermination = ({
                                                         }
                                                         format="DD/MM/YYYY"
                                                         className="w-full"
+                                                         disabled={isViewOnly}
                                                     />
                                                 </div>
                                                 <button
@@ -449,6 +455,7 @@ const FormalDetermination = ({
                                                         resetKhieuNaiBKHCN(updateRefusal, index);
                                                     }}
                                                     className="text-red-500 hover:text-red-700 text-xs ml-auto"
+                                                    disabled={isViewOnly}
                                                 >
                                                     🗑 Xóa
                                                 </button>
@@ -473,6 +480,7 @@ const FormalDetermination = ({
                                                                 handleKNThanhCong();
                                                             }}
                                                             className="mr-2"
+                                                            disabled={isViewOnly}
                                                         />
                                                         Thành công
                                                     </label>
@@ -484,6 +492,7 @@ const FormalDetermination = ({
                                                             checked={refusal.ketQuaKhieuNaiCSHTT === 'ThatBai'}
                                                             onChange={() => { updateRefusal(index, 'ketQuaKhieuNaiCSHTT', 'ThatBai'); handleKNThatBai(); }}
                                                             className="mr-2"
+                                                            disabled={isViewOnly}
                                                         />
                                                         Thất bại
                                                     </label>
@@ -503,6 +512,7 @@ const FormalDetermination = ({
                                                                 }
                                                                 format="DD/MM/YYYY"
                                                                 className="w-full mt-1 "
+                                                                 disabled={isViewOnly}
                                                             />
                                                         </div>
 
@@ -514,6 +524,7 @@ const FormalDetermination = ({
                                                                 className="w-full mt-1 p-2 border border-gray-300 rounded-md"
                                                                 rows={3}
                                                                 placeholder="Nhập ghi chú..."
+                                                                 disabled={isViewOnly}
                                                             />
                                                         </div>
                                                         {refusal.ketQuaKhieuNaiCSHTT === 'ThatBai' ? (
@@ -542,6 +553,7 @@ const FormalDetermination = ({
                                                                         }
                                                                         format="DD/MM/YYYY"
                                                                         className="w-full mt-1"
+                                                                         disabled={isViewOnly}
                                                                     />
                                                                 </div>
                                                             </>
@@ -574,12 +586,14 @@ const FormalDetermination = ({
                                                                 }
                                                                 format="DD/MM/YYYY"
                                                                 className="w-full"
+                                                                 disabled={isViewOnly}
                                                             />
                                                         </div>
                                                         <button
                                                             type="button"
                                                             onClick={() => resetKhieuNaiBKHCN(updateRefusal, index)}
                                                             className="text-red-500 hover:text-red-700 text-xs ml-auto"
+                                                            disabled={isViewOnly}
                                                         >
                                                             🗑 Xóa
                                                         </button>
@@ -600,6 +614,7 @@ const FormalDetermination = ({
                                                                         handleKNThanhCong();
                                                                     }}
                                                                     className="mr-2"
+                                                                    disabled={isViewOnly}
                                                                 />
                                                                 Thành công
                                                             </label>
@@ -614,6 +629,7 @@ const FormalDetermination = ({
                                                                         handleKNThatBai();
                                                                     }}
                                                                     className="mr-2"
+                                                                    disabled={isViewOnly}
                                                                 />
                                                                 Thất bại
                                                             </label>
@@ -633,6 +649,7 @@ const FormalDetermination = ({
                                                                         }
                                                                         format="DD/MM/YYYY"
                                                                         className="w-full mt-1 "
+                                                                         disabled={isViewOnly}
                                                                     />
                                                                 </div>
 
@@ -644,6 +661,7 @@ const FormalDetermination = ({
                                                                         className="w-full mt-1 p-2 border border-gray-300 rounded-md text-input"
                                                                         rows={3}
                                                                         placeholder="Nhập ghi chú..."
+                                                                         disabled={isViewOnly}
                                                                     />
                                                                 </div>
                                                                 {(refusal.ketQuaKhieuNaiBKHCN === 'ThanhCong' || refusal.ketQuaKhieuNaiCSHTT === 'ThanhCong') && (
@@ -656,6 +674,7 @@ const FormalDetermination = ({
                                                                             }
                                                                             format="DD/MM/YYYY"
                                                                             className="w-full mt-1 "
+                                                                             disabled={isViewOnly}
                                                                         />
                                                                     </div>
                                                                 )}

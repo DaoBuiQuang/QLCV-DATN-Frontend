@@ -109,12 +109,13 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
                                                 updatedList[idx].trangThai = tl.trangThai === "Đã nộp" ? "Chưa nộp" : "Đã nộp";
                                                 updateTaiLieuList(updatedList);
                                             }}
+                                            disabled={isViewOnly}
                                         />
                                     </td>
 
                                     <td className="px-4 py-1 border text-center">
-                                        <button onClick={() => handleEdit(idx)} className="text-yellow-600 hover:text-yellow-800 text-xl mr-2" title="Chỉnh sửa">📝</button>
-                                        <button onClick={() => handleDelete(idx)} className="text-red-600 hover:text-red-800 text-xl" title="Xóa">🗑️</button>
+                                        <button onClick={() => handleEdit(idx)} className="text-yellow-600 hover:text-yellow-800 text-xl mr-2" title="Chỉnh sửa" disabled={isViewOnly}>📝</button>
+                                        <button onClick={() => handleDelete(idx)} className="text-red-600 hover:text-red-800 text-xl" title="Xóa" disabled={isViewOnly}>🗑️</button>
                                     </td>
                                 </tr>
                             ))}

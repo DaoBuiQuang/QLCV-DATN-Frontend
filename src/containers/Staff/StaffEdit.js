@@ -67,9 +67,9 @@ function StaffEdit() {
                     chucVu,
                     phongBan,
                     sdt,
-                    email,
+                    email: email || null,
                     ngayThangNamSinh,
-                    cccd,
+                    cccd: cccd || null,
                     bangCap,
                 },
             });

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import {Key, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 function MenuLeft() {
-    const location = useLocation(); // Lấy đường dẫn hiện tại
+    const location = useLocation();
     const role = useSelector((state) => state.auth.role);
     const [openSettingSubmenu, setOpenSettingSubmenu] = useState(false);
     const { t } = useTranslation();

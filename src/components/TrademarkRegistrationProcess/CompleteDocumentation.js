@@ -67,6 +67,7 @@ const CompleteDocumentation = ({
                         format="DD/MM/YYYY"
                         placeholder="Chọn ngày hoàn thành hồ sơ tài liệu"
                         className="mt-1 w-full"
+                        disabled={isViewOnly}
                     />
                 </div>
                 <div>

@@ -19,6 +19,7 @@ function CaseEdit() {
     const [maLoaiDon, setMaLoaiDon] = useState("")
     const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [maDonDangKy, setMaDonDangKy] = useState(null);
     // const [ngayTao, setNgayTao] = useState("");
     // const [ngayCapNhap, setNgayCapNhap] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
@@ -111,6 +112,7 @@ function CaseEdit() {
                 setTrangThaiVuViec(response.trangThaiVuViec);
                 setBuocXuLyHienTai(response.buocXuLyHienTai);
                 setMaLoaiDon(response.maLoaiDon);
+                setMaDonDangKy(response.maDonDangKy);
                 const nhanSuChinh = response.nhanSuXuLy.find(item => item.vaiTro === "Chính");
                 const nhanSuPhu = response.nhanSuXuLy.find(item => item.vaiTro === "Phụ");
 
@@ -238,7 +240,12 @@ function CaseEdit() {
         }
     };
     const handleApplicationAdd = () => {
-        navigate(`/applicationadd/${maHoSoVuViec}`);
+        if (!maDonDangKy) {
+            navigate(`/applicationadd/${maHoSoVuViec}`);
+        }
+        else {
+            navigate(`/applicationedit/${maDonDangKy}`);
+        }
     };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
@@ -407,7 +414,7 @@ function CaseEdit() {
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
@@ -417,7 +424,7 @@ function CaseEdit() {
                             className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label className="block text-gray-700 text-left text-left">Người xử lí chính</label>
                         <Select
@@ -455,9 +462,9 @@ function CaseEdit() {
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-blue-300 cursor-not-allowed"
                             }`}>Sửa hồ sơ vụ việc</button>
-                    {maLoaiVuViec?.startsWith("NH") && (
+                     {maLoaiVuViec?.startsWith("NH01") && (
                         <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                            Tạo đơn đăng kí
+                            {maDonDangKy ? "Sửa đơn đăng ký nhãn hiệu" : "Tạo đơn đăng ký nhãn hiệu"}
                         </button>
                     )}
                 </div>

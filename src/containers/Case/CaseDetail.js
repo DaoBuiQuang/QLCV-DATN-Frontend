@@ -19,6 +19,7 @@ function CaseDetail() {
     const [maLoaiDon, setMaLoaiDon] = useState("")
     const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [maDonDangKy, setMaDonDangKy] = useState(null);
     // const [ngayTao, setNgayTao] = useState("");
     // const [ngayCapNhap, setNgayCapNhap] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
@@ -111,6 +112,7 @@ function CaseDetail() {
                 setTrangThaiVuViec(response.trangThaiVuViec);
                 setBuocXuLyHienTai(response.buocXuLyHienTai);
                 setMaLoaiDon(response.maLoaiDon);
+                setMaDonDangKy(response.maDonDangKy);
                 const nhanSuChinh = response.nhanSuXuLy.find(item => item.vaiTro === "Chính");
                 const nhanSuPhu = response.nhanSuXuLy.find(item => item.vaiTro === "Phụ");
 
@@ -210,13 +212,18 @@ function CaseDetail() {
 
 
     const handleApplicationAdd = () => {
-        navigate(`/applicationadd/${maHoSoVuViec}`);
+        if (!maDonDangKy) {
+            navigate(`/applicationadd/${maHoSoVuViec}`);
+        }
+        else {
+            navigate(`/applicationdetail/${maDonDangKy}`);
+        }
     };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             {console.log("người xử lí: ", nguoiXuLyChinh)}
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ vụ việc</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thông tin hồ sơ vụ việc</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
@@ -288,7 +295,7 @@ function CaseDetail() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Ngày xử lý</label>
+                        <label className="block text-gray-700 text-left">Ngày xử lý</label>
                         <DatePicker
                             value={ngayXuLy ? dayjs(ngayXuLy) : null}
                             onChange={(date) => {
@@ -387,7 +394,7 @@ function CaseDetail() {
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
@@ -398,7 +405,7 @@ function CaseDetail() {
                             isClearable
                             isDisabled
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label className="block text-gray-700 text-left text-left">Người xử lí chính</label>
                         <Select
@@ -433,9 +440,9 @@ function CaseDetail() {
                 </div>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    {maLoaiVuViec?.startsWith("NH") && (
+                    {maLoaiVuViec?.startsWith("NH01") && (
                         <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                            Tạo đơn đăng kí
+                            {maDonDangKy ? "Xem đơn đăng ký nhãn hiệu" : "Tạo đơn đăng ký nhãn hiệu"}
                         </button>
                     )}
 

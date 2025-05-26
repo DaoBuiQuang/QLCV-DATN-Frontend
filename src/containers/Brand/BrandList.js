@@ -59,12 +59,12 @@ function BrandList() {
                         >
                             🔎 Tìm kiếm
                         </button>
-                        <button
+                        {/* <button
                             onClick={() => navigate("/brandadd")}
                             className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             ➕ Thêm mới
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>

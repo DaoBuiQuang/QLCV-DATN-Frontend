@@ -245,6 +245,7 @@ const ContentReview = ({
                                             type="button"
                                             onClick={() => deleteRefusal(index)}
                                             className="text-red-500 hover:text-red-700 text-xs"
+                                            disabled={isViewOnly}
                                         >
                                             🗑 Xóa
                                         </button>
@@ -253,7 +254,7 @@ const ContentReview = ({
 
                                 <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
                                     <div className="md:col-span-3">
-                                        <label className="block text-gray-600 text-left">Ngày nhận thông báo từ từ chối</label>
+                                        <label className="block text-gray-600 text-left">Ngày nhận thông báo từ chối</label>
                                         <DatePicker
                                             value={refusal.ngayNhanThongBaoTuChoiTD ? dayjs(refusal.ngayNhanThongBaoTuChoiTD) : null}
                                             onChange={(date) => {
@@ -264,7 +265,7 @@ const ContentReview = ({
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
-                                            placeholder="Chọn ngày nhận thông báo từ từ chối"
+                                            placeholder="Chọn ngày nhận thông báo từ chối"
                                             disabled={isViewOnly}
                                             className="mt-1 w-full"
                                         />
@@ -318,6 +319,7 @@ const ContentReview = ({
                                                             }}
                                                             format="DD/MM/YYYY"
                                                             className="w-full disabled"
+                                                            disabled={isViewOnly}
 
                                                         />
                                                     </div>
@@ -395,6 +397,7 @@ const ContentReview = ({
                                                     placeholder='Chọn ngày nhận quyết định từ chối'
                                                     format="DD/MM/YYYY"
                                                     className="w-full"
+                                                    disabled={isViewOnly}
                                                 />
                                             </div>
                                             <div className="mt-8 flex justify-between items-center col-span-2">
@@ -414,6 +417,7 @@ const ContentReview = ({
                                                         updateRefusal(index, 'showKhieuNaiCSHCTForm', false);
                                                     }}
                                                     className="text-red-500 hover:text-red-700 text-xs ml-auto"
+                                                    disabled={isViewOnly}
                                                 >
                                                     🗑 Xóa
                                                 </button>
@@ -450,6 +454,7 @@ const ContentReview = ({
                                                             }
                                                             format="DD/MM/YYYY"
                                                             className="w-full"
+                                                             disabled={isViewOnly}
                                                         />
                                                     </div>
                                                     <button
@@ -459,6 +464,7 @@ const ContentReview = ({
                                                             resetKhieuNaiBKHCN(updateRefusal, index);
                                                         }}
                                                         className="text-red-500 hover:text-red-700 text-xs ml-auto"
+                                                        disabled={isViewOnly}
                                                     >
                                                         🗑 Xóa
                                                     </button>
@@ -484,6 +490,7 @@ const ContentReview = ({
                                                                     resetKhieuNaiBKHCN(updateRefusal, index); // gọi luôn hàm reset của BKH&CN nếu có
                                                                 }}
                                                                 className="mr-2"
+                                                                disabled={isViewOnly}
                                                             />
                                                             Thành công
                                                         </label>
@@ -495,6 +502,7 @@ const ContentReview = ({
                                                                 checked={refusal.ketQuaKhieuNaiCSHTT === 'ThatBai'}
                                                                 onChange={() => { updateRefusal(index, 'ketQuaKhieuNaiCSHTT', 'ThatBai'); handleKNThatBai(); }}
                                                                 className="mr-2"
+                                                                disabled={isViewOnly}
                                                             />
                                                             Thất bại
                                                         </label>
@@ -514,6 +522,7 @@ const ContentReview = ({
                                                                     }
                                                                     format="DD/MM/YYYY"
                                                                     className="w-full mt-1 "
+                                                                    disabled={isViewOnly}
                                                                 />
                                                             </div>
 
@@ -525,6 +534,7 @@ const ContentReview = ({
                                                                     className="w-full mt-1 p-2 border border-gray-300 rounded-md"
                                                                     rows={3}
                                                                     placeholder="Nhập ghi chú..."
+                                                                    disabled={isViewOnly}
                                                                 />
                                                             </div>
                                                             {refusal.ketQuaKhieuNaiCSHTT === 'ThatBai' ? (
@@ -534,6 +544,7 @@ const ContentReview = ({
                                                                             type="button"
                                                                             onClick={() => updateRefusal(index, 'showKhieuNaiBKHCNForm', true)}
                                                                             className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs"
+                                                                            disabled={isViewOnly}
                                                                         >
                                                                             Khiếu nại Bộ khoa học và công nghệ
                                                                         </button>
@@ -553,6 +564,7 @@ const ContentReview = ({
                                                                             }
                                                                             format="DD/MM/YYYY"
                                                                             className="w-full mt-1"
+                                                                            disabled={isViewOnly}
                                                                         />
                                                                     </div>
                                                                 </>
@@ -586,12 +598,14 @@ const ContentReview = ({
                                                                     }
                                                                     format="DD/MM/YYYY"
                                                                     className="w-full"
+                                                                    disabled={isViewOnly}
                                                                 />
                                                             </div>
                                                             <button
                                                                 type="button"
                                                                 onClick={() => resetKhieuNaiBKHCN(updateRefusal, index)}
                                                                 className="text-red-500 hover:text-red-700 text-xs ml-auto"
+                                                                disabled={isViewOnly}
                                                             >
                                                                 🗑 Xóa
                                                             </button>
@@ -612,6 +626,7 @@ const ContentReview = ({
                                                                             handleDat();
                                                                         }}
                                                                         className="mr-2"
+                                                                        disabled={isViewOnly}
                                                                     />
                                                                     Thành công
                                                                 </label>
@@ -626,6 +641,7 @@ const ContentReview = ({
                                                                             handleKNThatBai();
                                                                         }}
                                                                         className="mr-2"
+                                                                        disabled={isViewOnly}
                                                                     />
                                                                     Thất bại
                                                                 </label>
@@ -645,6 +661,7 @@ const ContentReview = ({
                                                                             }
                                                                             format="DD/MM/YYYY"
                                                                             className="w-full mt-1 "
+                                                                            disabled={isViewOnly}
                                                                         />
                                                                     </div>
 
@@ -656,6 +673,7 @@ const ContentReview = ({
                                                                             className="w-full mt-1 p-2 border border-gray-300 rounded-md text-input"
                                                                             rows={3}
                                                                             placeholder="Nhập ghi chú..."
+                                                                            disabled={isViewOnly}
                                                                         />
                                                                     </div>
                                                                     {(refusal.ketQuaKhieuNaiBKHCN === 'ThanhCong' || refusal.ketQuaKhieuNaiCSHTT === 'ThanhCong') && (
@@ -668,6 +686,7 @@ const ContentReview = ({
                                                                                 }
                                                                                 format="DD/MM/YYYY"
                                                                                 className="w-full mt-1 "
+                                                                                disabled={isViewOnly}
                                                                             />
                                                                         </div>
                                                                     )}

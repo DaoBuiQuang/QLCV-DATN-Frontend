@@ -9,7 +9,8 @@ function BrandBasicForm({
   setLinkAnh,
   errors,
   validateField,
-  isEditOnly
+  isEditOnly,
+  isViewOnly,
 }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -36,9 +37,9 @@ function BrandBasicForm({
             setMaNhanHieu(e.target.value);
             validateField("maNhanHieu", e.target.value);
           }}
-          disabled={isEditOnly}
+          disabled={isViewOnly||isEditOnly}
           placeholder="Nhập mã nhãn hiệu"
-          className="w-full p-2 mt-1 border rounded-lg text-input"
+           className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly || isEditOnly ? 'bg-gray-200' : ''}`}
         />
         {errors?.maNhanHieu && (
           <p className="text-red-500 text-xs mt-1 text-left">
@@ -60,7 +61,8 @@ function BrandBasicForm({
             validateField("tenNhanHieu", e.target.value);
           }}
           placeholder="Nhập tên nhãn hiệu"
-          className="w-full p-2 mt-1 border rounded-lg text-input"
+          disabled={isViewOnly}
+          className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly  ? 'bg-gray-200' : ''}`}
         />
         {errors?.tenNhanHieu && (
           <p className="text-red-500 text-xs mt-1 text-left">
@@ -71,13 +73,18 @@ function BrandBasicForm({
 
       {/* Ảnh */}
       <div className="col-span-2">
-        <label className="block text-gray-700 text-left">Chọn ảnh</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-full p-2 mt-1 border rounded-lg"
-        />
+
+        {!isViewOnly && (
+          <>
+            <label className="block text-gray-700 text-left">Chọn ảnh</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full p-2 mt-1 border rounded-lg"
+            />
+          </>
+        )}
         {linkAnh && (
           <div className="mt-2">
             <img

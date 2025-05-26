@@ -28,13 +28,14 @@ function CaseList() {
         "maDonDangKy",
         "noiDungVuViec",
         "trangThaiVuViec",
-        "buocXuLyHienTai",
+        // "buocXuLyHienTai",
         "ngayTiepNhan",
         "ngayTao",
         "ngayCapNhap",
         "tenKhachHang",
         "tenQuocGia",
         "tenLoaiVuViec",
+        "tenLoaiDon",
         "nhanSuXuLy",
     ]);
 
@@ -43,13 +44,14 @@ function CaseList() {
         { key: "maDonDangKy", label: "Mã đơn đăng ký" },
         { key: "noiDungVuViec", label: "Nội dung vụ việc" },
         { key: "trangThaiVuViec", label: "Trạng thái" },
-        { key: "buocXuLyHienTai", label: "Bước xử lý hiện tại" },
+        // { key: "buocXuLyHienTai", label: "Bước xử lý hiện tại" },
         { key: "ngayTiepNhan", label: "Ngày tiếp nhận" },
         { key: "ngayTao", label: "Ngày tạo" },
         { key: "ngayCapNhap", label: "Ngày cập nhập" },
         { key: "tenKhachHang", label: "Tên khách hàng" },
         { key: "tenQuocGia", label: "Quốc gia" },
         { key: "tenLoaiVuViec", label: "Loại vụ việc" },
+        { key: "tenLoaiDon", label: "Loại đơn" },
         { key: "nhanSuXuLy", label: "Nhân sự xử lý" },
     ];
     const formatOptions = (data, valueKey, labelKey) => {
@@ -316,7 +318,18 @@ function CaseList() {
                                             </td>
                                         );
                                     }
-
+                                    if (col.key === "trangThaiVuViec") {
+                                        const statusMap = {
+                                            dang_xu_ly: "Đang xử lý",
+                                            hoan_thanh: "Hoàn thành",
+                                            tam_dung: "Tạm dừng"
+                                        };
+                                        return (
+                                            <td key={col.key} className="p-2">
+                                                {statusMap[content] || "Không xác định"}
+                                            </td>
+                                        );
+                                    }
                                     return <td key={col.key} className="p-2">{content}</td>;
                                 })}
                                 {/* <td className="p-2">

@@ -419,7 +419,7 @@ function CaseAdd() {
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
@@ -429,7 +429,7 @@ function CaseAdd() {
                             className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label className="block text-gray-700 text-left">Người xử lí chính</label>
                         <Select
