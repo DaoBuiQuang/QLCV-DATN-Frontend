@@ -36,7 +36,7 @@ export default function App() {
           return;
         }
 
-        await axios.post("http://localhost:3000/api/save-token", {
+        await axios.post(`${process.env.REACT_APP_API_URL}/save-token`, {
           maNhanSu,
           token,
         });
@@ -54,7 +54,7 @@ export default function App() {
           .then((currentToken) => {
             if (currentToken) {
               console.log("FCM Token:", currentToken);
-              registerFCMToken(currentToken); // Gửi token lên backend
+              registerFCMToken(currentToken); 
             } else {
               console.log("Không có token FCM khả dụng.");
             }

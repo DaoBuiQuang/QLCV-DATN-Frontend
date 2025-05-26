@@ -53,7 +53,6 @@ i18next
                     deleteSuccess: "Employee deleted successfully",
                     deleteError: "Failed to delete employee",
                     department: "Department"
-
                 },
             },
             vi: {
@@ -143,6 +142,20 @@ i18next
                     tenDoiTac: "Đối tác",
                     tenQuocGia: "Quốc gia",
                     tenNganhNghe: "Ngành nghề",
+                    tenVietTatKH:"Tên viết tắt KH",
+                    trangThai: "Trạng thái",
+                    moTa: "Mô tả",
+                    ghiChu: "Ghi chú",
+                    maKhachHangCu: "Mã khách hàng cũ",
+                    themKhachHang: "Thêm khách hàng",
+                    themKhachHangThanhCong: "Thêm khách hàng thành công!",
+                    suaKhachHang: "Sửa khách hàng",
+                    capNhapKhachHangThanhCong: "Cập nhập khách hàng thành công!",
+                    maKhachHangRequired: "Mã khách hàng không được để trống",
+                    tenVietTatKHRequired: "Tên viết tắt của khách hàng không được để trống",
+                    tenKhachHangRequired: "Tên khách hàng không được để trống",
+                    chiTietKhachHang: "Chi tiết khách hàng",
+                    suaKhachHang: "Sửa khách hàng"
                 },
             },
         },

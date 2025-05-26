@@ -3,7 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
 import { showSuccess, showError } from "../../components/commom/Notification";
+import { useTranslation } from "react-i18next";
 function CustomerEdit() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { maKhachHang } = useParams();
     const [tenVietTatKH, setTenVietTatKH] = useState("");
@@ -31,9 +33,9 @@ function CustomerEdit() {
     const validateField = (field, value) => {
         let error = "";
         if (!value.trim()) {
-            if (field === "maKhachHang") error = "Mã khách hàng không được để trống";
-            if (field === "tenVietTatKH") error = "Tên viết tắt của khách hàng không được để trống";
-            if (field === "tenKhachHang") error = "Tên khách hàng không được để trống";
+            if (field === "maKhachHang") error = t("maKhachHangRequired");
+            if (field === "tenVietTatKH") error = t("tenVietTatKHRequired");
+            if (field === "tenKhachHang") error = t("tenKhachHangRequired");
         }
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -133,11 +135,11 @@ function CustomerEdit() {
                     maNganhNghe
                 },
             });
-            await showSuccess("Thành công!", "Cập nhập khách hàng thành công!");
+            await showSuccess(t("successTitle"), t("capNhapKhachHangThanhCong"));
             navigate(-1);
         } catch (error) {
-            showError("Thất bại!", "Đã xảy ra lỗi.", error);
-            console.error("Lỗi khi thêm khách hàng!", error);
+            showError(t("errorTitle"), t("genericError"), error);
+            console.error(t("addStaffError"), error);
         }
     };
     const trangThaiOptions = [
@@ -147,11 +149,11 @@ function CustomerEdit() {
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa khách hàng mới</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 {t("suaKhachHang")}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
                     <div>
-                    <label className="block text-gray-700 text-left">Mã khách hàng <span className="text-red-500">*</span></label>
+                         <label className="block text-gray-700 text-left">{t("maKhachHang")}<span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={maKhachHang}
@@ -160,16 +162,21 @@ function CustomerEdit() {
                         />
                     </div>
                     <div>
-                    <label className="block text-gray-700 text-left">Tên viết tắt khách hàng <span className="text-red-500">*</span></label>
+                       <label className="block text-gray-700 text-left">{t("tenVietTatKH")} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenVietTatKH}
-                            onChange={(e) => setTenVietTatKH(e.target.value)}
+                            onChange={(e) => {setTenVietTatKH(e.target.value)
+                                validateField("tenVietTatKH", e.target.value)
+                            }}
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
+                        {errors.tenVietTatKH && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.tenVietTatKH}</p>
+                        )}
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Tên khách hàng <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">{t("tenKhachHang")} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={tenKhachHang}
@@ -183,84 +190,88 @@ function CustomerEdit() {
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.tenKhachHang}</p>
                         )}
                     </div>
+
                     <div>
-                        <label className="block text-gray-700 text-left">Đối tác</label>
+                        <label className="block text-gray-700 text-left">{t("tenDoiTac")}</label>
                         <Select
                             options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
                             onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
-                            placeholder="Chọn đối tác"
-                            className="w-full  mt-1  rounded-lg text-left"
-                            isClearable
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Quốc gia</label>
-                        <Select
-                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
-                            placeholder="Chọn quốc gia"
-                            className="w-full  mt-1  rounded-lg text-left"
-                            isClearable
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Ngành nghề</label>
-                        <Select
-                            options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
-                            value={maNganhNghe ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === maNganhNghe) : null}
-                            onChange={selectedOption => setMaNganhNghe(selectedOption?.value)}
-                            placeholder="Chọn ngành nghề"
-                            className="w-full  mt-1  rounded-lg text-left"
-                            isClearable
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Địa chỉ</label>
-                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Số điện thoại</label>
-                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 text-left">Trạng thái</label>
-                        <Select
-                            options={trangThaiOptions}
-                            value={trangThaiOptions.find(option => option.value === trangThai)}
-                            onChange={(selectedOption) => setTrangThai(selectedOption?.value)}
-                            placeholder="Chọn trạng thái"
+                            placeholder={t("chonDoiTac")}
                             className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Mô tả</label>
+                        <label className="block text-gray-700 text-left">{t("tenQuocGia")}</label>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
+                            onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
+                            placeholder={t("chonQuocGia")}
+                            className="w-full mt-1 rounded-lg text-left"
+                            isClearable
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 text-left">{t("tenNganhNghe")}</label>
+                        <Select
+                            options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
+                            value={maNganhNghe ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === maNganhNghe) : null}
+                            onChange={selectedOption => setMaNganhNghe(selectedOption?.value)}
+                            placeholder={t("chonNganhNghe")}
+                            className="w-full mt-1 rounded-lg text-left"
+                            isClearable
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 text-left">{t("diaChi")}</label>
+                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 text-left">{t("sdt")}</label>
+                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 text-left">{t("trangThai")}</label>
+                        <Select
+                            options={trangThaiOptions}
+                            value={trangThaiOptions.find(option => option.value === trangThai)}
+                            onChange={(selectedOption) => setTrangThai(selectedOption?.value)}
+                            placeholder={t("chonTrangThai")}
+                            className="w-full mt-1 rounded-lg text-left"
+                            isClearable
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 text-left">{t("moTa")}</label>
                         <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Ghi chú</label>
+                        <label className="block text-gray-700 text-left">{t("ghiChu")}</label>
                         <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
+
                     <div>
-                        <label className="block text-gray-700 text-left">Mã khách hàng cũ</label>
+                        <label className="block text-gray-700 text-left">{t("maKhachHangCu")}</label>
                         <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
                     </div>
                 </div>
 
                 <div className="flex justify-center gap-4 mt-4">
-                    <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
+                    <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">{t("back")}</button>
                     <button onClick={handleEditCustomer} disabled={!isFormValid}
                         className={`px-4 py-2 rounded-lg text-white ${isFormValid
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-blue-300 cursor-not-allowed"
-                            }`}>Sửa khách hàng</button>
+                            }`}>{t("suaKhachHang")}</button>
                 </div>
             </div>
         </div>
