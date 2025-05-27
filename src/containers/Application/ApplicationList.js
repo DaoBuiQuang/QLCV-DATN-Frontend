@@ -357,6 +357,31 @@ function ApplicationList() {
                       <td>{getTenSPDVChuoi(app.dsSPDV)}</td>
                     );
                   }
+                   if (col.key === "hanXuLy") {
+                    const days = parseInt(app.hanXuLy, 10);
+
+                    let text = "";
+                    let textColor = "";
+
+                    if (!isNaN(days)) {
+                      if (days < 0) {
+                        text = `Quá hạn ${Math.abs(days)} ngày`;
+                        textColor = "text-red-500";
+                      } else if (days <= 7) {
+                        text = `Còn ${days} ngày`;
+                        textColor = "text-yellow-500"; // hoặc orange-500 tuỳ màu
+                      } else {
+                        text = `Còn ${days} ngày`;
+                        textColor = "text-green-600";
+                      }
+                    }
+
+                    return (
+                      <td key={col.key} className={`p-2 font-semibold ${textColor}`}>
+                        {text}
+                      </td>
+                    );
+                  }
                   // Special logic for trangThaiHoanThienHoSoTaiLieu
                   if (col.key === "trangThaiHoanThienHoSoTaiLieu") {
                     return (
