@@ -1,31 +1,32 @@
-// Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReactECharts from "echarts-for-react";
+import { Spin } from "antd";
 
 const Dashboard = () => {
   const [statusChartData, setStatusChartData] = useState([]);
   const [hanXuLyChartData, setHanXuLyChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const statusRes = await axios.post("http://localhost:3000/api/application/statistics-by-status");
-        const hanXuLyRes = await axios.post("http://localhost:3000/api/application/statistics-by-han-xu-ly");
+        setLoading(true);
+        const statusRes = await axios.post(`${process.env.REACT_APP_API_URL}/application/statistics-by-status`);
+        const hanXuLyRes = await axios.post(`${process.env.REACT_APP_API_URL}/application/statistics-by-han-xu-ly`);
 
-        // Format trạng thái đơn
         const formattedStatus = statusRes.data.map(item => ({
           name: item.trangThaiDon,
           value: item.count
         }));
 
-        // Format hạn xử lý
         const labelMap = {
           under7Days: "< 7 ngày",
           under30Days: "< 30 ngày",
           overdue: "Quá hạn",
           over30Days: "> 30 ngày"
         };
+
         const formattedHanXuLy = Object.entries(hanXuLyRes.data).map(([key, value]) => ({
           name: labelMap[key] || key,
           value
@@ -35,6 +36,8 @@ const Dashboard = () => {
         setHanXuLyChartData(formattedHanXuLy);
       } catch (err) {
         console.error("Lỗi tải dữ liệu dashboard:", err);
+      } finally {
+        setLoading(false); // Kết thúc loading
       }
     };
 
@@ -46,9 +49,7 @@ const Dashboard = () => {
       text: "📌 Trạng thái đơn",
       left: "center"
     },
-    tooltip: {
-      trigger: "item"
-    },
+    tooltip: { trigger: "item" },
     legend: {
       bottom: 10,
       left: "center"
@@ -75,23 +76,17 @@ const Dashboard = () => {
       text: "📅 Hạn xử lý",
       left: "center"
     },
-    tooltip: {
-      trigger: "axis"
-    },
+    tooltip: { trigger: "axis" },
     xAxis: {
       type: "category",
       data: hanXuLyChartData.map(item => item.name)
     },
-    yAxis: {
-      type: "value"
-    },
+    yAxis: { type: "value" },
     series: [
       {
         data: hanXuLyChartData.map(item => item.value),
         type: "bar",
-        itemStyle: {
-          color: "#3398DB"
-        }
+        itemStyle: { color: "#3398DB" }
       }
     ]
   };
@@ -99,16 +94,18 @@ const Dashboard = () => {
   return (
     <div className="bg-white p-8">
       <h2 className="text-2xl font-semibold mb-6">📊 Dashboard Thống Kê</h2>
-      <div className="flex flex-wrap justify-around gap-8">
-        <div className="w-[45%] min-w-[300px] h-[400px]">
-          <ReactECharts option={pieOption} style={{ height: "100%" }} />
-        </div>
-        <div className="w-[45%] min-w-[300px] h-[400px]">
-          <ReactECharts option={barOption} style={{ height: "100%" }} />
-        </div>
-      </div>
-    </div>
 
+      <Spin spinning={loading} tip="Loading..." size="large">
+        <div className="flex flex-wrap justify-around gap-8">
+          <div className="w-[45%] min-w-[300px] h-[400px]">
+            <ReactECharts option={pieOption} style={{ height: "100%" }} />
+          </div>
+          <div className="w-[45%] min-w-[300px] h-[400px]">
+            <ReactECharts option={barOption} style={{ height: "100%" }} />
+          </div>
+        </div>
+      </Spin>
+    </div>
   );
 };
 

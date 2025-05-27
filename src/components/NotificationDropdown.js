@@ -146,7 +146,7 @@ const NotificationDropdown = () => {
                 <li
                   key={index}
                   onClick={() => handleNotificationClick(item.id)}
-                  className={`cursor-pointer px-4 py-2 text-sm ${item.isRead
+                  className={`cursor-pointer px-2  py-2 text-sm ${item.isRead
                       ? "text-gray-400"
                       : "text-gray-800 font-semibold"
                     } hover:bg-gray-100`}

@@ -5,7 +5,9 @@ import Select from "react-select";
 import { useSelector } from 'react-redux';
 import FieldSelector from "../../components/FieldSelector";
 import { Modal } from "antd";
+import { Spin } from "antd";
 function CaseList() {
+    const [loading, setLoading] = useState(false);
     const role = useSelector((state) => state.auth.role);
     const [cases, setCases] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -61,6 +63,7 @@ function CaseList() {
         }));
     };
     const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId) => {
+        setLoading(true);
         try {
             const response = await callAPI({
                 method: "post",
@@ -77,6 +80,8 @@ function CaseList() {
             setCases(response);
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu hồ sơ vụ việc:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -250,146 +255,144 @@ function CaseList() {
             </div>
 
             <div class="overflow-x-auto">
-                <table className="w-full border-collapse bg-white text-sm mt-4">
-                    <thead>
-                        <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                            <th className="p-2">STT</th>
-                            {columns.map(col => (
-                                <th key={col.key} className="p-2">{col.label}</th>
-                            ))}
-                            <th className="p-2"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {cases.map((caseItem, index) => (
-                            <tr key={caseItem.maHoSoVuViec} className="group hover:bg-gray-100 text-center border-b relative">
-                                <td className="p-2">{index + 1}</td>
-                                {columns.map(col => {
-                                    let content = caseItem[col.key];
-                                    if (
-                                        col.key === "ngayTiepNhan" ||
-                                        col.key === "ngayTao" ||
-                                        col.key === "ngayCapNhap"
-                                    ) {
-                                        content = content ? new Date(content).toLocaleDateString("vi-VN") : "";
-                                    }
-                                    if (col.key === "maHoSoVuViec") {
-                                        return (
-                                            <td
-                                                key={col.key}
-                                                className="p-2 text-blue-500 cursor-pointer hover:underline"
-                                                onClick={e => {
-                                                    e.stopPropagation();
-                                                    navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
-                                                }}
-                                            >
-                                                {content}
-                                            </td>
-                                        );
-                                    }
-                                    if (col.key === "maDonDangKy") {
-                                        return (
-                                            <td
-                                                key={col.key}
-                                                className={`p-2 ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
-                                                onClick={e => {
-                                                    if (content) {
+                <Spin spinning={loading} tip="Loading..." size="large">
+                    <table className="w-full border-collapse bg-white text-sm mt-4">
+                        <thead>
+                            <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
+                                <th className="p-2">STT</th>
+                                {columns.map(col => (
+                                    <th key={col.key} className="p-2">{col.label}</th>
+                                ))}
+                                <th className="p-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {cases.map((caseItem, index) => (
+                                <tr key={caseItem.maHoSoVuViec} className="group hover:bg-gray-100 text-center border-b relative">
+                                    <td className="p-2">{index + 1}</td>
+                                    {columns.map(col => {
+                                        let content = caseItem[col.key];
+                                        if (
+                                            col.key === "ngayTiepNhan" ||
+                                            col.key === "ngayTao" ||
+                                            col.key === "ngayCapNhap"
+                                        ) {
+                                            content = content ? new Date(content).toLocaleDateString("vi-VN") : "";
+                                        }
+                                        if (col.key === "maHoSoVuViec") {
+                                            return (
+                                                <td
+                                                    key={col.key}
+                                                    className="p-2 text-blue-500 cursor-pointer hover:underline"
+                                                    onClick={e => {
                                                         e.stopPropagation();
-                                                        navigate(`/applicationdetail/${content}`);
-                                                    }
-                                                }}
-                                            >
-                                                {content ? content : "Không có đơn đăng ký"}
-                                            </td>
-                                        );
-                                    }
-                                    if (col.key === "nhanSuXuLy") {
-                                        return (
-                                            <td className="p-2" key={col.key}>
-                                                {Array.isArray(caseItem.nhanSuXuLy) ? (
-                                                    caseItem.nhanSuXuLy.map((person, idx) => (
-                                                        <div key={idx}>
-                                                            {person.tenNhanSu} ({person.vaiTro})
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <span>—</span> // hoặc để trống
-                                                )}
-                                            </td>
-                                        );
-                                    }
-                                    if (col.key === "trangThaiVuViec") {
-                                        const statusMap = {
-                                            dang_xu_ly: "Đang xử lý",
-                                            hoan_thanh: "Hoàn thành",
-                                            tam_dung: "Tạm dừng"
-                                        };
-                                        return (
-                                            <td key={col.key} className="p-2">
-                                                {statusMap[content] || "Không xác định"}
-                                            </td>
-                                        );
-                                    }
-                                    return <td key={col.key} className="p-2">{content}</td>;
-                                })}
-                                {/* <td className="p-2">
+                                                        navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
+                                                    }}
+                                                >
+                                                    {content}
+                                                </td>
+                                            );
+                                        }
+                                        if (col.key === "maDonDangKy") {
+                                            return (
+                                                <td
+                                                    key={col.key}
+                                                    className={`p-2 ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
+                                                    onClick={e => {
+                                                        if (content) {
+                                                            e.stopPropagation();
+                                                            navigate(`/applicationdetail/${content}`);
+                                                        }
+                                                    }}
+                                                >
+                                                    {content ? content : "Không có đơn đăng ký"}
+                                                </td>
+                                            );
+                                        }
+                                        if (col.key === "nhanSuXuLy") {
+                                            return (
+                                                <td className="p-2" key={col.key}>
+                                                    {Array.isArray(caseItem.nhanSuXuLy) ? (
+                                                        caseItem.nhanSuXuLy.map((person, idx) => (
+                                                            <div key={idx}>
+                                                                {person.tenNhanSu} ({person.vaiTro})
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <span>—</span> // hoặc để trống
+                                                    )}
+                                                </td>
+                                            );
+                                        }
+                                        if (col.key === "trangThaiVuViec") {
+                                            const statusMap = {
+                                                dang_xu_ly: "Đang xử lý",
+                                                hoan_thanh: "Hoàn thành",
+                                                tam_dung: "Tạm dừng"
+                                            };
+                                            return (
+                                                <td key={col.key} className="p-2">
+                                                    {statusMap[content] || "Không xác định"}
+                                                </td>
+                                            );
+                                        }
+                                        return <td key={col.key} className="p-2">{content}</td>;
+                                    })}
+                                    {/* <td className="p-2">
                                     {caseItem.nhanSuXuLy.map((person, idx) => (
                                         <div key={idx}>
                                             {person.tenNhanSu} ({person.vaiTro})
                                         </div>
                                     ))}
                                 </td> */}
-                                <td className="p-2 relative">
-                                    {(role === 'admin' || role === 'staff') && (
-                                        <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
-                                            <button
-                                                className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                onClick={() => navigate(`/caseedit/${caseItem.maHoSoVuViec}`)}
-                                            >
-                                                📝
-                                            </button>
+                                    <td className="p-2 relative">
+                                        {(role === 'admin' || role === 'staff') && (
+                                            <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
+                                                <button
+                                                    className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                                    onClick={() => navigate(`/caseedit/${caseItem.maHoSoVuViec}`)}
+                                                >
+                                                    📝
+                                                </button>
 
-                                            <button
-                                                className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                                onClick={() => {
-                                                    setCaseToDelete(caseItem.maHoSoVuViec);
-                                                    setShowDeleteModal(true);
-                                                }}
-                                            >
-                                                🗑️
-                                            </button>
-                                            <button
-                                                className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
-                                                onClick={() =>
-                                                    caseItem.maDonDangKy
-                                                        ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
-                                                        : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
-                                                }
-                                            >
-                                                📄
-                                            </button>
+                                                <button
+                                                    className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                                    onClick={() => {
+                                                        setCaseToDelete(caseItem.maHoSoVuViec);
+                                                        setShowDeleteModal(true);
+                                                    }}
+                                                >
+                                                    🗑️
+                                                </button>
+                                                <button
+                                                    className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
+                                                    onClick={() =>
+                                                        caseItem.maDonDangKy
+                                                            ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
+                                                            : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
+                                                    }
+                                                >
+                                                    📄
+                                                </button>
 
-                                        </div>
-                                    )}
-                                </td>
+                                            </div>
+                                        )}
+                                    </td>
 
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </Spin>
             </div>
-            {showFieldModal && (
-                <FieldSelector
-                    allFieldOptions={allFieldOptions}
-                    selectedFields={selectedFields}
-                    setSelectedFields={setSelectedFields}
-                    onClose={() => setShowFieldModal(false)}
-                    onConfirm={() => {
-                        setShowFieldModal(false);
-                        fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype)
-                    }}
-                />
-            )}
+            <FieldSelector
+                visible={showFieldModal}
+                allFieldOptions={allFieldOptions}
+                selectedFields={selectedFields}
+                setSelectedFields={setSelectedFields}
+                onClose={() => setShowFieldModal(false)}
+                onConfirm={() => setShowFieldModal(false)}
+            />
             <Modal
                 title="Xác nhận xóa"
                 open={showDeleteModal}

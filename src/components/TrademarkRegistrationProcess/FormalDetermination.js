@@ -56,7 +56,7 @@ const FormalDetermination = ({
             {
                 loaiThamDinh: 'HinhThuc',
                 lanThamDinh: prev.length + 1,
-                ngayNhanThongBaoTuChoiTD: "",
+                ngayNhanThongBaoTuChoiTD: today,
                 hanTraLoi: hanTraLoi,
                 giaHan: false,
                 ghiChu: ""

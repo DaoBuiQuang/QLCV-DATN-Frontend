@@ -6,9 +6,10 @@ import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 import FieldSelector from "../../components/FieldSelector";
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { DatePicker, Radio, Modal } from 'antd';
+import { DatePicker, Modal, Spin } from 'antd';
 function ApplicationList() {
   const role = useSelector((state) => state.auth.role);
+  const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [applicationToDelete, setApplicationToDelete] = useState(null);
@@ -25,7 +26,7 @@ function ApplicationList() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [selectedHanXuLy, setSelectedHanXuLy] = useState(null);
-
+  const [sortByHanXuLy, setSortByHanXuLy] = useState(false);
   useEffect(() => {
     console.log("Selected field:", selectedHanXuLy);
   }, [selectedHanXuLy]);
@@ -35,6 +36,7 @@ function ApplicationList() {
     fromDate,
     toDate,
     hanXuLyFilter: selectedHanXuLy?.value || "",
+    sortByHanXuLy: sortByHanXuLy,
   };
   const trangThaiDonOptions = [
     { value: "Nộp đơn", label: "Nộp đơn" },
@@ -87,6 +89,7 @@ function ApplicationList() {
       .map(field => field.key)
   );
   const fetchApplications = async (searchValue) => {
+    setLoading(true);
     try {
       const response = await callAPI({
         method: "post",
@@ -96,6 +99,8 @@ function ApplicationList() {
       setApplications(response);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách đơn đăng ký:", error);
+    } finally {
+      setLoading(false);
     }
   };
   const fetchBrands = async () => {
@@ -173,6 +178,17 @@ function ApplicationList() {
     setApplicationToDelete(null);
     fetchApplications(searchTerm);
   };
+  const handleClearFilters = () => {
+    setSelectedBrand(null);
+    setSelectedProductAndService([]);
+    setSelectedTrangThaiDon(null);
+    setSelectedField(null);
+    setFromDate(null);
+    setToDate(null);
+    setSelectedHanXuLy(null);
+    setSortByHanXuLy(false);
+  };
+
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
@@ -219,16 +235,42 @@ function ApplicationList() {
         >
           {showFilters ? "Ẩn bộ lọc" : "🔽 Bộ lọc nâng cao"}
         </button>
-
-        {showFilters && (
-          <div className="flex flex-wrap gap-3 mt-4">
-            {/* Dòng 1: Select nhãn hiệu, sản phẩm, trạng thái */}
+        <Modal
+          title="Bộ lọc nâng cao"
+          visible={showFilters}
+          onCancel={() => setShowFilters(false)}
+          footer={[
+            <button
+              key="clear"
+              onClick={handleClearFilters}
+              className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md mr-2"
+            >
+              🧹 Xóa bộ lọc
+            </button>,
+            <button
+              key="cancel"
+              onClick={() => setShowFilters(false)}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mr-2"
+            >
+              Đóng
+            </button>,
+            <button
+              key="ok"
+              onClick={() => setShowFilters(false)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            >
+              Áp dụng
+            </button>
+          ]}
+          width={1000}
+        >
+          <div className="flex flex-wrap gap-3">
             <Select
               options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
               value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
               onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
               placeholder="Chọn nhãn hiệu"
-              className="w-full md:w-1/5 text-left"
+              className="w-full md:w-1/4 text-left"
               isClearable
             />
             <Select
@@ -240,7 +282,7 @@ function ApplicationList() {
                 setSelectedProductAndService(selectedOptions ? selectedOptions.map(opt => opt.value) : [])
               }
               placeholder="Chọn sản phẩm/dịch vụ"
-              className="w-full md:w-1/5 text-left"
+              className="w-full md:w-1/4 text-left"
               isClearable
               isMulti
             />
@@ -251,17 +293,16 @@ function ApplicationList() {
                 setSelectedTrangThaiDon(selectedOption ? selectedOption.value : null)
               }
               placeholder="Chọn trạng thái đơn"
-              className="w-full md:w-1/5 text-left"
+              className="w-full md:w-1/4 text-left"
               isClearable
             />
 
-            {/* Dòng 2: Trường ngày + từ ngày + đến ngày */}
-            <div className="w-full">
+            {/* Dòng 2: Lọc theo thời gian */}
+            <div className="w-full mt-4">
               <label className="block text-gray-500 font-medium text-sm mb-2">
                 📅 Lọc theo mốc thời gian
               </label>
-
-              <div className="flex flex-wrap gap-3 w-full">
+              <div className="flex flex-wrap gap-3">
                 <div className="w-full md:w-1/4">
                   <Select
                     options={fieldOptions}
@@ -289,6 +330,13 @@ function ApplicationList() {
                   placeholder="Đến ngày"
                   className="w-full md:w-1/6"
                 />
+              </div>
+            </div>
+            <div className="w-full mt-4">
+              <label className="block text-gray-500 font-medium text-sm mb-2">
+                📅 Lọc theo hạn xử lý
+              </label>
+              <div className="flex flex-wrap gap-3 w-full mt-4">
                 <Select
                   options={hanXuLyOptions}
                   value={selectedHanXuLy}
@@ -296,14 +344,21 @@ function ApplicationList() {
                   placeholder="Lọc theo hạn xử lý"
                   isClearable
                 />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={sortByHanXuLy}
+                    onChange={(e) => setSortByHanXuLy(e.target.checked)}
+                  />
+                  <label>Sắp xếp theo hạn xử lý</label>
+                </div>
               </div>
             </div>
-
           </div>
-        )}
-
+        </Modal>
       </div>
       <div class="overflow-x-auto">
+         <Spin spinning={loading} tip="Loading..." size="large">
         <table className="w-full border-collapse bg-white text-sm mt-4">
           <thead>
             <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
@@ -357,7 +412,7 @@ function ApplicationList() {
                       <td>{getTenSPDVChuoi(app.dsSPDV)}</td>
                     );
                   }
-                   if (col.key === "hanXuLy") {
+                  if (col.key === "hanXuLy") {
                     const days = parseInt(app.hanXuLy, 10);
 
                     let text = "";
@@ -428,8 +483,6 @@ function ApplicationList() {
                       </td>
                     );
                   }
-
-                  // Default render
                   return (
                     <td key={col.key} className="p-2">
                       {content}
@@ -456,19 +509,17 @@ function ApplicationList() {
             ))}
           </tbody>
         </table>
+        </Spin>
       </div>
-      {showFieldModal && (
-        <FieldSelector
-          allFieldOptions={allFieldOptions}
-          selectedFields={selectedFields}
-          setSelectedFields={setSelectedFields}
-          onClose={() => setShowFieldModal(false)}
-          onConfirm={() => {
-            setShowFieldModal(false);
-            // fetchApplications(searchTerm)
-          }}
-        />
-      )}
+      <FieldSelector
+        visible={showFieldModal}
+        allFieldOptions={allFieldOptions}
+        selectedFields={selectedFields}
+        setSelectedFields={setSelectedFields}
+        onClose={() => setShowFieldModal(false)}
+        onConfirm={() => setShowFieldModal(false)}
+      />
+
       <Modal
         title="Xác nhận xóa"
         open={showDeleteModal}

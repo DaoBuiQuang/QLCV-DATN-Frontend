@@ -25,6 +25,11 @@ function ApplicationAdd() {
     const [maNhanHieu, setMaNhanHieu] = useState("");
     const [tenNhanHieu, setTenNhanHieu] = useState("");
     const [linkAnh, setLinkAnh] = useState("");
+    const nhanHieu = {
+        maNhanHieu,
+        tenNhanHieu,
+        linkAnh,
+    };
     const [maSPDVList, setMaSPDVList] = useState([]);
 
     const [ngayHoanThanhHSTL_DuKien, setNgayHoanThanhHSTL_DuKien] = useState(null);
@@ -172,8 +177,8 @@ function ApplicationAdd() {
         if (ngayTraLoiKQThamDinhND) {
             setTrangThaiDon("Hoàn thành nhận bằng")
             setDaChonNgayTraLoiThamDinhNoiDung(true)
-        } 
-        if(daChonNgayTraLoiThamDinhNoiDung || (trangThaiTraLoiKQThamDinhND === false && daChonNgayThamDinhNoiDung)){
+        }
+        if (daChonNgayTraLoiThamDinhNoiDung || (trangThaiTraLoiKQThamDinhND === false && daChonNgayThamDinhNoiDung)) {
             setTrangThaiDon("Hoàn thành nhận bằng")
         }
         if (ngayThongBaoCapBang) {
@@ -189,31 +194,13 @@ function ApplicationAdd() {
         if (ngayGuiBangChoKH) {
             setTrangThaiDon("Đơn đăng ký thành công")
         }
-    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang,daChonNgayTraLoiThamDinhNoiDung, trangThaiTraLoiKQThamDinhND, daChonNgayThamDinhNoiDung, ngayGuiBangChoKH]);
+    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang, daChonNgayTraLoiThamDinhNoiDung, trangThaiTraLoiKQThamDinhND, daChonNgayThamDinhNoiDung, ngayGuiBangChoKH]);
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
             value: item[valueKey],
             label: item[labelKey]
         }));
-    };
-    const handleAddBrand = async () => {
-        try {
-            await callAPI({
-                method: "post",
-                endpoint: "/brand/add",
-                data: {
-                    maNhanHieu,
-                    tenNhanHieu,
-                    linkAnh,
-                },
-            });
-            return true; 
-        } catch (error) {
-            showError("Thất bại!", "Đã xảy ra lỗi khi thêm nhãn hiệu.", error);
-            console.error("Lỗi khi thêm nhãn hiệu!", error);
-            throw error; 
-        }
     };
 
     const handleApplication = async () => {
@@ -258,7 +245,8 @@ function ApplicationAdd() {
                     ngayCapBang: ngayCapBang,
                     ngayHetHanBang: ngayHetHanBang,
                     soBang: soBang,
-                    taiLieus: taiLieuList
+                    taiLieus: taiLieuList,
+                    nhanHieu
                 },
             });
             await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
@@ -268,13 +256,9 @@ function ApplicationAdd() {
             console.error("Lỗi khi thêm đơn đăng ký!", error);
         }
     };
-    const handleSubmit = async () => {
-        try {
-            await handleAddBrand(); // nếu lỗi sẽ nhảy vào catch
-            await handleApplication(); // chỉ gọi nếu thêm brand thành công
-        } catch (err) {
-            console.log("Dừng lại vì lỗi trong thêm brand hoặc application");
-        }
+    const handleSubmit =  () => {
+         handleApplication();
+       
     };
 
     const handleTaiLieuChange = (list) => {
