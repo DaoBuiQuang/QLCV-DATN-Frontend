@@ -92,7 +92,7 @@ function JobAdd() {
               : "bg-blue-300 cursor-not-allowed"
               }`}
           >
-            Thêm quốc gia
+            Thêm ngành nghề
           </button>
         </div>
       </div>

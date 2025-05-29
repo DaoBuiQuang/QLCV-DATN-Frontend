@@ -51,7 +51,7 @@ function ProductAndServicesList() {
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="🔍 Nhập tên sản phẩm/dịch vụ"
+                        placeholder="🔍 Nhập tên sản phẩm/dịch vụ hoặc mô tả"
                         className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                     <div className="flex gap-3">
