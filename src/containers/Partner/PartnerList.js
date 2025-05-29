@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import Select from "react-select";
 import { useSelector } from 'react-redux';
-import { Modal } from "antd";
+import { useTranslation } from "react-i18next";
+import { Modal, Pagination } from "antd";
 function PartnerList() {
+  const { t } = useTranslation();
   const role = useSelector((state) => state.auth.role);
   const [partners, setPartners] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -12,16 +14,25 @@ function PartnerList() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [partnerToDelete, setPartnerToDelete] = useState(null);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
   const navigate = useNavigate();
 
-  const fetchPartners = async (searchValue, countryCode) => {
+  const fetchPartners = async (searchValue, countryCode, page = 1, size = 10) => {
     try {
       const response = await callAPI({
         method: "post",
         endpoint: "/partner/list",
-        data: { tenDoiTac: searchValue, maQuocGia: countryCode },
+        data: {
+          tenDoiTac: searchValue, maQuocGia: countryCode, pageIndex: page,
+          pageSize: size,
+        },
       });
-      setPartners(response);
+      setPartners(response.data);
+      setTotalItems(response.pagination?.totalItems || 0);
+      setPageIndex(response.pagination?.pageIndex || 1);
+      setPageSize(response.pagination?.pageSize || 10);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu đối tác:", error);
     }
@@ -80,7 +91,7 @@ function PartnerList() {
           />
           <div className="flex gap-3">
             <button
-              onClick={() => fetchPartners(searchTerm, selectedCountry)}
+              onClick={() => fetchPartners(searchTerm, selectedCountry, 1, pageSize)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               🔎 Tìm kiếm
@@ -156,6 +167,32 @@ function PartnerList() {
         </tbody>
 
       </table>
+      <div className="mt-4 flex flex-col items-center space-y-2">
+        {totalItems > 0 && (
+          <div className="text-sm text-gray-500 text-center ">
+            <span className="mr-1"></span>
+            <span className="font-medium text-gray-800">
+              {(pageIndex - 1) * pageSize + 1} - {Math.min(pageIndex * pageSize, totalItems)}
+            </span>
+            <span className="mx-1"> / </span>
+            <span className="font-medium text-gray-800">{totalItems}</span>
+            <span className="ml-1"></span>
+          </div>
+        )}
+        <Pagination
+          current={pageIndex}
+          total={totalItems}
+          pageSize={pageSize}
+          onChange={(page, size) => {
+            setPageIndex(page);
+            setPageSize(size);
+            fetchPartners(searchTerm, selectedCountry, page, size)
+          }}
+          showSizeChanger
+          pageSizeOptions={['5', '10', '20', '50']}
+          locale={{ items_per_page: t("bản ghi") }}
+        />
+      </div>
       <Modal
         title="Xác nhận xóa"
         open={showDeleteModal}

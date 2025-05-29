@@ -6,9 +6,11 @@ import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 import FieldSelector from "../../components/FieldSelector";
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { DatePicker, Modal, Spin } from 'antd';
+import { DatePicker, Modal, Spin, Pagination } from 'antd';
+import { useTranslation } from "react-i18next";
 function ApplicationList() {
   const role = useSelector((state) => state.auth.role);
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [applications, setApplications] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -26,10 +28,10 @@ function ApplicationList() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [selectedHanXuLy, setSelectedHanXuLy] = useState(null);
-  const [sortByHanXuLy, setSortByHanXuLy] = useState(false);
-  useEffect(() => {
-    console.log("Selected field:", selectedHanXuLy);
-  }, [selectedHanXuLy]);
+  const [sortByHanXuLy, setSortByHanXuLy] = useState(true);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
   const filterCondition = {
     selectedField: selectedField?.value || "",
@@ -88,15 +90,18 @@ function ApplicationList() {
       .filter(field => !hiddenFieldKeys.includes(field.key))
       .map(field => field.key)
   );
-  const fetchApplications = async (searchValue) => {
+  const fetchApplications = async (searchValue, page = 1, size = 10) => {
     setLoading(true);
     try {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition },
+        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
       });
-      setApplications(response);
+      setApplications(response.data || []);
+      setTotalItems(response.pagination?.totalItems || 0);
+      setPageIndex(response.pagination?.pageIndex || 1);
+      setPageSize(response.pagination?.pageSize || 10);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách đơn đăng ký:", error);
     } finally {
@@ -134,7 +139,7 @@ function ApplicationList() {
     }));
   };
   useEffect(() => {
-    // fetchApplications("");
+    fetchApplications("");
     fetchBrands();
     fetchItems();
   }, []);
@@ -203,7 +208,7 @@ function ApplicationList() {
           />
           <div className="flex gap-3">
             <button
-              onClick={() => fetchApplications(searchTerm)}
+              onClick={() => fetchApplications(searchTerm, 1, pageSize)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               🔎 Tìm kiếm
@@ -358,158 +363,184 @@ function ApplicationList() {
         </Modal>
       </div>
       <div class="overflow-x-auto">
-         <Spin spinning={loading} tip="Loading..." size="large">
-        <table className="w-full border-collapse bg-white text-sm mt-4">
-          <thead>
-            <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-              <th className="p-2">STT</th>
-              {columns.map(col => (
-                <th key={col.key} className="p-2">{col.label}</th>
-              ))}
-              <th className="p-2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {applications.map((app, index) => (
-              <tr key={app.maDonDangKy} className="group hover:bg-gray-100 text-center border-b relative">
-                <td className="p-2">{index + 1}</td>
-                {columns.map(col => {
-                  let content = app[col.key];
+        <Spin spinning={loading} tip="Loading..." size="large">
+          <table className="w-full border-collapse bg-white text-sm mt-4">
+            <thead>
+              <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
+                <th className="p-2">STT</th>
+                {columns.map(col => (
+                  <th key={col.key} className="p-2">{col.label}</th>
+                ))}
+                <th className="p-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {applications.map((app, index) => (
+                <tr key={app.maDonDangKy} className="group hover:bg-gray-100 text-center border-b relative">
+                  <td className="p-2">{index + 1}</td>
+                  {columns.map(col => {
+                    let content = app[col.key];
 
-                  // Format ngày
-                  const isDateField = [
-                    "ngayNopDon", "ngayHoanThanhHoSoTaiLieu", "ngayKQThamDinhHinhThuc",
-                    "ngayCongBoDon", "ngayKQThamDinhND", "ngayTraLoiKQThamDinhND",
-                    "ngayThongBaoCapBang", "ngayNopPhiCapBang", "ngayNhanBang",
-                    "ngayCapBang", "ngayHetHanBang", "ngayGuiBangChoKhachHang"
-                  ];
+                    // Format ngày
+                    const isDateField = [
+                      "ngayNopDon", "ngayHoanThanhHoSoTaiLieu", "ngayKQThamDinhHinhThuc",
+                      "ngayCongBoDon", "ngayKQThamDinhND", "ngayTraLoiKQThamDinhND",
+                      "ngayThongBaoCapBang", "ngayNopPhiCapBang", "ngayNhanBang",
+                      "ngayCapBang", "ngayHetHanBang", "ngayGuiBangChoKhachHang"
+                    ];
 
-                  if (isDateField.includes(col.key)) {
-                    return (
-                      <td key={col.key} className="p-2">
-                        {content ? new Date(content).toLocaleDateString("vi-VN") : ""}
-                      </td>
-                    );
-                  }
-
-                  // Clickable link for maDonDangKy
-                  if (col.key === "maDonDangKy") {
-                    return (
-                      <td
-                        key={col.key}
-                        className="p-2 text-blue-500 cursor-pointer hover:underline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/applicationdetail/${app.maDonDangKy}`);
-                        }}
-                      >
-                        {app.maDonDangKy}
-                      </td>
-                    );
-                  }
-                  if (col.key === "dsSPDV") {
-                    return (
-                      <td>{getTenSPDVChuoi(app.dsSPDV)}</td>
-                    );
-                  }
-                  if (col.key === "hanXuLy") {
-                    const days = parseInt(app.hanXuLy, 10);
-
-                    let text = "";
-                    let textColor = "";
-
-                    if (!isNaN(days)) {
-                      if (days < 0) {
-                        text = `Quá hạn ${Math.abs(days)} ngày`;
-                        textColor = "text-red-500";
-                      } else if (days <= 7) {
-                        text = `Còn ${days} ngày`;
-                        textColor = "text-yellow-500"; // hoặc orange-500 tuỳ màu
-                      } else {
-                        text = `Còn ${days} ngày`;
-                        textColor = "text-green-600";
-                      }
+                    if (isDateField.includes(col.key)) {
+                      return (
+                        <td key={col.key} className="p-2">
+                          {content ? new Date(content).toLocaleDateString("vi-VN") : ""}
+                        </td>
+                      );
                     }
 
+                    // Clickable link for maDonDangKy
+                    if (col.key === "maDonDangKy") {
+                      return (
+                        <td
+                          key={col.key}
+                          className="p-2 text-blue-500 cursor-pointer hover:underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/applicationdetail/${app.maDonDangKy}`);
+                          }}
+                        >
+                          {app.maDonDangKy}
+                        </td>
+                      );
+                    }
+                    if (col.key === "dsSPDV") {
+                      return (
+                        <td>{getTenSPDVChuoi(app.dsSPDV)}</td>
+                      );
+                    }
+                    if (col.key === "hanXuLy") {
+                      const days = parseInt(app.hanXuLy, 10);
+
+                      let text = "";
+                      let textColor = "";
+
+                      if (!isNaN(days)) {
+                        if (days < 0) {
+                          text = `Quá hạn ${Math.abs(days)} ngày`;
+                          textColor = "text-red-500";
+                        } else if (days <= 7) {
+                          text = `Còn ${days} ngày`;
+                          textColor = "text-yellow-500"; // hoặc orange-500 tuỳ màu
+                        } else {
+                          text = `Còn ${days} ngày`;
+                          textColor = "text-green-600";
+                        }
+                      }
+
+                      return (
+                        <td key={col.key} className={`p-2 font-semibold ${textColor}`}>
+                          {text}
+                        </td>
+                      );
+                    }
+                    // Special logic for trangThaiHoanThienHoSoTaiLieu
+                    if (col.key === "trangThaiHoanThienHoSoTaiLieu") {
+                      return (
+                        <td className="p-2 min-w-[120px]" key={col.key}>
+                          <div className="flex flex-col items-center">
+                            <span>
+                              {app.trangThaiHoanThienHoSoTaiLieu === "hoan_thanh"
+                                ? "Hoàn thành"
+                                : app.trangThaiHoanThienHoSoTaiLieu === "chua_hoan_thanh"
+                                  ? "Chưa hoàn thành"
+                                  : app.trangThaiHoanThienHoSoTaiLieu}
+                            </span>
+
+                            {app.ngayHoanThanhHoSoTaiLieu_DuKien && app.trangThaiHoanThienHoSoTaiLieu !== "hoan_thanh" && (
+                              (() => {
+                                const today = new Date();
+                                const dueDate = new Date(app.ngayHoanThanhHoSoTaiLieu_DuKien);
+                                const diffTime = dueDate - today;
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                                const textColor = diffDays < 0 ? "text-red-500" : "text-yellow-500";
+                                return (
+                                  <div>
+                                    <span className={`text-xs ${textColor}`}>
+                                      {diffDays > 0
+                                        ? `Còn ${diffDays} ngày`
+                                        : diffDays === 0
+                                          ? "Hạn là hôm nay"
+                                          : `Quá hạn ${Math.abs(diffDays)} ngày`}
+                                    </span>
+
+                                    {app.taiLieuChuaNop && app.taiLieuChuaNop.length > 0 && (
+                                      <ul className="mt-1 list-disc list-inside text-xs text-gray-600">
+                                        {app.taiLieuChuaNop.map((tl, index) => (
+                                          <li key={index}>{tl.tenTaiLieu}</li>
+                                        ))}
+                                      </ul>
+                                    )}
+                                  </div>
+                                );
+                              })()
+                            )}
+                          </div>
+                        </td>
+                      );
+                    }
                     return (
-                      <td key={col.key} className={`p-2 font-semibold ${textColor}`}>
-                        {text}
+                      <td key={col.key} className="p-2">
+                        {content}
                       </td>
                     );
-                  }
-                  // Special logic for trangThaiHoanThienHoSoTaiLieu
-                  if (col.key === "trangThaiHoanThienHoSoTaiLieu") {
-                    return (
-                      <td className="p-2 min-w-[120px]" key={col.key}>
-                        <div className="flex flex-col items-center">
-                          <span>
-                            {app.trangThaiHoanThienHoSoTaiLieu === "hoan_thanh"
-                              ? "Hoàn thành"
-                              : app.trangThaiHoanThienHoSoTaiLieu === "chua_hoan_thanh"
-                                ? "Chưa hoàn thành"
-                                : app.trangThaiHoanThienHoSoTaiLieu}
-                          </span>
+                  })}
 
-                          {app.ngayHoanThanhHoSoTaiLieu_DuKien && app.trangThaiHoanThienHoSoTaiLieu !== "hoan_thanh" && (
-                            (() => {
-                              const today = new Date();
-                              const dueDate = new Date(app.ngayHoanThanhHoSoTaiLieu_DuKien);
-                              const diffTime = dueDate - today;
-                              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                              const textColor = diffDays < 0 ? "text-red-500" : "text-yellow-500";
-                              return (
-                                <div>
-                                  <span className={`text-xs ${textColor}`}>
-                                    {diffDays > 0
-                                      ? `Còn ${diffDays} ngày`
-                                      : diffDays === 0
-                                        ? "Hạn là hôm nay"
-                                        : `Quá hạn ${Math.abs(diffDays)} ngày`}
-                                  </span>
-
-                                  {app.taiLieuChuaNop && app.taiLieuChuaNop.length > 0 && (
-                                    <ul className="mt-1 list-disc list-inside text-xs text-gray-600">
-                                      {app.taiLieuChuaNop.map((tl, index) => (
-                                        <li key={index}>{tl.tenTaiLieu}</li>
-                                      ))}
-                                    </ul>
-                                  )}
-                                </div>
-                              );
-                            })()
-                          )}
-                        </div>
-                      </td>
-                    );
-                  }
-                  return (
-                    <td key={col.key} className="p-2">
-                      {content}
-                    </td>
-                  );
-                })}
-
-                <td className="p-2">
-                  {(role === "admin" || role === "staff") && (
-                    <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
-                      <button
-                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                        onClick={() => navigate(`/applicationedit/${app.maDonDangKy}`)}
-                      >
-                        📝
-                      </button>
-                      <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300" onClick={() => { setApplicationToDelete(app.maDonDangKy); setShowDeleteModal(true); }}>
-                        🗑️
-                      </button>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <td className="p-2">
+                    {(role === "admin" || role === "staff") && (
+                      <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
+                        <button
+                          className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                          onClick={() => navigate(`/applicationedit/${app.maDonDangKy}`)}
+                        >
+                          📝
+                        </button>
+                        <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300" onClick={() => { setApplicationToDelete(app.maDonDangKy); setShowDeleteModal(true); }}>
+                          🗑️
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </Spin>
+      </div>
+      <div className="mt-4 flex flex-col items-center space-y-2">
+        {totalItems > 0 && (
+          <div className="text-sm text-gray-500 text-center ">
+            <span className="mr-1"></span>
+            <span className="font-medium text-gray-800">
+              {(pageIndex - 1) * pageSize + 1} - {Math.min(pageIndex * pageSize, totalItems)}
+            </span>
+            <span className="mx-1"> / </span>
+            <span className="font-medium text-gray-800">{totalItems}</span>
+            <span className="ml-1"></span>
+          </div>
+        )}
+        <Pagination
+          current={pageIndex}
+          total={totalItems}
+          pageSize={pageSize}
+          onChange={(page, size) => {
+            setPageIndex(page);
+            setPageSize(size);
+            fetchApplications(searchTerm, page, size)
+          }}
+          showSizeChanger
+          pageSizeOptions={['5', '10', '20', '50']}
+          locale={{ items_per_page: t("bản ghi") }}
+        />
       </div>
       <FieldSelector
         visible={showFieldModal}

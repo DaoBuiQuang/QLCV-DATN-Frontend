@@ -107,7 +107,7 @@ function CaseAdd() {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/partner/list",
+                endpoint: "/partner/all",
                 data: {},
             });
             setPartners(response);

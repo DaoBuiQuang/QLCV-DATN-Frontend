@@ -5,9 +5,11 @@ import Select from "react-select";
 import { useSelector } from 'react-redux';
 import FieldSelector from "../../components/FieldSelector";
 import { Modal } from "antd";
-import { Spin } from "antd";
+import { Spin, Pagination } from "antd";
+import { useTranslation } from "react-i18next";
 function CaseList() {
     const [loading, setLoading] = useState(false);
+    const { t } = useTranslation();
     const role = useSelector((state) => state.auth.role);
     const [cases, setCases] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -24,6 +26,9 @@ function CaseList() {
     const [casetypes, setCasetypes] = useState([]);
     const [selectedCasetype, setSelectedCasetype] = useState("");
     const navigate = useNavigate();
+    const [pageIndex, setPageIndex] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalItems, setTotalItems] = useState(0);
     const [showFieldModal, setShowFieldModal] = useState(false);
     const [selectedFields, setSelectedFields] = useState([
         "maHoSoVuViec",
@@ -62,7 +67,7 @@ function CaseList() {
             label: item[labelKey]
         }));
     };
-    const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId) => {
+    const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId, page = 1, size = 10) => {
         setLoading(true);
         try {
             const response = await callAPI({
@@ -75,9 +80,14 @@ function CaseList() {
                     maKhachHang: customerId,
                     maLoaiVuViec: casetypeId,
                     fields: selectedFields,
+                    pageIndex: page,
+                    pageSize: size,
                 },
             });
-            setCases(response);
+            setCases(response.data || []);
+            setTotalItems(response.pagination?.totalItems || 0);
+            setPageIndex(response.pagination?.pageIndex || 1);
+            setPageSize(response.pagination?.pageSize || 10);
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu hồ sơ vụ việc:", error);
         } finally {
@@ -102,7 +112,7 @@ function CaseList() {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/partner/list",
+                endpoint: "/partner/all",
                 data: {},
             });
             setPartners(response);
@@ -148,7 +158,7 @@ function CaseList() {
         }
     }
     useEffect(() => {
-        // fetchCases("");
+        fetchCases("");
         fetchCountries();
         fetchPartners();
         fetchCustomers();
@@ -187,7 +197,7 @@ function CaseList() {
                     />
                     <div className="flex gap-3">
                         <button
-                            onClick={() => fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype)}
+                            onClick={() => fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, 1, pageSize)}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             🔎 Tìm kiếm
@@ -384,6 +394,32 @@ function CaseList() {
                         </tbody>
                     </table>
                 </Spin>
+            </div>
+            <div className="mt-4 flex flex-col items-center space-y-2">
+                {totalItems > 0 && (
+                    <div className="text-sm text-gray-500 text-center ">
+                        <span className="mr-1"></span>
+                        <span className="font-medium text-gray-800">
+                            {(pageIndex - 1) * pageSize + 1} - {Math.min(pageIndex * pageSize, totalItems)}
+                        </span>
+                        <span className="mx-1"> / </span>
+                        <span className="font-medium text-gray-800">{totalItems}</span>
+                        <span className="ml-1"></span>
+                    </div>
+                )}
+                <Pagination
+                    current={pageIndex}
+                    total={totalItems}
+                    pageSize={pageSize}
+                    onChange={(page, size) => {
+                        setPageIndex(page);
+                        setPageSize(size)
+                       fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, page, size)
+                    }}
+                    showSizeChanger
+                    pageSizeOptions={['5', '10', '20', '50']}
+                    locale={{ items_per_page: t("bản ghi") }}
+                />
             </div>
             <FieldSelector
                 visible={showFieldModal}

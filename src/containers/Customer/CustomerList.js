@@ -8,6 +8,8 @@ import FieldSelector from "../../components/FieldSelector";
 import { Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import { Spin } from "antd";
+import { Pagination } from 'antd';
+
 function CustomerList() {
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
@@ -23,6 +25,10 @@ function CustomerList() {
     const [industries, setIndustries] = useState([]);
     const [selectedIndustry, setSelectedIndustry] = useState("");
     const [showFieldModal, setShowFieldModal] = useState(false);
+    const [pageIndex, setPageIndex] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalItems, setTotalItems] = useState(0);
+
     const [selectedFields, setSelectedFields] = useState([
         "maKhachHang",
         "tenKhachHang",
@@ -46,7 +52,7 @@ function CustomerList() {
 
     const navigate = useNavigate();
 
-    const fetchCustomers = async (searchValue, partnerId, countryId, industryId) => {
+    const fetchCustomers = async (searchValue, partnerId, countryId, industryId, page = 1, size = 10) => {
         setLoading(true);
         try {
             const response = await callAPI({
@@ -58,9 +64,15 @@ function CustomerList() {
                     maQuocGia: countryId,
                     maNganhNghe: industryId,
                     fields: selectedFields,
+                    pageIndex: page,
+                    pageSize: size,
                 },
             });
-            setCustomers(response);
+
+            setCustomers(response.data || []);
+            setTotalItems(response.pagination?.totalItems || 0);
+            setPageIndex(response.pagination?.pageIndex || 1);
+            setPageSize(response.pagination?.pageSize || 10);
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu khách hàng:", error);
         } finally {
@@ -68,13 +80,14 @@ function CustomerList() {
         }
     };
 
+
     const fetchCountries = async () => {
         const res = await callAPI({ method: "post", endpoint: "/country/list", data: {} });
         setCountries(res);
     };
 
     const fetchPartners = async () => {
-        const res = await callAPI({ method: "post", endpoint: "/partner/list", data: {} });
+        const res = await callAPI({ method: "post", endpoint: "/partner/all", data: {} });
         setPartners(res);
     };
 
@@ -117,7 +130,7 @@ function CustomerList() {
                     />
                     <div className="flex gap-3">
                         <button
-                            onClick={() => fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry)}
+                            onClick={() => fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry, 1, pageSize)}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             {t("timKiem")}
@@ -152,8 +165,8 @@ function CustomerList() {
             <div className="overflow-x-auto mt-4">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">
-                        <thead>
-                            <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
+                        <thead className=" bg-[#EAECF0]">
+                            <tr className="text-[#667085] text-center font-normal">
                                 <th className="p-2">{t("stt")}</th>
                                 {columns.map(col => (
                                     <th key={col.key} className="p-2">{col.label}</th>
@@ -196,7 +209,35 @@ function CustomerList() {
                         </tbody>
                     </table>
                 </Spin>
+
             </div>
+            <div className="mt-4 flex flex-col items-center space-y-2">
+                {totalItems > 0 && (
+                    <div className="text-sm text-gray-500 text-center ">
+                        <span className="mr-1"></span>
+                        <span className="font-medium text-gray-800">
+                            {(pageIndex - 1) * pageSize + 1} - {Math.min(pageIndex * pageSize, totalItems)}
+                        </span>
+                        <span className="mx-1"> / </span>
+                        <span className="font-medium text-gray-800">{totalItems}</span>
+                        <span className="ml-1"></span>
+                    </div>
+                )}
+                <Pagination
+                    current={pageIndex}
+                    total={totalItems}
+                    pageSize={pageSize}
+                    onChange={(page, size) => {
+                        setPageIndex(page);
+                        setPageSize(size);
+                        fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry, page, size);
+                    }}
+                    showSizeChanger
+                    pageSizeOptions={['5', '10', '20', '50']}
+                    locale={{ items_per_page: t("bản ghi") }}
+                />
+            </div>
+
             <FieldSelector
                 visible={showFieldModal}
                 allFieldOptions={allFieldOptions}
@@ -205,18 +246,6 @@ function CustomerList() {
                 onClose={() => setShowFieldModal(false)}
                 onConfirm={() => setShowFieldModal(false)}
             />
-            {/* {showFieldModal && (
-                <FieldSelector
-                    allFieldOptions={allFieldOptions}
-                    selectedFields={selectedFields}
-                    setSelectedFields={setSelectedFields}
-                    onClose={() => setShowFieldModal(false)}
-                    onConfirm={() => {
-                        setShowFieldModal(false);
-                        fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry);
-                    }}
-                />
-            )} */}
             <Modal
                 title={t("xacNhanXoa")}
                 open={showDeleteModal}
