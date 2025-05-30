@@ -34,9 +34,12 @@ function CustomerList() {
         "tenKhachHang",
         "diaChi",
         "sdt",
+         "nguoiLienHe",
         "tenDoiTac",
         "tenQuocGia",
+        "ghiChu",
         "tenNganhNghe",
+       
     ]);
 
     const allFieldOptions = [
@@ -44,9 +47,11 @@ function CustomerList() {
         { key: "tenKhachHang", label: t("tenKhachHang") },
         { key: "diaChi", label: t("diaChi") },
         { key: "sdt", label: t("sdt") },
+        { key: "nguoiLienHe", label: t("nguoiLienHe") },
         { key: "tenDoiTac", label: t("tenDoiTac") },
         { key: "tenQuocGia", label: t("tenQuocGia") },
         { key: "tenNganhNghe", label: t("tenNganhNghe") },
+         { key: "ghiChu", label: t("ghiChu") },
     ];
 
 

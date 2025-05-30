@@ -155,7 +155,8 @@ i18next
                     tenVietTatKHRequired: "Tên viết tắt của khách hàng không được để trống",
                     tenKhachHangRequired: "Tên khách hàng không được để trống",
                     chiTietKhachHang: "Chi tiết khách hàng",
-                    suaKhachHang: "Sửa khách hàng"
+                    suaKhachHang: "Sửa khách hàng",
+                    nguoiLienHe: "Người liên hệ"
                 },
             },
         },

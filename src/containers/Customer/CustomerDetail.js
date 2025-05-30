@@ -12,6 +12,7 @@ function CustomerDetail() {
     const [tenVietTatKH, setTenVietTatKH] = useState("");
     const [tenKhachHang, setTenKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
+    const [nguoiLienHe, setNguoiLienHe] = useState("");
     const [moTa, setMoTa] = useState("");
     const [diaChi, setDiaChi] = useState("");
     const [sdt, setSdt] = useState("");
@@ -43,6 +44,7 @@ function CustomerDetail() {
                 setMaDoiTac(response.maDoiTac || "");
                 setMoTa(response.moTa || "");
                 setDiaChi(response.diaChi || "");
+                setNguoiLienHe(response.nguoiLienHe || "");
                 setSdt(response.sdt || "");
                 setGhiChu(response.ghiChu || "");
                 setMaQuocGia(response.maQuocGia || "");
@@ -77,7 +79,7 @@ function CustomerDetail() {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "/partner/list",
+                endpoint: "/partner/all",
                 data: {},
             });
             setPartners(response);
@@ -183,7 +185,10 @@ function CustomerDetail() {
                                 isDisabled
                             />
                         </div>
-
+                        <div>
+                            <label className="block text-gray-700 text-left">{t("nguoilienhe")}</label>
+                            <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
+                        </div>
                         <div>
                             <label className="block text-gray-700 text-left">{t("diaChi")}</label>
                             <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 " readOnly />
