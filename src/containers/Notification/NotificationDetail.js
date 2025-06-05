@@ -32,6 +32,33 @@ const NotificationDetail = () => {
         fetchNotificationDetail();
     }, [id]);
 
+    const handleRestore = async () => {
+        if (!notification?.data?.maKhachHang || !notification?.data?.maNhanSuCapNhap) {
+            alert("Dữ liệu không hợp lệ");
+            return;
+        }
+
+        const confirm = window.confirm("Bạn có chắc muốn khôi phục khách hàng này không?");
+        if (!confirm) return;
+
+        try {
+            setLoading(true);
+            await callAPI({
+                method: "PUT",
+                endpoint: "/customer/restore",
+                data: {
+                    maKhachHang: notification.data.maKhachHang,
+                }
+            });
+            alert("Khôi phục khách hàng thành công!");
+            navigate("/customerlist"); 
+        } catch (err) {
+            alert("Lỗi khi khôi phục: " + err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (loading) return <div>Đang tải...</div>;
     if (error) return <div className="text-red-500">Lỗi: {error}</div>;
     if (!notification) return <div>Chưa có thông báo</div>;
@@ -75,15 +102,27 @@ const NotificationDetail = () => {
                                 key={index}
                                 className={index % 2 === 0 ? "bg-gray-50" : ""}
                             >
-                                <td className="p-3 border-b border-gray-200  text-left">{field}</td>
-                                <td className="p-3 border-b border-gray-200 text-gray-600 italic  text-left">{oldValue ?? "null"}</td>
-                                <td className="p-3 border-b border-gray-200 font-semibold  text-left">{newValue ?? "null"}</td>
+                                <td className="p-3 border-b border-gray-200 text-left">{field}</td>
+                                <td className="p-3 border-b border-gray-200 text-gray-600 italic text-left">{oldValue ?? "null"}</td>
+                                <td className="p-3 border-b border-gray-200 font-semibold text-left">{newValue ?? "null"}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             ) : (
                 <p>Không có thay đổi nào.</p>
+            )}
+
+            {/* Nút khôi phục nếu action là delete */}
+            {notification.data?.action === "delete" && notification.data?.maKhachHang && (
+                <div className="mt-6">
+                    <button
+                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                        onClick={handleRestore}
+                    >
+                        Khôi phục
+                    </button>
+                </div>
             )}
         </div>
     );

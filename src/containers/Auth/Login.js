@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { setAuth } from "../../features/authSlice";
 import { showSuccess, showError } from "../../components/commom/Notification";
-
+import { messaging, getToken, onMessage } from '../../firebase';
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -22,6 +22,7 @@ const Login = () => {
                 },
                 body: JSON.stringify({ username, password }),
             });
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || "Đăng nhập thất bại");
@@ -32,7 +33,20 @@ const Login = () => {
             if (data && data.token) {
                 localStorage.setItem("token", data.token);
                 const decoded = jwtDecode(data.token);
+                localStorage.setItem("maNhanSu", decoded.maNhanSu);
                 dispatch(setAuth({ authId: decoded.id, role: decoded.role }));
+
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    const fcmToken = await getToken(messaging, {
+                        vapidKey: "BO8l5RV8jUti5DfRNG6DVGNpAqkQUH8wCxZETSVjCfBA3awtoq-QOwUqeM2tvFKXBNtrfW1WjKCxicXLt-VSPK0",
+                    });
+                    if (fcmToken) {
+                        console.log("FCM token sau login:", fcmToken);
+                        await registerFCMToken(fcmToken);
+                    }
+                }
+
                 await showSuccess("Thành công!", "Đăng nhập thành công!");
                 navigate("/");
             } else {
@@ -43,6 +57,33 @@ const Login = () => {
             setError(err.message || "Đăng nhập thất bại!");
         }
     };
+    const registerFCMToken = async (token) => {
+        try {
+            const maNhanSu = localStorage.getItem("maNhanSu");
+            if (!maNhanSu) {
+                console.warn("Không có mã nhân sự, không gửi FCM token");
+                return;
+            }
+
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/save-token`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ maNhanSu, token }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Lỗi khi gửi FCM token");
+            }
+
+            console.log("✅ FCM token đã gửi lên server!");
+        } catch (error) {
+            console.error("❌ Lỗi khi gửi token lên server:", error);
+        }
+    };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 px-4">

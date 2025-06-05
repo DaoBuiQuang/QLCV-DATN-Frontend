@@ -219,6 +219,30 @@ function CaseList() {
                 </div>
                 <div className="flex flex-wrap gap-3">
                     <Select
+                        options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
+                        value={selectedCasetype ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === selectedCasetype) : null}
+                        onChange={selectedOption => setSelectedCasetype(selectedOption?.value)}
+                        placeholder="Chọn loại vụ việc"
+                        className="w-full md:w-1/6 text-left"
+                        isClearable
+                    />
+                    <Select
+                        options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
+                        value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
+                        onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
+                        placeholder="Chọn loại đơn"
+                        className="w-full md:w-1/6 text-left"
+                        isClearable
+                    />
+                     <Select
+                        options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
+                        value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
+                        onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
+                        placeholder="Chọn khách hàng"
+                        className="w-full md:w-1/6 text-left"
+                        isClearable
+                    />
+                    <Select
                         options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                         value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
                         onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
@@ -232,32 +256,6 @@ function CaseList() {
                         value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
                         onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
                         placeholder="Chọn đối tác"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-
-                    <Select
-                        options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
-                        value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
-                        onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
-                        placeholder="Chọn khách hàng"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-
-                    <Select
-                        options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
-                        value={selectedCasetype ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === selectedCasetype) : null}
-                        onChange={selectedOption => setSelectedCasetype(selectedOption?.value)}
-                        placeholder="Chọn loại vụ việc"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-                    <Select
-                        options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
-                        value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
-                        onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
-                        placeholder="Chọn loại đơn"
                         className="w-full md:w-1/6 text-left"
                         isClearable
                     />

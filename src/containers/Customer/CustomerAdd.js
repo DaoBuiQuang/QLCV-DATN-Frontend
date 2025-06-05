@@ -16,7 +16,7 @@ function CustomerAdd() {
     const [diaChi, setDiaChi] = useState("");
     const [sdt, setSdt] = useState("");
     const [ghiChu, setGhiChu] = useState("");
-    const [maQuocGia, setMaQuocGia] = useState("");
+    const [maQuocGia, setMaQuocGia] = useState("VN");
     const [maNganhNghe, setMaNganhNghe] = useState("");
     const [trangThai, setTrangThai] = useState("Đang hoạt động");
     const [maKhachHangCu, setMaKhachHangCu] = useState("");

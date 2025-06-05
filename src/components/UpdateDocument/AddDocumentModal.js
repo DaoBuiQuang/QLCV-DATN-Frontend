@@ -8,11 +8,22 @@ function AddDocumentModal({
     setFileName,
     file,
     setFile,
-    // status,
-    // setStatus,
     editingIndex
 }) {
     if (!isOpen) return null;
+
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        if (selectedFile && selectedFile.size > maxSize) {
+            alert("Tệp quá lớn. Vui lòng chọn tệp nhỏ hơn 5MB.");
+            e.target.value = ""; // Reset input
+            setFile(null);
+        } else {
+            setFile(selectedFile);
+        }
+    };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -27,20 +38,10 @@ function AddDocumentModal({
                     className="w-full p-2 border border-gray-300 rounded-md mb-4"
                 />
 
-                {/* <label className="block text-sm font-medium text-gray-700">Trạng thái</label>
-                <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md mb-4"
-                >
-                    <option value="Đã tải lên">Đã nộp</option>
-                    <option value="Chưa tải">Chưa nộp</option>
-                </select> */}
-
                 <label className="block text-sm font-medium text-gray-700">Tệp tài liệu (không bắt buộc)</label>
                 <input
                     type="file"
-                    onChange={(e) => setFile(e.target.files[0])}
+                    onChange={handleFileChange}
                     className="w-full p-2 border border-gray-300 rounded-md"
                 />
 
@@ -49,7 +50,6 @@ function AddDocumentModal({
                     <button onClick={onAdd} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                         {editingIndex !== null ? "Cập nhật" : "Thêm"}
                     </button>
-
                 </div>
             </div>
         </div>

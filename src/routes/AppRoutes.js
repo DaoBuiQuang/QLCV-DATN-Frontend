@@ -52,8 +52,10 @@ import ChangePassword from "../containers/Auth/ChangePassword";
 import Profile from "../containers/Auth/Profile";
 import NotificationDetail from "../containers/Notification/NotificationDetail";
 import Dashboard from "../containers/Dashboard/Dashboard";
+import ApplicationDetailTest from "../containers/Application/ApplicationDetailTest";
+import NotificationPopup from "../containers/Notification/NotificationPopup";
 
-const MainLayout = () => {
+const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   useEffect(() => {
     const handleResize = () => {
@@ -94,16 +96,23 @@ const MainLayout = () => {
         >
           <Outlet />
         </main>
-
+        {notification && (
+          <NotificationPopup
+            title={notification.title}
+            body={notification.body}
+            id={notification.id}
+            onClose={() => setNotification(null)}
+          />
+        )}
       </div>
     </div>
   );
 };
-const AppRoutes = () => {
+const AppRoutes = ({ notification, setNotification }) => {
   return (
     <Router>
       <Routes>
-        <Route element={<MainLayout />}>
+        <Route element={<MainLayout notification={notification} setNotification={setNotification} />}>
           <Route path="/customerlist" element={<CustomerList />} />
           <Route path="/customeradd" element={<CustomerAdd></CustomerAdd>} />
           <Route path="/customeredit/:maKhachHang" element={<CustomerEdit></CustomerEdit>} />
@@ -149,7 +158,8 @@ const AppRoutes = () => {
           <Route path="/applicationadd/:maHoSoVuViec" element={<ApplicationAdd></ApplicationAdd>} />
           <Route path="/applicationadd" element={<ApplicationAdd />} />
           <Route path="/applicationedit/:maDonDangKy" element={<ApplicationEdit></ApplicationEdit>} />
-          <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetail></ApplicationDetail>} />
+          {/* <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetail></ApplicationDetail>} /> */}
+          <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetailTest></ApplicationDetailTest>} />
 
           <Route path="/brandlist" element={<BrandList></BrandList>} />
           <Route path="/brandadd" element={<BrandAdd></BrandAdd>} />

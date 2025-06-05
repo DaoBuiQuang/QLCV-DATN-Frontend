@@ -12,16 +12,28 @@ function BrandBasicForm({
   isEditOnly,
   isViewOnly,
 }) {
+  const [imageError, setImageError] = React.useState("");
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    const maxSize = 2 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+      setImageError("Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 2MB.");
+      e.target.value = "";
+      return;
+    }
+
+    setImageError("");
     const reader = new FileReader();
     reader.onloadend = () => {
-      setLinkAnh(reader.result); // Base64 và preview
+      setLinkAnh(reader.result);
     };
     reader.readAsDataURL(file);
   };
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -37,9 +49,9 @@ function BrandBasicForm({
             setMaNhanHieu(e.target.value);
             validateField("maNhanHieu", e.target.value);
           }}
-          disabled={isViewOnly||isEditOnly}
+          disabled={isViewOnly || isEditOnly}
           placeholder="Nhập mã nhãn hiệu"
-           className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly || isEditOnly ? 'bg-gray-200' : ''}`}
+          className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly || isEditOnly ? 'bg-gray-200' : ''}`}
         />
         {errors?.maNhanHieu && (
           <p className="text-red-500 text-xs mt-1 text-left">
@@ -62,7 +74,7 @@ function BrandBasicForm({
           }}
           placeholder="Nhập tên nhãn hiệu"
           disabled={isViewOnly}
-          className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly  ? 'bg-gray-200' : ''}`}
+          className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
         />
         {errors?.tenNhanHieu && (
           <p className="text-red-500 text-xs mt-1 text-left">
@@ -85,6 +97,10 @@ function BrandBasicForm({
             />
           </>
         )}
+        {imageError && (
+          <p className="text-red-500 text-xs mt-1 text-left">{imageError}</p>
+        )}
+
         {linkAnh && (
           <div className="mt-2">
             <img

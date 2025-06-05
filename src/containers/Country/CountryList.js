@@ -17,7 +17,7 @@ function CountryList() {
     try {
       const response = await callAPI({
         method: "post",
-        endpoint: "/country/list",
+        endpoint: "/country/full-list",
         data: { search: searchValue },
       });
       setCountries(response);
@@ -82,13 +82,14 @@ function CountryList() {
             <th className="p-2 font-normal">STT</th>
             <th className="p-2 font-normal">Mã quốc gia</th>
             <th className="p-2 font-normal">Tên quốc gia</th>
+            <th className="p-2 font-normal">Cờ</th> {/* Cột mới */}
             <th className="p-2 text-center"></th>
           </tr>
         </thead>
         <tbody>
           {countries.map((country, index) => (
             <tr
-              key={country.id}
+              key={country.maQuocGia}
               className="group hover:bg-gray-100 text-center border-b relative"
             >
               <td className="p-2">{index + 1}</td>
@@ -102,8 +103,23 @@ function CountryList() {
                 {country.maQuocGia}
               </td>
               <td className="p-2">{country.tenQuocGia}</td>
-              <td className="p-2 relative">
+              <td className="p-2">
+                {country.linkAnh ? (
+                  <div className="flex justify-center items-center">
+                    <img
+                      src={country.linkAnh}
+                      alt={`Cờ ${country.tenQuocGia}`}
+                      className="w-10 h-6 object-cover rounded"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center text-gray-400 italic">
+                    Không có
+                  </div>
+                )}
+              </td>
 
+              <td className="p-2 relative">
                 {(role === 'admin' || role === 'staff') && (
                   <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                     <button
@@ -112,7 +128,8 @@ function CountryList() {
                     >
                       📝
                     </button>
-                    <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                    <button
+                      className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                       onClick={() => {
                         setCountryToDelete(country.maQuocGia);
                         setShowDeleteModal(true);
@@ -126,6 +143,7 @@ function CountryList() {
             </tr>
           ))}
         </tbody>
+
       </table>
       <Modal
         title="Xác nhận xóa"

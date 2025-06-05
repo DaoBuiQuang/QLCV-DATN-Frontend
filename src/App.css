@@ -155,3 +155,12 @@ aside::-webkit-scrollbar-track {
 .css-1jqq78o-placeholder{
   color: #888888 !important; /* Màu xám nhạt */
 }
+tr{
+  line-height: 1rem; /* Khoảng cách dòng */
+}
+th{
+  text-align: left !important;
+}
+td{
+  text-align: left !important;
+}

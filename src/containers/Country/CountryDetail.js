@@ -6,7 +6,7 @@ import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 function CountryDetail() {
   const navigate = useNavigate();
   const { maQuocGia } = useParams();
-
+  const [linkAnhBase64, setLinkAnhBase64] = useState("");
   const [tenQuocGia, setTenQuocGia] = useState("");
 
   useEffect(() => {
@@ -25,6 +25,7 @@ function CountryDetail() {
         });
 
         setTenQuocGia(response.tenQuocGia);
+         setLinkAnhBase64(response.linkAnh || "");
       } catch (error) {
         console.error("Lỗi khi lấy chi tiết quốc gia:", error);
         alert("Không thể lấy dữ liệu quốc gia!");
@@ -64,7 +65,15 @@ function CountryDetail() {
             />
           </div>
         </div>
-
+        <div className="mb-4">
+          {linkAnhBase64 && (
+            <img
+              src={linkAnhBase64}
+              alt="Xem trước"
+              className="mt-2 h-32 object-contain border"
+            />
+          )}
+        </div>
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-4">
           <button
             className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg"

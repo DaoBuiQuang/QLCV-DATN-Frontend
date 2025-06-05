@@ -465,9 +465,9 @@ function CaseEdit() {
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-blue-300 cursor-not-allowed"
                             }`}>Sửa hồ sơ vụ việc</button>
-                    {maLoaiVuViec?.startsWith("NH01") && (
+                    {(maLoaiVuViec?.startsWith("TM") && maLoaiDon === "1") && (
                         <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                            {maDonDangKy ? "Sửa đơn đăng ký nhãn hiệu" : "Tạo đơn đăng ký nhãn hiệu"}
+                            {maDonDangKy ? "Xem đơn đăng ký nhãn hiệu" : "Tạo đơn đăng ký nhãn hiệu"}
                         </button>
                     )}
                 </div>

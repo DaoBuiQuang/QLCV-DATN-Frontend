@@ -13,12 +13,12 @@ function CaseAdd() {
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maKhachHang, setMaKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
-    const [maLoaiDon, setMaLoaiDon] = useState("")
+    const [maLoaiDon, setMaLoaiDon] = useState("1")
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
     const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
     const [ngayXuLy, setNgayXuLy] = useState(null);
-    const [maLoaiVuViec, setMaLoaiVuViec] = useState("");
-    const [maQuocGia, setMaQuocGia] = useState("");
+    const [maLoaiVuViec, setMaLoaiVuViec] = useState("TM");
+    const [maQuocGia, setMaQuocGia] = useState("VN");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
     const [nhanSuVuViec, setNhanSuVuViec] = useState([]);
@@ -407,7 +407,7 @@ function CaseAdd() {
                             isClearable
                         />
                     </div>
-                    <div>
+                    {/* <div>
                         <label className="block text-gray-700 text-left text-left">Trạng thái vụ việc</label>
                         <Select
                             options={formatOptions(statusOptions, "value", "label")}
@@ -417,7 +417,7 @@ function CaseAdd() {
                             className="w-full mt-1 rounded-lg  text-left"
                             isClearable
                         />
-                    </div>
+                    </div> */}
 
                     {/* <div>
                         <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>

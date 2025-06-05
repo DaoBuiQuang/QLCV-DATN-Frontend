@@ -75,8 +75,8 @@ function ApplicationTypeList() {
         <thead>
           <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
             <th className="p-2 font-normal">STT</th>
-            <th className="p-2 font-normal">Mã loại đơn đăng kí</th>
-            <th className="p-2 font-normal">Tên loại đơn đăng kí</th>
+            <th className="p-2 font-normal">Mã loại đơn đăng ký</th>
+            <th className="p-2 font-normal">Tên loại đơn đăng ký</th>
             <th className="p-2 font-normal">Mô tả</th>
             <th className="p-2 text-center"></th>
           </tr>

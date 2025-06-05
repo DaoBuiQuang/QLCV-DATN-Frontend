@@ -36,9 +36,12 @@ export default function App() {
           return;
         }
 
-        await axios.post(`${process.env.REACT_APP_API_URL}/save-token`, {
-          maNhanSu,
-          token,
+        await fetch(`${process.env.REACT_APP_API_URL}/save-token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ maNhanSu, token }),
         });
         console.log("FCM token đã gửi lên server!");
       } catch (error) {
@@ -54,7 +57,7 @@ export default function App() {
           .then((currentToken) => {
             if (currentToken) {
               console.log("FCM Token:", currentToken);
-              registerFCMToken(currentToken); 
+              registerFCMToken(currentToken);
             } else {
               console.log("Không có token FCM khả dụng.");
             }
@@ -67,24 +70,18 @@ export default function App() {
       }
     });
     onMessage(messaging, (payload) => {
-      console.log("📨 Đã nhận được thông báo:", payload);
+      console.log("📨 Nhận foreground:", payload);
       const { title, body } = payload.notification;
+      const { id } = payload.data;
       dispatch(triggerNotificationRefresh());
-      setNotification({ title, body });
+      setNotification({ title, body, id });
     });
   }, []);
   return (
     <div className="App">
       {/* <AuthProvider> */}
       <ToastContainer />
-      <AppRoutes />
-      {notification && (
-        <NotificationPopup
-          title={notification.title}
-          body={notification.body}
-          onClose={() => setNotification(null)}
-        />
-      )}
+      <AppRoutes notification={notification} setNotification={setNotification} />
       {/* </AuthProvider> */}
     </div>
   );
