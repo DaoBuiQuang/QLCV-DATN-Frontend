@@ -7,7 +7,7 @@ function RegisterStaff() {
   const { maNhanSu } = useParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("staff");
 
   const handleRegister = async () => {
     try {

@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { setAuth } from "../../features/authSlice";
 import { showSuccess, showError } from "../../components/commom/Notification";
-import { messaging, getToken, onMessage } from '../../firebase';
+// import { messaging, getToken, onMessage } from '../../firebase';
+import { messaging } from '../../firebase';
+import { getToken } from "firebase/messaging";
+// import { getToken, onMessage } from "../../firebase/messaging";
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -38,12 +41,21 @@ const Login = () => {
 
                 const permission = await Notification.requestPermission();
                 if (permission === "granted") {
-                    const fcmToken = await getToken(messaging, {
-                        vapidKey: "BO8l5RV8jUti5DfRNG6DVGNpAqkQUH8wCxZETSVjCfBA3awtoq-QOwUqeM2tvFKXBNtrfW1WjKCxicXLt-VSPK0",
-                    });
-                    if (fcmToken) {
-                        console.log("FCM token sau login:", fcmToken);
-                        await registerFCMToken(fcmToken);
+                    if (messaging) {
+                        // Chỉ gọi getToken khi messaging không undefined/null
+                        try {
+                            const fcmToken = await getToken(messaging, {
+                                vapidKey: "BO8l5RV8jUti5DfRNG6DVGNpAqkQUH8wCxZETSVjCfBA3awtoq-QOwUqeM2tvFKXBNtrfW1WjKCxicXLt-VSPK0",
+                            });
+                            if (fcmToken) {
+                                console.log("FCM token sau login:", fcmToken);
+                                await registerFCMToken(fcmToken);
+                            }
+                        } catch (err) {
+                            console.warn("Lấy FCM token thất bại:", err);
+                        }
+                    } else {
+                        console.warn("Firebase Messaging không khả dụng trong môi trường này.");
                     }
                 }
 
@@ -57,6 +69,7 @@ const Login = () => {
             setError(err.message || "Đăng nhập thất bại!");
         }
     };
+
     const registerFCMToken = async (token) => {
         try {
             const maNhanSu = localStorage.getItem("maNhanSu");

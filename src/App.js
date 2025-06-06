@@ -8,8 +8,8 @@ import "./App.css";
 import { ToastContainer } from "react-toastify";
 import { jwtDecode } from 'jwt-decode';
 import axios from "axios";
-import { messaging, getToken, onMessage } from './firebase';
-import NotificationPopup from "./containers/Notification/NotificationPopup";
+import { messaging } from './firebase';
+import { getToken, onMessage } from "firebase/messaging";
 import { triggerNotificationRefresh } from "./features/notificationSlice";
 export default function App() {
   const dispatch = useDispatch();
@@ -28,6 +28,11 @@ export default function App() {
     }
   }, [dispatch]);
   useEffect(() => {
+    if (!messaging) {
+      console.warn("Firebase Messaging không khả dụng trong môi trường này.");
+      return; // thoát luôn, không chạy tiếp nếu messaging không có
+    }
+
     const registerFCMToken = async (token) => {
       try {
         const maNhanSu = localStorage.getItem("maNhanSu");
@@ -69,6 +74,7 @@ export default function App() {
         console.warn("Người dùng từ chối nhận thông báo.");
       }
     });
+
     onMessage(messaging, (payload) => {
       console.log("📨 Nhận foreground:", payload);
       const { title, body } = payload.notification;
@@ -77,6 +83,7 @@ export default function App() {
       setNotification({ title, body, id });
     });
   }, []);
+
   return (
     <div className="App">
       {/* <AuthProvider> */}

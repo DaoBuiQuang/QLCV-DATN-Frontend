@@ -1,6 +1,6 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDhlu763Buze3CR8PhhZXnDqi0u0zWDEno",
@@ -12,6 +12,11 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-const messaging = getMessaging(firebaseApp);
 
-export { messaging, getToken, onMessage };
+// Chỉ tạo messaging nếu đang chạy trên trình duyệt và hỗ trợ serviceWorker
+const messaging = (typeof window !== "undefined" && "serviceWorker" in navigator)
+  ? getMessaging(firebaseApp)
+  : null;
+
+export { messaging };
+

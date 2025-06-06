@@ -1,12 +1,12 @@
 import i18next from "i18next";
 import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-const storedLang = localStorage.getItem("language") || "en";
+const storedLang = localStorage.getItem("language") || "vn";
 i18next
     .use(I18nextBrowserLanguageDetector)
     .use(initReactI18next)
     .init({
-        debug: true,
+        debug: false,
         lng: storedLang,
         resources: {
             en: {

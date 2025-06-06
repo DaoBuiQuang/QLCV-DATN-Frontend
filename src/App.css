@@ -114,14 +114,14 @@ input.error {
 }
 
 .don-progress .ant-steps-item {
-  flex: 0 0 25%; /* 4 bước mỗi dòng, có thể đổi thành 20% cho 5 bước mỗi dòng */
+  flex: 0 0 25%; 
   max-width: 25%;
 }
 .don-progress .ant-steps-horizontal {
-  flex-wrap: wrap; /* Cho phép xuống dòng khi không đủ chỗ */
-  row-gap: 8px;     /* Khoảng cách giữa các hàng */
-  column-gap: 12px; /* Khoảng cách giữa các bước */
-  justify-content: center; /* Căn giữa các bước */
+  flex-wrap: wrap;
+  row-gap: 8px;     
+  column-gap: 12px; 
+  justify-content: center; 
 }
 
 .don-progress .ant-steps-item {
