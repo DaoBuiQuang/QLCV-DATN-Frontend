@@ -88,6 +88,7 @@ function StaffList() {
             <th className="p-2">{t("phoneNumber")}</th>
             <th className="p-2">{t("email")}</th>
             <th className="p-2">{t("username")}</th>
+            <th className="p-2">{t("role")}</th>
             <th className="p-2 text-center"></th>
           </tr>
         </thead>
@@ -105,6 +106,10 @@ function StaffList() {
               <td className="p-2">{staff.sdt}</td>
               <td className="p-2">{staff.email}</td>
               <td className="p-2">{staff.Username}</td>
+              <td className="p-2">
+                {staff.Role === "staff" ? "Nhân viên" : staff.Role === "admin" ? "Quản trị viên" : staff.Role}
+              </td>
+
               <td className="p-2 relative">
                 <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                   <button
