@@ -367,17 +367,17 @@ function ApplicationList() {
           <table className="w-full border-collapse bg-white text-sm mt-4">
             <thead>
               <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                <th className="p-2">STT</th>
+                <th className="p-2 text-table">STT</th>
                 {columns.map(col => (
-                  <th key={col.key} className="p-2">{col.label}</th>
+                  <th key={col.key} className="p-2 text-table">{col.label}</th>
                 ))}
-                <th className="p-2"></th>
+                <th className="p-2 text-table"></th>
               </tr>
             </thead>
             <tbody>
               {applications.map((app, index) => (
                 <tr key={app.maDonDangKy} className="group hover:bg-gray-100 text-center border-b relative">
-                  <td className="p-2">{index + 1}</td>
+                  <td className="p-2 text-table">{index + 1}</td>
                   {columns.map(col => {
                     let content = app[col.key];
 
@@ -391,7 +391,7 @@ function ApplicationList() {
 
                     if (isDateField.includes(col.key)) {
                       return (
-                        <td key={col.key} className="p-2">
+                        <td key={col.key} className="p-2 text-table">
                           {content ? new Date(content).toLocaleDateString("vi-VN") : ""}
                         </td>
                       );
@@ -402,7 +402,7 @@ function ApplicationList() {
                       return (
                         <td
                           key={col.key}
-                          className="p-2 text-blue-500 cursor-pointer hover:underline"
+                          className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
                           onClick={(e) => {
                             e.stopPropagation();
                             navigate(`/applicationdetail/${app.maDonDangKy}`);
@@ -489,13 +489,13 @@ function ApplicationList() {
                       );
                     }
                     return (
-                      <td key={col.key} className="p-2">
+                      <td key={col.key} className="p-2 text-table">
                         {content}
                       </td>
                     );
                   })}
 
-                  <td className="p-2">
+                  <td className="p-2 text-table">
                     {(role === "admin" || role === "staff") && (
                       <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                         <button

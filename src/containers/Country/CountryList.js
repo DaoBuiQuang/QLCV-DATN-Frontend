@@ -79,11 +79,11 @@ function CountryList() {
       <table className="w-full border-collapse bg-white text-sm mt-4">
         <thead>
           <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-            <th className="p-2 font-normal">STT</th>
-            <th className="p-2 font-normal">Mã quốc gia</th>
-            <th className="p-2 font-normal">Tên quốc gia</th>
-            <th className="p-2 font-normal">Cờ</th> {/* Cột mới */}
-            <th className="p-2 text-center"></th>
+            <th className="p-2 font-normal text-table">STT</th>
+            <th className="p-2 font-normal text-table">Mã quốc gia</th>
+            <th className="p-2 font-normal text-table">Tên quốc gia</th>
+            <th className="p-2 font-normal text-table">Cờ</th> {/* Cột mới */}
+            <th className="p-2 text-center text-table"></th>
           </tr>
         </thead>
         <tbody>
@@ -92,9 +92,9 @@ function CountryList() {
               key={country.maQuocGia}
               className="group hover:bg-gray-100 text-center border-b relative"
             >
-              <td className="p-2">{index + 1}</td>
+              <td className="p-2 text-table">{index + 1}</td>
               <td
-                className="p-2 text-blue-500 cursor-pointer hover:underline"
+                className="p-2 text-blue-500 cursor-pointer hover:underline text-table"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(`/countrydetail/${country.maQuocGia}`);
@@ -102,10 +102,10 @@ function CountryList() {
               >
                 {country.maQuocGia}
               </td>
-              <td className="p-2">{country.tenQuocGia}</td>
-              <td className="p-2">
+              <td className="p-2 text-table">{country.tenQuocGia}</td>
+              <td className="p-2 text-table">
                 {country.linkAnh ? (
-                  <div className="flex justify-center items-center">
+                  <div className="flex text-table items-center">
                     <img
                       src={country.linkAnh}
                       alt={`Cờ ${country.tenQuocGia}`}
@@ -113,7 +113,7 @@ function CountryList() {
                     />
                   </div>
                 ) : (
-                  <div className="flex justify-center items-center text-gray-400 italic">
+                  <div className="flex text-table items-center text-gray-400 italic">
                     Không có
                   </div>
                 )}

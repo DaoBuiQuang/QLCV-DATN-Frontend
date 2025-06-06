@@ -80,33 +80,33 @@ function StaffList() {
       <table className="w-full border-collapse bg-white text-sm mt-4">
         <thead>
           <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-            <th className="p-2">{t("no")}</th>
-            <th className="p-2">{t("employeeCode")}</th>
-            <th className="p-2">{t("fullName")}</th>
-            <th className="p-2">{t("position")}</th>
-            <th className="p-2">{t("department")}</th>
-            <th className="p-2">{t("phoneNumber")}</th>
-            <th className="p-2">{t("email")}</th>
-            <th className="p-2">{t("username")}</th>
-            <th className="p-2">{t("role")}</th>
+            <th className="p-2 text-table">{t("no")}</th>
+            <th className="p-2 text-table">{t("employeeCode")}</th>
+            <th className="p-2 text-table">{t("fullName")}</th>
+            <th className="p-2 text-table">{t("position")}</th>
+            <th className="p-2 text-table">{t("department")}</th>
+            <th className="p-2 text-table">{t("phoneNumber")}</th>
+            <th className="p-2 text-table">{t("email")}</th>
+            <th className="p-2 text-table">{t("username")}</th>
+            <th className="p-2 text-table">{t("role")}</th>
             <th className="p-2 text-center"></th>
           </tr>
         </thead>
         <tbody>
           {staffs.map((staff, index) => (
             <tr key={staff.maNhanSu} className="group relative hover:bg-gray-100 text-center border-b">
-              <td className="p-2">{index + 1}</td>
-              <td className="p-2 text-blue-500 cursor-pointer hover:underline" onClick={(e) => {
+              <td className="p-2 text-table">{index + 1}</td>
+              <td className="p-2 text-table text-blue-500 cursor-pointer hover:underline" onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/staffdetail/${staff.maNhanSu}`);
               }}>{staff.maNhanSu}</td>
-              <td className="p-2">{staff.hoTen}</td>
-              <td className="p-2">{staff.chucVu}</td>
-              <td className="p-2">{staff.phongBan}</td>
-              <td className="p-2">{staff.sdt}</td>
-              <td className="p-2">{staff.email}</td>
-              <td className="p-2">{staff.Username}</td>
-              <td className="p-2">
+              <td className="p-2 text-table">{staff.hoTen}</td>
+              <td className="p-2 text-table">{staff.chucVu}</td>
+              <td className="p-2 text-table">{staff.phongBan}</td>
+              <td className="p-2 text-table">{staff.sdt}</td>
+              <td className="p-2 text-table">{staff.email}</td>
+              <td className="p-2 text-table">{staff.Username}</td>
+              <td className="p-2 text-table">
                 {staff.Role === "staff" ? "Nhân viên" : staff.Role === "admin" ? "Quản trị viên" : staff.Role}
               </td>
 

@@ -74,11 +74,11 @@ function CaseTypeList() {
       <table className="w-full border-collapse bg-white text-sm mt-4">
         <thead>
           <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-            <th className="p-2 font-normal">STT</th>
-            <th className="p-2 font-normal">Mã loại vụ việc</th>
-            <th className="p-2 font-normal">Tên loại vụ việc</th>
-            <th className="p-2 font-normal">Mô tả</th>
-            <th className="p-2 text-center"></th>
+            <th className="p-2 font-normal text-table">STT</th>
+            <th className="p-2 font-normal text-table">Mã loại vụ việc</th>
+            <th className="p-2 font-normal text-table">Tên loại vụ việc</th>
+            <th className="p-2 font-normal text-table">Mô tả</th>
+            <th className="p-2 text-center text-table"></th>
           </tr>
         </thead>
         <tbody>
@@ -87,9 +87,9 @@ function CaseTypeList() {
               key={casetype.id}
               className="group hover:bg-gray-100 text-center border-b relative"
             >
-              <td className="p-2">{index + 1}</td>
+              <td className="p-2 text-table">{index + 1}</td>
               <td
-                className="p-2 text-blue-500 cursor-pointer hover:underline"
+                className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(`/casetypedetail/${casetype.maLoaiVuViec}`);
@@ -97,8 +97,8 @@ function CaseTypeList() {
               >
                 {casetype.maLoaiVuViec}
               </td>
-              <td className="p-2">{casetype.tenLoaiVuViec}</td>
-              <td className="p-2">{casetype.moTa}</td>
+              <td className="p-2 text-table">{casetype.tenLoaiVuViec}</td>
+              <td className="p-2 text-table">{casetype.moTa}</td>
               <td className="p-2 relative">
                 {(role === 'admin' || role === 'staff') && (
                   <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">

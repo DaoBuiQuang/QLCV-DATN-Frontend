@@ -172,24 +172,24 @@ function CustomerList() {
                     <table className="w-full border-collapse bg-white text-sm">
                         <thead className=" bg-[#EAECF0]">
                             <tr className="text-[#667085] text-center font-normal">
-                                <th className="p-2">{t("stt")}</th>
+                                <th className="p-2 text-table">{t("stt")}</th>
                                 {columns.map(col => (
-                                    <th key={col.key} className="p-2">{col.label}</th>
+                                    <th key={col.key} className="p-2 text-table">{col.label}</th>
                                 ))}
-                                <th className="p-2"></th>
+                                <th className="p-2 text-table"></th>
                             </tr>
                         </thead>
                         <tbody>
                             {customers.map((cus, idx) => (
                                 <tr key={cus.maKhachHang} className="group hover:bg-gray-100 text-center border-b relative">
-                                    <td className="p-2">{idx + 1}</td>
+                                    <td className="p-2 text-table">{idx + 1}</td>
                                     {columns.map(col => {
                                         let content = cus[col.key];
                                         if (col.key === "maKhachHang") {
                                             return (
                                                 <td
                                                     key={col.key}
-                                                    className="p-2 text-blue-500 cursor-pointer hover:underline"
+                                                    className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
                                                     onClick={e => {
                                                         e.stopPropagation();
                                                         navigate(`/customerdetail/${cus.maKhachHang}`);
@@ -199,7 +199,7 @@ function CustomerList() {
                                                 </td>
                                             );
                                         }
-                                        return <td key={col.key} className="p-2">{cus[col.key]}</td>
+                                        return <td key={col.key} className="p-2 text-table">{cus[col.key]}</td>
                                     })}
                                     <td className="p-2 relative">
                                         {(role === 'admin' || role === 'staff') && (
@@ -214,7 +214,6 @@ function CustomerList() {
                         </tbody>
                     </table>
                 </Spin>
-
             </div>
             <div className="mt-4 flex flex-col items-center space-y-2">
                 {totalItems > 0 && (

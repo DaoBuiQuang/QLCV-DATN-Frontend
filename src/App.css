@@ -158,9 +158,12 @@ aside::-webkit-scrollbar-track {
 tr{
   line-height: 1rem; /* Khoảng cách dòng */
 }
-th{
+.text-table{
+  text-align: left !important;
+}
+/* th{
   text-align: left !important;
 }
 td{
   text-align: left !important;
-}
+} */

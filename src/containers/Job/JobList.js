@@ -85,7 +85,7 @@ function JobList() {
               key={job.id}
               className="group hover:bg-gray-100 text-center border-b relative"
             >
-              <td className="p-2">{index + 1}</td>
+              <td className="p-2 text-table">{index + 1}</td>
               <td
                 className="p-2 text-blue-500 cursor-pointer hover:underline"
                 onClick={(e) => {
@@ -95,7 +95,7 @@ function JobList() {
               >
                 {job.maNganhNghe}
               </td>
-              <td className="p-2">{job.tenNganhNghe}</td>
+              <td className="p-2 text-table">{job.tenNganhNghe}</td>
               <td className="p-2 relative">
                 {(role === 'admin' || role === 'staff') && (
                   <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">

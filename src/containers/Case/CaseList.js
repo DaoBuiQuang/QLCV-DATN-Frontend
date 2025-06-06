@@ -267,17 +267,17 @@ function CaseList() {
                     <table className="w-full border-collapse bg-white text-sm mt-4">
                         <thead>
                             <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                                <th className="p-2">STT</th>
+                                <th className="p-2 text-table">STT</th>
                                 {columns.map(col => (
-                                    <th key={col.key} className="p-2">{col.label}</th>
+                                    <th key={col.key} className="p-2 text-table">{col.label}</th>
                                 ))}
-                                <th className="p-2"></th>
+                                <th className="p-2 text-table"></th>
                             </tr>
                         </thead>
                         <tbody>
                             {cases.map((caseItem, index) => (
                                 <tr key={caseItem.maHoSoVuViec} className="group hover:bg-gray-100 text-center border-b relative">
-                                    <td className="p-2">{index + 1}</td>
+                                    <td className="p-2 text-table">{index + 1}</td>
                                     {columns.map(col => {
                                         let content = caseItem[col.key];
                                         if (
@@ -305,7 +305,7 @@ function CaseList() {
                                             return (
                                                 <td
                                                     key={col.key}
-                                                    className={`p-2 ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
+                                                    className={`p-2 text-table ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
                                                     onClick={e => {
                                                         if (content) {
                                                             e.stopPropagation();
@@ -319,7 +319,7 @@ function CaseList() {
                                         }
                                         if (col.key === "nhanSuXuLy") {
                                             return (
-                                                <td className="p-2" key={col.key}>
+                                                <td className="p-2 text-table" key={col.key}>
                                                     {Array.isArray(caseItem.nhanSuXuLy) ? (
                                                         caseItem.nhanSuXuLy.map((person, idx) => (
                                                             <div key={idx}>
@@ -339,14 +339,14 @@ function CaseList() {
                                                 tam_dung: "Tạm dừng"
                                             };
                                             return (
-                                                <td key={col.key} className="p-2">
+                                                <td key={col.key} className="p-2 text-table">
                                                     {statusMap[content] || "Không xác định"}
                                                 </td>
                                             );
                                         }
-                                        return <td key={col.key} className="p-2">{content}</td>;
+                                        return <td key={col.key} className="p-2 text-table">{content}</td>;
                                     })}
-                                    {/* <td className="p-2">
+                                    {/* <td className="p-2 text-table">
                                     {caseItem.nhanSuXuLy.map((person, idx) => (
                                         <div key={idx}>
                                             {person.tenNhanSu} ({person.vaiTro})

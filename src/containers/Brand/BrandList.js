@@ -82,7 +82,7 @@ function BrandList() {
                 <tbody>
                     {brands.map((brand, index) => (
                         <tr key={brand.maNhanHieu} className="group hover:bg-gray-100 text-center border-b relative">
-                            <td className="p-2">{index + 1}</td>
+                            <td className="p-2 text-table">{index + 1}</td>
                             <td
                                 className="p-2 text-blue-500 cursor-pointer hover:underline"
                                 onClick={(e) => {
@@ -92,8 +92,8 @@ function BrandList() {
                             >
                                 {brand.maNhanHieu}
                             </td>
-                            <td className="p-2">{brand.tenNhanHieu}</td>
-                            <td className="p-2">
+                            <td className="p-2 text-table">{brand.tenNhanHieu}</td>
+                            <td className="p-2 text-table">
                                 {brand.linkAnh ? (
                                     <img src={brand.linkAnh} alt="Brand" className="w-16 h-16 object-contain mx-auto" />
                                 ) : (
