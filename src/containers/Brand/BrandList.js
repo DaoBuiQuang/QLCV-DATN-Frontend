@@ -72,10 +72,10 @@ function BrandList() {
             <table className="w-full border-collapse bg-white text-sm mt-4">
                 <thead>
                     <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                        <th className="p-2 font-normal">STT</th>
-                        <th className="p-2 font-normal">Mã nhãn hiệu</th>
-                        <th className="p-2 font-normal">Tên nhãn hiệu</th>
-                        <th className="p-2 font-normal">Ảnh</th>
+                        <th className="p-2 font-normal text-table">STT</th>
+                        <th className="p-2 font-normal text-table">Mã nhãn hiệu</th>
+                        <th className="p-2 font-normal text-table">Tên nhãn hiệu</th>
+                        <th className="p-2 font-normal text-table">Ảnh</th>
                         <th className="p-2 text-center"></th>
                     </tr>
                 </thead>
@@ -84,7 +84,7 @@ function BrandList() {
                         <tr key={brand.maNhanHieu} className="group hover:bg-gray-100 text-center border-b relative">
                             <td className="p-2 text-table">{index + 1}</td>
                             <td
-                                className="p-2 text-blue-500 cursor-pointer hover:underline"
+                                className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     navigate(`/branddetail/${brand.maNhanHieu}`);

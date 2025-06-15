@@ -234,7 +234,7 @@ function CaseList() {
                         className="w-full md:w-1/6 text-left"
                         isClearable
                     />
-                     <Select
+                    <Select
                         options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                         value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
                         onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
@@ -267,9 +267,11 @@ function CaseList() {
                     <table className="w-full border-collapse bg-white text-sm mt-4">
                         <thead>
                             <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                                <th className="p-2 text-table">STT</th>
-                                {columns.map(col => (
-                                    <th key={col.key} className="p-2 text-table">{col.label}</th>
+                                <th className="p-2 text-table border-r">STT</th>
+                                {columns.map((col, index) => (
+                                    <th key={col.key} className={`p-2 text-table ${index < columns.length - 1 ? 'border-r' : ''}`}>
+                                        {col.label}
+                                    </th>
                                 ))}
                                 <th className="p-2 text-table"></th>
                             </tr>
@@ -277,9 +279,11 @@ function CaseList() {
                         <tbody>
                             {cases.map((caseItem, index) => (
                                 <tr key={caseItem.maHoSoVuViec} className="group hover:bg-gray-100 text-center border-b relative">
-                                    <td className="p-2 text-table">{index + 1}</td>
-                                    {columns.map(col => {
+                                    <td className="p-2 text-table border-r">{index + 1}</td>
+                                    {columns.map((col, colIndex) => {
                                         let content = caseItem[col.key];
+                                        const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? 'border-r' : ''}`;
+
                                         if (
                                             col.key === "ngayTiepNhan" ||
                                             col.key === "ngayTao" ||
@@ -287,11 +291,12 @@ function CaseList() {
                                         ) {
                                             content = content ? new Date(content).toLocaleDateString("vi-VN") : "";
                                         }
+
                                         if (col.key === "maHoSoVuViec") {
                                             return (
                                                 <td
                                                     key={col.key}
-                                                    className="p-2 text-blue-500 cursor-pointer hover:underline"
+                                                    className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
                                                     onClick={e => {
                                                         e.stopPropagation();
                                                         navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
@@ -301,11 +306,12 @@ function CaseList() {
                                                 </td>
                                             );
                                         }
+
                                         if (col.key === "maDonDangKy") {
                                             return (
                                                 <td
                                                     key={col.key}
-                                                    className={`p-2 text-table ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
+                                                    className={`${commonClass} ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
                                                     onClick={e => {
                                                         if (content) {
                                                             e.stopPropagation();
@@ -317,9 +323,10 @@ function CaseList() {
                                                 </td>
                                             );
                                         }
+
                                         if (col.key === "nhanSuXuLy") {
                                             return (
-                                                <td className="p-2 text-table" key={col.key}>
+                                                <td key={col.key} className={commonClass}>
                                                     {Array.isArray(caseItem.nhanSuXuLy) ? (
                                                         caseItem.nhanSuXuLy.map((person, idx) => (
                                                             <div key={idx}>
@@ -327,11 +334,12 @@ function CaseList() {
                                                             </div>
                                                         ))
                                                     ) : (
-                                                        <span>—</span> // hoặc để trống
+                                                        <span>—</span>
                                                     )}
                                                 </td>
                                             );
                                         }
+
                                         if (col.key === "trangThaiVuViec") {
                                             const statusMap = {
                                                 dang_xu_ly: "Đang xử lý",
@@ -339,20 +347,15 @@ function CaseList() {
                                                 tam_dung: "Tạm dừng"
                                             };
                                             return (
-                                                <td key={col.key} className="p-2 text-table">
+                                                <td key={col.key} className={commonClass}>
                                                     {statusMap[content] || "Không xác định"}
                                                 </td>
                                             );
                                         }
-                                        return <td key={col.key} className="p-2 text-table">{content}</td>;
+
+                                        return <td key={col.key} className={commonClass}>{content}</td>;
                                     })}
-                                    {/* <td className="p-2 text-table">
-                                    {caseItem.nhanSuXuLy.map((person, idx) => (
-                                        <div key={idx}>
-                                            {person.tenNhanSu} ({person.vaiTro})
-                                        </div>
-                                    ))}
-                                </td> */}
+
                                     <td className="p-2 relative">
                                         {(role === 'admin' || role === 'staff') && (
                                             <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
@@ -362,7 +365,6 @@ function CaseList() {
                                                 >
                                                     📝
                                                 </button>
-
                                                 <button
                                                     className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                                                     onClick={() => {
@@ -382,16 +384,15 @@ function CaseList() {
                                                 >
                                                     📄
                                                 </button>
-
                                             </div>
                                         )}
                                     </td>
-
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </Spin>
+
             </div>
             <div className="mt-4 flex flex-col items-center space-y-2">
                 {totalItems > 0 && (
@@ -412,7 +413,7 @@ function CaseList() {
                     onChange={(page, size) => {
                         setPageIndex(page);
                         setPageSize(size)
-                       fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, page, size)
+                        fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, page, size)
                     }}
                     showSizeChanger
                     pageSizeOptions={['5', '10', '20', '50']}

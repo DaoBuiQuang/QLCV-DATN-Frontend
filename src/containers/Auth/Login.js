@@ -8,6 +8,7 @@ import { showSuccess, showError } from "../../components/commom/Notification";
 import { messaging } from '../../firebase';
 import { getToken } from "firebase/messaging";
 // import { getToken, onMessage } from "../../firebase/messaging";
+import logoweb from "../../assets/image/logo-web-big.jpg";
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -102,11 +103,12 @@ const Login = () => {
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 px-4">
             <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
                 <div className="flex justify-center mb-6">
-                    <img
+                    {/* <img
                         src="https://ipac.vn/image/catalog/logo/rsz_1logo.jpg"
                         alt="Logo"
                         className="w-28"
-                    />
+                    /> */}
+                     <img src={logoweb} alt="Logo" className="w-32" />
                 </div>
 
                 <h2 className="text-3xl font-bold text-center text-gray-700 mb-6">

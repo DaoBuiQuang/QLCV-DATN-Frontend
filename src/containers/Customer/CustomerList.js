@@ -34,12 +34,12 @@ function CustomerList() {
         "tenKhachHang",
         "diaChi",
         "sdt",
-         "nguoiLienHe",
+        "nguoiLienHe",
         "tenDoiTac",
         "tenQuocGia",
         "ghiChu",
         "tenNganhNghe",
-       
+
     ]);
 
     const allFieldOptions = [
@@ -51,7 +51,7 @@ function CustomerList() {
         { key: "tenDoiTac", label: t("tenDoiTac") },
         { key: "tenQuocGia", label: t("tenQuocGia") },
         { key: "tenNganhNghe", label: t("tenNganhNghe") },
-         { key: "ghiChu", label: t("ghiChu") },
+        { key: "ghiChu", label: t("ghiChu") },
     ];
 
 
@@ -108,12 +108,23 @@ function CustomerList() {
         fetchIndustries();
     }, []);
 
+
+
     const handleDeleteCustomer = async () => {
-        await callAPI({ method: "post", endpoint: "/customer/delete", data: { maKhachHang: customerToDelete } });
-        setShowDeleteModal(false);
-        setCustomerToDelete(null);
-        fetchCustomers(searchTerm);
+        try {
+            await callAPI({
+                method: "post",
+                endpoint: "/customer/delete",
+                data: { maKhachHang: customerToDelete },
+            });
+            setShowDeleteModal(false);
+            setCustomerToDelete(null);
+            fetchCustomers(searchTerm);
+        } catch (err) {
+          
+        }
     };
+
 
     const formatOptions = (data, valueKey, labelKey) => data.map(item => ({ value: item[valueKey], label: item[labelKey] }));
 
@@ -170,11 +181,13 @@ function CustomerList() {
             <div className="overflow-x-auto mt-4">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">
-                        <thead className=" bg-[#EAECF0]">
+                        <thead className="bg-[#EAECF0]">
                             <tr className="text-[#667085] text-center font-normal">
-                                <th className="p-2 text-table">{t("stt")}</th>
-                                {columns.map(col => (
-                                    <th key={col.key} className="p-2 text-table">{col.label}</th>
+                                <th className="p-2 text-table border-r">{t("stt")}</th>
+                                {columns.map((col, index) => (
+                                    <th key={col.key} className={`p-2 text-table ${index < columns.length - 1 ? 'border-r' : ''}`}>
+                                        {col.label}
+                                    </th>
                                 ))}
                                 <th className="p-2 text-table"></th>
                             </tr>
@@ -182,14 +195,16 @@ function CustomerList() {
                         <tbody>
                             {customers.map((cus, idx) => (
                                 <tr key={cus.maKhachHang} className="group hover:bg-gray-100 text-center border-b relative">
-                                    <td className="p-2 text-table">{idx + 1}</td>
-                                    {columns.map(col => {
+                                    <td className="p-2 text-table border-r">{idx + 1}</td>
+                                    {columns.map((col, index) => {
                                         let content = cus[col.key];
+                                        const commonClass = `p-2 text-table ${index < columns.length - 1 ? 'border-r' : ''}`;
+
                                         if (col.key === "maKhachHang") {
                                             return (
                                                 <td
                                                     key={col.key}
-                                                    className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
+                                                    className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
                                                     onClick={e => {
                                                         e.stopPropagation();
                                                         navigate(`/customerdetail/${cus.maKhachHang}`);
@@ -199,13 +214,27 @@ function CustomerList() {
                                                 </td>
                                             );
                                         }
-                                        return <td key={col.key} className="p-2 text-table">{cus[col.key]}</td>
+
+                                        return <td key={col.key} className={commonClass}>{cus[col.key]}</td>;
                                     })}
                                     <td className="p-2 relative">
                                         {(role === 'admin' || role === 'staff') && (
                                             <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
-                                                <button className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300" onClick={() => navigate(`/customeredit/${cus.maKhachHang}`)}>📝</button>
-                                                <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300" onClick={() => { setCustomerToDelete(cus.maKhachHang); setShowDeleteModal(true); }}>🗑️</button>
+                                                <button
+                                                    className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                                    onClick={() => navigate(`/customeredit/${cus.maKhachHang}`)}
+                                                >
+                                                    📝
+                                                </button>
+                                                <button
+                                                    className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                                    onClick={() => {
+                                                        setCustomerToDelete(cus.maKhachHang);
+                                                        setShowDeleteModal(true);
+                                                    }}
+                                                >
+                                                    🗑️
+                                                </button>
                                             </div>
                                         )}
                                     </td>

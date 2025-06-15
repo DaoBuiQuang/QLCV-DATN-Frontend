@@ -240,7 +240,7 @@ function CaseAdd() {
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
                         <input
@@ -276,6 +276,7 @@ function CaseAdd() {
                                 setNoiDungVuViec(e.target.value)
                                 validateField("noiDungVuViec", e.target.value)
                             }}
+                            placeholder="Nhập nội dung vụ việc"
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                         {errors.noiDungVuViec && (
@@ -344,7 +345,7 @@ function CaseAdd() {
                         )}
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                             value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}

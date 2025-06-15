@@ -4,6 +4,7 @@ import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Laye
 import { useSelector } from 'react-redux';
 import {Key, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import logoweb from "../assets/image/logo-web-big.jpg";
 function MenuLeft() {
     const location = useLocation();
     const role = useSelector((state) => state.auth.role);
@@ -14,8 +15,11 @@ function MenuLeft() {
 
             {/* Logo */}
             <div className="p-2 flex justify-center">
-                <img src="https://ipac.vn/image/catalog/Logo-Slogan-PNG.png" alt="Logo" className="w-32" />
+                <img src={logoweb} alt="Logo" className="w-32" />
             </div>
+            {/* <div className="p-2 flex justify-center">
+                <img src="https://ipac.vn/image/catalog/Logo-Slogan-PNG.png" alt="Logo" className="w-32" />
+            </div> */}
             <nav className="flex-1 px-4 py-4">
                 <ul className="space-y-2 text-[#B1B1B1] text-sm">
                     <li>

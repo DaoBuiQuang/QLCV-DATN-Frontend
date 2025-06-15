@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-const storedLang = localStorage.getItem("language") || "vn";
+const storedLang = localStorage.getItem("language") || "vi";
 i18next
     .use(I18nextBrowserLanguageDetector)
     .use(initReactI18next)
@@ -33,7 +33,7 @@ i18next
                     caiDat: "Cài đặt",
                     doiMatKhau: "Đổi mật khẩu",
                     thongTinTaiKhoan: "Thông tin tài khoản",
-                    dashboard: "Thống kê",
+                    dashboard: "Báo cáo Thống kê",
                     personnelList: "Danh sách nhân sự",
                     enterEmployeeName: "Nhập tên nhân viên",
                     search: "Tìm kiếm",
@@ -117,6 +117,7 @@ i18next
                     degree: "Trình độ",
                     degreePlaceholder: "Nhập trình độ",
                     enterPosition: "Nhập chức vụ",
+                    nguoilienhe: "Người liên hệ",
                 },
             },
             en: {

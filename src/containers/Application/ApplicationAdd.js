@@ -22,6 +22,7 @@ function ApplicationAdd() {
     const isAddOnly = true
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
+    const [maNhanHieuOld, setMaNhanHieuOld] = useState("");
     const [maNhanHieu, setMaNhanHieu] = useState("");
     const [tenNhanHieu, setTenNhanHieu] = useState("");
     const [linkAnh, setLinkAnh] = useState("");
@@ -75,8 +76,12 @@ function ApplicationAdd() {
     const [productAndService, setProductAndService] = useState([]);
 
     const [errors, setErrors] = useState({});
-    const isFormValid = (maHoSoVuViec || "").trim() !== "" && (maNhanHieu || "").trim() !== "" && Array.isArray(maSPDVList) &&
+    const isFormValid =
+        (maHoSoVuViec || "").trim() !== "" &&
+        ((maNhanHieu || "").trim() !== "" || (maNhanHieuOld || "").trim() !== "") &&
+        Array.isArray(maSPDVList) &&
         maSPDVList.length > 0;
+
     const validateField = (field, value) => {
         let error = "";
         if (field === "maHoSoVuViec" || field === "maNhanHieu") {
@@ -211,7 +216,7 @@ function ApplicationAdd() {
                 data: {
                     maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
-                    maNhanHieu: maNhanHieu,
+                    maNhanHieu: maNhanHieuOld,
                     maSPDVList: maSPDVList,
                     trangThaiDon: trangThaiDon,
                     buocXuLy: buocXuLy,
@@ -256,9 +261,9 @@ function ApplicationAdd() {
             console.error("Lỗi khi thêm đơn đăng ký!", error);
         }
     };
-    const handleSubmit =  () => {
-         handleApplication();
-       
+    const handleSubmit = () => {
+        handleApplication();
+
     };
 
     const handleTaiLieuChange = (list) => {
@@ -269,7 +274,7 @@ function ApplicationAdd() {
         <div className="p-1 bg-gray-100 flex flex-col items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ đơn đăng ký mới</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm đơn đăng ký nhãn hiệu mới</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
@@ -333,6 +338,8 @@ function ApplicationAdd() {
                         </div> */}
                         <div className="col-span-2">
                             <BrandBasicForm
+                                maNhanHieuOld={maNhanHieuOld}
+                                setMaNhanHieuOld={setMaNhanHieuOld}
                                 maNhanHieu={maNhanHieu}
                                 setMaNhanHieu={setMaNhanHieu}
                                 tenNhanHieu={tenNhanHieu}
@@ -340,7 +347,9 @@ function ApplicationAdd() {
                                 linkAnh={linkAnh}
                                 setLinkAnh={setLinkAnh}
                                 errors={errors}
+                                setErrors={setErrors}
                                 validateField={validateField}
+                                brands={brands}
                             />
                         </div>
                         <div >

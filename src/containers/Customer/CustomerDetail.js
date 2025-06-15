@@ -115,7 +115,7 @@ function CustomerDetail() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 {t("chiTietKhachHang")}</h2>
                 <Spin spinning={loading} tip="Loading..." size="large">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
 
                         <div>
                             <label className="block text-gray-700 text-left">{t("maKhachHang")}<span className="text-red-500">*</span></label>
@@ -187,7 +187,7 @@ function CustomerDetail() {
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left">{t("nguoilienhe")}</label>
-                            <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" />
+                            <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly/>
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left">{t("diaChi")}</label>

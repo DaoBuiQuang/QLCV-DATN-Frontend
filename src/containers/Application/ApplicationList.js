@@ -197,7 +197,7 @@ function ApplicationList() {
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng kí</h2>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng ký</h2>
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
           <input
             type="text"
@@ -367,9 +367,11 @@ function ApplicationList() {
           <table className="w-full border-collapse bg-white text-sm mt-4">
             <thead>
               <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                <th className="p-2 text-table">STT</th>
-                {columns.map(col => (
-                  <th key={col.key} className="p-2 text-table">{col.label}</th>
+                <th className="p-2 text-table border-r">STT</th>
+                {columns.map((col, idx) => (
+                  <th key={col.key} className={`p-2 text-table ${idx < columns.length - 1 ? "border-r" : ""}`}>
+                    {col.label}
+                  </th>
                 ))}
                 <th className="p-2 text-table"></th>
               </tr>
@@ -377,11 +379,11 @@ function ApplicationList() {
             <tbody>
               {applications.map((app, index) => (
                 <tr key={app.maDonDangKy} className="group hover:bg-gray-100 text-center border-b relative">
-                  <td className="p-2 text-table">{index + 1}</td>
-                  {columns.map(col => {
+                  <td className="p-2 text-table border-r">{index + 1}</td>
+                  {columns.map((col, colIndex) => {
+                    const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? "border-r" : ""}`;
                     let content = app[col.key];
 
-                    // Format ngày
                     const isDateField = [
                       "ngayNopDon", "ngayHoanThanhHoSoTaiLieu", "ngayKQThamDinhHinhThuc",
                       "ngayCongBoDon", "ngayKQThamDinhND", "ngayTraLoiKQThamDinhND",
@@ -391,18 +393,17 @@ function ApplicationList() {
 
                     if (isDateField.includes(col.key)) {
                       return (
-                        <td key={col.key} className="p-2 text-table">
+                        <td key={col.key} className={commonClass}>
                           {content ? new Date(content).toLocaleDateString("vi-VN") : ""}
                         </td>
                       );
                     }
 
-                    // Clickable link for maDonDangKy
                     if (col.key === "maDonDangKy") {
                       return (
                         <td
                           key={col.key}
-                          className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
+                          className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
                           onClick={(e) => {
                             e.stopPropagation();
                             navigate(`/applicationdetail/${app.maDonDangKy}`);
@@ -412,14 +413,17 @@ function ApplicationList() {
                         </td>
                       );
                     }
+
                     if (col.key === "dsSPDV") {
                       return (
-                        <td>{getTenSPDVChuoi(app.dsSPDV)}</td>
+                        <td key={col.key} className={commonClass}>
+                          {getTenSPDVChuoi(app.dsSPDV)}
+                        </td>
                       );
                     }
+
                     if (col.key === "hanXuLy") {
                       const days = parseInt(app.hanXuLy, 10);
-
                       let text = "";
                       let textColor = "";
 
@@ -429,7 +433,7 @@ function ApplicationList() {
                           textColor = "text-red-500";
                         } else if (days <= 7) {
                           text = `Còn ${days} ngày`;
-                          textColor = "text-yellow-500"; // hoặc orange-500 tuỳ màu
+                          textColor = "text-yellow-500";
                         } else {
                           text = `Còn ${days} ngày`;
                           textColor = "text-green-600";
@@ -437,15 +441,15 @@ function ApplicationList() {
                       }
 
                       return (
-                        <td key={col.key} className={`p-2 font-semibold ${textColor}`}>
+                        <td key={col.key} className={`p-2 font-semibold ${textColor} ${colIndex < columns.length - 1 ? "border-r" : ""}`}>
                           {text}
                         </td>
                       );
                     }
-                    // Special logic for trangThaiHoanThienHoSoTaiLieu
+
                     if (col.key === "trangThaiHoanThienHoSoTaiLieu") {
                       return (
-                        <td className="p-2 min-w-[120px]" key={col.key}>
+                        <td className={`p-2 min-w-[120px] ${colIndex < columns.length - 1 ? "border-r" : ""}`} key={col.key}>
                           <div className="flex flex-col items-center">
                             <span>
                               {app.trangThaiHoanThienHoSoTaiLieu === "hoan_thanh"
@@ -455,14 +459,14 @@ function ApplicationList() {
                                   : app.trangThaiHoanThienHoSoTaiLieu}
                             </span>
 
-                            {app.ngayHoanThanhHoSoTaiLieu_DuKien && app.trangThaiHoanThienHoSoTaiLieu !== "hoan_thanh" && (
-                              (() => {
+                            {app.ngayHoanThanhHoSoTaiLieu_DuKien &&
+                              app.trangThaiHoanThienHoSoTaiLieu !== "hoan_thanh" && (() => {
                                 const today = new Date();
                                 const dueDate = new Date(app.ngayHoanThanhHoSoTaiLieu_DuKien);
                                 const diffTime = dueDate - today;
                                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
                                 const textColor = diffDays < 0 ? "text-red-500" : "text-yellow-500";
+
                                 return (
                                   <div>
                                     <span className={`text-xs ${textColor}`}>
@@ -472,8 +476,7 @@ function ApplicationList() {
                                           ? "Hạn là hôm nay"
                                           : `Quá hạn ${Math.abs(diffDays)} ngày`}
                                     </span>
-
-                                    {app.taiLieuChuaNop && app.taiLieuChuaNop.length > 0 && (
+                                    {app.taiLieuChuaNop?.length > 0 && (
                                       <ul className="mt-1 list-disc list-inside text-xs text-gray-600">
                                         {app.taiLieuChuaNop.map((tl, index) => (
                                           <li key={index}>{tl.tenTaiLieu}</li>
@@ -482,14 +485,14 @@ function ApplicationList() {
                                     )}
                                   </div>
                                 );
-                              })()
-                            )}
+                              })()}
                           </div>
                         </td>
                       );
                     }
+
                     return (
-                      <td key={col.key} className="p-2 text-table">
+                      <td key={col.key} className={commonClass}>
                         {content}
                       </td>
                     );
@@ -504,7 +507,13 @@ function ApplicationList() {
                         >
                           📝
                         </button>
-                        <button className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300" onClick={() => { setApplicationToDelete(app.maDonDangKy); setShowDeleteModal(true); }}>
+                        <button
+                          className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                          onClick={() => {
+                            setApplicationToDelete(app.maDonDangKy);
+                            setShowDeleteModal(true);
+                          }}
+                        >
                           🗑️
                         </button>
                       </div>
