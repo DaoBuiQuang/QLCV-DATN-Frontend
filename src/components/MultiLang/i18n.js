@@ -9,7 +9,7 @@ i18next
         debug: false,
         lng: storedLang,
         resources: {
-             vi: {
+            vi: {
                 translation: {
                     greeting: "Xin chào, Chào mừng!",
                     tellerPortal: "Cổng giao dịch viên",
@@ -96,7 +96,7 @@ i18next
                     tenDoiTac: "Đối tác",
                     tenQuocGia: "Quốc gia",
                     tenNganhNghe: "Ngành nghề",
-                    tenVietTatKH:"Tên viết tắt KH",
+                    tenVietTatKH: "Tên viết tắt KH",
                     trangThai: "Trạng thái",
                     moTa: "Mô tả",
                     ghiChu: "Ghi chú",
@@ -104,7 +104,7 @@ i18next
                     themKhachHang: "Thêm khách hàng",
                     themKhachHangThanhCong: "Thêm khách hàng thành công!",
                     suaKhachHang: "Sửa khách hàng",
-                    capNhapKhachHangThanhCong: "Cập nhập khách hàng thành công!",
+                    capNhapKhachHangThanhCong: "Cập nhật khách hàng thành công!",
                     maKhachHangRequired: "Mã khách hàng không được để trống",
                     tenVietTatKHRequired: "Tên viết tắt của khách hàng không được để trống",
                     tenKhachHangRequired: "Tên khách hàng không được để trống",
@@ -118,6 +118,9 @@ i18next
                     degreePlaceholder: "Nhập trình độ",
                     enterPosition: "Nhập chức vụ",
                     nguoilienhe: "Người liên hệ",
+                    thongKeDonDangKy: "Đơn đăng ký",
+                    thongKeQuocGia: "Theo quốc gia",
+                    thongKeDoiTac: "Theo đối tác"
                 },
             },
             en: {
@@ -166,7 +169,7 @@ i18next
                     department: "Department"
                 },
             },
-           
+
         },
     });
 

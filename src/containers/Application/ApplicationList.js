@@ -214,7 +214,7 @@ function ApplicationList() {
               🔎 Tìm kiếm
             </button>
             <button
-              onClick={() => exportToExcel(applications, allFieldOptions, "DanhSachĐonK")}
+              onClick={() => exportToExcel(applications, allFieldOptions, "DanhSachDonDK")}
               className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               📁 Xuất Excel
@@ -234,41 +234,14 @@ function ApplicationList() {
           </div>
 
         </div>
-        <button
+        {/* <button
           onClick={() => setShowFilters(!showFilters)}
           className="bg-gray-600 hover:bg-gray-700 text-white px-5 py-1 rounded-lg shadow-md transition"
         >
           {showFilters ? "Ẩn bộ lọc" : "🔽 Bộ lọc nâng cao"}
-        </button>
-        <Modal
-          title="Bộ lọc nâng cao"
-          visible={showFilters}
-          onCancel={() => setShowFilters(false)}
-          footer={[
-            <button
-              key="clear"
-              onClick={handleClearFilters}
-              className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md mr-2"
-            >
-              🧹 Xóa bộ lọc
-            </button>,
-            <button
-              key="cancel"
-              onClick={() => setShowFilters(false)}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mr-2"
-            >
-              Đóng
-            </button>,
-            <button
-              key="ok"
-              onClick={() => setShowFilters(false)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-            >
-              Áp dụng
-            </button>
-          ]}
-          width={1000}
-        >
+        </button> */}
+        <div className="">
+        
           <div className="flex flex-wrap gap-3">
             <Select
               options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
@@ -304,9 +277,6 @@ function ApplicationList() {
 
             {/* Dòng 2: Lọc theo thời gian */}
             <div className="w-full mt-4">
-              <label className="block text-gray-500 font-medium text-sm mb-2">
-                📅 Lọc theo mốc thời gian
-              </label>
               <div className="flex flex-wrap gap-3">
                 <div className="w-full md:w-1/4">
                   <Select
@@ -338,10 +308,7 @@ function ApplicationList() {
               </div>
             </div>
             <div className="w-full mt-4">
-              <label className="block text-gray-500 font-medium text-sm mb-2">
-                📅 Lọc theo hạn xử lý
-              </label>
-              <div className="flex flex-wrap gap-3 w-full mt-4">
+              <div className="flex flex-wrap gap-3 w-full">
                 <Select
                   options={hanXuLyOptions}
                   value={selectedHanXuLy}
@@ -360,7 +327,7 @@ function ApplicationList() {
               </div>
             </div>
           </div>
-        </Modal>
+        </div>
       </div>
       <div class="overflow-x-auto">
         <Spin spinning={loading} tip="Loading..." size="large">

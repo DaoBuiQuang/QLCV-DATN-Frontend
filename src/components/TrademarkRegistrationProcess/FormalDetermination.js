@@ -237,7 +237,7 @@ const FormalDetermination = ({
                         return (
                             <div key={index} className="p-1  rounded-md bg-gray-50 text-sm">
                                 <div className="flex justify-between items-center ">
-                                    <span className="font-semibold text-gray-700">Lần từ chối #{index + 1}</span>
+                                    <span className="font-semibold text-gray-700">Lần nhận thông báo từ chối #{index + 1}</span>
                                     {!isViewOnly && (
                                         <button
                                             type="button"
@@ -314,6 +314,7 @@ const FormalDetermination = ({
                                                                     updateRefusal(index, 'ngayYeuCauGiaHan', null);
                                                                 }
                                                             }}
+                                                            placeholder='Chọn ngày yêu cầu gia hạn'
                                                             format="DD/MM/YYYY"
                                                             className="w-full disabled"
 
@@ -344,7 +345,7 @@ const FormalDetermination = ({
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
-                                            placeholder="Chọn trả lời"
+                                            placeholder="Chọn ngày trả lời"
                                             disabled={isViewOnly}
                                             className="mt-1 w-full"
                                         />
@@ -399,7 +400,7 @@ const FormalDetermination = ({
                                                 onClick={() => updateRefusal(index, 'showKhieuNaiCSHCTForm', true)}
                                                 className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs"
                                             >
-                                                Khiếu nại cục sở hữu trí tuệ
+                                                Khiếu nại Cục sở hữu Trí tuệ
                                             </button>
                                             <button
                                                 type="button"
@@ -422,7 +423,7 @@ const FormalDetermination = ({
                                     {refusal.showKhieuNaiCSHCTForm && (
 
                                         <div className="mt-3 p-3 border rounded bg-white shadow-sm">
-                                            <span className="font-semibold text-gray-700 text-left">Khiếu nại Cục sở hữu trí tuệ</span>
+                                            <span className="font-semibold text-gray-700 text-left">Khiếu nại Cục sở hữu Trí tuệ</span>
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                 <div>
                                                     <label className="block text-gray-600 text-left">Hạn khiếu nại</label>
@@ -445,6 +446,7 @@ const FormalDetermination = ({
                                                         }
                                                         format="DD/MM/YYYY"
                                                         className="w-full"
+                                                        placeholder='Chọn ngày khiếu nại'
                                                          disabled={isViewOnly}
                                                     />
                                                 </div>
@@ -512,6 +514,7 @@ const FormalDetermination = ({
                                                                 }
                                                                 format="DD/MM/YYYY"
                                                                 className="w-full mt-1 "
+                                                                placeholder='Chọn ngày kết quả khiếu nại'
                                                                  disabled={isViewOnly}
                                                             />
                                                         </div>
@@ -552,6 +555,7 @@ const FormalDetermination = ({
                                                                             updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
                                                                         }
                                                                         format="DD/MM/YYYY"
+                                                                         placeholder='Chọn ngày nộp yêu cầu chấp nhận đơn hợp lệ'
                                                                         className="w-full mt-1"
                                                                          disabled={isViewOnly}
                                                                     />
@@ -586,6 +590,7 @@ const FormalDetermination = ({
                                                                 }
                                                                 format="DD/MM/YYYY"
                                                                 className="w-full"
+                                                                placeholder='Chọn ngày khiếu nại'
                                                                  disabled={isViewOnly}
                                                             />
                                                         </div>
@@ -649,6 +654,7 @@ const FormalDetermination = ({
                                                                         }
                                                                         format="DD/MM/YYYY"
                                                                         className="w-full mt-1 "
+                                                                         placeholder='Chọn ngày kết quả khiếu nại'
                                                                          disabled={isViewOnly}
                                                                     />
                                                                 </div>
@@ -673,6 +679,7 @@ const FormalDetermination = ({
                                                                                 updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
                                                                             }
                                                                             format="DD/MM/YYYY"
+                                                                            placeholder='Chọn ngày nộp yêu cầu chấp nhận đơn hợp lệ'
                                                                             className="w-full mt-1 "
                                                                              disabled={isViewOnly}
                                                                         />

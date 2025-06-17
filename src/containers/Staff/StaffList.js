@@ -105,10 +105,19 @@ function StaffList() {
               <td className="p-2 text-table">{staff.phongBan}</td>
               <td className="p-2 text-table">{staff.sdt}</td>
               <td className="p-2 text-table">{staff.email}</td>
-              <td className="p-2 text-table">{staff.Username}</td>
               <td className="p-2 text-table">
-                {staff.Role === "staff" ? "Nhân viên" : staff.Role === "admin" ? "Quản trị viên" : staff.Role}
+                {staff.Username ? staff.Username : "Chưa có tài khoản"}
               </td>
+              <td className="p-2 text-table">
+                {staff.Role
+                  ? staff.Role === "staff"
+                    ? "Nhân viên"
+                    : staff.Role === "admin"
+                      ? "Quản trị viên"
+                      : staff.Role
+                  : "Chưa có tài khoản"}
+              </td>
+
 
               <td className="p-2 relative">
                 <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">

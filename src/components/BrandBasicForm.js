@@ -83,7 +83,6 @@ function BrandBasicForm({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-      {/* Nút chuyển chế độ */}
       {!isViewOnly && !isEditOnly && (
         <div className="col-span-2">
           <button
@@ -95,10 +94,8 @@ function BrandBasicForm({
           </button>
         </div>
       )}
-
-      {/* Chọn nhãn hiệu có sẵn */}
       {showSelectExisting && !isViewOnly && !isEditOnly && (
-        <div className="col-span-2">
+        <div className="">
           <label className="block text-gray-700 text-left mb-1">Chọn nhãn hiệu có sẵn <span className="text-red-500">*</span></label>
           <Select
             options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
@@ -124,7 +121,7 @@ function BrandBasicForm({
             }}
             isClearable
             placeholder="Chọn nhãn hiệu"
-            className="w-full mt-1"
+            className=" mt-1"
           />
           {errors?.maNhanHieuOld && (
             <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanHieuOld}</p>

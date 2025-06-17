@@ -49,7 +49,7 @@ function ProductAndServicesEdit() {
           moTa,
         },
       });
-      await showSuccess("Thành công!", "Cập nhập sản phầm dịch vụ thành công!");
+      await showSuccess("Thành công!", "Cập nhật sản phầm dịch vụ thành công!");
       navigate(-1);
     } catch (error) {
       showError("Thất bại!", "Đã xảy ra lỗi.", error);

@@ -49,7 +49,7 @@ function CaseTypeEdit() {
           moTa,
         },
       });
-      await showSuccess("Thành công!", "Cập nhập loại vụ việc thành công!");
+      await showSuccess("Thành công!", "Cập nhật loại vụ việc thành công!");
       navigate(-1);
     } catch (error) {
       showError("Thất bại!", "Đã xảy ra lỗi.", error);

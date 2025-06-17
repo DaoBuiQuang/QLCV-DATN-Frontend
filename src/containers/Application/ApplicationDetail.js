@@ -333,7 +333,7 @@ function ApplicationDetail() {
                     taiLieus: taiLieuList
                 },
             });
-            await showSuccess("Thành công!", "Cập nhập đơn đăng ký nhãn hiệu thành công!");
+            await showSuccess("Thành công!", "Cập nhật đơn đăng ký nhãn hiệu thành công!");
             navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);

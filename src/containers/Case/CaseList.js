@@ -54,7 +54,7 @@ function CaseList() {
         // { key: "buocXuLyHienTai", label: "Bước xử lý hiện tại" },
         { key: "ngayTiepNhan", label: "Ngày tiếp nhận" },
         { key: "ngayTao", label: "Ngày tạo" },
-        { key: "ngayCapNhap", label: "Ngày cập nhập" },
+        { key: "ngayCapNhap", label: "Ngày Cập nhật" },
         { key: "tenKhachHang", label: "Tên khách hàng" },
         { key: "tenQuocGia", label: "Quốc gia" },
         { key: "tenLoaiVuViec", label: "Loại vụ việc" },
@@ -374,16 +374,19 @@ function CaseList() {
                                                 >
                                                     🗑️
                                                 </button>
-                                                <button
-                                                    className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
-                                                    onClick={() =>
-                                                        caseItem.maDonDangKy
-                                                            ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
-                                                            : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
-                                                    }
-                                                >
-                                                    📄
-                                                </button>
+                                                {caseItem.tenLoaiVuViec === "Nhãn hiệu" && caseItem.tenLoaiDon === "Đơn đăng ký mới" && (
+                                                    <button
+                                                        className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
+                                                        onClick={() =>
+                                                            caseItem.maDonDangKy
+                                                                ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
+                                                                : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
+                                                        }
+                                                    >
+                                                        📄
+                                                    </button>
+                                                )}
+
                                             </div>
                                         )}
                                     </td>

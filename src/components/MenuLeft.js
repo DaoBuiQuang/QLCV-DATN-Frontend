@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings, Tag, ShoppingCart,LayoutDashboard  } from "lucide-react";
+import { PieChart, Users, Briefcase, Handshake, Globe, UserCheck, FileText, Layers, Settings, Tag, ShoppingCart, LayoutDashboard } from "lucide-react";
 import { useSelector } from 'react-redux';
-import {Key, User } from "lucide-react";
+import { Key, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import logoweb from "../assets/image/logo-web-big.jpg";
 function MenuLeft() {
     const location = useLocation();
     const role = useSelector((state) => state.auth.role);
-    const [openSettingSubmenu, setOpenSettingSubmenu] = useState(false);
+    const [openSettingSubmenu, setOpenSettingSubmenu] = useState({
+        dashboard: false,
+        settings: false,
+    });
+
     const { t } = useTranslation();
+    useEffect(() => {
+        setOpenSettingSubmenu({
+            dashboard: location.pathname.startsWith("/dashboard"),
+            settings: ["/changepassword", "/profile"].some(path =>
+                location.pathname.startsWith(path)
+            ),
+        });
+    }, [location.pathname]);
+
     return (
         <aside className="bg-white w-56 h-screen shadow-md flex flex-col overflow-y-auto">
 
@@ -23,15 +36,66 @@ function MenuLeft() {
             <nav className="flex-1 px-4 py-4">
                 <ul className="space-y-2 text-[#B1B1B1] text-sm">
                     <li>
-                        <NavLink
-                            to="/"
-                            className={`flex items-center space-x-2 p-2 rounded-lg w-full transition ${location.pathname === "/" ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
-                                }`}
-                        >
-                            <LayoutDashboard  size={16} />
-                            <span>{t("dashboard")}</span>
-                        </NavLink>
+                        <div>
+                            <button
+                                onClick={() => setOpenSettingSubmenu(prev => ({
+                                    ...prev,
+                                    dashboard: !prev.dashboard
+                                }))}
+                                className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${openSettingSubmenu.dashboard ? "hover:bg-blue-500 hover:text-white" : ""
+                                    }`}
+
+                            >
+                                <div className="flex items-center space-x-2">
+                                    <LayoutDashboard size={16} />
+                                    <span>{t("dashboard")}</span>
+                                </div>
+                                <span>{openSettingSubmenu?.dashboard ? "▲" : "▼"}</span>
+                            </button>
+
+                            {openSettingSubmenu?.dashboard && (
+                                <ul className="ml-6 mt-1 space-y-1 text-sm">
+                                    <li>
+                                        <NavLink
+                                            to="/dashboard/application"
+                                            className={({ isActive }) =>
+                                                `flex items-center space-x-2 p-2 rounded-lg w-full transition ${isActive ? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
+                                                }`
+                                            }
+                                        >
+                                            <PieChart size={14} />
+                                            <span>{t("thongKeDonDangKy")}</span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            to="/dashboard/country"
+                                            className={({ isActive }) =>
+                                                `flex items-center space-x-2 p-2 rounded-lg w-full transition ${isActive ? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
+                                                }`
+                                            }
+                                        >
+                                            <Globe size={14} />
+                                            <span>{t("thongKeQuocGia")}</span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            to="/dashboard/partner"
+                                            className={({ isActive }) =>
+                                                `flex items-center space-x-2 p-2 rounded-lg w-full transition ${isActive ? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
+                                                }`
+                                            }
+                                        >
+                                            <Handshake size={14} />
+                                            <span>{t("thongKeDoiTac")}</span>
+                                        </NavLink>
+                                    </li>
+                                </ul>
+                            )}
+                        </div>
                     </li>
+
                     <li>
                         <NavLink
                             to="/customerlist"
@@ -147,7 +211,11 @@ function MenuLeft() {
                     )}
                     <li>
                         <button
-                            onClick={() => setOpenSettingSubmenu(!openSettingSubmenu)}
+                            onClick={() => setOpenSettingSubmenu(prev => ({
+                                ...prev,
+                                settings: !prev.settings
+                            }))
+                            }
                             className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${location.pathname.startsWith("/settings") ? "bg-blue-500 text-white" : "hover:bg-blue-500 hover:text-white"
                                 }`}
                         >
@@ -159,7 +227,7 @@ function MenuLeft() {
                         </button>
 
                         {/* Submenu */}
-                        {openSettingSubmenu && (
+                        {openSettingSubmenu?.settings && (
                             <ul className="ml-6 mt-1 space-y-1 text-sm">
                                 <li>
                                     <NavLink

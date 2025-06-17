@@ -22,6 +22,7 @@ function StaffDetail() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     useEffect(() => {
         const fetchStaffDetails = async () => {
@@ -78,7 +79,7 @@ function StaffDetail() {
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa nhân sự</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">Thông tin nhân sự</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="block text-gray-700 text-left">Mã nhân sự <span className="text-red-500">*</span></label>
@@ -160,7 +161,13 @@ function StaffDetail() {
             <Modal
                 title={`Đặt lại mật khẩu cho tài khoản ${taiKhoan}`}
                 open={isModalOpen}
-                onOk={handleResetPassword}
+                onOk={() => {
+                    if (newPassword !== confirmPassword) {
+                        message.error("Mật khẩu xác nhận không khớp!");
+                        return;
+                    }
+                    handleResetPassword();
+                }}
                 onCancel={() => setIsModalOpen(false)}
                 okText="Xác nhận"
                 cancelText="Hủy"
@@ -171,7 +178,15 @@ function StaffDetail() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                 />
+
+                <label className="block text-left mt-4 mb-2 text-gray-700">Nhập lại mật khẩu</label>
+                <Input.Password
+                    placeholder="Nhập lại mật khẩu"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                />
             </Modal>
+
 
         </div>
     );

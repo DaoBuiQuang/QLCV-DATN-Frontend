@@ -114,7 +114,7 @@ const NotificationDetail = () => {
             )}
 
             {/* Nút khôi phục nếu action là delete */}
-            {notification.data?.action === "delete" && notification.data?.maKhachHang && (
+            {/* {notification.data?.action === "delete" && notification.data?.maKhachHang && (
                 <div className="mt-6">
                     <button
                         className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
@@ -123,7 +123,7 @@ const NotificationDetail = () => {
                         Khôi phục
                     </button>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };

@@ -31,10 +31,10 @@ const ContentReview = ({
                 handleKNThanhCong();
             }
             if (item.ngayNhanThongBaoTuChoiTD && !item.ngayNhanQuyetDinhTuChoi && !item.trangThaiBiNhanQuyetDinhTuChoi && !item.ngayTraLoiThongBaoTuChoi) {
-                setBuocXuLy(`Chờ trả lời thông báo từ chối thẩm định hình thức lần: ${item.lanThamDinh}`);
+                setBuocXuLy(`Chờ trả lời thông báo từ chối thẩm định nội dung lần: ${item.lanThamDinh}`);
             }
             if (item.ngayNhanThongBaoTuChoiTD && !item.trangThaiBiNhanQuyetDinhTuChoi && item.ngayTraLoiThongBaoTuChoi) {
-                setBuocXuLy(`Chờ cục phản hồi trả lời thông báo từ chối thẩm định hình thức lần: ${item.lanThamDinh}`);
+                setBuocXuLy(`Chờ cục phản hồi trả lời thông báo từ chối thẩm định nội dung lần: ${item.lanThamDinh}`);
             }
             if ((item.ketQuaKhieuNaiCSHTT === false || !item.ketQuaKhieuNaiCSHTT) && item.ngayKhieuNaiCSHTT) {
                 setBuocXuLy("Chờ kết quả khiếu nại cục sở hữu trí tuệ");
@@ -441,6 +441,7 @@ const ContentReview = ({
                                                                 updateRefusal(index, 'hanKhieuNaiCSHTT', date?.format('YYYY-MM-DD'))
                                                             }
                                                             format="DD/MM/YYYY"
+                                                            placeholder="Chọn hạn khiếu nại"
                                                             className="w-full disabled"
                                                             disabled
                                                         />
@@ -454,6 +455,7 @@ const ContentReview = ({
                                                             }
                                                             format="DD/MM/YYYY"
                                                             className="w-full"
+                                                            placeholder='Chọn ngày khiếu nại'
                                                              disabled={isViewOnly}
                                                         />
                                                     </div>
@@ -522,6 +524,7 @@ const ContentReview = ({
                                                                     }
                                                                     format="DD/MM/YYYY"
                                                                     className="w-full mt-1 "
+                                                                    placeholder='Chọn ngày kết quả khiếu nại'
                                                                     disabled={isViewOnly}
                                                                 />
                                                             </div>
@@ -586,6 +589,7 @@ const ContentReview = ({
                                                                     }
                                                                     format="DD/MM/YYYY"
                                                                     className="w-full"
+                                                                    placeholder='Chọn hạn khiếu nại'
                                                                     disabled
                                                                 />
                                                             </div>
@@ -598,6 +602,7 @@ const ContentReview = ({
                                                                     }
                                                                     format="DD/MM/YYYY"
                                                                     className="w-full"
+                                                                    placeholder='Chọn ngày khiếu nại'
                                                                     disabled={isViewOnly}
                                                                 />
                                                             </div>
@@ -661,6 +666,7 @@ const ContentReview = ({
                                                                             }
                                                                             format="DD/MM/YYYY"
                                                                             className="w-full mt-1 "
+                                                                            placeholder='Chọn ngày kết quả khiếu nại'
                                                                             disabled={isViewOnly}
                                                                         />
                                                                     </div>

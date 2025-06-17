@@ -234,11 +234,11 @@ function CaseEdit() {
                     nhanSuVuViec
                 },
             });
-            await showSuccess("Thành công!", "Cập nhập hồ sơ vụ việc thành công!");
+            await showSuccess("Thành công!", "Cập nhật hồ sơ vụ việc thành công!");
             navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
-            console.error("Lỗi khi cập nhập hồ sơ vụ việc!", error);
+            console.error("Lỗi khi Cập nhật hồ sơ vụ việc!", error);
         }
     };
     const handleApplicationAdd = () => {
@@ -255,7 +255,7 @@ function CaseEdit() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Sửa hồ sơ vụ việc</h2>
                 <Spin spinning={loading} tip="Loading..." size="large">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                         <div className="flex-1">
                             <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
                             <input

@@ -14,7 +14,7 @@ function AddDocumentModal({
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
-        const maxSize = 5 * 1024 * 1024; // 5MB
+        const maxSize = 2 * 1024 * 1024; // 5MB
 
         if (selectedFile && selectedFile.size > maxSize) {
             alert("Tệp quá lớn. Vui lòng chọn tệp nhỏ hơn 5MB.");

@@ -1,6 +1,6 @@
 import React from "react";
 import { Steps } from "antd";
-// import "./DonProgress.css"; // đừng quên dòng này!
+// import "./DonProgress.css"; // Nếu có CSS tùy chỉnh
 
 const { Step } = Steps;
 
@@ -21,7 +21,7 @@ const DonProgress = ({ trangThaiDon }) => {
   return (
     <div className="text-xs mt-0 mb-auto p-0 don-progress">
       <Steps
-        direction="horizontal"
+        direction="vertical" // 👉 Đổi từ horizontal sang vertical
         size="small"
         current={currentIndex !== -1 ? currentIndex : 0}
       >
@@ -29,7 +29,7 @@ const DonProgress = ({ trangThaiDon }) => {
           <Step
             key={index}
             title={
-              <span className="text-xs break-words text-center leading-tight">
+              <span className="text-xs break-words text-left leading-tight">
                 {step}
               </span>
             }

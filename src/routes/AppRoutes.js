@@ -54,6 +54,9 @@ import NotificationDetail from "../containers/Notification/NotificationDetail";
 import Dashboard from "../containers/Dashboard/Dashboard";
 import ApplicationDetailTest from "../containers/Application/ApplicationDetailTest";
 import NotificationPopup from "../containers/Notification/NotificationPopup";
+import DashboardApplications from "../containers/Dashboard/DashboardApplication";
+import DashboardCountry from "../containers/Dashboard/DashboardCountry";
+import DashboardPartner from "../containers/Dashboard/DashboardPartner";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -175,7 +178,10 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/profile" element={<Profile></Profile>} />
 
           <Route path="/notificationdetail/:id" element={<NotificationDetail></NotificationDetail>} />
-          <Route path="/" element={<Dashboard></Dashboard>} />
+          <Route path="/" element={<DashboardApplications />} />
+          <Route path="/dashboard/application" element={<DashboardApplications />} />
+          <Route path="/dashboard/country" element={<DashboardCountry />} />
+          <Route path="/dashboard/partner" element={<DashboardPartner />} />
         </Route>
         <Route path="/login" element={<Login />} />
 
