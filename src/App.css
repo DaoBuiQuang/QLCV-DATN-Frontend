@@ -41,7 +41,7 @@
   }
 }
 .text-input {
-  border: 1px solid #d1d5db; /* Màu xám nhạt */
+  border: 1px solid #333333; /* Màu xám nhạt */
   padding: 8px 12px;
   /* border-radius: 4px; */
   outline: none; /* Loại bỏ viền khi focus */
@@ -49,7 +49,7 @@
 }
 
 input:focus {
-  border-color: #3b82f6; 
+  border:2px solid #66CC99; 
 }
 
 input.error {
@@ -58,7 +58,7 @@ input.error {
 
 .css-13cymwt-control{
   border-radius: 0.5rem !important;
-  border: 1px solid #d1d5db !important; 
+  border: 1px solid #333333 !important; 
   /* height: 40px; */
 }
 
@@ -68,17 +68,30 @@ input.error {
 .css-1wy0on6{
   border-radius: 0.5rem !important;
 } */
-.css-t3ipsp-control{
+.css-t3ipsp-control {
   border-radius: 0.5rem !important;
-  border-color: #d1d5db !important;
+  border-color: #333333 !important;
+   box-shadow: none !important;
 }
+
+.css-t3ipsp-control:hover {
+   border:2px solid #66CC99 !important;
+  box-shadow: none !important;
+}
+
+.css-3iigni-container{
+  border-radius: 0.5rem !important;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1)) !important;
+  border: 1px solid #333333 !important; 
+}
+
 .ant-picker{
   height: 38px;
   border-radius: 0.5rem;
-  /* border: 1px solid #3b82f6 !important; */
+  border: 1px solid #333333 !important;
 }
 .ant-picker:focus{
-  border-color: #3b82f6; 
+  border-color: #66CC99; 
 }
 .ant-picker-input{
   font-size: 16px !important;
@@ -135,7 +148,7 @@ input.error {
 }
 
 .css-hlgwow .css-olqui2-singleValue{
-  color: #000 !important;
+  color: #333333 !important;
 }
 
 /* Đặt ở file CSS hoặc trong style global */
@@ -167,3 +180,46 @@ tr{
 td{
   text-align: left !important;
 } */
+
+table{
+  border-collapse: collapse;
+  border-radius: 10px;
+}
+thead tr{
+  /* border:1px solid #AAAAAA !important; */
+  background-color: #66CC99;
+  color: #fff;
+}
+thead tr th{
+  color: #FFFFFF;
+}
+
+tbody tr{
+  border-color: #AAAAAA !important;
+}
+tbody tr td{
+  color: #333333;
+}
+.text-input{
+
+}
+input{
+  font-weight: 600;
+  color: #333333 !important; /* Màu chữ đen */
+}
+
+.css-1dimb5e-singleValue{
+  font-weight: 600 !important;
+  color: #333333 !important; /* Màu chữ đen */
+}
+.css-olqui2-singleValue{
+  font-weight: 600 !important;
+  color: #333333 !important; /* Màu chữ đen */
+}
+.text-blue-500{
+  color: #3b82f6 !important; /* Màu xanh dương */
+}
+
+.search-input{
+  border: 1px solid #333333; /* Màu xám nhạt */
+}

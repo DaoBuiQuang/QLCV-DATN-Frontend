@@ -55,21 +55,21 @@ function StaffList() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={`🔍 ${t("enterEmployeeName")}`}
-            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
           <div className="flex gap-3">
             <button
               onClick={() => fetchStaffs(searchTerm)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              🔎 {t("search")}
+              {t("search")}
             </button>
             <div className="flex gap-3">
               <button
                 onClick={() => navigate("/staffadd")}
                 className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
               >
-                ➕ {t("addNew")}
+                {t("addNew")}
               </button>
             </div>
           </div>
@@ -77,9 +77,9 @@ function StaffList() {
         </div>
       </div>
 
-      <table className="w-full border-collapse bg-white text-sm mt-4">
+      <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
         <thead>
-          <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
+          <tr className=" text-[#667085] text-center font-normal">
             <th className="p-2 text-table">{t("no")}</th>
             <th className="p-2 text-table">{t("employeeCode")}</th>
             <th className="p-2 text-table">{t("fullName")}</th>

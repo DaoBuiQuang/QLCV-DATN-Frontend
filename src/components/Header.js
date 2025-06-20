@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector.js";
 import NotificationDropdown from "./NotificationDropdown";
 import { Modal } from "antd";
-
+import logoweb from "../assets/image/logo-web-big.jpg";
 function Header({ toggleMenu, isMenuOpen }) {
   const [username, setUsername] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -70,6 +70,9 @@ function Header({ toggleMenu, isMenuOpen }) {
               : "100vw",
         }}
       >
+        {/* <div className="p-1">
+          <img src="https://ipac.vn/image/catalog/Logo-Slogan-PNG.png" alt="Logo" className="w-1" />
+        </div> */}
         <button
           className="text-gray-600 hover:text-gray-800"
           onClick={toggleMenu}

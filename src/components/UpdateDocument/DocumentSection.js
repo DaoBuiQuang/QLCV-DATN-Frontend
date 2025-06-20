@@ -80,9 +80,9 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
                 <p className="text-sm text-gray-500">Chưa có tài liệu nào.</p>
             ) : (
                 <div className="overflow-x-auto mb-2">
-                    <table className="min-w-full bg-white border border-gray-200 text-xs">
+                    <table className="min-w-full bg-white borde text-xs overflow-hidden rounded-lg border shadow">
                         <thead>
-                            <tr className="bg-gray-100">
+                            <tr className="">
                                 <th className="px-4 py-1 border">Tên tài liệu</th>
                                 <th className="px-4 py-1 border">Link tài liệu</th>
                                 <th className="px-4 py-1 border">Trạng thái</th>

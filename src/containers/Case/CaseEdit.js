@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
-import { showSuccess, showError } from "../../components/commom/Notification";
+import { showSuccess, showError, showWarning } from "../../components/commom/Notification";
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
@@ -85,9 +85,22 @@ function CaseEdit() {
 
     const handleSelectChange = (selectedOption, vaiTro) => {
         setNhanSuVuViec(prevState => {
+            const otherRole = vaiTro === "Chính" ? "Phụ" : "Chính";
+            const maNhanSu = selectedOption?.value;
+
+            const sameMaNhanSuOtherRole = prevState.find(nhanSu =>
+                nhanSu.vaiTro === otherRole && nhanSu.maNhanSu === maNhanSu
+            );
+
+            if (sameMaNhanSuOtherRole) {
+                showWarning("Cảnh báo!", "Không thể chọn cùng một người cho cả vai trò chính và phụ.");
+                // alert("Không thể chọn cùng một người cho cả vai trò chính và phụ.");
+                return prevState;
+            }
+
             const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro);
             if (selectedOption) {
-                updatedList.push({ maNhanSu: selectedOption.value, vaiTro });
+                updatedList.push({ maNhanSu, vaiTro });
             }
             return updatedList;
         });
@@ -118,7 +131,9 @@ function CaseEdit() {
                 const nhanSuChinh = response.nhanSuXuLy.find(item => item.vaiTro === "Chính");
                 const nhanSuPhu = response.nhanSuXuLy.find(item => item.vaiTro === "Phụ");
                 setNguoiXuLyChinh(nhanSuChinh ? nhanSuChinh.maNhanSu : null);
-                setNguoiXuLyPhu(nhanSuPhu ? nhanSuPhu.maNhanSu : null);
+
+                setNguoiXuLyPhu(nhanSuPhu ? nhanSuPhu?.maNhanSu : null);
+                setNhanSuVuViec(response.nhanSuXuLy);
 
             }
         } catch (error) {
@@ -228,8 +243,6 @@ function CaseEdit() {
                     maLoaiVuViec,
                     maQuocGiaVuViec: maQuocGia,
                     trangThaiVuViec,
-                    // ngayTao,
-                    // ngayCapNhap,
                     buocXuLyHienTai,
                     nhanSuVuViec
                 },
@@ -322,7 +335,7 @@ function CaseEdit() {
                         </div>
 
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Ngày xử lý</label>
+                            <label className="block text-gray-700 text-left">Ngày xử lý</label>
                             <DatePicker
                                 value={ngayXuLy ? dayjs(ngayXuLy) : null}
                                 onChange={(date) => {
@@ -358,7 +371,7 @@ function CaseEdit() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                                 value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
@@ -415,26 +428,15 @@ function CaseEdit() {
                                 isClearable
                             />
                         </div>
-
-                        {/* <div>
-                        <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
-                        <Select
-                            options={formatOptions(processSteps, "value", "label")}
-                            value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
-                            onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
-                            placeholder="Chọn bước xử lý"
-                            className="w-full mt-1 rounded-lg text-left"
-                            isClearable
-                        />
-                    </div> */}
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Người xử lí chính</label>
+                            <label className="block text-gray-700 text-left">Người xử lí chính</label>
                             <Select
                                 options={formatOptions(staffs, "maNhanSu", "hoTen")}
                                 // value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
                                 value={formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === nguoiXuLyChinh)}
                                 onChange={(selectedOption) => {
-                                    setNguoiXuLyChinh(selectedOption);
+                                    // setNguoiXuLyChinh(selectedOption);
+                                    setNguoiXuLyChinh(selectedOption?.value || null); // ✅ chỉ lấy maNhanSu
                                     handleSelectChange(selectedOption, "Chính");
                                 }}
                                 placeholder="Chọn người xử lí chính"
@@ -448,7 +450,7 @@ function CaseEdit() {
                                 options={formatOptions(staffs, "maNhanSu", "hoTen")}
                                 value={formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === nguoiXuLyPhu)}
                                 onChange={(selectedOption) => {
-                                    setNguoiXuLyPhu(selectedOption);
+                                    setNguoiXuLyPhu(selectedOption?.value || null);
                                     handleSelectChange(selectedOption, "Phụ");
                                 }}
                                 placeholder="Chọn người xử lí phụ"

@@ -29,9 +29,9 @@ function CustomerAdd() {
     const validateField = (field, value) => {
         let error = "";
         if (!value.trim()) {
-            if (field === "maKhachHang") error = t("error.maKhachHangRequired");
-            if (field === "tenVietTatKH") error = t("error.tenVietTatKHRequired");
-            if (field === "tenKhachHang") error = t("error.tenKhachHangRequired");
+            if (field === "maKhachHang") error = t("maKhachHangRequired");
+            if (field === "tenVietTatKH") error = t("tenVietTatKHRequired");
+            if (field === "tenKhachHang") error = t("tenKhachHangRequired");
         }
 
         setErrors((prevErrors) => ({

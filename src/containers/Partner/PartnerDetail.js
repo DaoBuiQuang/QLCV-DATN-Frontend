@@ -51,7 +51,7 @@ function PartnerDetail() {
   return (
     <div className="p-1 bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">✏️ Chỉnh sửa đối tác</h2>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">Thông tin đối tác</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
           <label className="block text-gray-700 text-left">Mã đối tác <span className="text-red-500">*</span></label>
@@ -79,7 +79,9 @@ function PartnerDetail() {
               value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
               onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
               placeholder="Chọn quốc gia"
-              className="w-full  mt-1  rounded-lg"
+              className="w-full  mt-1  rounded-lg text-left"
+              isDisabled
+
               isClearable
             />
           </div>

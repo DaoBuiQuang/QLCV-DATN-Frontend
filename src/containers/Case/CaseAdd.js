@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
 
-import { showSuccess, showError } from "../../components/commom/Notification";
+import { showSuccess, showError, showWarning } from "../../components/commom/Notification";
 import { DatePicker } from 'antd';
 
 import dayjs from 'dayjs';  // Import dayjs
@@ -82,6 +82,18 @@ function CaseAdd() {
 
     const handleSelectChange = (selectedOption, vaiTro) => {
         setNhanSuVuViec(prevState => {
+            const otherRole = vaiTro === "Chính" ? "Phụ" : "Chính";
+            const maNhanSu = selectedOption?.value;
+
+            const sameMaNhanSuOtherRole = prevState.find(nhanSu =>
+                nhanSu.vaiTro === otherRole && nhanSu.maNhanSu === maNhanSu
+            );
+
+            if (sameMaNhanSuOtherRole) {
+                showWarning("Cảnh báo!", "Không thể chọn cùng một người cho cả vai trò chính và phụ.");
+                // alert("Không thể chọn cùng một người cho cả vai trò chính và phụ.");
+                return prevState;
+            }
             const updatedList = prevState.filter(nhanSu => nhanSu.vaiTro !== vaiTro);
             if (selectedOption) {
                 updatedList.push({ maNhanSu: selectedOption.value, vaiTro });
@@ -268,7 +280,7 @@ function CaseAdd() {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-left">Nội dung vụ việc <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">Tên vụ việc <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={noiDungVuViec}
@@ -434,28 +446,33 @@ function CaseAdd() {
                     <div>
                         <label className="block text-gray-700 text-left">Người xử lí chính</label>
                         <Select
-                            options={formatOptions(staffs, "maNhanSu", "hoTen")}
+                            options={formatOptions(staffs, "maNhanSu", "hoTen").filter(
+                                (opt) => opt.value !== nguoiXuLyPhu?.value
+                            )}
                             value={nguoiXuLyChinh}
                             onChange={(selectedOption) => {
                                 setNguoiXuLyChinh(selectedOption);
                                 handleSelectChange(selectedOption, "Chính");
                             }}
                             placeholder="Chọn người xử lí chính"
-                            className="w-full mt-1 rounded-lg  text-left"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>
+
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Người xử lí phụ</label>
+                        <label className="block text-gray-700 text-left">Người xử lí phụ</label>
                         <Select
-                            options={formatOptions(staffs, "maNhanSu", "hoTen")}
+                            options={formatOptions(staffs, "maNhanSu", "hoTen").filter(
+                                (opt) => opt.value !== nguoiXuLyChinh?.value
+                            )}
                             value={nguoiXuLyPhu}
                             onChange={(selectedOption) => {
                                 setNguoiXuLyPhu(selectedOption);
                                 handleSelectChange(selectedOption, "Phụ");
                             }}
                             placeholder="Chọn người xử lí phụ"
-                            className="w-full mt-1 rounded-lg  text-left"
+                            className="w-full mt-1 rounded-lg text-left"
                             isClearable
                         />
                     </div>

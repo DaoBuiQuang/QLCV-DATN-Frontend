@@ -7,6 +7,7 @@ import FieldSelector from "../../components/FieldSelector";
 import { Modal } from "antd";
 import { Spin, Pagination } from "antd";
 import { useTranslation } from "react-i18next";
+import { exportToExcel } from "../../components/ExportFile/ExportExcel";
 function CaseList() {
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
@@ -25,6 +26,8 @@ function CaseList() {
     const [selectedCustomer, setSelectedCustomer] = useState("");
     const [casetypes, setCasetypes] = useState([]);
     const [selectedCasetype, setSelectedCasetype] = useState("");
+    const [staffs, setStaffs] = useState([]);
+    const [selectedStaff, setSelectedStaff] = useState("");
     const navigate = useNavigate();
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -35,31 +38,26 @@ function CaseList() {
         "maDonDangKy",
         "noiDungVuViec",
         "trangThaiVuViec",
-        // "buocXuLyHienTai",
-        "ngayTiepNhan",
-        "ngayTao",
-        "ngayCapNhap",
         "tenKhachHang",
-        "tenQuocGia",
-        "tenLoaiVuViec",
-        "tenLoaiDon",
-        "nhanSuXuLy",
+        "nguoiXuLyChinh",
     ]);
 
     const allFieldOptions = [
-        { key: "maHoSoVuViec", label: "Mã hồ sơ" },
-        { key: "maDonDangKy", label: "Mã đơn đăng ký" },
-        { key: "noiDungVuViec", label: "Nội dung vụ việc" },
-        { key: "trangThaiVuViec", label: "Trạng thái" },
+        { key: "maHoSoVuViec", label: "Mã hồ sơ", labelEn: "Matter Code" },
+        { key: "maDonDangKy", label: "Mã đơn đăng ký", labelEn: "App No" },
+        { key: "noiDungVuViec", label: "Tên vụ việc", labelEn: "Matter Name" },
+        { key: "trangThaiVuViec", label: "Trạng thái", labelEn: "Status" },
         // { key: "buocXuLyHienTai", label: "Bước xử lý hiện tại" },
-        { key: "ngayTiepNhan", label: "Ngày tiếp nhận" },
+        { key: "ngayTiepNhan", label: "Ngày tiếp nhận", labelEn: "Instruction Date" },
         { key: "ngayTao", label: "Ngày tạo" },
-        { key: "ngayCapNhap", label: "Ngày Cập nhật" },
-        { key: "tenKhachHang", label: "Tên khách hàng" },
-        { key: "tenQuocGia", label: "Quốc gia" },
-        { key: "tenLoaiVuViec", label: "Loại vụ việc" },
-        { key: "tenLoaiDon", label: "Loại đơn" },
-        { key: "nhanSuXuLy", label: "Nhân sự xử lý" },
+        { key: "ngayCapNhap", label: "Ngày Cập nhật",},
+        { key: "tenKhachHang", label: "Tên khách hàng", labelEn: "Client Name" },
+        { key: "tenQuocGia", label: "Quốc gia", labelEn: "Country" },
+        { key: "tenLoaiVuViec", label: "Loại vụ việc", labelEn: "Type of IP" },
+        { key: "tenLoaiDon", label: "Loại đơn", labelEn: "App Type" },
+        { key: "nguoiXuLyChinh", label: "Người xử lý chính" },
+        { key: "nhanSuKhac", label: "Nhân sự khác", labelEn: "Person" },
+        // { key: "nhanSuXuLy", label: "Nhân sự xử lý" },
     ];
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -67,7 +65,7 @@ function CaseList() {
             label: item[labelKey]
         }));
     };
-    const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId, page = 1, size = 10) => {
+    const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId, staffId,  page = 1, size = 10) => {
         setLoading(true);
         try {
             const response = await callAPI({
@@ -79,6 +77,7 @@ function CaseList() {
                     maQuocGia: countryId,
                     maKhachHang: customerId,
                     maLoaiVuViec: casetypeId,
+                    maNhanSu: staffId,
                     fields: selectedFields,
                     pageIndex: page,
                     pageSize: size,
@@ -157,12 +156,25 @@ function CaseList() {
             console.error("Lỗi khi lấy dữ liệu loại đơn: ", error)
         }
     }
+     const fetchStaffs = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/staff/basiclist",
+                data: {},
+            });
+            setStaffs(response);
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu nhân sự:", error);
+        }
+    };
     useEffect(() => {
         fetchCases("");
         fetchCountries();
         fetchPartners();
         fetchCustomers();
         fetchCaseTypes();
+        fetchStaffs();
         fetchApplicationTypes();
     }, []);
 
@@ -182,7 +194,7 @@ function CaseList() {
     };
     const columns = allFieldOptions
         .filter(field => selectedFields.includes(field.key))
-        .map(field => ({ label: field.label, key: field.key }));
+        .map(field => ({ label: field.label, labelEn: field.labelEn, key: field.key }));
     return (
         <div className="p-1 bg-gray-100 ">
             <div className="bg-white p-4 rounded-lg shadow-md">
@@ -193,21 +205,27 @@ function CaseList() {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="🔍 Nhập nội dung vụ việc"
-                        className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
                     />
                     <div className="flex gap-3">
                         <button
-                            onClick={() => fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, 1, pageSize)}
+                            onClick={() => fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, selectedStaff, 1, pageSize)}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
-                            🔎 Tìm kiếm
+                            Tìm kiếm
                         </button>
-
+                        
                         <button
                             onClick={() => navigate("/caseadd")}
                             className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
-                            ➕ Thêm mới
+                            Thêm mới
+                        </button>
+                        <button
+                            onClick={() => exportToExcel(cases, allFieldOptions, "DSHoSoVuViec")}
+                            className="bg-[#217346] hover:bg-[#1b5e3b] text-white px-5 py-3 rounded-lg shadow-md transition"
+                        >
+                            Xuất Excel
                         </button>
                         <button
                             onClick={() => setShowFieldModal(true)}
@@ -218,6 +236,14 @@ function CaseList() {
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
+                    <Select
+                        options={formatOptions(staffs, "maNhanSu", "hoTen")}
+                        value={selectedStaff ? formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === selectedStaff) : null}
+                        onChange={selectedOption => setSelectedStaff(selectedOption?.value)}
+                        placeholder="Chọn người XL chính"
+                        className="w-full md:w-1/6 text-left"
+                        isClearable
+                    />
                     <Select
                         options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
                         value={selectedCasetype ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === selectedCasetype) : null}
@@ -262,15 +288,23 @@ function CaseList() {
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
                 <Spin spinning={loading} tip="Loading..." size="large">
-                    <table className="w-full border-collapse bg-white text-sm mt-4">
+                    <table className="w-full border-collapse bg-white text-sm">
                         <thead>
-                            <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                                <th className="p-2 text-table border-r">STT</th>
-                                {columns.map((col, index) => (
-                                    <th key={col.key} className={`p-2 text-table ${index < columns.length - 1 ? 'border-r' : ''}`}>
-                                        {col.label}
+                            <tr className="text-[#667085] text-center font-normal">
+                                <th className="p-2 text-table">
+                                    <div className="leading-tight">
+                                        STT
+                                        <div className="text-xs text-gray-700">No.</div> {/* đổi từ gray-400 sang gray-700 */}
+                                    </div>
+                                </th>
+                                {columns.map((col) => (
+                                    <th key={col.key} className="p-2 text-table">
+                                        <div className="leading-tight">
+                                            {col.label}
+                                            <div className="text-xs text-gray-700">{col.labelEn}</div> {/* đổi màu tại đây */}
+                                        </div>
                                     </th>
                                 ))}
                                 <th className="p-2 text-table"></th>
@@ -279,10 +313,10 @@ function CaseList() {
                         <tbody>
                             {cases.map((caseItem, index) => (
                                 <tr key={caseItem.maHoSoVuViec} className="group hover:bg-gray-100 text-center border-b relative">
-                                    <td className="p-2 text-table border-r">{index + 1}</td>
+                                    <td className="p-2 text-table ">{index + 1}</td>
                                     {columns.map((col, colIndex) => {
                                         let content = caseItem[col.key];
-                                        const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? 'border-r' : ''}`;
+                                        const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? '' : ''}`;
 
                                         if (
                                             col.key === "ngayTiepNhan" ||
@@ -324,13 +358,42 @@ function CaseList() {
                                             );
                                         }
 
-                                        if (col.key === "nhanSuXuLy") {
+                                        // if (col.key === "nhanSuXuLy") {
+                                        //     return (
+                                        //         <td key={col.key} className={commonClass}>
+                                        //             {Array.isArray(caseItem.nhanSuXuLy) ? (
+                                        //                 caseItem.nhanSuXuLy.map((person, idx) => (
+                                        //                     <div key={idx}>
+                                        //                         {person.tenNhanSu} ({person.vaiTro})
+                                        //                     </div>
+                                        //                 ))
+                                        //             ) : (
+                                        //                 <span>—</span>
+                                        //             )}
+                                        //         </td>
+                                        //     );
+                                        // }
+                                        if (col.key === "nguoiXuLyChinh") {
                                             return (
                                                 <td key={col.key} className={commonClass}>
-                                                    {Array.isArray(caseItem.nhanSuXuLy) ? (
-                                                        caseItem.nhanSuXuLy.map((person, idx) => (
+                                                    {caseItem.nguoiXuLyChinh ? (
+                                                        <div>
+                                                            {caseItem.nguoiXuLyChinh.tenNhanSu} 
+                                                        </div>
+                                                    ) : (
+                                                        <span>—</span>
+                                                    )}
+                                                </td>
+                                            );
+                                        }
+
+                                        if (col.key === "nhanSuKhac") {
+                                            return (
+                                                <td key={col.key} className={commonClass}>
+                                                    {Array.isArray(caseItem.nhanSuKhac) && caseItem.nhanSuKhac.length > 0 ? (
+                                                        caseItem.nhanSuKhac.map((ns, idx) => (
                                                             <div key={idx}>
-                                                                {person.tenNhanSu} ({person.vaiTro})
+                                                                {ns.tenNhanSu} ({ns.vaiTro})
                                                             </div>
                                                         ))
                                                     ) : (
@@ -416,7 +479,7 @@ function CaseList() {
                     onChange={(page, size) => {
                         setPageIndex(page);
                         setPageSize(size)
-                        fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, page, size)
+                        fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, selectedStaff, page, size)
                     }}
                     showSizeChanger
                     pageSizeOptions={['5', '10', '20', '50']}

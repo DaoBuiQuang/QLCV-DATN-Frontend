@@ -43,18 +43,16 @@ function CustomerList() {
     ]);
 
     const allFieldOptions = [
-        { key: "maKhachHang", label: t("maKhachHang") },
-        { key: "tenKhachHang", label: t("tenKhachHang") },
-        { key: "diaChi", label: t("diaChi") },
-        { key: "sdt", label: t("sdt") },
-        { key: "nguoiLienHe", label: t("nguoiLienHe") },
-        { key: "tenDoiTac", label: t("tenDoiTac") },
-        { key: "tenQuocGia", label: t("tenQuocGia") },
-        { key: "tenNganhNghe", label: t("tenNganhNghe") },
-        { key: "ghiChu", label: t("ghiChu") },
+        { key: "maKhachHang", label: t("maKhachHang"), labelEn: "Client Code" },
+        { key: "tenKhachHang", label: t("tenKhachHang"), labelEn: "Client Name" },
+        { key: "diaChi", label: t("diaChi"), labelEn: "Address" },
+        { key: "sdt", label: t("sdt"), labelEn: "Phone Number" },
+        { key: "nguoiLienHe", label: t("nguoiLienHe"), labelEn: "Contact Person" },
+        { key: "tenDoiTac", label: t("tenDoiTac"), labelEn: "Instructing firm" },
+        { key: "tenQuocGia", label: t("tenQuocGia"), labelEn: "Country" },
+        { key: "tenNganhNghe", label: t("tenNganhNghe"), labelEn: "Industry" },
+        { key: "ghiChu", label: t("ghiChu"), labelEn: "Note" },
     ];
-
-
     const navigate = useNavigate();
 
     const fetchCustomers = async (searchValue, partnerId, countryId, industryId, page = 1, size = 10) => {
@@ -121,16 +119,14 @@ function CustomerList() {
             setCustomerToDelete(null);
             fetchCustomers(searchTerm);
         } catch (err) {
-          
+
         }
     };
-
-
     const formatOptions = (data, valueKey, labelKey) => data.map(item => ({ value: item[valueKey], label: item[labelKey] }));
 
     const columns = allFieldOptions
         .filter(field => selectedFields.includes(field.key))
-        .map(field => ({ label: field.label, key: field.key }));
+        .map(field => ({ label: field.label, labelEn: field.labelEn, key: field.key }));
 
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
@@ -142,7 +138,7 @@ function CustomerList() {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="🔍 Nhập tên khách hàng"
-                        className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
                     />
                     <div className="flex gap-3">
                         <button
@@ -159,7 +155,7 @@ function CustomerList() {
                         </button>
                         <button
                             onClick={() => exportToExcel(customers, columns, "DanhSachKhachHang")}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#217346] hover:bg-[#1b5e3b] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             {t("xuatExcel")}
                         </button>
@@ -178,34 +174,46 @@ function CustomerList() {
                 </div>
             </div>
 
-            <div className="overflow-x-auto mt-4">
+            <div className="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">
-                        <thead className="bg-[#EAECF0]">
+                        <thead>
                             <tr className="text-[#667085] text-center font-normal">
-                                <th className="p-2 text-table border-r">{t("stt")}</th>
-                                {columns.map((col, index) => (
-                                    <th key={col.key} className={`p-2 text-table ${index < columns.length - 1 ? 'border-r' : ''}`}>
-                                        {col.label}
+                                <th className="p-2 text-table">
+                                    <div className="leading-tight">
+                                        {t("stt")}
+                                        <div className="text-xs text-gray-700">No.</div> {/* đổi từ gray-400 sang gray-700 */}
+                                    </div>
+                                </th>
+                                {columns.map((col) => (
+                                    <th key={col.key} className="p-2 text-table">
+                                        <div className="leading-tight">
+                                            {col.label}
+                                            <div className="text-xs text-gray-700">{col.labelEn}</div> {/* đổi màu tại đây */}
+                                        </div>
                                     </th>
                                 ))}
                                 <th className="p-2 text-table"></th>
                             </tr>
                         </thead>
+
+
                         <tbody>
                             {customers.map((cus, idx) => (
-                                <tr key={cus.maKhachHang} className="group hover:bg-gray-100 text-center border-b relative">
-                                    <td className="p-2 text-table border-r">{idx + 1}</td>
-                                    {columns.map((col, index) => {
-                                        let content = cus[col.key];
-                                        const commonClass = `p-2 text-table ${index < columns.length - 1 ? 'border-r' : ''}`;
+                                <tr
+                                    key={cus.maKhachHang}
+                                    className="group hover:bg-gray-100 text-center border-b relative"
+                                >
+                                    <td className="p-2 text-table">{idx + 1}</td>
+                                    {columns.map((col) => {
+                                        const content = cus[col.key];
 
                                         if (col.key === "maKhachHang") {
                                             return (
                                                 <td
                                                     key={col.key}
-                                                    className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
-                                                    onClick={e => {
+                                                    className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
+                                                    onClick={(e) => {
                                                         e.stopPropagation();
                                                         navigate(`/customerdetail/${cus.maKhachHang}`);
                                                     }}
@@ -215,10 +223,10 @@ function CustomerList() {
                                             );
                                         }
 
-                                        return <td key={col.key} className={commonClass}>{cus[col.key]}</td>;
+                                        return <td key={col.key} className="p-2 text-table">{content}</td>;
                                     })}
                                     <td className="p-2 relative">
-                                        {(role === 'admin' || role === 'staff') && (
+                                        {(role === "admin" || role === "staff") && (
                                             <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                                                 <button
                                                     className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
@@ -242,6 +250,7 @@ function CustomerList() {
                             ))}
                         </tbody>
                     </table>
+
                 </Spin>
             </div>
             <div className="mt-4 flex flex-col items-center space-y-2">

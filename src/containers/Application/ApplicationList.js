@@ -52,23 +52,23 @@ function ApplicationList() {
   ];
 
   const allFieldOptions = [
-    { label: "Mã đơn đăng ký", key: "maDonDangKy" },
-    { label: "Số Đơn", key: "soDon" },
-    { label: "Mã hồ sơ vụ việc", key: "maHoSoVuViec" },
-    { label: "Mã nhãn hiệu", key: "maNhanHieu" },
-    { label: "Danh sách SPDV", key: "dsSPDV" },
-    { label: "Trạng thái đơn", key: "trangThaiDon" },
-    { label: "Hạn xử lý", key: "hanXuLy" },
-    { label: "Trạng thái hoàn thành hồ sơ tài liệu", key: "trangThaiHoanThienHoSoTaiLieu" },
-    { label: "Ngày nộp đơn", key: "ngayNopDon" },
-    { label: "Ngày hoàn thành hồ sơ tài liệu", key: "ngayHoanThanhHoSoTaiLieu" },
-    { label: "Ngày có kết quả thẩm định hình thức", key: "ngayKQThamDinhHinhThuc" },
-    { label: "Ngày công bố đơn", key: "ngayCongBoDon" },
-    { label: "Ngày có kết quả thẩm định nội dung", key: "ngayKQThamDinhND" },
-    { label: "Ngày trả lời kết quả thẩm định nội dung", key: "ngayTraLoiKQThamDinhND" },
-    { label: "Ngày thông báo cấp bằng", key: "ngayThongBaoCapBang" },
-    { label: "Ngày nộp phí cấp bằng", key: "ngayNopPhiCapBang" },
-    { label: "Ngày nhận bằng", key: "ngayNhanBang" },
+    { label: "Mã đơn DK", labelEn: "Matter code", key: "maDonDangKy" },
+    { label: "Số Đơn", labelEn: "App No", key: "soDon" },
+    { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
+    { label: "Mã nhãn hiệu", labelEn: "Trademark", key: "maNhanHieu" },
+    { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
+    { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiDon" },
+    { label: "Hạn Cục xử lý", labelEn: "Soft Deadline", key: "hanXuLy" },
+    { label: "Trạng thái hoàn thành TL", labelEn: "Outstanding Documents", key: "trangThaiHoanThienHoSoTaiLieu" },
+    { label: "Ngày nộp đơn", labelEn: "Filing Date", key: "ngayNopDon" },
+    { label: "Ngày hoàn thành TL", labelEn: "Doc Completion", key: "ngayHoanThanhHoSoTaiLieu" },
+    { label: "Ngày có KQ thẩm định hình thức", labelEn: "Formality Exam Result", key: "ngayKQThamDinhHinhThuc" },
+    { label: "Ngày công bố đơn", labelEn: "Publication", key: "ngayCongBoDon" },
+    { label: "Ngày có kết quả thẩm định nội dung", labelEn: "Substantive Exam Result", key: "ngayKQThamDinhND" },
+    { label: "Ngày TL kết quả thẩm định nội dung", labelEn: "Response To SE", key: "ngayTraLoiKQThamDinhND" },
+    { label: "Ngày thông báo cấp bằng", labelEn: "Notice of Protection", key: "ngayThongBaoCapBang" },
+    { label: "Ngày/Hạn nộp phí cấp bằng", labelEn: "Deadline For Granting Payment", key: "ngayNopPhiCapBang" },
+    { label: "Ngày nhận bằng", labelEn: "Certificate Receipt", key: "ngayNhanBang" },
     { label: "Số bằng", key: "soBang" },
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
     { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
@@ -76,6 +76,11 @@ function ApplicationList() {
 
   ];
   const hiddenFieldKeys = [
+    "ngayHoanThanhHoSoTaiLieu",
+    "ngayKQThamDinhHinhThuc",
+    "ngayCongBoDon",
+    "ngayKQThamDinhND",
+    "ngayTraLoiKQThamDinhND",
     "soBang",
     "ngayCapBang",
     "ngayHetHanBang",
@@ -145,7 +150,7 @@ function ApplicationList() {
   }, []);
   const columns = allFieldOptions
     .filter(field => selectedFields.includes(field.key))
-    .map(field => ({ label: field.label, key: field.key }));
+    .map(field => ({ label: field.label, labelEn: field.labelEn, key: field.key }));
 
 
   const fieldOptions = [
@@ -204,20 +209,20 @@ function ApplicationList() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
-            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
           <div className="flex gap-3">
             <button
               onClick={() => fetchApplications(searchTerm, 1, pageSize)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              🔎 Tìm kiếm
+              Tìm kiếm
             </button>
             <button
               onClick={() => exportToExcel(applications, allFieldOptions, "DanhSachDonDK")}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+              className="bg-[#217346] hover:bg-[#1b5e3b] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              📁 Xuất Excel
+              Xuất Excel
             </button>
             <button
               onClick={() => setShowFieldModal(true)}
@@ -229,7 +234,7 @@ function ApplicationList() {
               onClick={() => navigate("/applicationadd")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              ➕ Thêm mới
+              Thêm mới
             </button> */}
           </div>
 
@@ -241,7 +246,7 @@ function ApplicationList() {
           {showFilters ? "Ẩn bộ lọc" : "🔽 Bộ lọc nâng cao"}
         </button> */}
         <div className="">
-        
+
           <div className="flex flex-wrap gap-3">
             <Select
               options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
@@ -329,15 +334,23 @@ function ApplicationList() {
           </div>
         </div>
       </div>
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
         <Spin spinning={loading} tip="Loading..." size="large">
-          <table className="w-full border-collapse bg-white text-sm mt-4">
+          <table className="w-full border-collapse bg-white text-sm ">
             <thead>
-              <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-                <th className="p-2 text-table border-r">STT</th>
-                {columns.map((col, idx) => (
-                  <th key={col.key} className={`p-2 text-table ${idx < columns.length - 1 ? "border-r" : ""}`}>
-                    {col.label}
+              <tr className="text-[#667085] text-center font-normal">
+                <th className="p-2 text-table">
+                  <div className="leading-tight">
+                    STT
+                    <div className="text-xs text-gray-700">No.</div> {/* đổi từ gray-400 sang gray-700 */}
+                  </div>
+                </th>
+                {columns.map((col) => (
+                  <th key={col.key} className="p-2 text-table">
+                    <div className="leading-tight">
+                      {col.label}
+                      <div className="text-xs text-gray-700">{col.labelEn}</div> {/* đổi màu tại đây */}
+                    </div>
                   </th>
                 ))}
                 <th className="p-2 text-table"></th>
@@ -397,18 +410,21 @@ function ApplicationList() {
                       if (!isNaN(days)) {
                         if (days < 0) {
                           text = `Quá hạn ${Math.abs(days)} ngày`;
-                          textColor = "text-red-500";
+                          textColor = "text-red-600";
                         } else if (days <= 7) {
                           text = `Còn ${days} ngày`;
-                          textColor = "text-yellow-500";
+                          textColor = "text-orange-500"; // tránh dùng vàng
                         } else {
                           text = `Còn ${days} ngày`;
-                          textColor = "text-green-600";
+                          textColor = "text-emerald-600";
                         }
                       }
 
                       return (
-                        <td key={col.key} className={`p-2 font-semibold ${textColor} ${colIndex < columns.length - 1 ? "border-r" : ""}`}>
+                        <td
+                          key={col.key}
+                          className={`p-2 font-semibold ${textColor} ${colIndex < columns.length - 1 ? "border-r" : ""}`}
+                        >
                           {text}
                         </td>
                       );

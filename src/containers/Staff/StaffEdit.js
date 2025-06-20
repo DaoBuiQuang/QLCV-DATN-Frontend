@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import callAPI from "../../utils/api";
+import { showSuccess, showError } from "../../components/commom/Notification";
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs'; 
 import 'dayjs/locale/vi';
@@ -75,7 +76,8 @@ function StaffEdit() {
                     bangCap,
                 },
             });
-            alert("Cập nhật nhân sự thành công!");
+            await showSuccess(t("successTitle"), 'Cập nhật nhân sự thành công!');
+            // alert("Cập nhật nhân sự thành công!");
             navigate(-1);
         } catch (error) {
             console.error("Lỗi khi cập nhật nhân sự!", error);

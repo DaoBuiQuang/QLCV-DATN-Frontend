@@ -50,32 +50,32 @@ function JobList() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="🔍 Nhập tên ngành nghề"
-            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
           <div className="flex gap-3">
             <button
               onClick={() => fetchJobs(searchTerm)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              🔎 Tìm kiếm
+              Tìm kiếm
             </button>
             <button
               onClick={() => navigate("/jobadd")} // Chuyển hướng khi bấm nút
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              ➕ Thêm mới
+              Thêm mới
             </button>
           </div>
         </div>
 
 
       </div>
-      <table className="w-full border-collapse bg-white text-sm mt-4">
+      <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
         <thead>
-          <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-            <th className="p-2 font-normal text-table">STT</th>
-            <th className="p-2 font-normal text-table">Mã ngành nghề</th>
-            <th className="p-2 font-normal text-table">Tên ngành nghề</th>
+          <tr className=" text-[#667085] text-center font-normal">
+            <th className="p-2 text-table">STT</th>
+            <th className="p-2 text-table">Mã ngành nghề</th>
+            <th className="p-2 text-table">Tên ngành nghề</th>
             <th className="p-2 text-center text-table"></th>
           </tr>
         </thead>

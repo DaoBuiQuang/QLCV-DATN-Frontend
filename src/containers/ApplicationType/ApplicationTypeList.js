@@ -44,40 +44,40 @@ function ApplicationTypeList() {
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách loại đơn đăng kí</h2>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách loại đơn </h2>
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="🔍 Nhập tên loại đơn đăng ký hoặc mô tả"
-            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="🔍 Nhập tên loại đơn  hoặc mô tả"
+            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
           <div className="flex gap-3">
             <button
               onClick={() => fetchApplicationTypes(searchTerm)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              🔎 Tìm kiếm
+              Tìm kiếm
             </button>
             <button
               onClick={() => navigate("/applicationtypeadd")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              ➕ Thêm mới
+              Thêm mới
             </button>
           </div>
         </div>
 
 
       </div>
-      <table className="w-full border-collapse bg-white text-sm mt-4">
+      <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
         <thead>
-          <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-            <th className="p-2 font-normal text-table">STT</th>
-            <th className="p-2 font-normal text-table">Mã loại đơn đăng ký</th>
-            <th className="p-2 font-normal text-table">Tên loại đơn đăng ký</th>
-            <th className="p-2 font-normal text-table">Mô tả</th>
+          <tr className=" text-[#667085] text-center font-normal">
+            <th className="p-2 text-table">STT</th>
+            <th className="p-2 text-table">Mã loại đơn </th>
+            <th className="p-2 text-table">Tên loại đơn </th>
+            <th className="p-2 text-table">Mô tả</th>
             <th className="p-2 text-center text-table"></th>
           </tr>
         </thead>
@@ -134,7 +134,7 @@ function ApplicationTypeList() {
           className: "bg-red-500 hover:bg-red-600 text-white",
         }}
       >
-        <p>Bạn có chắc chắn muốn xóa loại đơn đăng ký này không?</p>
+        <p>Bạn có chắc chắn muốn xóa loại đơn  này không?</p>
       </Modal>
     </div>
   );

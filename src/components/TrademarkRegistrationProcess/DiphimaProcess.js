@@ -133,7 +133,7 @@ const DiphimaProcess = ({
                                 <Radio value="KHONG_THOA_DANG">Không thỏa đáng</Radio>
                             </Radio.Group>
                         </div>
-                        <div>
+                        {/* <div>
                             <label className="block text-gray-700 text-left">Ngày phản hồi kết quả ý kiến</label>
                             <DatePicker
                                 value={ngayPhanHoiKQYKien ? dayjs(ngayPhanHoiKQYKien) : null}
@@ -149,7 +149,7 @@ const DiphimaProcess = ({
                                 disabled={isViewOnly}
                                 className="mt-1 w-full"
                             />
-                        </div>
+                        </div> */}
                     </>
                 )}
 

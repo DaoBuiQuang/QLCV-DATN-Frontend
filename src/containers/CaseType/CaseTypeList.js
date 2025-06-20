@@ -51,14 +51,14 @@ function CaseTypeList() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="🔍 Nhập loại vụ việc"
-            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
           <div className="flex gap-3">
             <button
               onClick={() => fetchCaseTypes(searchTerm)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
             >
-              🔎 Tìm kiếm
+              Tìm kiếm
             </button>
             <button
               onClick={() => navigate("/casetypeadd")}
@@ -71,13 +71,13 @@ function CaseTypeList() {
 
 
       </div>
-      <table className="w-full border-collapse bg-white text-sm mt-4">
+      <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
         <thead>
-          <tr className="bg-[#EAECF0] text-[#667085] text-center font-normal">
-            <th className="p-2 font-normal text-table">STT</th>
-            <th className="p-2 font-normal text-table">Mã loại vụ việc</th>
-            <th className="p-2 font-normal text-table">Tên loại vụ việc</th>
-            <th className="p-2 font-normal text-table">Mô tả</th>
+          <tr className=" text-[#667085] text-center font-normal">
+            <th className="p-2 text-table">STT</th>
+            <th className="p-2 text-table">Mã loại vụ việc</th>
+            <th className="p-2 text-table">Tên loại vụ việc</th>
+            <th className="p-2 text-table">Mô tả</th>
             <th className="p-2 text-center text-table"></th>
           </tr>
         </thead>
