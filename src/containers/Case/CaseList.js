@@ -35,7 +35,7 @@ function CaseList() {
     const [showFieldModal, setShowFieldModal] = useState(false);
     const [selectedFields, setSelectedFields] = useState([
         "maHoSoVuViec",
-        "maDonDangKy",
+        "soDon",
         "noiDungVuViec",
         "trangThaiVuViec",
         "tenKhachHang",
@@ -44,13 +44,13 @@ function CaseList() {
 
     const allFieldOptions = [
         { key: "maHoSoVuViec", label: "Mã hồ sơ", labelEn: "Matter Code" },
-        { key: "maDonDangKy", label: "Mã đơn đăng ký", labelEn: "App No" },
+        { key: "soDon", label: "Số đơn", labelEn: "App No" },
         { key: "noiDungVuViec", label: "Tên vụ việc", labelEn: "Matter Name" },
         { key: "trangThaiVuViec", label: "Trạng thái", labelEn: "Status" },
         // { key: "buocXuLyHienTai", label: "Bước xử lý hiện tại" },
         { key: "ngayTiepNhan", label: "Ngày tiếp nhận", labelEn: "Instruction Date" },
         { key: "ngayTao", label: "Ngày tạo" },
-        { key: "ngayCapNhap", label: "Ngày Cập nhật",},
+        { key: "ngayCapNhap", label: "Ngày Cập nhật", },
         { key: "tenKhachHang", label: "Tên khách hàng", labelEn: "Client Name" },
         { key: "tenQuocGia", label: "Quốc gia", labelEn: "Country" },
         { key: "tenLoaiVuViec", label: "Loại vụ việc", labelEn: "Type of IP" },
@@ -65,7 +65,7 @@ function CaseList() {
             label: item[labelKey]
         }));
     };
-    const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId, staffId,  page = 1, size = 10) => {
+    const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId, staffId, page = 1, size = 10) => {
         setLoading(true);
         try {
             const response = await callAPI({
@@ -156,7 +156,7 @@ function CaseList() {
             console.error("Lỗi khi lấy dữ liệu loại đơn: ", error)
         }
     }
-     const fetchStaffs = async () => {
+    const fetchStaffs = async () => {
         try {
             const response = await callAPI({
                 method: "post",
@@ -210,81 +210,98 @@ function CaseList() {
                     <div className="flex gap-3">
                         <button
                             onClick={() => fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, selectedStaff, 1, pageSize)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Tìm kiếm
                         </button>
-                        
+
                         <button
                             onClick={() => navigate("/caseadd")}
-                            className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Thêm mới
                         </button>
                         <button
                             onClick={() => exportToExcel(cases, allFieldOptions, "DSHoSoVuViec")}
-                            className="bg-[#217346] hover:bg-[#1b5e3b] text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Xuất Excel
                         </button>
                         <button
                             onClick={() => setShowFieldModal(true)}
-                            className="bg-purple-500 hover:bg-purple-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Chọn cột hiển thị
                         </button>
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <Select
-                        options={formatOptions(staffs, "maNhanSu", "hoTen")}
-                        value={selectedStaff ? formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === selectedStaff) : null}
-                        onChange={selectedOption => setSelectedStaff(selectedOption?.value)}
-                        placeholder="Chọn người XL chính"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-                    <Select
-                        options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
-                        value={selectedCasetype ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === selectedCasetype) : null}
-                        onChange={selectedOption => setSelectedCasetype(selectedOption?.value)}
-                        placeholder="Chọn loại vụ việc"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-                    <Select
-                        options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
-                        value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
-                        onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
-                        placeholder="Chọn loại đơn"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-                    <Select
-                        options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
-                        value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
-                        onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
-                        placeholder="Chọn khách hàng"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-                    <Select
-                        options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                        value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
-                        onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
-                        placeholder="Chọn quốc gia"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
-
-                    <Select
-                        options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
-                        value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
-                        onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
-                        placeholder="Chọn đối tác"
-                        className="w-full md:w-1/6 text-left"
-                        isClearable
-                    />
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Người XL chính</label>
+                        <Select
+                            options={formatOptions(staffs, "maNhanSu", "hoTen")}
+                            value={selectedStaff ? formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === selectedStaff) : null}
+                            onChange={selectedOption => setSelectedStaff(selectedOption?.value)}
+                            placeholder="Chọn người XL chính"
+                            className="text-left"
+                            isClearable
+                        />
+                    </div>
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Loại vụ việc</label>
+                        <Select
+                            options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
+                            value={selectedCasetype ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === selectedCasetype) : null}
+                            onChange={selectedOption => setSelectedCasetype(selectedOption?.value)}
+                            placeholder="Chọn loại vụ việc"
+                            className="text-left"
+                            isClearable
+                        />
+                    </div>
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Loại đơn</label>
+                        <Select
+                            options={formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon")}
+                            value={selectedApplicationTypes ? formatOptions(applicationTypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === selectedApplicationTypes) : null}
+                            onChange={selectedOption => setSelectedApplicationType(selectedOption?.value)}
+                            placeholder="Chọn loại đơn"
+                            className="text-left"
+                            isClearable
+                        />
+                    </div>
+                    <div className="w-full md:w-1/6"> 
+                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Khách hàng</label>
+                        <Select
+                            options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
+                            value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
+                            onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
+                            placeholder="Chọn khách hàng"
+                            className="text-left"
+                            isClearable
+                        />
+                    </div>
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Quốc gia</label>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
+                            onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
+                            placeholder="Chọn quốc gia"
+                            className="text-left"
+                            isClearable
+                        />
+                    </div>
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Đối tác</label>
+                        <Select
+                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
+                            value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
+                            onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
+                            placeholder="Chọn đối tác"
+                            className="text-left"
+                            isClearable
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -341,22 +358,32 @@ function CaseList() {
                                             );
                                         }
 
-                                        if (col.key === "maDonDangKy") {
+                                        if (col.key === "soDon") {
+                                            const maDon = caseItem.maDonDangKy;
+                                            const hasDon = !!maDon;
+                                            const hasSoDon = !!content;
+
                                             return (
                                                 <td
                                                     key={col.key}
-                                                    className={`${commonClass} ${content ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
-                                                    onClick={e => {
-                                                        if (content) {
+                                                    className={`p-2 text-table ${hasDon ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"
+                                                        }`}
+                                                    onClick={(e) => {
+                                                        if (hasDon) {
                                                             e.stopPropagation();
-                                                            navigate(`/applicationdetail/${content}`);
+                                                            navigate(`/applicationdetail/${maDon}`);
                                                         }
                                                     }}
                                                 >
-                                                    {content ? content : "Không có đơn đăng ký"}
+                                                    {hasDon
+                                                        ? hasSoDon
+                                                            ? content
+                                                            : "Chưa có số đơn"
+                                                        : "Không có đơn đăng ký"}
                                                 </td>
                                             );
                                         }
+
 
                                         // if (col.key === "nhanSuXuLy") {
                                         //     return (
@@ -378,7 +405,7 @@ function CaseList() {
                                                 <td key={col.key} className={commonClass}>
                                                     {caseItem.nguoiXuLyChinh ? (
                                                         <div>
-                                                            {caseItem.nguoiXuLyChinh.tenNhanSu} 
+                                                            {caseItem.nguoiXuLyChinh.tenNhanSu}
                                                         </div>
                                                     ) : (
                                                         <span>—</span>
@@ -407,7 +434,8 @@ function CaseList() {
                                             const statusMap = {
                                                 dang_xu_ly: "Đang xử lý",
                                                 hoan_thanh: "Hoàn thành",
-                                                tam_dung: "Tạm dừng"
+                                                dong: "Đóng",
+                                                rut_don: "Rút đơn",
                                             };
                                             return (
                                                 <td key={col.key} className={commonClass}>

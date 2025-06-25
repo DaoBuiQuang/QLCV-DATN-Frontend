@@ -140,7 +140,7 @@ function CustomerEdit() {
                     ghiChu,
                     maQuocGia,
                     trangThai,
-                    maNganhNghe
+                   maNganhNghe: maNganhNghe === "" ? null : maNganhNghe
                 },
             });
             await showSuccess(t("successTitle"), t("capNhapKhachHangThanhCong"));

@@ -12,6 +12,7 @@
     "axios": "^1.8.4",
     "docx": "^9.4.1",
     "docxtemplater": "^3.61.1",
+    "docxtemplater-image-module-free": "^1.1.1",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.2",
     "file-saver": "^2.0.5",

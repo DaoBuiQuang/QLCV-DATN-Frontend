@@ -58,14 +58,14 @@ function CountryList() {
           <div className="flex gap-3">
             <button
               onClick={() => fetchCountries(searchTerm)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               {t("search")}
             </button>
             {(role === 'admin' || role === 'staff') && (
               <button
                 onClick={() => navigate("/countryadd")}
-                className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+                 className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
               >
                 Thêm mới
               </button>
@@ -73,8 +73,6 @@ function CountryList() {
 
           </div>
         </div>
-
-
       </div>
       <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
         <thead>

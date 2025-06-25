@@ -77,7 +77,7 @@ function Header({ toggleMenu, isMenuOpen }) {
           className="text-gray-600 hover:text-gray-800"
           onClick={toggleMenu}
         >
-          <Menu size={24} />
+          <Menu size={24} color="#009999" />
         </button>
 
         {username && (

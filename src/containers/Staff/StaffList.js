@@ -60,14 +60,14 @@ function StaffList() {
           <div className="flex gap-3">
             <button
               onClick={() => fetchStaffs(searchTerm)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               {t("search")}
             </button>
             <div className="flex gap-3">
               <button
                 onClick={() => navigate("/staffadd")}
-                className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+                 className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
               >
                 {t("addNew")}
               </button>

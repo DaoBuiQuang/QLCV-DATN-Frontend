@@ -21,12 +21,12 @@ function CaseEdit() {
     const [maQuocGia, setMaQuocGia] = useState("");
     const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
     const [maDonDangKy, setMaDonDangKy] = useState(null);
-    // const [ngayTao, setNgayTao] = useState("");
-    // const [ngayCapNhap, setNgayCapNhap] = useState("");
     const [buocXuLyHienTai, setBuocXuLyHienTai] = useState("");
     const [nhanSuVuViec, setNhanSuVuViec] = useState([]);
     const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState(null);
     const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState(null);
+    const [ngayDongHS, setNgayDongHS] = useState(null);
+    const [ngayRutHS, setNgayRutHS] = useState(null);
 
     const [casetypes, setCasetypes] = useState([]);
     const [countries, setCountries] = useState([]);
@@ -68,7 +68,8 @@ function CaseEdit() {
     const statusOptions = [
         { value: "dang_xu_ly", label: "Đang xử lý" },
         { value: "hoan_thanh", label: "Hoàn thành" },
-        { value: "tam_dung", label: "Tạm dừng" }
+        { value: "dong", label: "Đóng" },
+        { value: "rut_don", label: "Rút đơn" }
     ];
 
 
@@ -125,6 +126,8 @@ function CaseEdit() {
                 setMaLoaiVuViec(response.maLoaiVuViec);
                 setMaQuocGia(response.maQuocGiaVuViec);
                 setTrangThaiVuViec(response.trangThaiVuViec);
+                setNgayDongHS(formatDate(response.ngayDongHS));
+                setNgayRutHS(formatDate(response.ngayRutHS));
                 setBuocXuLyHienTai(response.buocXuLyHienTai);
                 setMaLoaiDon(response.maLoaiDon);
                 setMaDonDangKy(response.maDonDangKy);
@@ -237,12 +240,15 @@ function CaseEdit() {
                     maHoSoVuViec,
                     maKhachHang,
                     noiDungVuViec,
-                    ngayTiepNhan,
+                    ngayTiepNhan: ngayTiepNhan || null,
                     ngayXuLy: ngayXuLy || null,
                     maLoaiDon,
                     maLoaiVuViec,
+                    maDoiTac,
                     maQuocGiaVuViec: maQuocGia,
                     trangThaiVuViec,
+                    ngayDongHS:   ngayDongHS || null,
+                    ngayRutHS: ngayRutHS || null,
                     buocXuLyHienTai,
                     nhanSuVuViec
                 },
@@ -280,7 +286,7 @@ function CaseEdit() {
                         </div>
 
                         <div className="flex-1">
-                            <label className="block text-gray-700 text-left ">Chọn khách hàng <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left ">Khách hàng <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                                 value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
@@ -291,6 +297,7 @@ function CaseEdit() {
                                 }}
                                 placeholder="Chọn khách hàng"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
+                                isDisabled
                                 isClearable
                             />
                         </div>
@@ -371,7 +378,7 @@ function CaseEdit() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Loại đơn đăng ký <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                                 value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
@@ -380,7 +387,7 @@ function CaseEdit() {
                                     const value = selectedOption?.value || "";
                                     validateField("maLoaiDon", value);
                                 }}
-                                placeholder="Chọn loại đơn đăng kí"
+                                placeholder="Chọn loại đơn đăng ký"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                             />
@@ -389,7 +396,7 @@ function CaseEdit() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                                 value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
@@ -407,24 +414,13 @@ function CaseEdit() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Đối tác</label>
+                            <label className="block text-gray-700 text-left">Đối tác</label>
                             <Select
                                 options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                                 value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
                                 onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
                                 placeholder="Chọn đối tác"
                                 className="w-full  mt-1  rounded-lg text-left"
-                                isClearable
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left text-left">Trạng thái vụ việc</label>
-                            <Select
-                                options={formatOptions(statusOptions, "value", "label")}
-                                value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
-                                onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
-                                placeholder="Chọn trạng thái"
-                                className="w-full mt-1 rounded-lg text-left"
                                 isClearable
                             />
                         </div>
@@ -458,6 +454,57 @@ function CaseEdit() {
                                 isClearable
                             />
                         </div>
+                        <div>
+                            <label className="block text-gray-700 text-left">Trạng thái vụ việc</label>
+                            <Select
+                                options={formatOptions(statusOptions, "value", "label")}
+                                value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
+                                onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
+                                placeholder="Chọn trạng thái"
+                                className="w-full mt-1 rounded-lg text-left"
+                                isClearable
+                            />
+                        </div>
+
+                        {trangThaiVuViec === "dong" && (
+                            <div>
+                                <label className="block text-gray-700 text-left">Ngày đóng hồ sơ</label>
+                                <DatePicker
+                                    value={ngayDongHS ? dayjs(ngayDongHS) : null}
+                                    onChange={(date) => {
+                                        if (dayjs.isDayjs(date) && date.isValid()) {
+                                            setNgayDongHS(date.format("YYYY-MM-DD"));
+                                        } else {
+                                            setNgayDongHS(null);
+                                        }
+                                    }}
+                                    format="DD/MM/YYYY"
+                                    placeholder="Chọn ngày đóng hồ sơ"
+                                    className="mt-1 w-full"
+                                    style={{ height: "38px" }}
+                                />
+                            </div>
+                        )}
+
+                        {trangThaiVuViec === "rut_don" && (
+                            <div>
+                                <label className="block text-gray-700 text-left">Ngày rút hồ sơ</label>
+                                <DatePicker
+                                    value={ngayRutHS ? dayjs(ngayRutHS) : null}
+                                    onChange={(date) => {
+                                        if (dayjs.isDayjs(date) && date.isValid()) {
+                                            setNgayRutHS(date.format("YYYY-MM-DD"));
+                                        } else {
+                                            setNgayRutHS(null);
+                                        }
+                                    }}
+                                    format="DD/MM/YYYY"
+                                    placeholder="Chọn ngày rút hồ sơ"
+                                    className="mt-1 w-full"
+                                    style={{ height: "38px" }}
+                                />
+                            </div>
+                        )}
                     </div>
                 </Spin>
                 <div className="flex justify-center gap-4 mt-4">

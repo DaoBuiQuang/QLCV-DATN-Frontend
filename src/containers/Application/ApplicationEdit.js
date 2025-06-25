@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
@@ -35,6 +35,7 @@ function ApplicationEdit() {
         linkAnh,
     };
     const [maSPDVList, setMaSPDVList] = useState([]);
+    const [ghiChu, setGhiChu] = useState("");
 
     const [ngayHoanThanhHSTL_DuKien, setNgayHoanThanhHSTL_DuKien] = useState(null);
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
@@ -59,11 +60,12 @@ function ApplicationEdit() {
     const [ngayTraLoiKQThamDinhND, setNgayTraLoiKQThamDinhND] = useState(null);
 
     const [ngayThongBaoCapBang, setNgayThongBaoCapBang] = useState(null);
+    const [hanNopYKien, setHanNopYKien] = useState(null);
     const [trangThaiCapBang, setTrangThaiCapBang] = useState(null);
     const [ngayNopYKien, setNgayNopYKien] = useState(null);
     const [ngayNhanKQYKien, setNgayNhanKQYKien] = useState(null);
     const [ketQuaYKien, setKetQuaYKien] = useState(null);
-    const [ngayPhanHoiKQYKien, setNgayPhanHoiKQYKien] = useState(null);
+    const [hanNopPhiCapBang, setHanNopPhiCapBang] = useState(null);
 
     const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
@@ -79,7 +81,10 @@ function ApplicationEdit() {
     const [productAndService, setProductAndService] = useState([]);
 
     const [errors, setErrors] = useState({});
-    const isFormValid = (maHoSoVuViec || "").trim() !== "" && (maNhanHieu || "").trim() !== "" && Array.isArray(maSPDVList) &&
+    const isFormValid =
+        (maHoSoVuViec || "").trim() !== "" &&
+        ((tenNhanHieu || "").trim() !== "") &&
+        Array.isArray(maSPDVList) &&
         maSPDVList.length > 0;
     const validateField = (field, value) => {
         let error = "";
@@ -137,70 +142,140 @@ function ApplicationEdit() {
         fetchItems();
         detailApplication();
     }, [])
+    const trangThaiDonRef = useRef();
+
+    const updateTrangThaiDon = (trangThaiMoi) => {
+        if (trangThaiDonRef.current !== trangThaiMoi) {
+            setTrangThaiDon(trangThaiMoi);
+            trangThaiDonRef.current = trangThaiMoi;
+        }
+    };
+
     useEffect(() => {
         if (ngayNopDon) {
-            const ngayHoanThanhHoSoTaiLieu = dayjs(ngayNopDon).add(1, 'month');
-            setNgayHoanThanhHSTL_DuKien(ngayHoanThanhHoSoTaiLieu.format('YYYY-MM-DD'));
+            const duKien = dayjs(ngayNopDon).add(1, 'month').format('YYYY-MM-DD');
+            setNgayHoanThanhHSTL_DuKien(duKien);
+
+            // 👉 Chỉ set ngày hết hạn nếu chưa có
+            if (!ngayHetHanBang) {
+                const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
+                setNgayHetHanBang(hetHanBang);
+            }
+
             setDaChonNgayNopDon(true);
-            setTrangThaiDon("Hoàn thành hồ sơ tài liệu")
+            updateTrangThaiDon("Hoàn thành tài liệu");
         } else {
             setNgayHoanThanhHSTL_DuKien(null);
+            setNgayHetHanBang(null);
         }
+
         if (ngayHoanThanhHSTL) {
-            const ngayKQThamDinhHinhThuc = dayjs(ngayHoanThanhHSTL).add(1, 'month');
-            setNgayKQThamDinhHinhThuc_DuKien(ngayKQThamDinhHinhThuc.format('YYYY-MM-DD'));
-            setDaChonNgayHoanThanhHSTL(true)
-            setTrangThaiDon("Thẩm định hình thức")
-        } else {
-            setNgayKQThamDinhHinhThuc_DuKien(null);
+            // if (!ngayKQThamDinhHinhThuc_DuKien) {
+            const duKien = dayjs(ngayHoanThanhHSTL).add(1, 'month').format('YYYY-MM-DD');
+            setNgayKQThamDinhHinhThuc_DuKien(duKien);
+            // }
+            setDaChonNgayHoanThanhHSTL(true);
+            updateTrangThaiDon("Thẩm định hình thức");
         }
+
         if (ngayKQThamDinhHinhThuc) {
-            const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
-            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
+            // if (!ngayCongBo_DuKien) {
+            const duKien = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month').format('YYYY-MM-DD');
+            setNgayCongBo_DuKien(duKien);
+            // }
             setDaChonNgayThamDinhHinhThuc(true);
-            setTrangThaiDon("Công bố đơn")
+            updateTrangThaiDon("Công bố đơn");
         } else {
             setNgayCongBo_DuKien(null);
         }
-
         if (ngayCongBo) {
-            const ngayKQThamDinhND = dayjs(ngayCongBo).add(9, 'month');
-            setNgayKQThamDinhND_DuKien(ngayKQThamDinhND.format('YYYY-MM-DD'));
-            setDaChonNgayCongBoDon(true)
-            setTrangThaiDon("Thẩm định nội dung")
+            // if (!ngayKQThamDinhND_DuKien) {
+            const duKien = dayjs(ngayCongBo).add(9, 'month').format('YYYY-MM-DD');
+            setNgayKQThamDinhND_DuKien(duKien);
+            // }
+            setDaChonNgayCongBoDon(true);
+            updateTrangThaiDon("Thẩm định nội dung");
         } else {
             setNgayKQThamDinhND_DuKien(null);
         }
 
         if (ngayKQThamDinhND) {
-            const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
-            setNgayTraLoiKQThamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
+            // if (!ngayTraLoiKQThamDinhND_DuKien) {
+            const duKien = dayjs(ngayKQThamDinhND).add(3, 'month').format('YYYY-MM-DD');
+            setNgayTraLoiKQThamDinhND_DuKien(duKien);
+            // }
             setDaChonNgayThamDinhNoiDung(true);
-            // setTrangThaiDon("Trả lời thẩm định nội dung")
         } else {
             setNgayTraLoiKQThamDinhND_DuKien(null);
         }
-        if (ngayTraLoiKQThamDinhND) {
-            setTrangThaiDon("Hoàn thành nhận bằng")
-            setDaChonNgayTraLoiThamDinhNoiDung(true)
+
+        if (
+            ngayTraLoiKQThamDinhND ||
+            (trangThaiTraLoiKQThamDinhND === false && daChonNgayThamDinhNoiDung) || ngayThongBaoCapBang
+        ) {
+            setDaChonNgayTraLoiThamDinhNoiDung(true);
+            updateTrangThaiDon("Hoàn tất nhận bằng");
         }
-        if (daChonNgayTraLoiThamDinhNoiDung || (trangThaiTraLoiKQThamDinhND === false && daChonNgayThamDinhNoiDung)) {
-            setTrangThaiDon("Hoàn thành nhận bằng")
+
+        // const baseNgay = ngayNhanKQYKien || ngayThongBaoCapBang;
+        if (trangThaiCapBang === true) {
+            const baseNgay = ngayThongBaoCapBang;
+            if (ngayThongBaoCapBang && !hanNopPhiCapBang) {
+                const han = dayjs(baseNgay).add(3, 'month').format('YYYY-MM-DD');
+                setHanNopPhiCapBang(han);
+            } else if (!baseNgay) {
+                setHanNopPhiCapBang(null);
+            }
+        } else if (trangThaiCapBang === false) {
+            const baseNgay = ngayNhanKQYKien;
+
+            if (ketQuaYKien === true && ngayNhanKQYKien && !hanNopPhiCapBang) {
+                const han = dayjs(baseNgay).add(3, 'month').format('YYYY-MM-DD');
+                setHanNopPhiCapBang(han);
+            } else if (!baseNgay || ketQuaYKien !== true) {
+                setHanNopPhiCapBang(null);
+            }
+
+            // 👉 Thêm xử lý hanNopYKien khi trạng thái cấp bằng là false
+            if (ngayThongBaoCapBang) {
+                const hanYKien = dayjs(ngayThongBaoCapBang).add(3, 'month').format('YYYY-MM-DD');
+                setHanNopYKien(hanYKien);
+            } else {
+                setHanNopYKien(null);
+            }
         }
-        if (ngayThongBaoCapBang) {
-            setTrangThaiDon("Gửi bằng cho khách hàng")
-            const ngayNopPhiCapBang = dayjs(ngayThongBaoCapBang).add(3, 'month');
-            setNgayNopPhiCapBang(ngayNopPhiCapBang.format('YYYY-MM-DD'));
-        } else {
-            setNgayNopPhiCapBang(null);
-        }
+
+
         if (ngayNhanBang) {
             setDaChonHoanTatThuTucNhapBang(true);
+            updateTrangThaiDon("Gửi bằng cho khách hàng");
         }
+
         if (ngayGuiBangChoKH) {
-            setTrangThaiDon("Đơn đăng ký thành công")
+            updateTrangThaiDon("Đơn đăng ký thành công");
         }
-    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang, daChonNgayTraLoiThamDinhNoiDung, trangThaiTraLoiKQThamDinhND, daChonNgayThamDinhNoiDung, ngayGuiBangChoKH]);
+
+    }, [
+        ngayNopDon,
+        ngayHoanThanhHSTL,
+        ngayKQThamDinhHinhThuc,
+        ngayCongBo,
+        ngayKQThamDinhND,
+        ngayTraLoiKQThamDinhND,
+        trangThaiTraLoiKQThamDinhND,
+        ngayNhanKQYKien,
+        ngayThongBaoCapBang,
+        ngayNhanBang,
+        ngayGuiBangChoKH,
+        ngayHoanThanhHSTL_DuKien,
+        ngayKQThamDinhHinhThuc_DuKien,
+        ngayCongBo_DuKien,
+        ngayKQThamDinhND_DuKien,
+        ngayTraLoiKQThamDinhND_DuKien,
+        hanNopPhiCapBang,
+        daChonNgayThamDinhNoiDung,
+        trangThaiCapBang,
+    ]);
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -229,7 +304,8 @@ function ApplicationEdit() {
                 setLinkAnh(response.nhanHieu.linkAnh);
                 setTrangThaiDon(response.trangThaiDon);
                 setBuocXuLy(response.buocXuLy);
-                setMaSPDVList(response.maSPDVList)
+                setMaSPDVList(response.maSPDVList);
+                setGhiChu(response.ghiChu);
                 setNgayNopDon(formatDate(response.ngayNopDon));
                 setNgayHoanThanhHSTL_DuKien(formatDate(response.ngayHoanThanhHoSoTaiLieu_DuKien));
                 setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
@@ -251,10 +327,11 @@ function ApplicationEdit() {
 
                 setNgayThongBaoCapBang(formatDate(response.ngayThongBaoCapBang));
                 setTrangThaiCapBang(response.trangThaiDYTBCapBang);
+                setHanNopYKien(formatDate(response.hanNopYKien));
                 setNgayNopYKien(formatDate(response.ngayNopYKien));
                 setNgayNhanKQYKien(formatDate(response.ngayNhanKQYKien));
                 setKetQuaYKien(response.ketQuaYKien);
-                setNgayPhanHoiKQYKien(formatDate(response.ngayPhanHoiKQYKien));
+                setHanNopPhiCapBang(formatDate(response.hanNopPhiCapBang));
 
                 setNgayNopPhiCapBang(formatDate(response.ngayNopPhiCapBang));
                 setNgayNhanBang(formatDate(response.ngayNhanBang));
@@ -276,7 +353,6 @@ function ApplicationEdit() {
         try {
             await callAPI({
                 method: "put",
-
                 endpoint: "/application/edit",
                 data: {
                     maDonDangKy: maDonDangKy,
@@ -284,6 +360,7 @@ function ApplicationEdit() {
                     soDon: soDon,
                     maNhanHieu: maNhanHieu,
                     maSPDVList: maSPDVList,
+                    ghiChu: ghiChu,
                     trangThaiDon: trangThaiDon,
                     buocXuLy: buocXuLy,
 
@@ -305,12 +382,13 @@ function ApplicationEdit() {
                     ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
                     ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
                     ngayThongBaoCapBang: ngayThongBaoCapBang || null,
-                    trangThaiDYTBCapBang: trangThaiCapBang || null,
+                    trangThaiDYTBCapBang: trangThaiCapBang,
 
+                    hanNopYKien: hanNopYKien || null,
                     ngayNopYKien: ngayNopYKien || null,
                     ngayNhanKQYKien: ngayNhanKQYKien || null,
                     ketQuaYKien: ketQuaYKien || null,
-                    ngayPhanHoiKQYKien: ngayPhanHoiKQYKien || null,
+                    hanNopPhiCapBang: hanNopPhiCapBang || null,
 
                     ngayNopPhiCapBang: ngayNopPhiCapBang || null,
                     ngayNhanBang: ngayNhanBang || null,
@@ -347,7 +425,7 @@ function ApplicationEdit() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div >
-                                <label className="block text-gray-700 text-left text-left">Mã hồ sơ vụ việc</label>
+                                <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
                                 <input
                                     type="text"
                                     value={maHoSoVuViec}
@@ -357,7 +435,7 @@ function ApplicationEdit() {
                                 />
                             </div>
                             <div >
-                                <label className="block text-gray-700 text-left text-left">Số đơn</label>
+                                <label className="block text-gray-700 text-left">Số đơn</label>
                                 <input
                                     type="text"
                                     value={soDon}
@@ -368,7 +446,7 @@ function ApplicationEdit() {
                             </div>
 
                             <div>
-                                <label className="block text-gray-700 text-left text-left">Trạng thái đơn</label>
+                                <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                                 <input
                                     type="text"
                                     value={trangThaiDon}
@@ -387,22 +465,63 @@ function ApplicationEdit() {
                                     className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
                                 />
                             </div>
-                            <div>
-                                <label className="block text-gray-700 text-left text-left">Ngày nộp đơn</label>
-                                <DatePicker
-                                    value={ngayNopDon ? dayjs(ngayNopDon) : null}
-                                    onChange={(date) => {
-                                        if (dayjs.isDayjs(date) && date.isValid()) {
-                                            setNgayNopDon(date.format("YYYY-MM-DD"));
-                                        } else {
-                                            setNgayNopDon(null);
-                                        }
-                                    }}
-                                    format="DD/MM/YYYY"
-                                    placeholder="Chọn ngày nộp đơn"
-                                    className="mt-1 w-full"
-                                />
+                            <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* Cột trái: Ngày nộp đơn + Danh sách sản phẩm dịch vụ */}
+                                <div className="flex flex-col gap-4">
+                                    <div>
+                                        <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
+                                        <DatePicker
+                                            value={ngayNopDon ? dayjs(ngayNopDon) : null}
+                                            onChange={(date) => {
+                                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                                    setNgayNopDon(date.format("YYYY-MM-DD"));
+                                                } else {
+                                                    setNgayNopDon(null);
+                                                }
+                                            }}
+                                            format="DD/MM/YYYY"
+                                            placeholder="Chọn ngày nộp đơn"
+                                            className="mt-1 w-full"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
+                                        <Select
+                                            options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
+                                            value={
+                                                maSPDVList && maSPDVList.length > 0
+                                                    ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
+                                                    : []
+                                            }
+                                            onChange={(selectedOptions) => {
+                                                const selectedValues = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
+                                                setMaSPDVList(selectedValues);
+                                                validateField("maSPDVList", selectedValues);
+                                            }}
+                                            placeholder="Chọn mã nhãn hiệu"
+                                            className="w-full mt-1 rounded-lg text-left"
+                                            isClearable
+                                            isMulti
+                                        />
+                                        {errors.maSPDVList && (
+                                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maSPDVList}</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Cột phải: Ghi chú */}
+                                <div>
+                                    <label className="block  text-left">Ghi chú</label>
+                                    <textarea
+                                        value={ghiChu}
+                                        placeholder="Nhập ghi chú"
+                                        onChange={(e) => setGhiChu(e.target.value)}
+                                        className="w-full p-2 mt-1 border rounded-lg  min-h-[120px] resize-none"
+                                    />
+                                </div>
                             </div>
+
                             <div className="col-span-2">
                                 <BrandBasicForm
                                     maNhanHieu={maNhanHieu}
@@ -416,31 +535,10 @@ function ApplicationEdit() {
                                     isEditOnly
                                 />
                             </div>
-                            <div >
-                                <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
-                                <Select
-                                    options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
-                                    value={
-                                        maSPDVList && maSPDVList.length > 0
-                                            ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
-                                            : []
-                                    }
-                                    onChange={(selectedOptions) => {
-                                        const selectedValues = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
-                                        setMaSPDVList(selectedValues);
-                                        validateField("maSPDVList", selectedValues);
-                                    }}
-                                    placeholder="Chọn mã nhãn hiệu"
-                                    className="w-full mt-1 rounded-lg h-10 text-left"
-                                    isClearable
-                                    isMulti
-                                />
-                                {errors.maSPDVList && (
-                                    <p className="text-red-500 text-xs mt-1 text-left">{errors.maSPDVList}</p>
-                                )}
 
-                            </div>
+
                         </div>
+
                         {daChonNgayNopDon && (
                             <div className="col-span-2">
                                 <CompleteDocumentation
@@ -504,7 +602,7 @@ function ApplicationEdit() {
                         )}
                         {daChonNgayThamDinhNoiDung && (
                             <div>
-                                {/* <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label> */}
+                                {/* <label className="block text-gray-700 text-left">Trạng thái trả lời kết quả thẩm định nội dung</label> */}
                                 <Radio.Group
                                     onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
                                     value={trangThaiTraLoiKQThamDinhND}
@@ -536,14 +634,16 @@ function ApplicationEdit() {
                                     setNgayNhanBang={setNgayNhanBang}
                                     trangThaiCapBang={trangThaiCapBang}
                                     setTrangThaiCapBang={setTrangThaiCapBang}
+                                    hanNopYKien={hanNopYKien}
+                                    setHanNopYKien={setHanNopYKien}
                                     ngayNopYKien={ngayNopYKien}
                                     setNgayNopYKien={setNgayNopYKien}
                                     ngayNhanKQYKien={ngayNhanKQYKien}
                                     setNgayNhanKQYKien={setNgayNhanKQYKien}
                                     ketQuaYKien={ketQuaYKien}
                                     setKetQuaYKien={setKetQuaYKien}
-                                    ngayPhanHoiKQYKien={ngayPhanHoiKQYKien}
-                                    setNgayPhanHoiKQYKien={setNgayPhanHoiKQYKien}
+                                    hanNopPhiCapBang={hanNopPhiCapBang}
+                                    setHanNopPhiCapBang={setHanNopPhiCapBang}
                                 />
                             </div>
                         )}

@@ -92,27 +92,38 @@ function PartnerList() {
           <div className="flex gap-3">
             <button
               onClick={() => fetchPartners(searchTerm, selectedCountry, 1, pageSize)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Tìm kiếm
             </button>
             <button
               onClick={() => navigate("/partneradd")}
-              className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Thêm mới
             </button>
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Select
+          <div className="w-full md:w-1/6">
+            <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Quốc gia</label>
+            <Select
+              options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+              value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
+              onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
+              placeholder="Chọn quốc gia"
+              className="text-left"
+              isClearable
+            />
+          </div>
+          {/* <Select
             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
             value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
             onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
             placeholder="Chọn quốc gia"
             className="w-full md:w-1/6 text-left"
             isClearable
-          />
+          /> */}
         </div>
       </div>
 

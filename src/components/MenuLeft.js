@@ -25,8 +25,8 @@ function MenuLeft() {
     const navLinkClass = ({ isActive }) =>
         `flex items-center space-x-2 p-2 rounded-lg w-full transition 
    ${isActive
-            ? "border border-[#009999] text-[#66CC99] fill-[#66CC99]"
-            : "hover:border hover:border-[#009999] hover:text-[#66CC99] hover:fill-[#66CC99]"}`;
+            ? "border border-[#009999] text-[#009999] fill-[#009999]"
+            : "hover:border hover:border-[#009999] hover:text-[#009999] hover:fill-[#009999]"}`;
 
     return (
         <aside className="bg-white w-56 h-screen shadow-md flex flex-col overflow-y-auto">
@@ -39,7 +39,7 @@ function MenuLeft() {
                 <img src="https://ipac.vn/image/catalog/Logo-Slogan-PNG.png" alt="Logo" className="w-32" />
             </div> */}
             <nav className="flex-1 px-4 py-4">
-                <ul className="space-y-2 text-[#66CC99] text-sm font-bold">
+                <ul className="space-y-2 text-[#009999] text-sm font-bold">
                     <li>
                         <div>
                             <button
@@ -50,12 +50,12 @@ function MenuLeft() {
                                     }))
                                 }
                                 className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${openSettingSubmenu.dashboard
-                                        ? "border border-[#009999] text-[#66CC99]"
-                                        : "hover:border hover:border-[#009999] hover:text-[#66CC99]"
+                                        ? "border border-[#009999] text-[#009999]"
+                                        : "hover:border hover:border-[#009999] hover:text-[#009999]"
                                     }`}
                             >
                                 <div className="flex items-center space-x-2">
-                                    <LayoutDashboard size={16} color={openSettingSubmenu.dashboard ? "#66CC99" : undefined} />
+                                    <LayoutDashboard size={16} color={openSettingSubmenu.dashboard ? "#009999" : undefined} />
                                     <span>{t("dashboard")}</span>
                                 </div>
                                 <span>{openSettingSubmenu?.dashboard ? "▲" : "▼"}</span>
@@ -112,12 +112,12 @@ function MenuLeft() {
                             className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${location.pathname.startsWith("/settings") ||
                                     location.pathname === "/changepassword" ||
                                     location.pathname === "/profile"
-                                    ? "border border-[#009999] text-[#66CC99]"
-                                    : "hover:border hover:border-[#009999] hover:text-[#66CC99]"
+                                    ? "border border-[#009999] text-[#009999]"
+                                    : "hover:border hover:border-[#009999] hover:text-[#009999]"
                                 }`}
                         >
                             <div className="flex items-center space-x-2">
-                                <Settings size={16} color={(location.pathname.startsWith("/settings") || location.pathname === "/changepassword" || location.pathname === "/profile") ? "#66CC99" : undefined} />
+                                <Settings size={16} color={(location.pathname.startsWith("/settings") || location.pathname === "/changepassword" || location.pathname === "/profile") ? "#009999" : undefined} />
                                 <span>{t("caiDat")}</span>
                             </div>
                             <span>{openSettingSubmenu?.settings ? "▲" : "▼"}</span>

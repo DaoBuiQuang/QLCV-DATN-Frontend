@@ -32,7 +32,7 @@ const AnnouncementOfApplication = ({
                     
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày công bố đơn</label>
+                    <label className="block text-gray-700 text-left">Ngày công bố đơn</label>
                     <DatePicker
                         value={ngayCongBo ? dayjs(ngayCongBo) : null}
                         onChange={(date) => {

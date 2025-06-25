@@ -6,11 +6,11 @@ const { Step } = Steps;
 
 const steps = [
   "Nộp đơn",
-  "Hoàn thành hồ sơ tài liệu",
+  "Hoàn thành tài liệu",
   "Thẩm định hình thức",
   "Công bố đơn",
   "Thẩm định nội dung",
-  "Hoàn thành nhận bằng",
+  "Hoàn tất nhận bằng",
   "Gửi bằng cho khách hàng",
   "Đơn đăng ký thành công",
 ];

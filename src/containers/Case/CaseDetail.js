@@ -242,7 +242,7 @@ function CaseDetail() {
                         </div>
 
                         <div className="flex-1">
-                            <label className="block text-gray-700 text-left ">Chọn khách hàng <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left ">Khách hàng <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
                                 value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
@@ -259,7 +259,7 @@ function CaseDetail() {
                         </div>
 
                         <div>
-                            <label className="block text-gray-700 text-left">Nội dung vụ việc <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Tên vụ việc <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 value={noiDungVuViec}
@@ -337,7 +337,7 @@ function CaseDetail() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Loại đơn <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                                 value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
@@ -346,7 +346,7 @@ function CaseDetail() {
                                     const value = selectedOption?.value || "";
                                     validateField("maLoaiDon", value);
                                 }}
-                                placeholder="Chọn loại đơn đăng kí"
+                                placeholder="Chọn loại đơn đăng ký"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
                                 isClearable
                                 isDisabled
@@ -356,7 +356,7 @@ function CaseDetail() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
+                            <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
                             <Select
                                 options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                                 value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
@@ -375,7 +375,7 @@ function CaseDetail() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Đối tác</label>
+                            <label className="block text-gray-700 text-left">Đối tác</label>
                             <Select
                                 options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                                 value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
@@ -400,7 +400,7 @@ function CaseDetail() {
                         </div>
 
                         {/* <div>
-                        <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
+                        <label className="block text-gray-700 text-left">Bước xử lý hiện tại</label>
                         <Select
                             options={formatOptions(processSteps, "value", "label")}
                             value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
@@ -412,7 +412,7 @@ function CaseDetail() {
                         />
                     </div> */}
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Người xử lí chính</label>
+                            <label className="block text-gray-700 text-left">Người xử lí chính</label>
                             <Select
                                 options={formatOptions(staffs, "maNhanSu", "hoTen")}
                                 // value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
@@ -428,7 +428,7 @@ function CaseDetail() {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left text-left">Người xử lí phụ</label>
+                            <label className="block text-gray-700 text-left">Người xử lí phụ</label>
                             <Select
                                 options={formatOptions(staffs, "maNhanSu", "hoTen")}
                                 value={formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === nguoiXuLyPhu)}

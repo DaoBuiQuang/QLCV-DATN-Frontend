@@ -25,6 +25,9 @@ function CaseAdd() {
     const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState(null);
     const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState(null);
 
+    const [ngayDongHS, setNgayDongHS] = useState(null);
+    const [ngayRutHS, setNgayRutHS] = useState(null);
+
     const [casetypes, setCasetypes] = useState([]);
     const [countries, setCountries] = useState([]);
     const [customers, setCustomers] = useState([]);
@@ -69,7 +72,8 @@ function CaseAdd() {
     const statusOptions = [
         { value: "dang_xu_ly", label: "Đang xử lý" },
         { value: "hoan_thanh", label: "Hoàn thành" },
-        { value: "tam_dung", label: "Tạm dừng" }
+        { value: "dong", label: "Đóng" },
+        { value: "rut_don", label: "Rút đơn" }
     ];
 
 
@@ -200,6 +204,8 @@ function CaseAdd() {
                     maLoaiVuViec,
                     maQuocGiaVuViec: maQuocGia,
                     trangThaiVuViec,
+                    ngayDongHS,
+                    ngayRutHS,
                     maLoaiDon,
                     buocXuLyHienTai,
                     nhanSuVuViec
@@ -213,6 +219,8 @@ function CaseAdd() {
             setNoiDungVuViec("");
             setNgayTiepNhan(null);
             setNgayXuLy(null);
+            setNgayRutHS(null);
+            setNgayDongHS(null);
             setMaLoaiVuViec("");
             setMaQuocGia("");
             setTrangThaiVuViec("");
@@ -258,10 +266,16 @@ function CaseAdd() {
                         <input
                             type="text"
                             value={maHoSoVuViec}
-                            readOnly
-                            disabled
+                            onChange={(e) => {
+                                setMaHoSoVuViec(e.target.value)
+                                validateField("maHoSoVuViec", e.target.value)
+                            }}
+                            
                             className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                         />
+                         {errors.maHoSoVuViec && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maHoSoVuViec}</p>
+                        )}
                     </div>
 
                     <div className="flex-1">
@@ -357,7 +371,7 @@ function CaseAdd() {
                         )}
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left">Loại đơn đăng kí <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">Loại đơn đăng ký <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
                             value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
@@ -366,7 +380,7 @@ function CaseAdd() {
                                 const value = selectedOption?.value || "";
                                 validateField("maLoaiDon", value);
                             }}
-                            placeholder="Chọn loại đơn đăng kí"
+                            placeholder="Chọn loại đơn đăng ký"
                             className="w-full mt-1 rounded-lg h-10 text-left"
                             isClearable
                         />
@@ -375,7 +389,7 @@ function CaseAdd() {
                         )}
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                             value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
@@ -393,7 +407,7 @@ function CaseAdd() {
                         )}
                     </div>
                     {/* <div>
-                        <label className="block text-gray-700 text-left text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
+                        <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
                         <Select
                             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
                             value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGƯia").find(opt => opt.value === maQuocGia) : null}
@@ -410,7 +424,7 @@ function CaseAdd() {
                         )}
                     </div> */}
                     <div>
-                        <label className="block text-gray-700 text-left text-left">Đối tác</label>
+                        <label className="block text-gray-700 text-left">Đối tác</label>
                         <Select
                             options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
                             value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
@@ -420,29 +434,6 @@ function CaseAdd() {
                             isClearable
                         />
                     </div>
-                    {/* <div>
-                        <label className="block text-gray-700 text-left text-left">Trạng thái vụ việc</label>
-                        <Select
-                            options={formatOptions(statusOptions, "value", "label")}
-                            value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
-                            onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
-                            placeholder="Chọn trạng thái"
-                            className="w-full mt-1 rounded-lg  text-left"
-                            isClearable
-                        />
-                    </div> */}
-
-                    {/* <div>
-                        <label className="block text-gray-700 text-left text-left">Bước xử lý hiện tại</label>
-                        <Select
-                            options={formatOptions(processSteps, "value", "label")}
-                            value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
-                            onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
-                            placeholder="Chọn bước xử lý"
-                            className="w-full mt-1 rounded-lg text-left"
-                            isClearable
-                        />
-                    </div> */}
                     <div>
                         <label className="block text-gray-700 text-left">Người xử lí chính</label>
                         <Select
@@ -476,6 +467,57 @@ function CaseAdd() {
                             isClearable
                         />
                     </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Trạng thái vụ việc</label>
+                        <Select
+                            options={formatOptions(statusOptions, "value", "label")}
+                            value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
+                            onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
+                            placeholder="Chọn trạng thái"
+                            className="w-full mt-1 rounded-lg text-left"
+                            isClearable
+                        />
+                    </div>
+
+                    {trangThaiVuViec === "dong" && (
+                        <div>
+                            <label className="block text-gray-700 text-left">Ngày đóng hồ sơ</label>
+                            <DatePicker
+                                value={ngayDongHS ? dayjs(ngayDongHS) : null}
+                                onChange={(date) => {
+                                    if (dayjs.isDayjs(date) && date.isValid()) {
+                                        setNgayDongHS(date.format("YYYY-MM-DD"));
+                                    } else {
+                                        setNgayDongHS(null);
+                                    }
+                                }}
+                                format="DD/MM/YYYY"
+                                placeholder="Chọn ngày đóng hồ sơ"
+                                className="mt-1 w-full"
+                                style={{ height: "38px" }}
+                            />
+                        </div>
+                    )}
+
+                    {trangThaiVuViec === "rut_don" && (
+                        <div>
+                            <label className="block text-gray-700 text-left">Ngày rút hồ sơ</label>
+                            <DatePicker
+                                value={ngayRutHS ? dayjs(ngayRutHS) : null}
+                                onChange={(date) => {
+                                    if (dayjs.isDayjs(date) && date.isValid()) {
+                                        setNgayRutHS(date.format("YYYY-MM-DD"));
+                                    } else {
+                                        setNgayRutHS(null);
+                                    }
+                                }}
+                                format="DD/MM/YYYY"
+                                placeholder="Chọn ngày rút hồ sơ"
+                                className="mt-1 w-full"
+                                style={{ height: "38px" }}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>

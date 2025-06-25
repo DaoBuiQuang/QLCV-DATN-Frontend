@@ -116,7 +116,7 @@ function PartnerAdd() {
                 validateField("maQuocGia", value);
               }}
               placeholder="Chọn quốc gia"
-              className="w-full  mt-1  rounded-lg"
+              className="w-full  mt-1  rounded-lg text-left"
               isClearable
             />
             {errors.maQuocGia && (

@@ -4,8 +4,8 @@ import Select from "react-select";
 function BrandBasicForm({
   maNhanHieuOld,
   setMaNhanHieuOld,
-  maNhanHieu,
-  setMaNhanHieu,
+  // maNhanHieu,
+  // setMaNhanHieu,
   tenNhanHieu,
   setTenNhanHieu,
   linkAnh,
@@ -56,7 +56,7 @@ function BrandBasicForm({
 
     if (newMode) {
       // Chuyển sang dùng lại → clear tạo mới
-      setMaNhanHieu("");
+      // setMaNhanHieu("");
       setTenNhanHieu("");
       setLinkAnh("");
       setErrors(prev => {
@@ -139,80 +139,59 @@ function BrandBasicForm({
         </div>
       )}
 
-      {/* Mã nhãn hiệu */}
+      {/* Tên nhãn hiệu + Ảnh trên cùng 1 dòng */}
       {!showSelectExisting && (
-        <div>
-          <label className="block text-gray-700 text-left">
-            Mã nhãn hiệu <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={maNhanHieu}
-            onChange={(e) => {
-              setMaNhanHieu(e.target.value);
-              if (!showSelectExisting) {
-                validateField("maNhanHieu", e.target.value);
-              }
-            }}
-            disabled={isViewOnly || isEditOnly}
-            placeholder="Nhập mã nhãn hiệu"
-            className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly || isEditOnly ? 'bg-gray-200' : ''}`}
-          />
-          {errors?.maNhanHieu && (
-            <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanHieu}</p>
-          )}
-        </div>
-      )}
-
-      {/* Tên nhãn hiệu */}
-      {!showSelectExisting && (
-        <div>
-          <label className="block text-gray-700 text-left">
-            Tên nhãn hiệu <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={tenNhanHieu}
-            onChange={(e) => {
-              setTenNhanHieu(e.target.value);
-              validateField("tenNhanHieu", e.target.value);
-            }}
-            placeholder="Nhập tên nhãn hiệu"
-            disabled={isViewOnly}
-            className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
-          />
-          {errors?.tenNhanHieu && (
-            <p className="text-red-500 text-xs mt-1 text-left">{errors.tenNhanHieu}</p>
-          )}
-        </div>
-      )}
-
-      {/* Ảnh */}
-      <div className="col-span-2">
-        {!isViewOnly && !showSelectExisting && (
-          <>
-            <label className="block text-gray-700 text-left">Chọn ảnh</label>
+        <div className="col-span-2 flex gap-4">
+          {/* Tên nhãn hiệu */}
+          <div className="w-1/2">
+            <label className="block text-gray-700 text-left">
+              Tên nhãn hiệu <span className="text-red-500">*</span>
+            </label>
             <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full p-2 mt-1 border rounded-lg"
+              type="text"
+              value={tenNhanHieu}
+              onChange={(e) => {
+                setTenNhanHieu(e.target.value);
+                validateField("tenNhanHieu", e.target.value);
+              }}
+              placeholder="Nhập tên nhãn hiệu"
+              disabled={isViewOnly}
+              className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
             />
-          </>
-        )}
-        {imageError && (
-          <p className="text-red-500 text-xs mt-1 text-left">{imageError}</p>
-        )}
-        {!showSelectExisting && linkAnh && (
-          <div className="mt-2">
-            <img
-              src={linkAnh}
-              alt="Ảnh xem trước"
-              className="h-32 object-contain rounded-lg border"
-            />
+            {errors?.tenNhanHieu && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.tenNhanHieu}</p>
+            )}
           </div>
-        )}
-      </div>
+
+          {/* Ảnh */}
+          <div className="w-1/2">
+            {!isViewOnly && (
+              <>
+                <label className="block text-gray-700 text-left">Chọn ảnh</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="w-full p-2 mt-1 border rounded-lg"
+                />
+              </>
+            )}
+            {imageError && (
+              <p className="text-red-500 text-xs mt-1 text-left">{imageError}</p>
+            )}
+            {linkAnh && (
+              <div className="mt-2">
+                <img
+                  src={linkAnh}
+                  alt="Ảnh xem trước"
+                  className="h-32 object-contain rounded-lg border"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

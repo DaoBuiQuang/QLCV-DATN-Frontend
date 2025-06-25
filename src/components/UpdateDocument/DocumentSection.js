@@ -95,9 +95,21 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
                                     <td className="px-4 py-1 border">{tl.tenTaiLieu}</td>
                                     <td className="px-4 py-1 border">
                                         {tl.linkTaiLieu ? (
-                                            <a href={tl.linkTaiLieu} target="_blank" rel="noopener noreferrer" download={tl.tenTaiLieu} className="text-blue-600 hover:underline">
-                                                Xem file
-                                            </a>
+                                            <button
+                                                onClick={() => {
+                                                    const link = document.createElement("a");
+                                                    link.href = tl.linkTaiLieu; // chuỗi base64
+                                                    link.download = tl.tenTaiLieu || "tai_lieu.docx";
+                                                    document.body.appendChild(link);
+                                                    link.click();
+                                                    document.body.removeChild(link);
+                                                }}
+                                                className="text-blue-600 hover:underline"
+                                            >
+                                                Tải tài liệu
+                                            </button>
+
+
                                         ) : <span className="text-gray-400 italic">Không có</span>}
                                     </td>
                                     <td className="px-4 py-1 border text-center">

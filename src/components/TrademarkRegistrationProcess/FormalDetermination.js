@@ -19,7 +19,7 @@ const FormalDetermination = ({
     const [daKNThanhCong, setDaKNThanhCong] = useState(false);
     const [showLichSu, setShowLichSu] = useState(true);
     useEffect(() => {
-        
+
         lichSuThamDinhHT.forEach((item, index) => {
             if (item.hanKhieuNaiCSHTT && !item.showKhieuNaiCSHCTForm) {
                 updateRefusal(index, 'showKhieuNaiCSHCTForm', true);
@@ -27,21 +27,21 @@ const FormalDetermination = ({
             if (item.hanKhieuNaiBKHCN && !item.showKhieuNaiBKHCNForm) {
                 updateRefusal(index, 'showKhieuNaiBKHCNForm', true);
             }
-            if(item.ketQuaKhieuNaiBKHCN === true || item.ketQuaKhieuNaiCSHTT === true){
+            if (item.ketQuaKhieuNaiBKHCN === "ThanhCong" || item.ketQuaKhieuNaiCSHTT === "ThanhCong") {
                 handleKNThanhCong();
             }
-            
-            if(item.ngayNhanThongBaoTuChoiTD && !item.ngayNhanQuyetDinhTuChoi && !item.trangThaiBiNhanQuyetDinhTuChoi && !item.ngayTraLoiThongBaoTuChoi){
+
+            if (item.ngayNhanThongBaoTuChoiTD && !item.ngayNhanQuyetDinhTuChoi && !item.trangThaiBiNhanQuyetDinhTuChoi && !item.ngayTraLoiThongBaoTuChoi) {
                 setBuocXuLy(`Chờ trả lời thông báo từ chối thẩm định hình thức lần: ${item.lanThamDinh}`);
             }
-            
-            if(item.ngayNhanThongBaoTuChoiTD  && !item.trangThaiBiNhanQuyetDinhTuChoi && item.ngayTraLoiThongBaoTuChoi){
+
+            if (item.ngayNhanThongBaoTuChoiTD && !item.trangThaiBiNhanQuyetDinhTuChoi && item.ngayTraLoiThongBaoTuChoi) {
                 setBuocXuLy(`Chờ cục phản hồi trả lời thông báo từ chối thẩm định hình thức lần: ${item.lanThamDinh}`);
             }
-            if((item.ketQuaKhieuNaiCSHTT === false || !item.ketQuaKhieuNaiCSHTT) && item.ngayKhieuNaiCSHTT){
+            if ((item.ketQuaKhieuNaiCSHTT === "ThatBai" || !item.ketQuaKhieuNaiCSHTT) && item.ngayKhieuNaiCSHTT) {
                 setBuocXuLy("Chờ kết quả khiếu nại cục sở hữu trí tuệ");
             }
-            if((item.ketQuaKhieuNaiBKHCN === false || !item.ketQuaKhieuNaiBKHCN) && item.ngayKhieuNaiBKHCN){
+            if ((item.ketQuaKhieuNaiBKHCN === "ThatBai" || !item.ketQuaKhieuNaiBKHCN) && item.ngayKhieuNaiBKHCN) {
                 setBuocXuLy("Chờ kết quả khiếu nại bộ khoa học và công nghệ");
             }
         });
@@ -80,6 +80,14 @@ const FormalDetermination = ({
     const updateRefusal = (index, field, value) => {
         const updated = [...lichSuThamDinhHT];
         updated[index][field] = value;
+        if (field === "ngayNhanThongBaoTuChoiTD") {
+            if (value) {
+                const newHan = dayjs(value).add(2, 'month').format('YYYY-MM-DD');
+                updated[index].hanTraLoi = newHan;
+            } else {
+                updated[index].hanTraLoi = null;
+            }
+        }
 
         if (field === "giaHan") {
             const refusal = updated[index];
@@ -87,22 +95,28 @@ const FormalDetermination = ({
 
             if (value) {
                 hanTraLoi = hanTraLoi.add(2, 'month');
+                if (refusal.ngayGiaHan) {
+                    updated[index].hanTraLoiGiaHan = dayjs(refusal.ngayGiaHan).add(2, 'month').format('YYYY-MM-DD');
+                }
             } else {
                 hanTraLoi = hanTraLoi.subtract(2, 'month');
+                updated[index].hanTraLoiGiaHan = null; // reset nếu không gia hạn nữa
             }
+
             updated[index].hanTraLoi = hanTraLoi.format('YYYY-MM-DD');
         }
+
         if (field === 'showKhieuNaiCSHCTForm' && value === true) {
             const ngayTuChoi = updated[index].ngayNhanQuyetDinhTuChoi;
             if (ngayTuChoi) {
-                const newHan = dayjs(ngayTuChoi).add(3, 'month').format('YYYY-MM-DD');
+                const newHan = dayjs(ngayTuChoi).add(90, 'day').format('YYYY-MM-DD');
                 updated[index].hanKhieuNaiCSHTT = newHan;
             }
         }
         if (field === 'showKhieuNaiBKHCNForm' && value === true) {
             const ngayTuChoi = updated[index].ngayKQ_KN_CSHTT;
             if (ngayTuChoi) {
-                const newHan = dayjs(ngayTuChoi).add(3, 'month').format('YYYY-MM-DD');
+                const newHan = dayjs(ngayTuChoi).add(30, 'day').format('YYYY-MM-DD');
                 updated[index].hanKhieuNaiBKHCN = newHan;
             }
         }
@@ -136,7 +150,7 @@ const FormalDetermination = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày có kết quả trả lời thẩm định hình thức dự kiến</label>
+                    <label className="block text-gray-700 text-left">Ngày kết quả thẩm định hình thức dự kiến</label>
                     <DatePicker
                         value={ngayKQThamDinhHinhThuc_DuKien ? dayjs(ngayKQThamDinhHinhThuc_DuKien) : null}
                         onChange={(date) => {
@@ -156,7 +170,7 @@ const FormalDetermination = ({
                         {(daKNThanhCong || ngayKQThamDinhHinhThuc_DK_SauKN) && (
                             <div>
                                 <label className="block text-gray-700 text-left">
-                                    Ngày có KQ trả lời thẩm định hình thức sau KN dự kiến
+                                    Ngày KQ thẩm định hình thức sau KN dự kiến
                                 </label>
                                 <DatePicker
                                     value={ngayKQThamDinhHinhThuc_DK_SauKN ? dayjs(ngayKQThamDinhHinhThuc_DK_SauKN) : null}
@@ -169,7 +183,7 @@ const FormalDetermination = ({
                                     }}
                                     format="DD/MM/YYYY"
                                     className="mt-1 w-full"
-                                     disabled={isViewOnly}
+                                    disabled={isViewOnly}
                                 />
                             </div>
                         )}
@@ -187,7 +201,7 @@ const FormalDetermination = ({
                                 format="DD/MM/YYYY"
                                 placeholder="Chọn ngày chấp nhận đơn hợp lệ"
                                 className="mt-1 w-full"
-                                 disabled={isViewOnly}
+                                disabled={isViewOnly}
                             />
                         </div>
                     </>
@@ -196,7 +210,7 @@ const FormalDetermination = ({
             {lichSuThamDinhHT.length > 0 && (
                 <button
                     type="button"
-                    onClick={() => setShowLichSu(!showLichSu)} 
+                    onClick={() => setShowLichSu(!showLichSu)}
                     className="text-blue-600 underline text-sm"
                 >
                     {showLichSu ? "Ẩn lịch sử thẩm định" : "Hiển thị lịch sử thẩm định"}
@@ -227,13 +241,14 @@ const FormalDetermination = ({
             {lichSuThamDinhHT.length > 0 && showLichSu && (
                 <div className="mt-4 border">
                     {lichSuThamDinhHT.map((refusal, index) => {
-                        const baseHanTraLoi = dayjs(refusal.ngayNhanThongBaoTuChoiTD).add(3, 'month');
-                        const ngayTraLoiThongBaoTuChoi = refusal.ngayTraLoiThongBaoTuChoi;
-                        const hanTraLoi = baseHanTraLoi.format('YYYY-MM-DD');
-                        //  const baseNgayYeuCauGiaHan= dayjs(refusal.ngayYeuCauGiaHan).add(3, 'month');
-                        const hanTraLoiGiaHan = refusal.giaHan && refusal.ngayYeuCauGiaHan
-                            ? dayjs(refusal.ngayYeuCauGiaHan).clone().add(2, 'month').format('YYYY-MM-DD')
-                            : dayjs(refusal.ngayYeuCauGiaHan) || null;
+                        const hanTraLoi = refusal.hanTraLoi;
+
+                        // const baseHanTraLoi = dayjs(refusal.ngayNhanThongBaoTuChoiTD).add(3, 'month');
+                        // const ngayTraLoiThongBaoTuChoi = refusal.ngayTraLoiThongBaoTuChoi;
+                        // const hanTraLoi = baseHanTraLoi.format('YYYY-MM-DD');
+                        //  const basengayGiaHan= dayjs(refusal.ngayGiaHan).add(3, 'month');
+                        const hanTraLoiGiaHan = refusal.hanTraLoiGiaHan;
+
                         return (
                             <div key={index} className="p-1  rounded-md bg-gray-50 text-sm">
                                 <div className="flex justify-between items-center ">
@@ -273,6 +288,7 @@ const FormalDetermination = ({
                                             value={hanTraLoi ? dayjs(hanTraLoi) : null}
                                             format="DD/MM/YYYY"
                                             className="w-full disabled"
+                                            placeholder='Hạn trả lời'
                                             disabled
                                         />
                                     </div>
@@ -306,12 +322,15 @@ const FormalDetermination = ({
                                                     <div className="md:col-span-3">
                                                         <label className="block text-gray-600 text-left">Ngày yêu cầu gia hạn</label>
                                                         <DatePicker
-                                                            value={refusal.ngayYeuCauGiaHan ? dayjs(refusal.ngayYeuCauGiaHan) : null}
+                                                            value={refusal.ngayGiaHan ? dayjs(refusal.ngayGiaHan) : null}
                                                             onChange={(date) => {
                                                                 if (dayjs.isDayjs(date) && date.isValid()) {
-                                                                    updateRefusal(index, 'ngayYeuCauGiaHan', date.format("YYYY-MM-DD"));
+                                                                    updateRefusal(index, 'ngayGiaHan', date.format("YYYY-MM-DD"));
+                                                                    const newHanGiaHan = dayjs(hanTraLoi).add(2, 'month').format('YYYY-MM-DD'); // ← Cập nhật theo hạn trả lời
+                                                                    updateRefusal(index, 'hanTraLoiGiaHan', newHanGiaHan);
                                                                 } else {
-                                                                    updateRefusal(index, 'ngayYeuCauGiaHan', null);
+                                                                    updateRefusal(index, 'ngayGiaHan', null);
+                                                                    updateRefusal(index, 'hanTraLoiGiaHan', null);
                                                                 }
                                                             }}
                                                             placeholder='Chọn ngày yêu cầu gia hạn'
@@ -329,6 +348,22 @@ const FormalDetermination = ({
                                                             disabled
                                                         />
                                                     </div>
+                                                    {/* <div className="md:col-span-3">
+                                                        <label className="block text-gray-600 text-left">Hạn trả lời sau khi gia hạn</label>
+                                                        <DatePicker
+                                                            value={refusal.hanTraLoiGiaHan ? dayjs(refusal.hanTraLoiGiaHan) : null}
+                                                            onChange={(date) => {
+                                                                if (dayjs.isDayjs(date) && date.isValid()) {
+                                                                    updateRefusal(index, 'hanTraLoiGiaHan', date.format("YYYY-MM-DD"));
+                                                                } else {
+                                                                    updateRefusal(index, 'hanTraLoiGiaHan', null);
+                                                                }
+                                                            }}
+                                                            format="DD/MM/YYYY"
+                                                            className="w-full disabled"
+                                                            disabled
+                                                        />
+                                                    </div> */}
                                                 </>
                                             )}
                                         </>
@@ -447,7 +482,7 @@ const FormalDetermination = ({
                                                         format="DD/MM/YYYY"
                                                         className="w-full"
                                                         placeholder='Chọn ngày khiếu nại'
-                                                         disabled={isViewOnly}
+                                                        disabled={isViewOnly}
                                                     />
                                                 </div>
                                                 <button
@@ -515,7 +550,7 @@ const FormalDetermination = ({
                                                                 format="DD/MM/YYYY"
                                                                 className="w-full mt-1 "
                                                                 placeholder='Chọn ngày kết quả khiếu nại'
-                                                                 disabled={isViewOnly}
+                                                                disabled={isViewOnly}
                                                             />
                                                         </div>
 
@@ -527,7 +562,7 @@ const FormalDetermination = ({
                                                                 className="w-full mt-1 p-2 border border-gray-300 rounded-md"
                                                                 rows={3}
                                                                 placeholder="Nhập ghi chú..."
-                                                                 disabled={isViewOnly}
+                                                                disabled={isViewOnly}
                                                             />
                                                         </div>
                                                         {refusal.ketQuaKhieuNaiCSHTT === 'ThatBai' ? (
@@ -550,14 +585,14 @@ const FormalDetermination = ({
                                                                         Ngày nộp yêu cầu chấp nhận đơn hợp lệ
                                                                     </label>
                                                                     <DatePicker
-                                                                        value={refusal.ngayNopYeuCCNDHLSauKN ? dayjs(refusal.ngayNopYeuCCNDHLSauKN) : null}
+                                                                        value={refusal.ngayNopYeuCauSauKN ? dayjs(refusal.ngayNopYeuCauSauKN) : null}
                                                                         onChange={(date) =>
-                                                                            updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
+                                                                            updateRefusal(index, 'ngayNopYeuCauSauKN', date?.format('YYYY-MM-DD'))
                                                                         }
                                                                         format="DD/MM/YYYY"
-                                                                         placeholder='Chọn ngày nộp yêu cầu chấp nhận đơn hợp lệ'
+                                                                        placeholder='Chọn ngày nộp yêu cầu chấp nhận đơn hợp lệ'
                                                                         className="w-full mt-1"
-                                                                         disabled={isViewOnly}
+                                                                        disabled={isViewOnly}
                                                                     />
                                                                 </div>
                                                             </>
@@ -591,7 +626,7 @@ const FormalDetermination = ({
                                                                 format="DD/MM/YYYY"
                                                                 className="w-full"
                                                                 placeholder='Chọn ngày khiếu nại'
-                                                                 disabled={isViewOnly}
+                                                                disabled={isViewOnly}
                                                             />
                                                         </div>
                                                         <button
@@ -654,8 +689,8 @@ const FormalDetermination = ({
                                                                         }
                                                                         format="DD/MM/YYYY"
                                                                         className="w-full mt-1 "
-                                                                         placeholder='Chọn ngày kết quả khiếu nại'
-                                                                         disabled={isViewOnly}
+                                                                        placeholder='Chọn ngày kết quả khiếu nại'
+                                                                        disabled={isViewOnly}
                                                                     />
                                                                 </div>
 
@@ -667,21 +702,21 @@ const FormalDetermination = ({
                                                                         className="w-full mt-1 p-2 border border-gray-300 rounded-md text-input"
                                                                         rows={3}
                                                                         placeholder="Nhập ghi chú..."
-                                                                         disabled={isViewOnly}
+                                                                        disabled={isViewOnly}
                                                                     />
                                                                 </div>
                                                                 {(refusal.ketQuaKhieuNaiBKHCN === 'ThanhCong' || refusal.ketQuaKhieuNaiCSHTT === 'ThanhCong') && (
                                                                     <div className="mt-3">
                                                                         <label className="block text-gray-600 text-left">Ngày nộp yêu cầu chấp nhận đơn hợp lệ</label>
                                                                         <DatePicker
-                                                                            value={refusal.ngayNopYeuCCNDHLSauKN ? dayjs(refusal.ngayNopYeuCCNDHLSauKN) : null}
+                                                                            value={refusal.ngayNopYeuCauSauKN ? dayjs(refusal.ngayNopYeuCauSauKN) : null}
                                                                             onChange={(date) =>
-                                                                                updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
+                                                                                updateRefusal(index, 'ngayNopYeuCauSauKN', date?.format('YYYY-MM-DD'))
                                                                             }
                                                                             format="DD/MM/YYYY"
                                                                             placeholder='Chọn ngày nộp yêu cầu chấp nhận đơn hợp lệ'
                                                                             className="w-full mt-1 "
-                                                                             disabled={isViewOnly}
+                                                                            disabled={isViewOnly}
                                                                         />
                                                                     </div>
                                                                 )}

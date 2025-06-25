@@ -143,37 +143,69 @@ function CustomerList() {
                     <div className="flex gap-3">
                         <button
                             onClick={() => fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry, 1, pageSize)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             {t("timKiem")}
                         </button>
                         <button
                             onClick={() => navigate("/customeradd")}
-                            className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             {t("themMoi")}
                         </button>
                         <button
                             onClick={() => exportToExcel(customers, columns, "DanhSachKhachHang")}
-                            className="bg-[#217346] hover:bg-[#1b5e3b] text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             {t("xuatExcel")}
                         </button>
                         <button
                             onClick={() => setShowFieldModal(true)}
-                            className="bg-purple-500 hover:bg-purple-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             {t("chonCotHienThi")}
                         </button>
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <Select options={formatOptions(countries, "maQuocGia", "tenQuocGia")} onChange={opt => setSelectedCountry(opt?.value)} placeholder={t("chonQuocGia")} isClearable className="w-full md:w-1/6" />
-                    <Select options={formatOptions(partners, "maDoiTac", "tenDoiTac")} onChange={opt => setSelectedPartner(opt?.value)} placeholder={t("chonDoiTac")} isClearable className="w-full md:w-1/6" />
-                    <Select options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")} onChange={opt => setSelectedIndustry(opt?.value)} placeholder={t("chonNganhNghe")} isClearable className="w-full md:w-1/6" />
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                            {t("chonQuocGia")}
+                        </label>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            onChange={opt => setSelectedCountry(opt?.value)}
+                            placeholder={t("chonQuocGia")}
+                            isClearable
+                            className="text-left"
+                        />
+                    </div>
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                            {t("chonDoiTac")}
+                        </label>
+                        <Select
+                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
+                            onChange={opt => setSelectedPartner(opt?.value)}
+                            placeholder={t("chonDoiTac")}
+                            isClearable
+                            className="text-left"
+                        />
+                    </div>
+                    <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                            {t("chonNganhNghe")}
+                        </label>
+                        <Select
+                            options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
+                            onChange={opt => setSelectedIndustry(opt?.value)}
+                            placeholder={t("chonNganhNghe")}
+                            isClearable
+                            className="text-left"
+                        />
+                    </div>
                 </div>
             </div>
-
             <div className="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">

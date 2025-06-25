@@ -151,9 +151,16 @@ function CustomerAdd() {
                         <input
                             type="text"
                             value={maKhachHang}
-                            readOnly
-                            className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-100"
+                            onChange={(e) => {
+                                setMaKhachHang(e.target.value)
+                                validateField("maKhachHang", e.target.value);
+                            }}
+                            placeholder="Nhập tên viết tắt để tự hiện mã khách hàng"
+                            className="w-full p-2 mt-1 border rounded-lg text-input "
                         />
+                        {errors.maKhachHang && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maKhachHang}</p>
+                        )}
                     </div>
 
                     <div>
@@ -178,7 +185,7 @@ function CustomerAdd() {
                                 setTenKhachHang(e.target.value)
                                 validateField("tenKhachHang", e.target.value);
                             }}
-                             placeholder="Nhập tên khách hàng"
+                            placeholder="Nhập tên khách hàng"
                             className="w-full p-2 mt-1 border rounded-lg text-input"
                         />
                         {errors.tenKhachHang && (
@@ -221,18 +228,18 @@ function CustomerAdd() {
                             isClearable
                         />
                     </div>
-                     <div>
+                    <div>
                         <label className="block text-gray-700 text-left">{t("nguoilienhe")}</label>
-                        <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập người liên hệ"/>
+                        <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập người liên hệ" />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">{t("diaChi")}</label>
-                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập địa chỉ"/>
+                        <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập địa chỉ" />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">{t("sdt")}</label>
-                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập số điện thoại"/>
+                        <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập số điện thoại" />
                     </div>
 
                     <div>
@@ -249,17 +256,17 @@ function CustomerAdd() {
 
                     <div>
                         <label className="block text-gray-700 text-left">{t("moTa")}</label>
-                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mô tả"/>
+                        <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mô tả" />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">{t("ghiChu")}</label>
-                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập ghi chú"/>
+                        <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập ghi chú" />
                     </div>
 
                     <div>
                         <label className="block text-gray-700 text-left">{t("maKhachHangCu")}</label>
-                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mã khách hàng cũ"/>
+                        <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mã khách hàng cũ" />
                     </div>
                 </div>
 

@@ -24,7 +24,7 @@ function PartnerEdit() {
       [field]: error,
     }));
   };
-  // Fetch danh sách quốc gia
+
   const fetchCountries = async () => {
     try {
       const response = await callAPI({
@@ -38,7 +38,6 @@ function PartnerEdit() {
     }
   };
 
-  // Fetch thông tin đối tác cần chỉnh sửa
   const fetchPartnerDetails = async () => {
     try {
       const response = await callAPI({
@@ -123,7 +122,7 @@ function PartnerEdit() {
                 validateField("maQuocGia", value);
               }}
               placeholder="Chọn quốc gia"
-              className="w-full  mt-1  rounded-lg"
+              className="w-full  mt-1  rounded-lg text-left"
               isClearable
             />
             {errors.maQuocGia && (

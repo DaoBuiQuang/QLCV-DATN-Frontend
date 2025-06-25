@@ -27,7 +27,7 @@ const ContentReview = ({
             if (item.hanKhieuNaiBKHCN && !item.showKhieuNaiBKHCNForm) {
                 updateRefusal(index, 'showKhieuNaiBKHCNForm', true);
             }
-            if (item.ketQuaKhieuNaiBKHCN === true || item.ketQuaKhieuNaiCSHTT === true) {
+            if (item.ketQuaKhieuNaiBKHCN === "ThanhCong" || item.ketQuaKhieuNaiCSHTT === "ThanhCong") {
                 handleKNThanhCong();
             }
             if (item.ngayNhanThongBaoTuChoiTD && !item.ngayNhanQuyetDinhTuChoi && !item.trangThaiBiNhanQuyetDinhTuChoi && !item.ngayTraLoiThongBaoTuChoi) {
@@ -36,10 +36,10 @@ const ContentReview = ({
             if (item.ngayNhanThongBaoTuChoiTD && !item.trangThaiBiNhanQuyetDinhTuChoi && item.ngayTraLoiThongBaoTuChoi) {
                 setBuocXuLy(`Chờ cục phản hồi trả lời thông báo từ chối thẩm định nội dung lần: ${item.lanThamDinh}`);
             }
-            if ((item.ketQuaKhieuNaiCSHTT === false || !item.ketQuaKhieuNaiCSHTT) && item.ngayKhieuNaiCSHTT) {
+            if ((item.ketQuaKhieuNaiCSHTT === "ThatBai" || !item.ketQuaKhieuNaiCSHTT) && item.ngayKhieuNaiCSHTT) {
                 setBuocXuLy("Chờ kết quả khiếu nại cục sở hữu trí tuệ");
             }
-            if ((item.ketQuaKhieuNaiBKHCN === false || !item.ketQuaKhieuNaiBKHCN) && item.ngayKhieuNaiBKHCN) {
+            if ((item.ketQuaKhieuNaiBKHCN === "ThatBai" || !item.ketQuaKhieuNaiBKHCN) && item.ngayKhieuNaiBKHCN) {
                 setBuocXuLy("Chờ kết quả khiếu nại bộ khoa học và công nghệ");
             }
         });
@@ -78,29 +78,36 @@ const ContentReview = ({
     const updateRefusal = (index, field, value) => {
         const updated = [...lichSuThamDinhND];
         updated[index][field] = value;
-
+        if (field === "ngayNhanThongBaoTuChoiTD") {
+            if (value) {
+                const newHan = dayjs(value).add(3, 'month').format('YYYY-MM-DD');
+                updated[index].hanTraLoi = newHan;
+            } else {
+                updated[index].hanTraLoi = null;
+            }
+        }
         if (field === "giaHan") {
             const refusal = updated[index];
             let hanTraLoi = dayjs(refusal.hanTraLoi);
 
             if (value) {
-                hanTraLoi = hanTraLoi.add(2, 'month');
+                hanTraLoi = hanTraLoi.add(3, 'month');
             } else {
-                hanTraLoi = hanTraLoi.subtract(2, 'month');
+                hanTraLoi = hanTraLoi.subtract(3, 'month');
             }
             updated[index].hanTraLoi = hanTraLoi.format('YYYY-MM-DD');
         }
         if (field === 'showKhieuNaiCSHCTForm' && value === true) {
             const ngayTuChoi = updated[index].ngayNhanQuyetDinhTuChoi;
             if (ngayTuChoi) {
-                const newHan = dayjs(ngayTuChoi).add(3, 'month').format('YYYY-MM-DD');
+                const newHan = dayjs(ngayTuChoi).add(90, 'day').format('YYYY-MM-DD');
                 updated[index].hanKhieuNaiCSHTT = newHan;
             }
         }
         if (field === 'showKhieuNaiBKHCNForm' && value === true) {
-            const ngayTuChoi = updated[index].ngayNhanKQKNThatBaiCSHTT;
+            const ngayTuChoi = updated[index].ngayKQ_KN_CSHTT;
             if (ngayTuChoi) {
-                const newHan = dayjs(ngayTuChoi).add(3, 'month').format('YYYY-MM-DD');
+                const newHan = dayjs(ngayTuChoi).add(30, 'day').format('YYYY-MM-DD');
                 updated[index].hanKhieuNaiBKHCN = newHan;
             }
         }
@@ -156,7 +163,7 @@ const ContentReview = ({
                         {(daKNThanhCong || ngayKQThamDinhND_DK_SauKN) && (
                             <div>
                                 <label className="block text-gray-700 text-left">
-                                    Ngày có kết quả trả lời thẩm định nội dung sau khiếu nại dự kiến
+                                    Ngày KQ thẩm định nội dung sau KN dự kiến
                                 </label>
                                 <DatePicker
                                     value={ngayKQThamDinhND_DK_SauKN ? dayjs(ngayKQThamDinhND_DK_SauKN) : null}
@@ -167,6 +174,7 @@ const ContentReview = ({
                                             setNgayKQThamDinhND_DK_SauKN(null);
                                         }
                                     }}
+                                    placeholder='Chọn ngày KQ thẩm định nội dung sau KN'
                                     format="DD/MM/YYYY"
                                     className="mt-1 w-full"
                                 />
@@ -228,13 +236,13 @@ const ContentReview = ({
             {lichSuThamDinhND.length > 0 && showLichSu && (
                 <div className="mt-4 border">
                     {lichSuThamDinhND.map((refusal, index) => {
-                        const baseHanTraLoi = dayjs(refusal.ngayNhanThongBaoTuChoiTD).add(3, 'month');
-                        const ngayTraLoi = refusal.ngayTraLoi;
-                        const hanTraLoi = baseHanTraLoi.format('YYYY-MM-DD');
+                        const hanTraLoi = refusal.hanTraLoi;
 
-                        const hanTraLoiGiaHan = refusal.giaHan && refusal.ngayYeuCauGiaHan
-                            ? dayjs(refusal.ngayYeuCauGiaHan).clone().add(2, 'month').format('YYYY-MM-DD')
-                            : dayjs(refusal.ngayYeuCauGiaHan) || null;
+                        // const baseHanTraLoi = dayjs(refusal.ngayNhanThongBaoTuChoiTD).add(3, 'month');
+                        // const ngayTraLoiThongBaoTuChoi = refusal.ngayTraLoiThongBaoTuChoi;
+                        // const hanTraLoi = baseHanTraLoi.format('YYYY-MM-DD');
+                        //  const basengayGiaHan= dayjs(refusal.ngayGiaHan).add(3, 'month');
+                        const hanTraLoiGiaHan = refusal.hanTraLoiGiaHan;
 
                         return (
                             <div key={index} className="p-1  rounded-md bg-gray-50 text-sm">
@@ -309,17 +317,20 @@ const ContentReview = ({
                                                     <div className="md:col-span-3">
                                                         <label className="block text-gray-600 text-left">Ngày yêu cầu gia hạn</label>
                                                         <DatePicker
-                                                            value={refusal.ngayYeuCauGiaHan ? dayjs(refusal.ngayYeuCauGiaHan) : null}
+                                                            value={refusal.ngayGiaHan ? dayjs(refusal.ngayGiaHan) : null}
                                                             onChange={(date) => {
                                                                 if (dayjs.isDayjs(date) && date.isValid()) {
-                                                                    updateRefusal(index, 'ngayYeuCauGiaHan', date.format("YYYY-MM-DD"));
+                                                                    updateRefusal(index, 'ngayGiaHan', date.format("YYYY-MM-DD"));
+                                                                    const newHanGiaHan = dayjs(hanTraLoi).add(3, 'month').format('YYYY-MM-DD'); // ← Cập nhật theo hạn trả lời
+                                                                    updateRefusal(index, 'hanTraLoiGiaHan', newHanGiaHan);
                                                                 } else {
-                                                                    updateRefusal(index, 'ngayYeuCauGiaHan', null);
+                                                                    updateRefusal(index, 'ngayGiaHan', null);
+                                                                    updateRefusal(index, 'hanTraLoiGiaHan', null);
                                                                 }
                                                             }}
+                                                            placeholder='Chọn ngày yêu cầu gia hạn'
                                                             format="DD/MM/YYYY"
                                                             className="w-full disabled"
-                                                            disabled={isViewOnly}
 
                                                         />
                                                     </div>
@@ -339,12 +350,12 @@ const ContentReview = ({
                                     <div className="md:col-span-3">
                                         <label className="block text-gray-600 text-left">Ngày trả lời</label>
                                         <DatePicker
-                                            value={refusal.ngayTraLoi ? dayjs(refusal.ngayTraLoi) : null}
+                                            value={refusal.ngayTraLoiThongBaoTuChoi ? dayjs(refusal.ngayTraLoiThongBaoTuChoi) : null}
                                             onChange={(date) => {
                                                 if (dayjs.isDayjs(date) && date.isValid()) {
-                                                    updateRefusal(index, 'ngayTraLoi', date.format("YYYY-MM-DD"));
+                                                    updateRefusal(index, 'ngayTraLoiThongBaoTuChoi', date.format("YYYY-MM-DD"));
                                                 } else {
-                                                    updateRefusal(index, 'ngayTraLoi', null);
+                                                    updateRefusal(index, 'ngayTraLoiThongBaoTuChoi', null);
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
@@ -456,7 +467,7 @@ const ContentReview = ({
                                                             format="DD/MM/YYYY"
                                                             className="w-full"
                                                             placeholder='Chọn ngày khiếu nại'
-                                                             disabled={isViewOnly}
+                                                            disabled={isViewOnly}
                                                         />
                                                     </div>
                                                     <button
@@ -561,9 +572,9 @@ const ContentReview = ({
                                                                             Ngày nộp yêu cầu chấp nhận đơn hợp lệ
                                                                         </label>
                                                                         <DatePicker
-                                                                            value={refusal.ngayNopYeuCCNDHLSauKN ? dayjs(refusal.ngayNopYeuCCNDHLSauKN) : null}
+                                                                            value={refusal.ngayNopYeuCauSauKN ? dayjs(refusal.ngayNopYeuCauSauKN) : null}
                                                                             onChange={(date) =>
-                                                                                updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
+                                                                                updateRefusal(index, 'ngayNopYeuCauSauKN', date?.format('YYYY-MM-DD'))
                                                                             }
                                                                             format="DD/MM/YYYY"
                                                                             className="w-full mt-1"
@@ -686,9 +697,9 @@ const ContentReview = ({
                                                                         <div className="mt-3">
                                                                             <label className="block text-gray-600 text-left">Ngày nộp yêu cầu chấp nhận đơn hợp lệ</label>
                                                                             <DatePicker
-                                                                                value={refusal.ngayNopYeuCCNDHLSauKN ? dayjs(refusal.ngayNopYeuCCNDHLSauKN) : null}
+                                                                                value={refusal.ngayNopYeuCauSauKN ? dayjs(refusal.ngayNopYeuCauSauKN) : null}
                                                                                 onChange={(date) =>
-                                                                                    updateRefusal(index, 'ngayNopYeuCCNDHLSauKN', date?.format('YYYY-MM-DD'))
+                                                                                    updateRefusal(index, 'ngayNopYeuCauSauKN', date?.format('YYYY-MM-DD'))
                                                                                 }
                                                                                 format="DD/MM/YYYY"
                                                                                 className="w-full mt-1 "

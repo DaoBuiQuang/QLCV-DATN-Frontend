@@ -19,17 +19,18 @@ const DegreeInformation = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thông tin bằng</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex-1">
-                    <label className="block text-gray-700 text-left text-left">Số bằng</label>
+                    <label className="block text-gray-700 text-left">Số bằng</label>
                     <input
                         type="text"
                         value={soBang}
                         onChange={(e) => setSoBang(e.target.value)}
                         className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
+                        placeholder='Nhập số bằng'
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày cấp bằng</label>
+                    <label className="block text-gray-700 text-left">Ngày cấp bằng</label>
                     <DatePicker
                         value={ngayCapBang ? dayjs(ngayCapBang) : null}
                         onChange={(date) => {
@@ -46,7 +47,7 @@ const DegreeInformation = ({
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 text-left text-left">Ngày hết hạn bằng</label>
+                    <label className="block text-gray-700 text-left">Ngày hết hạn bằng</label>
                     <DatePicker
                         value={ngayHetHanBang ? dayjs(ngayHetHanBang) : null}
                         onChange={(date) => {

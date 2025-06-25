@@ -28,7 +28,9 @@ function ApplicationList() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [selectedHanXuLy, setSelectedHanXuLy] = useState(null);
-  const [sortByHanXuLy, setSortByHanXuLy] = useState(true);
+  const [sortByHanXuLy, setSortByHanXuLy] = useState(false);
+  const [selectedHanTraLoi, setSelectedHanTraLoi] = useState(null);
+  const [sortByHanTraLoi, setSortByHanTraLoi] = useState(true);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -38,36 +40,40 @@ function ApplicationList() {
     fromDate,
     toDate,
     hanXuLyFilter: selectedHanXuLy?.value || "",
+    hanTraLoiFilter: selectedHanTraLoi?.value || "",
     sortByHanXuLy: sortByHanXuLy,
+    sortByHanTraLoi: sortByHanTraLoi,
   };
   const trangThaiDonOptions = [
     { value: "Nộp đơn", label: "Nộp đơn" },
-    { value: "Hoàn thành hồ sơ tài liệu", label: "Hoàn thành hồ sơ tài liệu" },
+    { value: "Hoàn thành tài liệu", label: "Hoàn thành tài liệu" },
     { value: "Thẩm định hình thức", label: "Thẩm định hình thức" },
     { value: "Công bố đơn", label: "Công bố đơn" },
     { value: "Thẩm định nội dung", label: "Thẩm định nội dung" },
     { value: "Trả lời thẩm định nội dung", label: "Trả lời thẩm định nội dung" },
-    { value: "Hoàn thành nhận bằng", label: "Hoàn thành nhận bằng" },
+    { value: "Hoàn tất nhận bằng", label: "Hoàn tất nhận bằng" },
     { value: "Chờ nhận bằng", label: "Chờ nhận bằng" },
   ];
 
   const allFieldOptions = [
-    { label: "Mã đơn DK", labelEn: "Matter code", key: "maDonDangKy" },
+    // { label: "Mã đơn DK", labelEn: "Matter code", key: "maDonDangKy" },
     { label: "Số Đơn", labelEn: "App No", key: "soDon" },
     { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
-    { label: "Mã nhãn hiệu", labelEn: "Trademark", key: "maNhanHieu" },
+    { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
     { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
     { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiDon" },
+    { label: "Hạn trả lời Cục", labelEn: "Official Deadline", key: "hanTraLoi" },
     { label: "Hạn Cục xử lý", labelEn: "Soft Deadline", key: "hanXuLy" },
     { label: "Trạng thái hoàn thành TL", labelEn: "Outstanding Documents", key: "trangThaiHoanThienHoSoTaiLieu" },
     { label: "Ngày nộp đơn", labelEn: "Filing Date", key: "ngayNopDon" },
     { label: "Ngày hoàn thành TL", labelEn: "Doc Completion", key: "ngayHoanThanhHoSoTaiLieu" },
     { label: "Ngày có KQ thẩm định hình thức", labelEn: "Formality Exam Result", key: "ngayKQThamDinhHinhThuc" },
     { label: "Ngày công bố đơn", labelEn: "Publication", key: "ngayCongBoDon" },
-    { label: "Ngày có kết quả thẩm định nội dung", labelEn: "Substantive Exam Result", key: "ngayKQThamDinhND" },
+    { label: "Ngày kết quả thẩm định nội dung", labelEn: "Substantive Exam Result", key: "ngayKQThamDinhND" },
     { label: "Ngày TL kết quả thẩm định nội dung", labelEn: "Response To SE", key: "ngayTraLoiKQThamDinhND" },
     { label: "Ngày thông báo cấp bằng", labelEn: "Notice of Protection", key: "ngayThongBaoCapBang" },
-    { label: "Ngày/Hạn nộp phí cấp bằng", labelEn: "Deadline For Granting Payment", key: "ngayNopPhiCapBang" },
+    { label: "Hạn nộp phí cấp bằng", labelEn: "Deadline For Granting Payment", key: "hanNopPhiCapBang" },
+    { label: "Ngày nộp phí cấp bằng", labelEn: "For Granting Payment", key: "ngayNopPhiCapBang" },
     { label: "Ngày nhận bằng", labelEn: "Certificate Receipt", key: "ngayNhanBang" },
     { label: "Số bằng", key: "soBang" },
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
@@ -81,6 +87,7 @@ function ApplicationList() {
     "ngayCongBoDon",
     "ngayKQThamDinhND",
     "ngayTraLoiKQThamDinhND",
+    "ngayNopPhiCapBang",
     "soBang",
     "ngayCapBang",
     "ngayHetHanBang",
@@ -155,7 +162,7 @@ function ApplicationList() {
 
   const fieldOptions = [
     { value: "ngayNopDon", label: "Ngày nộp đơn" },
-    { value: "ngayHoanThanhHoSoTaiLieu", label: "Ngày hoàn thành hồ sơ tài liệu" },
+    { value: "ngayHoanThanhHoSoTaiLieu", label: "Ngày Hoàn thành tài liệu" },
     { value: "ngayKQThamDinhHinhThuc", label: "Ngày chấp nhận đơn hợp lệ" },
     { value: "ngayCongBoDon", label: "Ngày công bố đơn" },
     { value: "ngayKQThamDinhND", label: "Ngày kết quả thẩm định nội dung đơn" },
@@ -165,7 +172,7 @@ function ApplicationList() {
     { value: "ngayHetHanBang", label: "Ngày hết hạn bằng" },
     // Thêm trường khác nếu cần
   ];
-  const hanXuLyOptions = [
+  const hanOptions = [
     { value: "<7", label: "Còn hạn dưới 7 ngày" },
     { value: "<3", label: "Còn hạn dưới 3 ngày" },
     { value: "overdue", label: "Đã quá hạn" }
@@ -214,29 +221,24 @@ function ApplicationList() {
           <div className="flex gap-3">
             <button
               onClick={() => fetchApplications(searchTerm, 1, pageSize)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow-md transition"
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Tìm kiếm
             </button>
             <button
-              onClick={() => exportToExcel(applications, allFieldOptions, "DanhSachDonDK")}
-              className="bg-[#217346] hover:bg-[#1b5e3b] text-white px-5 py-3 rounded-lg shadow-md transition"
+              onClick={() => exportToExcel(applications, allFieldOptions, 'DanhSachDonDK')}
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Xuất Excel
             </button>
             <button
               onClick={() => setShowFieldModal(true)}
-              className="bg-purple-500 hover:bg-purple-600 text-white px-5 py-3 rounded-lg shadow-md transition"
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Chọn cột hiển thị
             </button>
-            {/* <button
-              onClick={() => navigate("/applicationadd")}
-              className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg shadow-md transition"
-            >
-              Thêm mới
-            </button> */}
           </div>
+
 
         </div>
         {/* <button
@@ -246,42 +248,107 @@ function ApplicationList() {
           {showFilters ? "Ẩn bộ lọc" : "🔽 Bộ lọc nâng cao"}
         </button> */}
         <div className="">
-
           <div className="flex flex-wrap gap-3">
-            <Select
-              options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
-              value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
-              onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
-              placeholder="Chọn nhãn hiệu"
-              className="w-full md:w-1/4 text-left"
-              isClearable
-            />
-            <Select
-              options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
-              value={formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt =>
-                selectedProductAndService?.includes(opt.value)
-              )}
-              onChange={selectedOptions =>
-                setSelectedProductAndService(selectedOptions ? selectedOptions.map(opt => opt.value) : [])
-              }
-              placeholder="Chọn sản phẩm/dịch vụ"
-              className="w-full md:w-1/4 text-left"
-              isClearable
-              isMulti
-            />
-            <Select
-              options={trangThaiDonOptions}
-              value={trangThaiDonOptions.find(opt => opt.value === selectedTrangThaiDon)}
-              onChange={selectedOption =>
-                setSelectedTrangThaiDon(selectedOption ? selectedOption.value : null)
-              }
-              placeholder="Chọn trạng thái đơn"
-              className="w-full md:w-1/4 text-left"
-              isClearable
-            />
+            {/* Nhãn hiệu */}
+            <div className="w-full md:w-1/5">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Nhãn hiệu</label>
+              <Select
+                options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
+                value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
+                onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
+                placeholder="Chọn nhãn hiệu"
+                className="text-left"
+                isClearable
+              />
+            </div>
+
+            {/* Sản phẩm dịch vụ */}
+            <div className="w-full md:w-1/5">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Sản phẩm dịch vụ</label>
+              <Select
+                options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
+                value={formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt =>
+                  selectedProductAndService?.includes(opt.value)
+                )}
+                onChange={selectedOptions =>
+                  setSelectedProductAndService(selectedOptions ? selectedOptions.map(opt => opt.value) : [])
+                }
+                placeholder="Chọn SPDV"
+                className="text-left"
+                isClearable
+                isMulti
+              />
+            </div>
+
+            {/* Trạng thái đơn */}
+            <div className="w-full md:w-1/5">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Trạng thái đơn</label>
+              <Select
+                options={trangThaiDonOptions}
+                value={trangThaiDonOptions.find(opt => opt.value === selectedTrangThaiDon)}
+                onChange={selectedOption =>
+                  setSelectedTrangThaiDon(selectedOption ? selectedOption.value : null)
+                }
+                placeholder="Chọn trạng thái đơn"
+                className="text-left"
+                isClearable
+              />
+            </div>
+
+            {/* Hạn xử lý và hạn trả lời */}
+            {/* <div className="flex flex-wrap gap-3 w-full"> */}
+            {/* --- Hạn xử lý --- */}
+            <div className="w-full md:w-1/6">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Lọc theo hạn xử lý</label>
+              <Select
+                options={hanOptions}
+                value={selectedHanXuLy}
+                onChange={(option) => setSelectedHanXuLy(option)}
+                placeholder="Lọc theo hạn xử lý"
+                isClearable
+                className="text-left"
+              />
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={sortByHanXuLy}
+                  onChange={(e) => {
+                    setSortByHanXuLy(e.target.checked);
+                    if (e.target.checked) setSortByHanTraLoi(false);
+                  }}
+                />
+                <label>Sắp xếp theo hạn xử lý</label>
+              </div>
+            </div>
+
+            {/* --- Hạn trả lời --- */}
+            <div className="w-full md:w-1/6">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Lọc theo hạn trả lời</label>
+              <Select
+                options={hanOptions}
+                value={selectedHanTraLoi}
+                onChange={(option) => setSelectedHanTraLoi(option)}
+                placeholder="Lọc theo hạn trả lời"
+                isClearable
+                className="text-left"
+              />
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={sortByHanTraLoi}
+                  onChange={(e) => {
+                    setSortByHanTraLoi(e.target.checked);
+                    if (e.target.checked) setSortByHanXuLy(false);
+                  }}
+                />
+                <label>Sắp xếp theo hạn trả lời</label>
+              </div>
+            </div>
+            {/* </div> */}
+
 
             {/* Dòng 2: Lọc theo thời gian */}
-            <div className="w-full mt-4">
+            <div className="w-full ">
               <div className="flex flex-wrap gap-3">
                 <div className="w-full md:w-1/4">
                   <Select
@@ -289,6 +356,7 @@ function ApplicationList() {
                     value={selectedField}
                     onChange={(option) => setSelectedField(option)}
                     placeholder="Chọn trường ngày"
+                    className="text-left"
                     isClearable
                   />
                 </div>
@@ -312,27 +380,9 @@ function ApplicationList() {
                 />
               </div>
             </div>
-            <div className="w-full mt-4">
-              <div className="flex flex-wrap gap-3 w-full">
-                <Select
-                  options={hanXuLyOptions}
-                  value={selectedHanXuLy}
-                  onChange={(option) => setSelectedHanXuLy(option)}
-                  placeholder="Lọc theo hạn xử lý"
-                  isClearable
-                />
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={sortByHanXuLy}
-                    onChange={(e) => setSortByHanXuLy(e.target.checked)}
-                  />
-                  <label>Sắp xếp theo hạn xử lý</label>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
+
       </div>
       <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
         <Spin spinning={loading} tip="Loading..." size="large">
@@ -359,16 +409,16 @@ function ApplicationList() {
             <tbody>
               {applications.map((app, index) => (
                 <tr key={app.maDonDangKy} className="group hover:bg-gray-100 text-center border-b relative">
-                  <td className="p-2 text-table border-r">{index + 1}</td>
+                  <td className="p-2 text-table ">{index + 1}</td>
                   {columns.map((col, colIndex) => {
-                    const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? "border-r" : ""}`;
+                    const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? "" : ""}`;
                     let content = app[col.key];
 
                     const isDateField = [
                       "ngayNopDon", "ngayHoanThanhHoSoTaiLieu", "ngayKQThamDinhHinhThuc",
                       "ngayCongBoDon", "ngayKQThamDinhND", "ngayTraLoiKQThamDinhND",
                       "ngayThongBaoCapBang", "ngayNopPhiCapBang", "ngayNhanBang",
-                      "ngayCapBang", "ngayHetHanBang", "ngayGuiBangChoKhachHang"
+                      "ngayCapBang", "ngayHetHanBang", "ngayGuiBangChoKhachHang", "hanNopPhiCapBang"
                     ];
 
                     if (isDateField.includes(col.key)) {
@@ -378,21 +428,45 @@ function ApplicationList() {
                         </td>
                       );
                     }
+                    if (col.key === "soDon") {
+                      const maDon = app.maDonDangKy;
+                      const hasDon = !!maDon;
+                      const hasSoDon = !!content;
 
-                    if (col.key === "maDonDangKy") {
                       return (
                         <td
                           key={col.key}
-                          className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
+                          className={`p-2 text-table ${hasDon ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"
+                            }`}
                           onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/applicationdetail/${app.maDonDangKy}`);
+                            if (hasDon) {
+                              e.stopPropagation();
+                              navigate(`/applicationdetail/${maDon}`);
+                            }
                           }}
                         >
-                          {app.maDonDangKy}
+                          {hasDon
+                            ? hasSoDon
+                              ? content
+                              : "Chưa có số đơn"
+                            : "Không có đơn đăng ký"}
                         </td>
                       );
                     }
+                    // if (col.key === "maDonDangKy") {
+                    //   return (
+                    //     <td
+                    //       key={col.key}
+                    //       className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
+                    //       onClick={(e) => {
+                    //         e.stopPropagation();
+                    //         navigate(`/applicationdetail/${app.maDonDangKy}`);
+                    //       }}
+                    //     >
+                    //       {app.maDonDangKy}
+                    //     </td>
+                    //   );
+                    // }
 
                     if (col.key === "dsSPDV") {
                       return (
@@ -403,52 +477,91 @@ function ApplicationList() {
                     }
 
                     if (col.key === "hanXuLy") {
-                      const days = parseInt(app.hanXuLy, 10);
                       let text = "";
                       let textColor = "";
 
-                      if (!isNaN(days)) {
-                        if (days < 0) {
-                          text = `Quá hạn ${Math.abs(days)} ngày`;
-                          textColor = "text-red-600";
-                        } else if (days <= 7) {
-                          text = `Còn ${days} ngày`;
-                          textColor = "text-orange-500"; // tránh dùng vàng
-                        } else {
-                          text = `Còn ${days} ngày`;
-                          textColor = "text-emerald-600";
+                      if (app.hanXuLy) {
+                        const today = new Date();
+                        const hanXuLyDate = new Date(app.hanXuLy);
+
+                        if (!isNaN(hanXuLyDate.getTime())) {
+                          debugger
+                          // Tính số ngày còn lại (so sánh ở mức ngày, tránh lệch giờ)
+                          const diffTime = hanXuLyDate.setHours(0, 0, 0, 0) - today.setHours(0, 0, 0, 0);
+                          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                          if (diffDays < 0) {
+                            text = `Quá hạn ${Math.abs(diffDays)} ngày`;
+                            textColor = "text-red-600";
+                          } else if (diffDays <= 7) {
+                            text = `Còn ${diffDays} ngày`;
+                            textColor = "text-orange-500";
+                          } else {
+                            text = `Còn ${diffDays} ngày`;
+                            textColor = "text-emerald-600";
+                          }
                         }
                       }
 
                       return (
                         <td
                           key={col.key}
-                          className={`p-2 font-semibold ${textColor} ${colIndex < columns.length - 1 ? "border-r" : ""}`}
+                          className={`p-2 font-semibold ${textColor} ${colIndex < columns.length - 1 ? "" : ""}`}
                         >
                           {text}
                         </td>
                       );
                     }
+                    if (col.key === "hanTraLoi") {
+                      let text = "";
+                      let textColor = "";
 
+                      if (app.hanTraLoi) {
+                        const today = new Date();
+                        const hanTraLoiDate = new Date(app.hanTraLoi);
+
+                        if (!isNaN(hanTraLoiDate.getTime())) {
+                          // Tính số ngày còn lại (so sánh ở mức ngày, tránh lệch giờ)
+                          const diffTime = hanTraLoiDate.setHours(0, 0, 0, 0) - today.setHours(0, 0, 0, 0);
+                          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                          if (diffDays < 0) {
+                            text = `Quá hạn ${Math.abs(diffDays)} ngày`;
+                            textColor = "text-red-600";
+                          } else if (diffDays <= 7) {
+                            text = `Còn ${diffDays} ngày`;
+                            textColor = "text-orange-500";
+                          } else {
+                            text = `Còn ${diffDays} ngày`;
+                            textColor = "text-emerald-600";
+                          }
+                        }
+                      }
+
+                      return (
+                        <td
+                          key={col.key}
+                          className={`p-2 font-semibold ${textColor} ${colIndex < columns.length - 1 ? "" : ""}`}
+                        >
+                          {text}
+                        </td>
+                      );
+                    }
                     if (col.key === "trangThaiHoanThienHoSoTaiLieu") {
                       return (
-                        <td className={`p-2 min-w-[120px] ${colIndex < columns.length - 1 ? "border-r" : ""}`} key={col.key}>
-                          <div className="flex flex-col items-center">
+                        <td className={`p-2 min-w-[120px] ${colIndex < columns.length - 1 ? "" : ""}`} key={col.key}>
+                          <div className="flex flex-col text-table">
                             <span>
-                              {app.trangThaiHoanThienHoSoTaiLieu === "hoan_thanh"
-                                ? "Hoàn thành"
-                                : app.trangThaiHoanThienHoSoTaiLieu === "chua_hoan_thanh"
-                                  ? "Chưa hoàn thành"
-                                  : app.trangThaiHoanThienHoSoTaiLieu}
+                              {app.trangThaiHoanThienHoSoTaiLieu}
                             </span>
 
                             {app.ngayHoanThanhHoSoTaiLieu_DuKien &&
-                              app.trangThaiHoanThienHoSoTaiLieu !== "hoan_thanh" && (() => {
+                              app.trangThaiHoanThienHoSoTaiLieu !== "Hoàn thành" && (() => {
                                 const today = new Date();
                                 const dueDate = new Date(app.ngayHoanThanhHoSoTaiLieu_DuKien);
                                 const diffTime = dueDate - today;
                                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                                const textColor = diffDays < 0 ? "text-red-500" : "text-yellow-500";
+                                const textColor = diffDays < 0 ? "text-red-500" : "text-orange-500";
 
                                 return (
                                   <div>
@@ -459,21 +572,21 @@ function ApplicationList() {
                                           ? "Hạn là hôm nay"
                                           : `Quá hạn ${Math.abs(diffDays)} ngày`}
                                     </span>
-                                    {app.taiLieuChuaNop?.length > 0 && (
-                                      <ul className="mt-1 list-disc list-inside text-xs text-gray-600">
-                                        {app.taiLieuChuaNop.map((tl, index) => (
-                                          <li key={index}>{tl.tenTaiLieu}</li>
-                                        ))}
-                                      </ul>
-                                    )}
+
                                   </div>
                                 );
                               })()}
+                            {app.taiLieuChuaNop?.length > 0 && (
+                              <ul className="mt-1 list-disc list-inside text-xs text-gray-600">
+                                {app.taiLieuChuaNop.map((tl, index) => (
+                                  <li key={index}>{tl.tenTaiLieu}</li>
+                                ))}
+                              </ul>
+                            )}
                           </div>
                         </td>
                       );
                     }
-
                     return (
                       <td key={col.key} className={commonClass}>
                         {content}

@@ -2,21 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
-import Select from "react-select";
-import DocumentSection from "../../components/UpdateDocument/DocumentSection";
-import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication";
-import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination";
-import ReplyContentRating from "../../components/TrademarkRegistrationProcess/ReplyContentRating";
-import DiphimaProcess from "../../components/TrademarkRegistrationProcess/DiphimaProcess";
-import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
-import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
-import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 import DonProgress from "../../components/commom/DonProgess.js";
 import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
-import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
-import BrandBasicForm from "../../components/BrandBasicForm";
 import { Spin } from "antd";
 function ApplicationDetail() {
     const navigate = useNavigate();
@@ -73,36 +62,6 @@ function ApplicationDetail() {
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
 
-    const [errors, setErrors] = useState({});
-    const isFormValid = (maHoSoVuViec || "").trim() !== "" && (maNhanHieu || "").trim() !== "" && Array.isArray(maSPDVList) &&
-        maSPDVList.length > 0;
-    const validateField = (field, value) => {
-        let error = "";
-        if (field === "maHoSoVuViec" || field === "maNhanHieu") {
-            if (!value || typeof value !== "string" || value.trim() === "") {
-                if (field === "maHoSoVuViec") error = "Mã hồ sơ vụ việc không được để trống";
-                if (field === "maNhanHieu") error = "Nhãn hiệu không được để trống";
-            }
-        }
-
-        if (field === "maSPDVList") {
-            if (!Array.isArray(value) || value.length === 0) {
-                error = "Sản phẩm dịch vụ không được để trống";
-            }
-        }
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            [field]: error,
-        }));
-    };
-    const [daChonNgayNopDon, setDaChonNgayNopDon] = useState(false);
-    const [daChonNgayHoanThanhHSTL, setDaChonNgayHoanThanhHSTL] = useState(false);
-    const [daChonNgayThamDinhHinhThuc, setDaChonNgayThamDinhHinhThuc] = useState(false);
-    const [daChonNgayCongBoDon, setDaChonNgayCongBoDon] = useState(false);
-    const [daChonNgayThamDinhNoiDung, setDaChonNgayThamDinhNoiDung] = useState(false);
-    const [daChonNgayTraLoiThamDinhNoiDung, setDaChonNgayTraLoiThamDinhNoiDung] = useState(false)
-    const [daChonHoanTatThuTucNhapBang, setDaChonHoanTatThuTucNhapBang] = useState(false)
-
     const fetchBrands = async () => {
         try {
             const response = await callAPI({
@@ -132,70 +91,6 @@ function ApplicationDetail() {
         fetchItems();
         detailApplication();
     }, [])
-    useEffect(() => {
-        if (ngayNopDon) {
-            const ngayHoanThanhHoSoTaiLieu = dayjs(ngayNopDon).add(1, 'month');
-            setNgayHoanThanhHSTL_DuKien(ngayHoanThanhHoSoTaiLieu.format('YYYY-MM-DD'));
-            setDaChonNgayNopDon(true);
-            setTrangThaiDon("Hoàn thành hồ sơ tài liệu")
-        } else {
-            setNgayHoanThanhHSTL_DuKien(null);
-        }
-        if (ngayHoanThanhHSTL) {
-            const ngayKQThamDinhHinhThuc = dayjs(ngayHoanThanhHSTL).add(1, 'month');
-            setNgayKQThamDinhHinhThuc_DuKien(ngayKQThamDinhHinhThuc.format('YYYY-MM-DD'));
-            setDaChonNgayHoanThanhHSTL(true)
-            setTrangThaiDon("Thẩm định hình thức")
-        } else {
-            setNgayKQThamDinhHinhThuc_DuKien(null);
-        }
-        if (ngayKQThamDinhHinhThuc) {
-            const ngayCongBo = dayjs(ngayKQThamDinhHinhThuc).add(2, 'month');
-            setNgayCongBo_DuKien(ngayCongBo.format('YYYY-MM-DD'));
-            setDaChonNgayThamDinhHinhThuc(true);
-            setTrangThaiDon("Công bố đơn")
-        } else {
-            setNgayCongBo_DuKien(null);
-        }
-
-        if (ngayCongBo) {
-            const ngayKQThamDinhND = dayjs(ngayCongBo).add(9, 'month');
-            setNgayKQThamDinhND_DuKien(ngayKQThamDinhND.format('YYYY-MM-DD'));
-            setDaChonNgayCongBoDon(true)
-            setTrangThaiDon("Thẩm định nội dung")
-        } else {
-            setNgayKQThamDinhND_DuKien(null);
-        }
-
-        if (ngayKQThamDinhND) {
-            const ngayTraLoiKQThamDinhND = dayjs(ngayKQThamDinhND).add(3, 'month');
-            setNgayTraLoiKQThamDinhND_DuKien(ngayTraLoiKQThamDinhND.format('YYYY-MM-DD'));
-            setDaChonNgayThamDinhNoiDung(true);
-            // setTrangThaiDon("Trả lời thẩm định nội dung")
-        } else {
-            setNgayTraLoiKQThamDinhND_DuKien(null);
-        }
-        if (ngayTraLoiKQThamDinhND) {
-            setTrangThaiDon("Hoàn thành nhận bằng")
-            setDaChonNgayTraLoiThamDinhNoiDung(true)
-        }
-        if (daChonNgayTraLoiThamDinhNoiDung || (trangThaiTraLoiKQThamDinhND === false && daChonNgayThamDinhNoiDung)) {
-            setTrangThaiDon("Hoàn thành nhận bằng")
-        }
-        if (ngayThongBaoCapBang) {
-            setTrangThaiDon("Gửi bằng cho khách hàng")
-            const ngayNopPhiCapBang = dayjs(ngayThongBaoCapBang).add(3, 'month');
-            setNgayNopPhiCapBang(ngayNopPhiCapBang.format('YYYY-MM-DD'));
-        } else {
-            setNgayNopPhiCapBang(null);
-        }
-        if (ngayNhanBang) {
-            setDaChonHoanTatThuTucNhapBang(true);
-        }
-        if (ngayGuiBangChoKH) {
-            setTrangThaiDon("Đơn đăng ký thành công")
-        }
-    }, [ngayNopDon, ngayHoanThanhHSTL, ngayKQThamDinhND, ngayThongBaoCapBang, ngayCongBo, ngayKQThamDinhHinhThuc, ngayTraLoiKQThamDinhND, ngayNhanBang, daChonNgayTraLoiThamDinhNoiDung, trangThaiTraLoiKQThamDinhND, daChonNgayThamDinhNoiDung, ngayGuiBangChoKH]);
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -266,331 +161,161 @@ function ApplicationDetail() {
             setLoading(false);
         }
     };
-    const handleEditBrand = async () => {
-        try {
-            await callAPI({
-                method: "put",
-                endpoint: "/brand/edit",
-                data: {
-                    maNhanHieu,
-                    tenNhanHieu,
-                    linkAnh, // Gửi ảnh lên server
-                },
-            });
-        } catch (error) {
-            showError("Thất bại!", "Đã xảy ra lỗi.", error);
-            console.error("Lỗi khi cập nhật nhãn hiệu!", error);
-            throw error;
-        }
-    };
 
-    const handleApplication = async () => {
-        try {
-            await callAPI({
-                method: "put",
-
-                endpoint: "/application/edit",
-                data: {
-                    maDonDangKy: maDonDangKy,
-                    maHoSoVuViec: maHoSoVuViec,
-                    soDon: soDon,
-                    maNhanHieu: maNhanHieu,
-                    maSPDVList: maSPDVList,
-                    trangThaiDon: trangThaiDon,
-                    buocXuLy: buocXuLy,
-
-                    ngayNopDon: ngayNopDon || null,
-                    ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien || null,
-                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL || null,
-                    trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
-                    ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien || null,
-                    ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc || null,
-                    lichSuThamDinhHT: lichSuThamDinhHT,
-                    ngayKQThamDinhHinhThuc_DK_SauKN: ngayKQThamDinhHinhThuc_DK_SauKN,
-                    ngayCongBoDonDuKien: ngayCongBo_DuKien || null,
-                    ngayCongBoDon: ngayCongBo || null,
-                    ngayKQThamDinhND_DuKien: ngayKQThamDinhND_DuKien || null,
-                    ngayKQThamDinhND: ngayKQThamDinhND || null,
-                    lichSuThamDinhND: lichSuThamDinhND,
-                    ngayKQThamDinhND_DK_SauKN: ngayKQThamDinhND_DK_SauKN,
-                    trangThaiTraLoiKQThamDinhND: trangThaiTraLoiKQThamDinhND,
-                    ngayTraLoiKQThamDinhND_DuKien: ngayTraLoiKQThamDinhND_DuKien || null,
-                    ngayTraLoiKQThamDinhND: ngayTraLoiKQThamDinhND || null,
-                    ngayThongBaoCapBang: ngayThongBaoCapBang || null,
-                    trangThaiDYTBCapBang: trangThaiCapBang || null,
-
-                    ngayNopYKien: ngayNopYKien || null,
-                    ngayNhanKQYKien: ngayNhanKQYKien || null,
-                    ketQuaYKien: ketQuaYKien || null,
-                    ngayPhanHoiKQYKien: ngayPhanHoiKQYKien || null,
-
-                    ngayNopPhiCapBang: ngayNopPhiCapBang || null,
-                    ngayNhanBang: ngayNhanBang || null,
-                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
-                    ngayCapBang: ngayCapBang || null,
-                    ngayHetHanBang: ngayHetHanBang || null,
-                    soBang: soBang,
-                    taiLieus: taiLieuList
-                },
-            });
-            await showSuccess("Thành công!", "Cập nhật đơn đăng ký nhãn hiệu thành công!");
-            navigate(-1);
-        } catch (error) {
-            showError("Thất bại!", "Đã xảy ra lỗi.", error);
-            console.error("Lỗi khi thêm hồ sơ vụ việc!", error);
-        }
-    };
-    const handleSubmit = async () => {
-        try {
-            await handleEditBrand();
-            await handleApplication();
-        } catch (err) {
-            console.log("Dừng lại vì lỗi trong thêm brand hoặc application");
-        }
-    };
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
     };
 
     return (
-        <div className="p-1 bg-gray-100 flex flex-col items-center justify-center space-y-4">
+        <div className="p-1 bg-gray-100 flex items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thông tin đơn đăng ký nhãn hiệu</h2>
+                {/* <h2 className="text-2xl font-semibold text-gray-700 mb-4"> Thông tin đơn đăng ký nhãn hiệu</h2> */}
                 <Spin spinning={loading} tip="Loading..." size="large">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div >
-                                <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
-                                <input
-                                    type="text"
-                                    value={maHoSoVuViec}
-                                    onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                                    className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                    disabled
-                                />
-                            </div>
-                            <div >
-                                <label className="block text-gray-700 text-left">Số đơn</label>
-                                <input
-                                    type="text"
-                                    value={soDon}
-                                    placeholder="Nhập số đơn"
-                                    onChange={(e) => setSoDon(e.target.value)}
-                                    className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                    disabled
-                                />
-                            </div>
+                    <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+                        <div className="text-xl font-semibold text-gray-700 mb-4">📌Thông tin chi tiết đơn đăng ký</div>
 
-                            <div>
-                                <label className="block text-gray-700 text-left text-left">Trạng thái đơn</label>
-                                <input
-                                    type="text"
-                                    value={trangThaiDon}
-                                    disabled
-                                    onChange={(e) => setTrangThaiDon(e.target.value)}
-                                    className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 text-left">Bước xử lý</label>
-                                <input
-                                    type="text"
-                                    value={buocXuLy}
-                                    disabled
-                                    onChange={(e) => setBuocXuLy(e.target.value)}
-                                    className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
-                                <DatePicker
-                                    value={ngayNopDon ? dayjs(ngayNopDon) : null}
-                                    onChange={(date) => {
-                                        if (dayjs.isDayjs(date) && date.isValid()) {
-                                            setNgayNopDon(date.format("YYYY-MM-DD"));
-                                        } else {
-                                            setNgayNopDon(null);
-                                        }
-                                    }}
-                                    format="DD/MM/YYYY"
-                                    placeholder="Chọn ngày nộp đơn"
-                                    className="mt-1 w-full"
-                                    disabled={isViewOnly}
-                                />
-                            </div>
-                            <div className="col-span-2">
-                                <BrandBasicForm
-                                    maNhanHieu={maNhanHieu}
-                                    setMaNhanHieu={setMaNhanHieu}
-                                    tenNhanHieu={tenNhanHieu}
-                                    setTenNhanHieu={setTenNhanHieu}
-                                    linkAnh={linkAnh}
-                                    setLinkAnh={setLinkAnh}
-                                    errors={errors}
-                                    validateField={validateField}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                            <div >
-                                <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
-                                <Select
-                                    options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
-                                    value={
-                                        maSPDVList && maSPDVList.length > 0
-                                            ? formatOptions(productAndService, "maSPDV", "tenSPDV").filter(opt => maSPDVList.includes(opt.value))
-                                            : []
-                                    }
-                                    onChange={(selectedOptions) => {
-                                        const selectedValues = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
-                                        setMaSPDVList(selectedValues);
-                                        validateField("maSPDVList", selectedValues);
-                                    }}
-                                    placeholder="Chọn mã nhãn hiệu"
-                                    className="w-full mt-1 rounded-lg h-10 text-left"
-                                    isClearable
-                                    isMulti
-                                    isDisabled
-                                />
-                                {errors.maSPDVList && (
-                                    <p className="text-red-500 text-xs mt-1 text-left">{errors.maSPDVList}</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-800 text-sm">
+                            {/* Thông tin chung */}
+                            <div className="text-left"><span className="font-medium">Mã hồ sơ vụ việc:</span> {maHoSoVuViec}</div>
+                            <div className="text-left"><span className="font-medium">Số đơn:</span> {soDon}</div>
+                            <div className="text-left"><span className="font-medium">Ngày nộp đơn:</span> {ngayNopDon}</div>
+                            <div className="text-left"><span className="font-medium">Mã nhãn hiệu:</span> {maNhanHieu}</div>
+                            <div className="text-left"><span className="font-medium">Tên nhãn hiệu:</span> {tenNhanHieu}</div>
+
+                            <div className="col-span-1 md:col-span-2 text-center my-4">
+                                {linkAnh ? (
+                                    <img
+                                        src={linkAnh}
+                                        alt="Ảnh nhãn hiệu"
+                                        className="h-32 mx-auto border rounded-md shadow-sm"
+                                    />
+                                ) : (
+                                    <div className="italic text-gray-400">Không có ảnh</div>
                                 )}
-
                             </div>
+
+                            <div className="text-left"><span className="font-medium">Trạng thái đơn:</span> {trangThaiDon}</div>
+                            <div className="text-left"><span className="font-medium">Bước xử lý:</span> {buocXuLy}</div>
+
+                            {/* Sản phẩm dịch vụ */}
+                            <div className="md:col-span-2 text-left">
+                                <span className="font-medium">Sản phẩm dịch vụ:</span>
+                                <ul className="list-disc list-inside ml-4 mt-1 text-gray-700">
+                                    {maSPDVList?.map((item, index) => (
+                                        <li key={index}>Mã SPDV: {item}</li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            {/* Các mốc thời gian khác */}
+                            <div className="text-left m-0 p-0">
+                                <span className="font-medium">Ngày hoàn thành hồ sơ (dự kiến):</span> {ngayHoanThanhHSTL_DuKien}
+                            </div>
+
+                            <div className="text-left"><span className="font-medium">Ngày hoàn thành hồ sơ:</span> {ngayHoanThanhHSTL}</div>
+                            <div className="text-left"><span className="font-medium">Trạng thái hoàn thiện hồ sơ:</span> {trangThaiHoanThanhHSTL}</div>
+
+                            <div className="text-left"><span className="font-medium">Ngày KQ TĐ hình thức (dự kiến):</span> {ngayKQThamDinhHinhThuc_DuKien}</div>
+                            <div className="text-left"><span className="font-medium">Ngày KQ TĐ hình thức:</span> {ngayKQThamDinhHinhThuc}</div>
+                            <div className="text-left"><span className="font-medium">Ngày KQ TĐ hình thức sau KN:</span> {ngayKQThamDinhHinhThuc_DK_SauKN}</div>
+
+                            <div className="text-left"><span className="font-medium">Ngày công bố (dự kiến):</span> {ngayCongBo_DuKien}</div>
+                            <div className="text-left"><span className="font-medium">Ngày công bố:</span> {ngayCongBo}</div>
+
+                            <div className="text-left"><span className="font-medium">Ngày KQ TĐ nội dung (dự kiến):</span> {ngayKQThamDinhND_DuKien}</div>
+                            <div className="text-left"><span className="font-medium">Ngày KQ TĐ nội dung:</span> {ngayKQThamDinhND}</div>
+                            <div className="text-left"><span className="font-medium">Ngày KQ TĐ nội dung sau KN:</span> {ngayKQThamDinhND_DK_SauKN}</div>
+                            {/* <div className="text-left"><span className="font-medium">Trạng thái trả lời TĐND:</span> {trangThaiTraLoiKQThamDinhND}</div> */}
+
+                            {ngayTraLoiKQThamDinhND_DuKien && (
+                                <div className="text-left">
+                                    <span className="font-medium">Ngày trả lời TĐND (dự kiến):</span> {ngayTraLoiKQThamDinhND_DuKien}
+                                </div>
+                            )}
+
+                            {ngayTraLoiKQThamDinhND && (
+                                <div className="text-left">
+                                    <span className="font-medium">Ngày trả lời TĐND:</span> {ngayTraLoiKQThamDinhND}
+                                </div>
+                            )}
+
+                            <div className="text-left"><span className="font-medium">Ngày thông báo cấp bằng:</span> {ngayThongBaoCapBang}</div>
+                            <div className="text-left"><span className="font-medium">Trạng thái cấp bằng:</span> {trangThaiCapBang}</div>
+
+                            {ngayNopYKien && (
+                                <div className="text-left">
+                                    <span className="font-medium">Ngày nộp ý kiến:</span> {ngayNopYKien}
+                                </div>
+                            )}
+
+                            {ngayNhanKQYKien && (
+                                <div className="text-left">
+                                    <span className="font-medium">Ngày nhận KQ ý kiến:</span> {ngayNhanKQYKien}
+                                </div>
+                            )}
+
+                            {ketQuaYKien && (
+                                <div className="text-left">
+                                    <span className="font-medium">Kết quả ý kiến:</span> {ketQuaYKien}
+                                </div>
+                            )}
+
+                            {/* {ngayPhanHoiKQYKien && (
+                                <div className="text-left">
+                                    <span className="font-medium">Ngày phản hồi KQ ý kiến:</span> {ngayPhanHoiKQYKien}
+                                </div>
+                            )} */}
+
+
+                            <div className="text-left"><span className="font-medium">Ngày nộp phí cấp bằng:</span> {ngayNopPhiCapBang}</div>
+                            <div className="text-left"><span className="font-medium">Ngày nhận bằng:</span> {ngayNhanBang}</div>
+                            <div className="text-left"><span className="font-medium">Ngày gửi bằng cho KH:</span> {ngayGuiBangChoKH}</div>
+
+                            <div className="text-left"><span className="font-medium">Số bằng:</span> {soBang}</div>
+                            <div className="text-left"><span className="font-medium">Ngày cấp bằng:</span> {ngayCapBang}</div>
+                            <div className="text-left"><span className="font-medium">Ngày hết hạn bằng:</span> {ngayHetHanBang}</div>
                         </div>
-                        {daChonNgayNopDon && (
-                            <div className="col-span-2">
-                                <CompleteDocumentation
-                                    ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
-                                    setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
-                                    ngayHoanThanhHSTL={ngayHoanThanhHSTL}
-                                    setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
-                                    trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
-                                    setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
-                                    formatOptions={formatOptions}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                        )}
-                        {daChonNgayNopDon && (
-                            <div className="col-span-2">
-                                <DocumentSection onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList} isViewOnly={isViewOnly} />
-                            </div>
-                        )}
 
-                        {daChonNgayHoanThanhHSTL && (
-                            <div className="col-span-2">
-                                <FormalDetermination
-                                    ngayKQThamDinhHinhThuc_DuKien={ngayKQThamDinhHinhThuc_DuKien}
-                                    setNgayKQThamDinhHinhThuc_DuKien={setNgayKQThamDinhHinhThuc_DuKien}
-                                    ngayKQThamDinhHinhThuc={ngayKQThamDinhHinhThuc}
-                                    setNgayKQThamDinhHinhThuc={setNgayKQThamDinhHinhThuc}
-                                    lichSuThamDinhHT={lichSuThamDinhHT}
-                                    setLichSuThamDinhHT={setLichSuThamDinhHT}
-                                    ngayKQThamDinhHinhThuc_DK_SauKN={ngayKQThamDinhHinhThuc_DK_SauKN}
-                                    setNgayKQThamDinhHinhThuc_DK_SauKN={setNgayKQThamDinhHinhThuc_DK_SauKN}
-                                    buocXuLy={buocXuLy}
-                                    setBuocXuLy={setBuocXuLy}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                        )}
-                        {daChonNgayThamDinhHinhThuc && (
-                            <div className="col-span-2">
-                                <AnnouncementOfApplication
-                                    ngayCongBo_DuKien={ngayCongBo_DuKien}
-                                    setNgayCongBo_DuKien={setNgayCongBo_DuKien}
-                                    ngayCongBo={ngayCongBo}
-                                    setNgayCongBo={setNgayCongBo}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                        )}
-                        {daChonNgayCongBoDon && (
-                            <div className="col-span-2">
-                                <ContentReview
-                                    ngayKQThamDinhND_DuKien={ngayKQThamDinhND_DuKien}
-                                    setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
-                                    ngayKQThamDinhND={ngayKQThamDinhND}
-                                    setNgayKQThamDinhND={setNgayKQThamDinhND}
-                                    lichSuThamDinhND={lichSuThamDinhND}
-                                    setLichSuThamDinhND={setLichSuThamDinhND}
-                                    ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
-                                    setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
-                                    buocXuLy={buocXuLy}
-                                    setBuocXuLy={setBuocXuLy}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                        )}
-                        {daChonNgayThamDinhNoiDung && (
-                            <div>
-                                {/* <label className="block text-gray-700 text-left">Trạng thái phản hồi kết quả thẩm định nội dung</label> */}
-                                <Radio.Group
-                                    onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
-                                    value={trangThaiTraLoiKQThamDinhND}
-                                    className="mt-2"
-                                    disabled={isViewOnly}
-                                >
-                                    <Radio value={true}>Phản hồi</Radio>
-                                    <Radio value={false}>Chờ nhận đơn</Radio>
-                                </Radio.Group>
-                            </div>
-                        )}
-                        {daChonNgayThamDinhNoiDung && trangThaiTraLoiKQThamDinhND === true && (
-                            <div className="col-span-2">
-                                <ReplyContentRating
-                                    ngayTraLoiKQThamDinhND_DuKien={ngayTraLoiKQThamDinhND_DuKien}
-                                    setNgayTraLoiKQThamDinhND_DuKien={setNgayTraLoiKQThamDinhND_DuKien}
-                                    ngayTraLoiKQThamDinhND={ngayTraLoiKQThamDinhND}
-                                    setNgayTraLoiKQThamDinhND={setNgayTraLoiKQThamDinhND}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                        )}
-                        {(daChonNgayTraLoiThamDinhNoiDung || (!trangThaiTraLoiKQThamDinhND && daChonNgayThamDinhNoiDung)) && (
-                            <div className="col-span-2">
-                                <DiphimaProcess
-                                    ngayThongBaoCapBang={ngayThongBaoCapBang}
-                                    setNgayThongBaoCapBang={setNgayThongBaoCapBang}
-                                    ngayNopPhiCapBang={ngayNopPhiCapBang}
-                                    setNgayNopPhiCapBang={setNgayNopPhiCapBang}
-                                    ngayNhanBang={ngayNhanBang}
-                                    setNgayNhanBang={setNgayNhanBang}
-                                    trangThaiCapBang={trangThaiCapBang}
-                                    setTrangThaiCapBang={setTrangThaiCapBang}
-                                    ngayNopYKien={ngayNopYKien}
-                                    setNgayNopYKien={setNgayNopYKien}
-                                    ngayNhanKQYKien={ngayNhanKQYKien}
-                                    setNgayNhanKQYKien={setNgayNhanKQYKien}
-                                    ketQuaYKien={ketQuaYKien}
-                                    setKetQuaYKien={setKetQuaYKien}
-                                    ngayPhanHoiKQYKien={ngayPhanHoiKQYKien}
-                                    setNgayPhanHoiKQYKien={setNgayPhanHoiKQYKien}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                        )}
-                        {daChonHoanTatThuTucNhapBang && (
-                            <div className="col-span-2">
-                                <DegreeInformation
-                                    soBang={soBang}
-                                    setSoBang={setSoBang}
-                                    ngayCapBang={ngayCapBang}
-                                    setNgayCapBang={setNgayCapBang}
-                                    ngayHetHanBang={ngayHetHanBang}
-                                    setNgayHetHanBang={setNgayHetHanBang}
-                                    ngayGuiBangChoKH={ngayGuiBangChoKH}
-                                    setNgayGuiBangChoKH={setNgayGuiBangChoKH}
-                                    isViewOnly={isViewOnly}
-                                />
-                            </div>
-                        )}
+                        {/* Danh sách tài liệu */}
+                        <div className="mt-8">
+                            <div className="text-lg font-semibold text-gray-700 mb-2">Danh sách tài liệu</div>
+                            <table className="w-full text-sm border border-gray-200 rounded-md overflow-hidden">
+                                <thead className="bg-gray-100 text-left">
+                                    <tr>
+                                        <th className="px-3 py-2 border-b">Tên tài liệu</th>
+                                        <th className="px-3 py-2 border-b">Trạng thái</th>
+                                        <th className="px-3 py-2 border-b">Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {taiLieuList?.length > 0 ? taiLieuList.map((item) => (
+                                        <tr key={item.maTaiLieu} className="hover:bg-gray-50 text-left">
+                                            <td className="px-3 py-2 border-b">{item.tenTaiLieu}</td>
+                                            <td className="px-3 py-2 border-b">{item.trangThai}</td>
+                                            <td className="px-3 py-2 border-b">
+                                                {item.linkTaiLieu ? (
+                                                    <a href={item.linkTaiLieu} className="text-blue-600 underline" target="_blank" rel="noreferrer">
+                                                        Xem tài liệu
+                                                    </a>
+                                                ) : (
+                                                    <span className="italic text-gray-400">Chưa có</span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    )) : (
+                                        <tr>
+                                            <td colSpan="3" className="text-center text-gray-500 italic py-4">Không có tài liệu</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </Spin>
+
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
                 </div>
                 <div className="mt-4">
                     <ExportWordButton
