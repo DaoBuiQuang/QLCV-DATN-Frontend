@@ -6,20 +6,22 @@ const { Step } = Steps;
 
 const steps = [
   "Nộp đơn",
-  "Hoàn thành tài liệu",
+ 
   "Thẩm định hình thức",
   "Công bố đơn",
   "Thẩm định nội dung",
   "Hoàn tất nhận bằng",
   "Gửi bằng cho khách hàng",
-  "Đơn đăng ký thành công",
+  "Đơn đăng ký hoàn tất",
 ];
 
 const DonProgress = ({ trangThaiDon }) => {
   const currentIndex = steps.indexOf(trangThaiDon);
 
   return (
-    <div className="text-xs mt-0 mb-auto p-0 don-progress">
+    <div className="text-xs mt-0 mb-auto p-0 don-progress"
+        style={{ marginTop: 16 }}
+    >
       <Steps
         direction="vertical" // 👉 Đổi từ horizontal sang vertical
         size="small"

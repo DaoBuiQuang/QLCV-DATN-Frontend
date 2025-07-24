@@ -12,7 +12,7 @@ import DegreeInformation from "../../components/TrademarkRegistrationProcess/Deg
 import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
 import DonProgress from "../../components/commom/DonProgess.js";
-import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
+// import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
@@ -71,6 +71,7 @@ function ApplicationEdit() {
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
     const [ngayGuiBangChoKH, setNgayGuiBangChoKH] = useState(null);
     const [soBang, setSoBang] = useState("");
+    const [quyetDinhSo, setQuyetDinhSo] = useState("");
     const [ngayCapBang, setNgayCapBang] = useState(null);
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
@@ -152,10 +153,19 @@ function ApplicationEdit() {
     };
 
     useEffect(() => {
+        if (soBang) {
+            setTrangThaiDon("Đơn đăng ký hoàn tất");
+            setDaChonNgayNopDon(true);
+            setDaChonNgayHoanThanhHSTL(true);
+            setDaChonNgayCongBoDon(true);
+            setDaChonNgayThamDinhNoiDung(true);
+            setDaChonNgayTraLoiThamDinhNoiDung(true);
+            setDaChonHoanTatThuTucNhapBang(true);
+        }
         if (ngayNopDon) {
             const duKien = dayjs(ngayNopDon).add(1, 'month').format('YYYY-MM-DD');
             setNgayHoanThanhHSTL_DuKien(duKien);
-
+            setNgayKQThamDinhHinhThuc_DuKien(duKien);
             // 👉 Chỉ set ngày hết hạn nếu chưa có
             if (!ngayHetHanBang) {
                 const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
@@ -163,20 +173,22 @@ function ApplicationEdit() {
             }
 
             setDaChonNgayNopDon(true);
-            updateTrangThaiDon("Hoàn thành tài liệu");
+            setDaChonNgayHoanThanhHSTL(true);
+            updateTrangThaiDon("Thẩm định hình thức");
         } else {
             setNgayHoanThanhHSTL_DuKien(null);
+            setNgayKQThamDinhHinhThuc_DuKien(null);
             setNgayHetHanBang(null);
         }
 
-        if (ngayHoanThanhHSTL) {
-            // if (!ngayKQThamDinhHinhThuc_DuKien) {
-            const duKien = dayjs(ngayHoanThanhHSTL).add(1, 'month').format('YYYY-MM-DD');
-            setNgayKQThamDinhHinhThuc_DuKien(duKien);
-            // }
-            setDaChonNgayHoanThanhHSTL(true);
-            updateTrangThaiDon("Thẩm định hình thức");
-        }
+        // if (ngayHoanThanhHSTL) {
+        //     // if (!ngayKQThamDinhHinhThuc_DuKien) {
+        //     const duKien = dayjs(ngayHoanThanhHSTL).add(1, 'month').format('YYYY-MM-DD');
+        //     setNgayKQThamDinhHinhThuc_DuKien(duKien);
+        //     // }
+        //     setDaChonNgayHoanThanhHSTL(true);
+        //     updateTrangThaiDon("Thẩm định hình thức");
+        // }
 
         if (ngayKQThamDinhHinhThuc) {
             // if (!ngayCongBo_DuKien) {
@@ -235,8 +247,6 @@ function ApplicationEdit() {
             } else if (!baseNgay || ketQuaYKien !== true) {
                 setHanNopPhiCapBang(null);
             }
-
-            // 👉 Thêm xử lý hanNopYKien khi trạng thái cấp bằng là false
             if (ngayThongBaoCapBang) {
                 const hanYKien = dayjs(ngayThongBaoCapBang).add(3, 'month').format('YYYY-MM-DD');
                 setHanNopYKien(hanYKien);
@@ -244,15 +254,13 @@ function ApplicationEdit() {
                 setHanNopYKien(null);
             }
         }
-
-
         if (ngayNhanBang) {
             setDaChonHoanTatThuTucNhapBang(true);
             updateTrangThaiDon("Gửi bằng cho khách hàng");
         }
 
         if (ngayGuiBangChoKH) {
-            updateTrangThaiDon("Đơn đăng ký thành công");
+            updateTrangThaiDon("Đơn đăng ký hoàn tất");
         }
 
     }, [
@@ -337,6 +345,7 @@ function ApplicationEdit() {
                 setNgayNhanBang(formatDate(response.ngayNhanBang));
                 setNgayGuiBangChoKH(formatDate(response.ngayGuiBangChoKhachHang));
                 setSoBang(response.soBang);
+                setQuyetDinhSo(response.quyetDinhSo);
                 setNgayCapBang(formatDate(response.ngayCapBang));
                 setNgayHetHanBang(formatDate(response.ngayHetHanBang));
                 setTrangThaiDon(response.trangThaiDon);
@@ -396,6 +405,7 @@ function ApplicationEdit() {
                     ngayCapBang: ngayCapBang || null,
                     ngayHetHanBang: ngayHetHanBang || null,
                     soBang: soBang,
+                    quyetDinhSo: quyetDinhSo || "",
                     taiLieus: taiLieuList,
                     nhanHieu
                 },
@@ -647,11 +657,13 @@ function ApplicationEdit() {
                                 />
                             </div>
                         )}
-                        {daChonHoanTatThuTucNhapBang && (
+                         {(daChonNgayTraLoiThamDinhNoiDung || (!trangThaiTraLoiKQThamDinhND && daChonNgayThamDinhNoiDung)) && (
                             <div className="col-span-2">
                                 <DegreeInformation
                                     soBang={soBang}
                                     setSoBang={setSoBang}
+                                    quyetDinhSo={quyetDinhSo}
+                                    setQuyetDinhSo={setQuyetDinhSo}
                                     ngayCapBang={ngayCapBang}
                                     setNgayCapBang={setNgayCapBang}
                                     ngayHetHanBang={ngayHetHanBang}
@@ -668,7 +680,7 @@ function ApplicationEdit() {
                     <button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
                 </div>
                 <div className="mt-4">
-                    <ExportWordButton
+                    {/* <ExportWordButton
                         data={{
                             maHoSoVuViec: maHoSoVuViec,
                             soDon: soDon,
@@ -685,7 +697,7 @@ function ApplicationEdit() {
 
                         }}
                         fileName={`ThongDonDangKy_${maDonDangKy}`}
-                    />
+                    /> */}
                 </div>
 
             </div>

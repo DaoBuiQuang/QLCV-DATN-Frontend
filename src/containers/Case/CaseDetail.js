@@ -223,238 +223,85 @@ function CaseDetail() {
             navigate(`/applicationdetail/${maDonDangKy}`);
         }
     };
+    // Lấy tên khách hàng từ mã
+    const getTenKhachHang = (maKH) => {
+        const kh = customers.find(c => c.maKhachHang === maKH);
+        return kh?.tenKhachHang || "Không xác định";
+    };
+
+    // Lấy tên loại vụ việc từ mã
+    const getTenLoaiVuViec = (maLoai) => {
+        const item = casetypes.find(c => c.maLoaiVuViec === maLoai);
+        return item?.tenLoaiVuViec || "Không xác định";
+    };
+
+    // Lấy tên loại đơn từ mã
+    const getTenLoaiDon = (maLoai) => {
+        const item = applicationtypes.find(a => a.maLoaiDon === maLoai);
+        return item?.tenLoaiDon || "Không xác định";
+    };
+
+    // Lấy tên quốc gia từ mã
+    const getTenQuocGia = (maQG) => {
+        const qg = countries.find(c => c.maQuocGia === maQG);
+        return qg?.tenQuocGia || "Không xác định";
+    };
+
+    // Lấy tên đối tác từ mã
+    const getTenDoiTac = (maDT) => {
+        const dt = partners.find(d => d.maDoiTac === maDT);
+        return dt?.tenDoiTac || "Không xác định";
+    };
+
+    // Lấy nhãn trạng thái từ value
+    const getTrangThaiLabel = (value) => {
+        const status = statusOptions.find(s => s.value === value);
+        return status?.label || "Không xác định";
+    };
+
+    // Lấy tên nhân sự từ mã
+    const getTenNhanSu = (maNS) => {
+        const ns = staffs.find(s => s.maNhanSu === maNS);
+        return ns?.hoTen || "Không xác định";
+    };
+
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
-            {console.log("người xử lí: ", nguoiXuLyChinh)}
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thông tin hồ sơ vụ việc</h2>
+
                 <Spin spinning={loading} tip="Loading..." size="large">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-                        <div className="flex-1">
-                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                disabled
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800 text-left">
 
-                                value={maHoSoVuViec}
-                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                            />
-                        </div>
+                        <div><span className="font-medium">Mã hồ sơ vụ việc:</span> {maHoSoVuViec}</div>
+                        <div><span className="font-medium">Khách hàng:</span> {getTenKhachHang(maKhachHang)}</div>
+                        <div><span className="font-medium">Tên vụ việc:</span> {noiDungVuViec}</div>
+                        <div><span className="font-medium">Ngày tiếp nhận:</span> {ngayTiepNhan}</div>
+                        <div><span className="font-medium">Ngày xử lý:</span> {ngayXuLy || "Chưa có"}</div>
+                        <div><span className="font-medium">Loại vụ việc:</span> {getTenLoaiVuViec(maLoaiVuViec)}</div>
+                        <div><span className="font-medium">Loại đơn:</span> {getTenLoaiDon(maLoaiDon)}</div>
+                        <div><span className="font-medium">Quốc gia vụ việc:</span> {getTenQuocGia(maQuocGia)}</div>
+                        <div><span className="font-medium">Đối tác:</span> {getTenDoiTac(maDoiTac) || "Không có"}</div>
+                        <div><span className="font-medium">Trạng thái vụ việc:</span> {getTrangThaiLabel(trangThaiVuViec)}</div>
+                        <div><span className="font-medium">Người xử lý chính:</span> {getTenNhanSu(nguoiXuLyChinh)}</div>
+                        <div><span className="font-medium">Người xử lý phụ:</span> {getTenNhanSu(nguoiXuLyPhu)}</div>
 
-                        <div className="flex-1">
-                            <label className="block text-gray-700 text-left ">Khách hàng <span className="text-red-500">*</span></label>
-                            <Select
-                                options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
-                                value={maKhachHang ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === maKhachHang) : null}
-                                onChange={selectedOption => {
-                                    setMaKhachHang(selectedOption?.value)
-                                    const value = selectedOption?.value || "";
-                                    validateField("maKhachHang", value);
-                                }}
-                                placeholder="Chọn khách hàng"
-                                className="w-full mt-1 rounded-lg h-10 text-left isDisabled"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">Tên vụ việc <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={noiDungVuViec}
-                                onChange={(e) => {
-                                    setNoiDungVuViec(e.target.value)
-                                    validateField("noiDungVuViec", e.target.value)
-                                }}
-                                disabled
-                                className="w-full p-2 mt-1 border rounded-lg text-input text-left bg-gray-200"
-                            />
-                            {errors.noiDungVuViec && (
-                                <p className="text-red-500 text-xs mt-1 text-left">{errors.noiDungVuViec}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">Ngày tiếp nhận <span className="text-red-500">*</span></label>
-                            <DatePicker
-                                value={ngayTiepNhan ? dayjs(ngayTiepNhan) : null}
-                                onChange={(date) => {
-                                    if (dayjs.isDayjs(date) && date.isValid()) {
-                                        setNgayTiepNhan(date.format("YYYY-MM-DD"));
-                                        validateField("ngayTiepNhan", date.format("YYYY-MM-DD"));
-                                    } else {
-                                        setNgayTiepNhan(null);
-                                        validateField("ngayTiepNhan", null);
-                                    }
-                                }}
-
-                                format="DD/MM/YYYY"
-                                placeholder="Chọn ngày tiếp nhận"
-                                className=" mt-1 w-full"
-                                disabled={true}
-                            />
-                            {errors.ngayTiepNhan && (
-                                <p className="text-red-500 text-xs mt-1 text-left">{errors.ngayTiepNhan}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">Ngày xử lý</label>
-                            <DatePicker
-                                value={ngayXuLy ? dayjs(ngayXuLy) : null}
-                                onChange={(date) => {
-                                    if (dayjs.isDayjs(date) && date.isValid()) {
-                                        setNgayXuLy(date.format("YYYY-MM-DD"));
-                                    } else {
-                                        setNgayXuLy(null);
-                                    }
-                                }}
-                                format="DD/MM/YYYY"
-                                placeholder="Chọn ngày xử lý"
-                                className="mt-1 w-full"
-                                disabled={true}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left ">Loại vụ việc <span className="text-red-500">*</span></label>
-                            <Select
-                                options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
-                                value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
-                                onChange={selectedOption => {
-                                    setMaLoaiVuViec(selectedOption?.value)
-                                    const value = selectedOption?.value || "";
-                                    validateField("maLoaiVuViec", value);
-                                }}
-                                placeholder="Chọn loại vụ việc"
-                                className="w-full  mt-1  rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                            {errors.maLoaiVuViec && (
-                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiVuViec}</p>
-                            )}
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">Loại đơn <span className="text-red-500">*</span></label>
-                            <Select
-                                options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
-                                value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
-                                onChange={selectedOption => {
-                                    setMaLoaiDon(selectedOption?.value)
-                                    const value = selectedOption?.value || "";
-                                    validateField("maLoaiDon", value);
-                                }}
-                                placeholder="Chọn loại đơn đăng ký"
-                                className="w-full mt-1 rounded-lg h-10 text-left"
-                                isClearable
-                                isDisabled
-                            />
-                            {errors.maLoaiDon && (
-                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiDon}</p>
-                            )}
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
-                            <Select
-                                options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                                value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-                                onChange={selectedOption => {
-                                    setMaQuocGia(selectedOption?.value)
-                                    const value = selectedOption?.value || "";
-                                    validateField("maQuocGia", value);
-                                }}
-                                placeholder="Chọn quốc gia"
-                                className="w-full  mt-1  rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                            {errors.maQuocGia && (
-                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
-                            )}
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">Đối tác</label>
-                            <Select
-                                options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
-                                value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
-                                onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
-                                placeholder="Chọn đối tác"
-                                className="w-full  mt-1  rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left ">Trạng thái vụ việc</label>
-                            <Select
-                                options={formatOptions(statusOptions, "value", "label")}
-                                value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
-                                onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
-                                placeholder="Chọn trạng thái"
-                                className="w-full mt-1 rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-
-                        {/* <div>
-                        <label className="block text-gray-700 text-left">Bước xử lý hiện tại</label>
-                        <Select
-                            options={formatOptions(processSteps, "value", "label")}
-                            value={buocXuLyHienTai ? processSteps.find(opt => opt.value === buocXuLyHienTai) : null}
-                            onChange={selectedOption => setBuocXuLyHienTai(selectedOption?.value)}
-                            placeholder="Chọn bước xử lý"
-                            className="w-full mt-1 rounded-lg text-left"
-                            isClearable
-                            isDisabled
-                        />
-                    </div> */}
-                        <div>
-                            <label className="block text-gray-700 text-left">Người xử lí chính</label>
-                            <Select
-                                options={formatOptions(staffs, "maNhanSu", "hoTen")}
-                                // value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
-                                value={formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === nguoiXuLyChinh)}
-                                onChange={(selectedOption) => {
-                                    setNguoiXuLyChinh(selectedOption);
-                                    handleSelectChange(selectedOption, "Chính");
-                                }}
-                                placeholder="Chọn người xử lí chính"
-                                className="w-full mt-1 rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">Người xử lí phụ</label>
-                            <Select
-                                options={formatOptions(staffs, "maNhanSu", "hoTen")}
-                                value={formatOptions(staffs, "maNhanSu", "hoTen").find(opt => opt.value === nguoiXuLyPhu)}
-                                onChange={(selectedOption) => {
-                                    setNguoiXuLyPhu(selectedOption);
-                                    handleSelectChange(selectedOption, "Phụ");
-                                }}
-                                placeholder="Chọn người xử lí phụ"
-                                className="w-full mt-1 rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
                     </div>
                 </Spin>
                 <div className="flex justify-center gap-4 mt-4">
-                    <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    {(maLoaiVuViec?.startsWith("TM") && maLoaiDon==="1") && (
+                    <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">
+                        Quay lại
+                    </button>
+
+                    {(maLoaiVuViec?.startsWith("TM") && maLoaiDon === "1") && (
                         <button onClick={handleApplicationAdd} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
                             {maDonDangKy ? "Xem đơn đăng ký nhãn hiệu" : "Tạo đơn đăng ký nhãn hiệu"}
                         </button>
                     )}
-
                 </div>
             </div>
         </div>
+
     );
 }
 

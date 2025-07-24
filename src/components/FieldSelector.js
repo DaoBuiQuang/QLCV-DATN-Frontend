@@ -1,13 +1,13 @@
 import React from "react";
 import { Modal } from "antd";
 
-function FieldSelector({ 
-    allFieldOptions, 
-    selectedFields, 
-    setSelectedFields, 
-    onClose, 
-    onConfirm, 
-    visible 
+function FieldSelector({
+    allFieldOptions,
+    selectedFields,
+    setSelectedFields,
+    onClose,
+    onConfirm,
+    visible
 }) {
     return (
         <Modal
@@ -32,7 +32,9 @@ function FieldSelector({
                                         : [...prev, field.key]
                                 );
                             }}
+                            style={{ accentColor: "#009999" }} 
                         />
+
                         {field.label}
                     </label>
                 ))}

@@ -12,7 +12,22 @@ function ApplicationList() {
   const role = useSelector((state) => state.auth.role);
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState([
+    {
+      soDon: "123456",
+      maHoSoVuViec: "HSVV001",
+      tenNhanHieu: "Nhãn hiệu mẫu",
+    }
+  ]);
+  //   const [applications, setApplications] = useState([
+  //   {
+  //     id: 1,
+  //     name: "Ứng dụng mẫu",
+  //     status: "pending",
+  //     // thêm các trường khác nếu cần
+  //   }
+  // ]);
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [applicationToDelete, setApplicationToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -105,6 +120,7 @@ function ApplicationList() {
   const fetchApplications = async (searchValue, page = 1, size = 10) => {
     setLoading(true);
     try {
+      localStorage.setItem("applicationListPage", page);
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
@@ -151,7 +167,11 @@ function ApplicationList() {
     }));
   };
   useEffect(() => {
-    fetchApplications("");
+    const savedPage = parseInt(localStorage.getItem("applicationListPage") || "1", 10);
+    fetchApplications("", savedPage, pageSize);
+    if (!localStorage.getItem("applicationListPage")) {
+      localStorage.setItem("applicationListPage", "1");
+    }
     fetchBrands();
     fetchItems();
   }, []);
@@ -215,9 +235,22 @@ function ApplicationList() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                fetchApplications(searchTerm, 1, pageSize);
+              }
+            }}
             placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
             className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
+
+          {/* <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
+            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
+          /> */}
           <div className="flex gap-3">
             <button
               onClick={() => fetchApplications(searchTerm, 1, pageSize)}
@@ -294,10 +327,6 @@ function ApplicationList() {
                 isClearable
               />
             </div>
-
-            {/* Hạn xử lý và hạn trả lời */}
-            {/* <div className="flex flex-wrap gap-3 w-full"> */}
-            {/* --- Hạn xử lý --- */}
             <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Lọc theo hạn xử lý</label>
               <Select
@@ -407,7 +436,7 @@ function ApplicationList() {
               </tr>
             </thead>
             <tbody>
-              {applications.map((app, index) => (
+              {applications.length > 0 ? (applications.map((app, index) => (
                 <tr key={app.maDonDangKy} className="group hover:bg-gray-100 text-center border-b relative">
                   <td className="p-2 text-table ">{index + 1}</td>
                   {columns.map((col, colIndex) => {
@@ -485,7 +514,6 @@ function ApplicationList() {
                         const hanXuLyDate = new Date(app.hanXuLy);
 
                         if (!isNaN(hanXuLyDate.getTime())) {
-                          debugger
                           // Tính số ngày còn lại (so sánh ở mức ngày, tránh lệch giờ)
                           const diffTime = hanXuLyDate.setHours(0, 0, 0, 0) - today.setHours(0, 0, 0, 0);
                           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -616,7 +644,14 @@ function ApplicationList() {
                     )}
                   </td>
                 </tr>
-              ))}
+              )
+              )) : (
+                <tr>
+                  <td colSpan={columns.length + 1} className="p-4 text-center text-gray-500">
+                    Không có đơn đăng ký nào
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </Spin>

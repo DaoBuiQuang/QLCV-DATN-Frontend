@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import { useSelector } from 'react-redux';
 import { Modal } from "antd";
+import { showSuccess } from "../../components/commom/Notification";
 function ApplicationTypeList() {
   const role = useSelector((state) => state.auth.role);
   const [applicationtypes, setApplicationTypes] = useState([]);
@@ -25,7 +26,9 @@ function ApplicationTypeList() {
   };
 
   useEffect(() => {
+      // showSuccess("Thành công!", "Đã vào trang laoij đơn đăng ký!");
     fetchApplicationTypes("");
+
   }, []);
   const handleDeleteApplicationType = async () => {
     try {

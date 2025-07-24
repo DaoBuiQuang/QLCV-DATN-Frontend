@@ -10,7 +10,8 @@ import { Spin } from "antd";
 function CaseEdit() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { maHoSoVuViec } = useParams();
+    const { id } = useParams();
+    const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maKhachHang, setMaKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
@@ -113,11 +114,11 @@ function CaseEdit() {
             const response = await callAPI({
                 method: "post",
                 endpoint: "/case/detail",
-                data: { maHoSoVuViec }
+                data: { id }
             });
 
             if (response) {
-
+                setMaHoSoVuViec(response.maHoSoVuViec);
                 setMaKhachHang(response.maKhachHang);
                 setMaDoiTac(response.maDoiTac);
                 setNoiDungVuViec(response.noiDungVuViec);
@@ -237,6 +238,7 @@ function CaseEdit() {
                 method: "put",
                 endpoint: "/case/edit",
                 data: {
+                    id,
                     maHoSoVuViec,
                     maKhachHang,
                     noiDungVuViec,
@@ -244,10 +246,10 @@ function CaseEdit() {
                     ngayXuLy: ngayXuLy || null,
                     maLoaiDon,
                     maLoaiVuViec,
-                    maDoiTac,
+                    maDoiTac: maDoiTac || null,
                     maQuocGiaVuViec: maQuocGia,
                     trangThaiVuViec,
-                    ngayDongHS:   ngayDongHS || null,
+                    ngayDongHS: ngayDongHS || null,
                     ngayRutHS: ngayRutHS || null,
                     buocXuLyHienTai,
                     nhanSuVuViec
@@ -277,12 +279,25 @@ function CaseEdit() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                         <div className="flex-1">
                             <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
-                            <input
+                            {/* <input
                                 type="text"
                                 disabled
                                 value={maHoSoVuViec}
                                 className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
+                            /> */}
+                             <input
+                                type="text"
+                                value={maHoSoVuViec}
+                                onChange={(e) => {
+                                    setMaHoSoVuViec(e.target.value);
+                                    validateField("maHoSoVuViec", e.target.value);
+                                }}
+                                placeholder="Nhập mã hồ sơ vụ việc"
+                                className="w-full p-2 mt-1 border rounded-lg text-input"
                             />
+                            {errors.maHoSoVuViec && (
+                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maHoSoVuViec}</p>
+                            )}
                         </div>
 
                         <div className="flex-1">
@@ -297,7 +312,7 @@ function CaseEdit() {
                                 }}
                                 placeholder="Chọn khách hàng"
                                 className="w-full mt-1 rounded-lg h-10 text-left"
-                                isDisabled
+                                
                                 isClearable
                             />
                         </div>
@@ -335,6 +350,9 @@ function CaseEdit() {
                                 format="DD/MM/YYYY"
                                 placeholder="Chọn ngày tiếp nhận"
                                 className=" mt-1 w-full"
+                                disabledDate={(current) => {
+                                    return current && current > dayjs().endOf("day");
+                                }}
                             />
                             {errors.ngayTiepNhan && (
                                 <p className="text-red-500 text-xs mt-1 text-left">{errors.ngayTiepNhan}</p>
@@ -371,6 +389,9 @@ function CaseEdit() {
                                 }}
                                 placeholder="Chọn loại vụ việc"
                                 className="w-full  mt-1  rounded-lg text-left"
+                                disabledDate={(current) => {
+                                    return current && current > dayjs().endOf("day");
+                                }}
                                 isClearable
                             />
                             {errors.maLoaiVuViec && (

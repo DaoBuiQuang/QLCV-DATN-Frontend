@@ -5,7 +5,8 @@ import Select from "react-select";
 import { showSuccess, showError } from "../../components/commom/Notification";
 function PartnerEdit() {
   const navigate = useNavigate();
-  const { maDoiTac } = useParams();
+  const { id } = useParams();
+  const [maDoiTac, setMaDoiTac] = useState("");
   const [tenDoiTac, setTenDoiTac] = useState("");
   const [maQuocGia, setMaQuocGia] = useState("");
   const [countries, setCountries] = useState([]);
@@ -43,8 +44,9 @@ function PartnerEdit() {
       const response = await callAPI({
         method: "post",
         endpoint: "/partner/detail",
-        data: { maDoiTac },
+        data: { id: id },
       });
+      setMaDoiTac(response.maDoiTac);
       setTenDoiTac(response.tenDoiTac);
       setMaQuocGia(response.maQuocGia);
     } catch (error) {
@@ -55,7 +57,7 @@ function PartnerEdit() {
   useEffect(() => {
     fetchCountries();
     fetchPartnerDetails();
-  }, [maDoiTac]);
+  }, [id]);
 
   const handleUpdatePartner = async () => {
     try {
@@ -63,6 +65,7 @@ function PartnerEdit() {
         method: "put",
         endpoint: "/partner/update",
         data: {
+          id,
           maDoiTac,
           tenDoiTac,
           maQuocGia,
@@ -91,9 +94,17 @@ function PartnerEdit() {
             <input
               type="text"
               value={maDoiTac}
-              disabled
-              className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
+              onChange={(e) => {
+                setMaDoiTac(e.target.value);
+                validateField("maDoiTac", e.target.value);
+              }}
+              placeholder="Nhập mã đối tác"
+              className="w-full p-2 mt-1 border rounded-lg text-input"
             />
+            {errors.maDoiTac && (
+              <p className="text-red-500 text-xs mt-1 text-left">{errors.maDoiTac}</p>
+            )}
+
           </div>
           <div>
             <label className="block text-gray-700 text-left">Tên đối tác <span className="text-red-500">*</span></label>

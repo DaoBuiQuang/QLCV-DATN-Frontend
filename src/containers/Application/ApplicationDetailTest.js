@@ -3,13 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import DonProgress from "../../components/commom/DonProgess.js";
-import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
+// import ExportWordButton from "../../components/ExportFile/ExportWordModal.js";
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
 import { Table, Modal, Button, Spin } from "antd";
+import ExportWordModal from "../../components/ExportFile/ExportWordModal.js";
 
 function ApplicationDetailTest() {
     const navigate = useNavigate();
+    const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
     const [maKhachHang, setMaKhachHang] = useState("");
@@ -62,6 +64,7 @@ function ApplicationDetailTest() {
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
     const [ngayGuiBangChoKH, setNgayGuiBangChoKH] = useState(null);
     const [soBang, setSoBang] = useState("");
+    const [quyetDinhSo, setQuyetDinhSo] = useState("");
     const [ngayCapBang, setNgayCapBang] = useState(null);
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
@@ -177,6 +180,7 @@ function ApplicationDetailTest() {
                 setNgayNhanBang(formatDate(response.ngayNhanBang));
                 setNgayGuiBangChoKH(formatDate(response.ngayGuiBangChoKhachHang));
                 setSoBang(response.soBang);
+                setQuyetDinhSo(response.quyetDinhSo);
                 setNgayCapBang(formatDate(response.ngayCapBang));
                 setNgayHetHanBang(formatDate(response.ngayHetHanBang));
                 setTrangThaiDon(response.trangThaiDon);
@@ -200,7 +204,15 @@ function ApplicationDetailTest() {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         return diffDays >= 0 ? `(còn ${diffDays} ngày)` : `(quá hạn ${Math.abs(diffDays)} ngày)`;
     };
+    const getLatestThongBao = (list) => {
+        if (!Array.isArray(list)) return null;
 
+        return list
+            .filter(item => item.ngayNhanThongBaoTuChoiTD) // lọc có ngày
+            .sort((a, b) => new Date(b.ngayNhanThongBaoTuChoiTD) - new Date(a.ngayNhanThongBaoTuChoiTD))[0] || null;
+    };
+    const tuChoiND = getLatestThongBao(lichSuThamDinhND);
+    const tuChoiHT = getLatestThongBao(lichSuThamDinhHT);
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
@@ -220,7 +232,7 @@ function ApplicationDetailTest() {
                             <div className="text-left"><span className="font-medium">Số điện thoại:</span> {soDienThoai}</div>
                             <div className="text-left"><span className="font-medium">Số đơn:</span> {soDon}</div>
                             <div className="text-left"><span className="font-medium">Ngày nộp đơn: </span>{formatDateVN(ngayNopDon)}</div>
-                            <div className="text-left"><span className="font-medium">Mã nhãn hiệu:</span> {maNhanHieu}</div>
+                            {/* <div className="text-left"><span className="font-medium">Mã nhãn hiệu:</span> {maNhanHieu}</div> */}
                             <div className="text-left"><span className="font-medium">Tên nhãn hiệu:</span> {tenNhanHieu}</div>
 
                             <div className="col-span-1 md:col-span-2 text-center my-4">
@@ -250,11 +262,20 @@ function ApplicationDetailTest() {
                                 <span className="font-medium">Sản phẩm dịch vụ:</span>
                                 <ul className="list-disc list-inside ml-4 mt-1 text-gray-700">
                                     {maSPDVList?.map((item, index) => (
-                                        <li key={index}>Mã SPDV: {item}</li>
+                                        <li key={index}>Nhóm SPDV: {item}</li>
                                     ))}
                                 </ul>
                             </div>
-
+                             {soBang && (
+                                <div className="text-left">
+                                    <span className="font-medium">Số bằng:</span> {soBang}
+                                </div>
+                            )}
+                             {quyetDinhSo && (
+                                <div className="text-left">
+                                    <span className="font-medium">Quyết định số:</span> {quyetDinhSo}
+                                </div>
+                            )}
                             {/* Các mốc thời gian khác */}
                             {ngayHoanThanhHSTL_DuKien && (
                                 <div className="text-left m-0 p-0">
@@ -268,11 +289,15 @@ function ApplicationDetailTest() {
                                 </div>
                             )}
 
-                            {trangThaiHoanThanhHSTL && (
+                            {/* {trangThaiHoanThanhHSTL && ( */}
                                 <div className="text-left">
                                     <span className="font-medium">Trạng thái hoàn thiện hồ sơ:</span> {trangThaiHoanThanhHSTL}
+                                    {taiLieuList?.some(tl => tl.trangThai === "Chưa nộp") && (
+                                        <span className="text-red-600 ml-2">(Cần bổ sung)</span>
+                                    )}
                                 </div>
-                            )}
+                            {/* )} */}
+
 
                             {ngayKQThamDinhHinhThuc_DuKien && (
                                 <div className="text-left">
@@ -382,12 +407,7 @@ function ApplicationDetailTest() {
                                 </div>
                             )}
 
-                            {soBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Số bằng:</span> {soBang}
-                                </div>
-                            )}
-
+                           
                             {ngayCapBang && (
                                 <div className="text-left">
                                     <span className="font-medium">Ngày cấp bằng:</span> {formatDateVN(ngayCapBang)}
@@ -427,14 +447,14 @@ function ApplicationDetailTest() {
                                                             // if (item.linkTaiLieu.startsWith("data:application/pdf")) {
                                                             //     window.open(item.linkTaiLieu, "_blank");
                                                             // } else {
-                                                                // Còn lại thì tự động tải về
-                                                                const link = document.createElement("a");
-                                                                link.href = item.linkTaiLieu;
-                                                                link.download = fileName;
-                                                                document.body.appendChild(link);
-                                                                link.click();
-                                                                document.body.removeChild(link);
-                                                            
+                                                            // Còn lại thì tự động tải về
+                                                            const link = document.createElement("a");
+                                                            link.href = item.linkTaiLieu;
+                                                            link.download = fileName;
+                                                            document.body.appendChild(link);
+                                                            link.click();
+                                                            document.body.removeChild(link);
+
                                                         }}
                                                     >
                                                         Xem tài liệu
@@ -465,31 +485,49 @@ function ApplicationDetailTest() {
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                 </div>
                 <div className="mt-4">
-                    <ExportWordButton
+                    <button
+                        onClick={() => setOpenModal(true)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                    >
+                        In Word: Thông tin Đơn Đăng Ký
+                    </button>
+
+                    <ExportWordModal
+                        open={openModal}
+                        onClose={() => setOpenModal(false)}
                         data={{
-                            maHoSoVuViec: maHoSoVuViec,
-                            tenKhachHang: tenKhachHang,
-                            tenNhanHieu: tenNhanHieu,
-                            soDon: soDon,
-                            trangThaiDon: trangThaiDon,
+                            soBang,
+                            quyetDinhSo,
+                            ngayCapBang,
+                            ngayGuiBangChoKH,
+                            maHoSoVuViec,
+                            tenKhachHang,
+                            tenNhanHieu,
+                            soDon,
+                            trangThaiDon,
                             ngayNopDon: formatDateVN(ngayNopDon),
                             ngayKQThamDinhND: formatDateVN(ngayKQThamDinhND),
                             ngayTraLoiKQThamDinhND_DuKien: formatDateVN(ngayTraLoiKQThamDinhND_DuKien),
-                            maNhanHieu: maNhanHieu,
-                            ngayHoanThanhHSTL_DuKien: ngayHoanThanhHSTL_DuKien,
-                            ngayHoanThanhHSTL: ngayHoanThanhHSTL,
-                            ngayKQThamDinhHinhThuc_DuKien: ngayKQThamDinhHinhThuc_DuKien,
-                            ngayKQThamDinhHinhThuc: ngayKQThamDinhHinhThuc,
-                            diaChi: diaChi,
-                            ngayCongBo_DuKien: ngayCongBo_DuKien,
-                            ngayCongBo: ngayCongBo,
+                            maNhanHieu,
+                            ngayHoanThanhHSTL_DuKien,
+                            ngayHoanThanhHSTL,
+                            ngayKQThamDinhHinhThuc_DuKien,
+                            ngayKQThamDinhHinhThuc,
+                            diaChi,
+                            ngayCongBo_DuKien,
+                            ngayCongBo,
                             image: linkAnh,
                             maSPDVList: maSPDVList.join(', '),
                             ngayHienTai: formatVietnameseDate(),
+                            ngayNhanThongBaoTuChoiHT: formatDateVN(tuChoiHT?.ngayNhanThongBaoTuChoiTD),
+                            hanTraLoiHT: formatDateVN(tuChoiHT?.hanTraLoiGiaHan),
+                            ngayNhanThongBaoTuChoiND: formatDateVN(tuChoiND?.ngayNhanThongBaoTuChoiTD),
+                            hanTraLoiND: formatDateVN(tuChoiND?.hanTraLoiGiaHan),
                         }}
                         fileName={`ThongDonDangKy_${maDonDangKy}`}
                     />
                 </div>
+
                 <Modal
                     title="📄 Lịch sử nhận thông báo từ chối thẩm định hình thức"
                     open={isModalHTOpen}
@@ -508,6 +546,7 @@ function ApplicationDetailTest() {
                             { title: "Lần thẩm định", dataIndex: "lanThamDinh", width: 100 },
                             { title: "Kết quả", dataIndex: "ketQuaThamDinh", width: 130 },
                             { title: "Ngày TB từ chối", dataIndex: "ngayNhanThongBaoTuChoiTD", width: 140 },
+                            { title: "Hạn trả lời", dataIndex: "hanTraLoi", width: 140 },
                             { title: "Ngày trả lời", dataIndex: "ngayTraLoiThongBaoTuChoi", width: 140 },
                             { title: "Gia hạn", dataIndex: "giaHan", render: val => val ? "Có" : "Không", width: 100 },
                             { title: "Ngày gia hạn", dataIndex: "ngayGiaHan", width: 130 },
@@ -548,6 +587,7 @@ function ApplicationDetailTest() {
                             { title: "Lần thẩm định", dataIndex: "lanThamDinh", width: 100 },
                             { title: "Kết quả", dataIndex: "ketQuaThamDinh", width: 130 },
                             { title: "Ngày TB từ chối", dataIndex: "ngayNhanThongBaoTuChoiTD", width: 140 },
+                            { title: "Hạn trả lời", dataIndex: "hanTraLoi", width: 140 },
                             { title: "Ngày trả lời", dataIndex: "ngayTraLoiThongBaoTuChoi", width: 140 },
                             { title: "Gia hạn", dataIndex: "giaHan", render: val => val ? "Có" : "Không", width: 100 },
                             { title: "Ngày gia hạn", dataIndex: "ngayGiaHan", width: 130 },

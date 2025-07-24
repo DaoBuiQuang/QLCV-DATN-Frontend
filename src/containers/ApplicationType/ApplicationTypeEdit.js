@@ -53,7 +53,7 @@ function ApplicationTypeEdit() {
                     moTa,
                 },
             });
-            await showSuccess("Thành công!", "Cập nhật loại đơn đăng ký thành công!");
+            await showSuccess("Thành công!", "Cập nhật loại Đơn đăng ký hoàn tất!");
             navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);

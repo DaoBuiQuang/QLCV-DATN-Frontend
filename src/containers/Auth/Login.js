@@ -153,7 +153,7 @@ const Login = () => {
                     </button>
                 </div>
 
-                <div className="mt-6 text-center text-sm text-gray-600 space-y-1">
+                {/* <div className="mt-6 text-center text-sm text-gray-600 space-y-1">
                     <p>
                         Chưa có tài khoản?{" "}
                         <a href="#" className="text-blue-500 hover:underline font-medium">Đăng ký</a>
@@ -161,7 +161,7 @@ const Login = () => {
                     <p>
                         <a href="#" className="text-blue-500 hover:underline font-medium">Quên mật khẩu?</a>
                     </p>
-                </div>
+                </div> */}
             </div>
         </div>
     );

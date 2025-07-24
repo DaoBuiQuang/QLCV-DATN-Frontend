@@ -8,7 +8,8 @@ function CustomerDetail() {
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { maKhachHang } = useParams();
+    const { id } = useParams();
+    const [maKhachHang, setMaKhachHang] = useState(id || "");
     const [tenVietTatKH, setTenVietTatKH] = useState("");
     const [tenKhachHang, setTenKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
@@ -37,8 +38,9 @@ function CustomerDetail() {
                 const response = await callAPI({
                     method: "post",
                     endpoint: "/customer/detail",
-                    data: { maKhachHang }
+                    data: { id }
                 });
+                setMaKhachHang(response.maKhachHang || "");
                 setTenVietTatKH(response.tenVietTatKH || "");
                 setTenKhachHang(response.tenKhachHang || "");
                 setMaDoiTac(response.maDoiTac || "");
@@ -110,124 +112,42 @@ function CustomerDetail() {
         { value: "Đang hoạt động", label: "Đang hoạt động" },
         { value: "Dừng hoạt động", label: "Dừng hoạt động" }
     ];
+    const getTenDoiTac = (ma) => {
+        const doiTac = partners.find(p => p.maDoiTac === ma);
+        return doiTac ? doiTac.tenDoiTac : "";
+    };
+
+    const getTenQuocGia = (ma) => {
+        const quocGia = countries.find(qg => qg.maQuocGia === ma);
+        return quocGia ? quocGia.tenQuocGia : "";
+    };
+
+    const getTenNganhNghe = (ma) => {
+        const nganh = industries.find(n => n.maNganhNghe === ma);
+        return nganh ? nganh.tenNganhNghe : "";
+    };
+
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 {t("chiTietKhachHang")}</h2>
                 <Spin spinning={loading} tip="Loading..." size="large">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("maKhachHang")}<span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={maKhachHang}
-                                readOnly
-                                className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("tenVietTatKH")} <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={tenVietTatKH}
-
-                                className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("tenKhachHang")} <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={tenKhachHang}
-                                readOnly
-                                className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 cursor-not-allowed"
-                            />
-                        </div>
-
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("tenDoiTac")}</label>
-                            <Select
-                                options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
-                                value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
-                                onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
-                                placeholder="Chọn đối tác"
-                                className="w-full  mt-1  rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("tenQuocGia")}</label>
-                            <Select
-                                options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                                value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-                                onChange={selectedOption => setMaQuocGia(selectedOption?.value)}
-                                placeholder="Chọn quốc gia"
-                                className="w-full  mt-1  rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("tenNganhNghe")}</label>
-                            <Select
-                                options={formatOptions(industries, "maNganhNghe", "tenNganhNghe")}
-                                value={maNganhNghe ? formatOptions(industries, "maNganhNghe", "tenNganhNghe").find(opt => opt.value === maQuocGia) : null}
-                                onChange={selectedOption => setMaNganhNghe(selectedOption?.value)}
-                                placeholder="Chọn ngành nghề"
-                                className="w-full  mt-1  rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("nguoilienhe")}</label>
-                            <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly/>
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("diaChi")}</label>
-                            <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200 " readOnly />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("sdt")}</label>
-                            <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("trangThai")}</label>
-                            <Select
-                                options={trangThaiOptions}
-                                value={trangThaiOptions.find(option => option.value === trangThai)}
-                                onChange={(selectedOption) => setTrangThai(selectedOption?.value)}
-                                placeholder="Chọn trạng thái"
-                                className="w-full mt-1 rounded-lg text-left"
-                                isClearable
-                                isDisabled
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("moTa")}</label>
-                            <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("ghiChu")}</label>
-                            <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-left">{t("maKhachHangCu")}</label>
-                            <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200" readOnly />
-                        </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800 text-left">
+                        <div><span className="font-medium">{t("maKhachHang")}:</span> {maKhachHang}</div>
+                        <div><span className="font-medium">{t("tenVietTatKH")}:</span> {tenVietTatKH}</div>
+                        <div><span className="font-medium">{t("tenKhachHang")}:</span> {tenKhachHang}</div>
+                        <div><span className="font-medium">{t("tenDoiTac")}:</span> {getTenDoiTac(maDoiTac)}</div>
+                        <div><span className="font-medium">{t("tenQuocGia")}:</span> {getTenQuocGia(maQuocGia)}</div>
+                        <div><span className="font-medium">{t("tenNganhNghe")}:</span> {getTenNganhNghe(maNganhNghe)}</div>
+                        <div><span className="font-medium">{t("nguoilienhe")}:</span> {nguoiLienHe}</div>
+                        <div><span className="font-medium">{t("diaChi")}:</span> {diaChi}</div>
+                        <div><span className="font-medium">{t("sdt")}:</span> {sdt}</div>
+                        <div><span className="font-medium">{t("trangThai")}:</span> {trangThai}</div>
+                        <div><span className="font-medium">{t("moTa")}:</span> {moTa}</div>
+                        <div><span className="font-medium">{t("ghiChu")}:</span> {ghiChu}</div>
+                        <div><span className="font-medium">{t("maKhachHangCu")}:</span> {maKhachHangCu}</div>
                     </div>
                 </Spin>
-
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                 </div>

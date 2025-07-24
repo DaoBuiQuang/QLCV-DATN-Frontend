@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import DonProgress from "../../components/commom/DonProgess.js";
-import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
+import ExportWordModal from "../../components/ExportFile/ExportWordModal.js";
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
 import { Spin } from "antd";
@@ -173,7 +173,7 @@ function ApplicationDetail() {
                 {/* <h2 className="text-2xl font-semibold text-gray-700 mb-4"> Thông tin đơn đăng ký nhãn hiệu</h2> */}
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                        <div className="text-xl font-semibold text-gray-700 mb-4">📌Thông tin chi tiết đơn đăng ký</div>
+                        <div className="text-xl font-semibold text-gray-700 mb-4">📌Thông tin chi tiết đơn đăng ký nhãn hiệu</div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-800 text-sm">
                             {/* Thông tin chung */}
@@ -318,7 +318,7 @@ function ApplicationDetail() {
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
                 </div>
                 <div className="mt-4">
-                    <ExportWordButton
+                    <ExportWordModal
                         data={{
                             maHoSoVuViec: maHoSoVuViec,
                             soDon: soDon,

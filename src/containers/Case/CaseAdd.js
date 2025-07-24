@@ -192,6 +192,7 @@ function CaseAdd() {
     // Add case
     const handleAddCase = async () => {
         try {
+            debugger
             await callAPI({
                 method: "post",
                 endpoint: "/case/add",
@@ -200,6 +201,7 @@ function CaseAdd() {
                     maKhachHang,
                     noiDungVuViec,
                     ngayTiepNhan,
+                    maDoiTac: maDoiTac || null,
                     ngayXuLy,
                     maLoaiVuViec,
                     maQuocGiaVuViec: maQuocGia,
@@ -270,10 +272,10 @@ function CaseAdd() {
                                 setMaHoSoVuViec(e.target.value)
                                 validateField("maHoSoVuViec", e.target.value)
                             }}
-                            
+
                             className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                         />
-                         {errors.maHoSoVuViec && (
+                        {errors.maHoSoVuViec && (
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.maHoSoVuViec}</p>
                         )}
                     </div>
@@ -327,6 +329,9 @@ function CaseAdd() {
                             format="DD/MM/YYYY"
                             placeholder="Chọn ngày tiếp nhận"
                             className=" mt-1 w-full"
+                            disabledDate={(current) => {
+                                return current && current > dayjs().endOf("day");
+                            }}
                         />
 
                         {errors.ngayTiepNhan && (
@@ -349,6 +354,9 @@ function CaseAdd() {
                             placeholder="Chọn ngày xử lý"
                             className="mt-1 w-full"
                             style={{ height: "38px" }}
+                            disabledDate={(current) => {
+                                return current && current > dayjs().endOf("day");
+                            }}
                         />
                     </div>
 

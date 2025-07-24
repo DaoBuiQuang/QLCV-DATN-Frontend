@@ -4,8 +4,6 @@ import Select from "react-select";
 function BrandBasicForm({
   maNhanHieuOld,
   setMaNhanHieuOld,
-  // maNhanHieu,
-  // setMaNhanHieu,
   tenNhanHieu,
   setTenNhanHieu,
   linkAnh,
@@ -55,8 +53,6 @@ function BrandBasicForm({
     setIsReuseExisting(false);
 
     if (newMode) {
-      // Chuyển sang dùng lại → clear tạo mới
-      // setMaNhanHieu("");
       setTenNhanHieu("");
       setLinkAnh("");
       setErrors(prev => {
@@ -66,12 +62,9 @@ function BrandBasicForm({
         return updated;
       });
     } else {
-      // Chuyển sang tạo mới → clear dùng lại
       setMaNhanHieuOld(null);
       setTenNhanHieuOld(null);
       setLinkAnhOld(null);
-
-      // ✅ Xoá lỗi liên quan đến reuse
       setErrors(prev => {
         const updated = { ...prev };
         delete updated.maNhanHieuOld;
@@ -121,7 +114,7 @@ function BrandBasicForm({
             }}
             isClearable
             placeholder="Chọn nhãn hiệu"
-            className=" mt-1"
+            className=" mt-1 text-left"
           />
           {errors?.maNhanHieuOld && (
             <p className="text-red-500 text-xs mt-1 text-left">{errors.maNhanHieuOld}</p>
@@ -142,7 +135,6 @@ function BrandBasicForm({
       {/* Tên nhãn hiệu + Ảnh trên cùng 1 dòng */}
       {!showSelectExisting && (
         <div className="col-span-2 flex gap-4">
-          {/* Tên nhãn hiệu */}
           <div className="w-1/2">
             <label className="block text-gray-700 text-left">
               Tên nhãn hiệu <span className="text-red-500">*</span>
@@ -162,8 +154,6 @@ function BrandBasicForm({
               <p className="text-red-500 text-xs mt-1 text-left">{errors.tenNhanHieu}</p>
             )}
           </div>
-
-          {/* Ảnh */}
           <div className="w-1/2">
             {!isViewOnly && (
               <>

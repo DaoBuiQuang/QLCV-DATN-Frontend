@@ -21,6 +21,7 @@ function PartnerList() {
 
   const fetchPartners = async (searchValue, countryCode, page = 1, size = 10) => {
     try {
+      localStorage.setItem("partnerListPage", page);
       const response = await callAPI({
         method: "post",
         endpoint: "/partner/list",
@@ -52,8 +53,11 @@ function PartnerList() {
   };
 
   useEffect(() => {
+     const savedPage = parseInt(localStorage.getItem("partnerListPage") || "1", 10);
     fetchCountries();
-    fetchPartners("", "");
+
+    fetchPartners("", "", savedPage, pageSize);
+        localStorage.setItem("partnerListPage", "1");
   }, []);
 
   // Hàm xử lý xóa đối tác
@@ -62,11 +66,11 @@ function PartnerList() {
       await callAPI({
         method: "post",
         endpoint: "/partner/delete",
-        data: { maDoiTac: partnerToDelete },
+        data: { id: partnerToDelete },
       });
       setShowDeleteModal(false);
       setPartnerToDelete(null);
-      fetchPartners(searchTerm, selectedCountry); // load lại danh sách
+      fetchPartners(searchTerm, selectedCountry);
     } catch (error) {
       console.error("Lỗi khi xóa đối tác:", error);
     }
@@ -86,9 +90,15 @@ function PartnerList() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                fetchPartners(searchTerm, selectedCountry, 1, pageSize);
+              }
+            }}
             placeholder="🔍 Nhập tên đối tác"
             className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
+
           <div className="flex gap-3">
             <button
               onClick={() => fetchPartners(searchTerm, selectedCountry, 1, pageSize)}
@@ -145,7 +155,7 @@ function PartnerList() {
                 className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/partnerdetail/${partner.maDoiTac}`);
+                  navigate(`/partnerdetail/${partner.id}`);
                 }}
               >
                 {partner.maDoiTac}
@@ -157,14 +167,14 @@ function PartnerList() {
                   <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                     <button
                       className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                      onClick={() => navigate(`/partneredit/${partner.maDoiTac}`)}
+                      onClick={() => navigate(`/partneredit/${partner.id}`)}
                     >
                       📝
                     </button>
                     <button
                       className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                       onClick={() => {
-                        setPartnerToDelete(partner.maDoiTac);
+                        setPartnerToDelete(partner.id);
                         setShowDeleteModal(true);
                       }}
                     >

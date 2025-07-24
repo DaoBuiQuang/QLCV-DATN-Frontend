@@ -49,19 +49,25 @@ function JobList() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                fetchJobs(searchTerm);
+              }
+            }}
             placeholder="🔍 Nhập tên ngành nghề"
             className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
+
           <div className="flex gap-3">
             <button
               onClick={() => fetchJobs(searchTerm)}
-               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Tìm kiếm
             </button>
             <button
               onClick={() => navigate("/jobadd")} // Chuyển hướng khi bấm nút
-               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Thêm mới
             </button>

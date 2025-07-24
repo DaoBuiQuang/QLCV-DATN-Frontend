@@ -32,7 +32,7 @@ function ApplicationTypeAdd() {
                     moTa,
                 },
             });
-            await showSuccess("Thành công!", "Thêm loại đơn đăng ký thành công!");
+            await showSuccess("Thành công!", "Thêm loại Đơn đăng ký hoàn tất!");
             setMaLoaiDon("");
             setTenLoaiDon("");
             setMoTa("");

@@ -68,6 +68,7 @@ function CaseList() {
     const fetchCases = async (searchValue, partnerId, countryId, customerId, casetypeId, staffId, page = 1, size = 10) => {
         setLoading(true);
         try {
+            localStorage.setItem("caseListPage", page);
             const response = await callAPI({
                 method: "post",
                 endpoint: "/case/list",
@@ -88,6 +89,10 @@ function CaseList() {
             setPageIndex(response.pagination?.pageIndex || 1);
             setPageSize(response.pagination?.pageSize || 10);
         } catch (error) {
+            setCases([]);
+            setTotalItems(0);
+            setPageIndex(1);
+            setPageSize(10);
             console.error("Lỗi khi lấy dữ liệu hồ sơ vụ việc:", error);
         } finally {
             setLoading(false);
@@ -169,7 +174,18 @@ function CaseList() {
         }
     };
     useEffect(() => {
-        fetchCases("");
+        const savedPage = parseInt(localStorage.getItem("caseListPage") || "1", 10);
+        fetchCases(
+            "",
+            null,
+            null,
+            null,
+            null,
+            null,
+            savedPage,
+            pageSize
+        );
+        localStorage.setItem("caseListPage", "1");
         fetchCountries();
         fetchPartners();
         fetchCustomers();
@@ -178,12 +194,13 @@ function CaseList() {
         fetchApplicationTypes();
     }, []);
 
+
     const handleDeleteCase = async () => {
         try {
             await callAPI({
                 method: "post",
                 endpoint: "/case/delete",
-                data: { maHoSoVuViec: caseToDelete },
+                data: { id: caseToDelete },
             });
             setShowDeleteModal(false);
             setCaseToDelete(null);
@@ -204,9 +221,24 @@ function CaseList() {
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="🔍 Nhập nội dung vụ việc"
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                fetchCases(
+                                    searchTerm,
+                                    selectedPartner,
+                                    selectedCountry,
+                                    selectedCustomer,
+                                    selectedCasetype,
+                                    selectedStaff,
+                                    1,
+                                    pageSize
+                                );
+                            }
+                        }}
+                        placeholder="🔍 Nhập tên vụ việc hoặc mã vụ việc"
                         className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
                     />
+
                     <div className="flex gap-3">
                         <button
                             onClick={() => fetchCases(searchTerm, selectedPartner, selectedCountry, selectedCustomer, selectedCasetype, selectedStaff, 1, pageSize)}
@@ -269,7 +301,7 @@ function CaseList() {
                             isClearable
                         />
                     </div>
-                    <div className="w-full md:w-1/6"> 
+                    <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Khách hàng</label>
                         <Select
                             options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
@@ -328,162 +360,149 @@ function CaseList() {
                             </tr>
                         </thead>
                         <tbody>
-                            {cases.map((caseItem, index) => (
-                                <tr key={caseItem.maHoSoVuViec} className="group hover:bg-gray-100 text-center border-b relative">
-                                    <td className="p-2 text-table ">{index + 1}</td>
-                                    {columns.map((col, colIndex) => {
-                                        let content = caseItem[col.key];
-                                        const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? '' : ''}`;
+                            {cases.length > 0 ? (
+                                cases.map((caseItem, index) => (
+                                    <tr key={caseItem.id} className="group hover:bg-gray-100 text-center border-b relative">
+                                        <td className="p-2 text-table ">{index + 1}</td>
+                                        {columns.map((col, colIndex) => {
+                                            let content = caseItem[col.key];
+                                            const commonClass = `p-2 text-table ${colIndex < columns.length - 1 ? '' : ''}`;
 
-                                        if (
-                                            col.key === "ngayTiepNhan" ||
-                                            col.key === "ngayTao" ||
-                                            col.key === "ngayCapNhap"
-                                        ) {
-                                            content = content ? new Date(content).toLocaleDateString("vi-VN") : "";
-                                        }
+                                            if (
+                                                col.key === "ngayTiepNhan" ||
+                                                col.key === "ngayTao" ||
+                                                col.key === "ngayCapNhap"
+                                            ) {
+                                                content = content ? new Date(content).toLocaleDateString("vi-VN") : "";
+                                            }
 
-                                        if (col.key === "maHoSoVuViec") {
-                                            return (
-                                                <td
-                                                    key={col.key}
-                                                    className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
-                                                    onClick={e => {
-                                                        e.stopPropagation();
-                                                        navigate(`/casedetail/${caseItem.maHoSoVuViec}`);
-                                                    }}
-                                                >
-                                                    {content}
-                                                </td>
-                                            );
-                                        }
-
-                                        if (col.key === "soDon") {
-                                            const maDon = caseItem.maDonDangKy;
-                                            const hasDon = !!maDon;
-                                            const hasSoDon = !!content;
-
-                                            return (
-                                                <td
-                                                    key={col.key}
-                                                    className={`p-2 text-table ${hasDon ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"
-                                                        }`}
-                                                    onClick={(e) => {
-                                                        if (hasDon) {
+                                            if (col.key === "maHoSoVuViec") {
+                                                return (
+                                                    <td
+                                                        key={col.key}
+                                                        className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
+                                                        onClick={e => {
                                                             e.stopPropagation();
-                                                            navigate(`/applicationdetail/${maDon}`);
-                                                        }
-                                                    }}
-                                                >
-                                                    {hasDon
-                                                        ? hasSoDon
-                                                            ? content
-                                                            : "Chưa có số đơn"
-                                                        : "Không có đơn đăng ký"}
-                                                </td>
-                                            );
-                                        }
-
-
-                                        // if (col.key === "nhanSuXuLy") {
-                                        //     return (
-                                        //         <td key={col.key} className={commonClass}>
-                                        //             {Array.isArray(caseItem.nhanSuXuLy) ? (
-                                        //                 caseItem.nhanSuXuLy.map((person, idx) => (
-                                        //                     <div key={idx}>
-                                        //                         {person.tenNhanSu} ({person.vaiTro})
-                                        //                     </div>
-                                        //                 ))
-                                        //             ) : (
-                                        //                 <span>—</span>
-                                        //             )}
-                                        //         </td>
-                                        //     );
-                                        // }
-                                        if (col.key === "nguoiXuLyChinh") {
-                                            return (
-                                                <td key={col.key} className={commonClass}>
-                                                    {caseItem.nguoiXuLyChinh ? (
-                                                        <div>
-                                                            {caseItem.nguoiXuLyChinh.tenNhanSu}
-                                                        </div>
-                                                    ) : (
-                                                        <span>—</span>
-                                                    )}
-                                                </td>
-                                            );
-                                        }
-
-                                        if (col.key === "nhanSuKhac") {
-                                            return (
-                                                <td key={col.key} className={commonClass}>
-                                                    {Array.isArray(caseItem.nhanSuKhac) && caseItem.nhanSuKhac.length > 0 ? (
-                                                        caseItem.nhanSuKhac.map((ns, idx) => (
-                                                            <div key={idx}>
-                                                                {ns.tenNhanSu} ({ns.vaiTro})
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <span>—</span>
-                                                    )}
-                                                </td>
-                                            );
-                                        }
-
-                                        if (col.key === "trangThaiVuViec") {
-                                            const statusMap = {
-                                                dang_xu_ly: "Đang xử lý",
-                                                hoan_thanh: "Hoàn thành",
-                                                dong: "Đóng",
-                                                rut_don: "Rút đơn",
-                                            };
-                                            return (
-                                                <td key={col.key} className={commonClass}>
-                                                    {statusMap[content] || "Không xác định"}
-                                                </td>
-                                            );
-                                        }
-
-                                        return <td key={col.key} className={commonClass}>{content}</td>;
-                                    })}
-
-                                    <td className="p-2 relative">
-                                        {(role === 'admin' || role === 'staff') && (
-                                            <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
-                                                <button
-                                                    className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                    onClick={() => navigate(`/caseedit/${caseItem.maHoSoVuViec}`)}
-                                                >
-                                                    📝
-                                                </button>
-                                                <button
-                                                    className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                                    onClick={() => {
-                                                        setCaseToDelete(caseItem.maHoSoVuViec);
-                                                        setShowDeleteModal(true);
-                                                    }}
-                                                >
-                                                    🗑️
-                                                </button>
-                                                {caseItem.tenLoaiVuViec === "Nhãn hiệu" && caseItem.tenLoaiDon === "Đơn đăng ký mới" && (
-                                                    <button
-                                                        className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
-                                                        onClick={() =>
-                                                            caseItem.maDonDangKy
-                                                                ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
-                                                                : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
-                                                        }
+                                                            navigate(`/casedetail/${caseItem.id}`);
+                                                        }}
                                                     >
-                                                        📄
-                                                    </button>
-                                                )}
+                                                        {content}
+                                                    </td>
+                                                );
+                                            }
 
-                                            </div>
-                                        )}
+                                            if (col.key === "soDon") {
+                                                const maDon = caseItem.maDonDangKy;
+                                                const hasDon = !!maDon;
+                                                const hasSoDon = !!content;
+
+                                                return (
+                                                    <td
+                                                        key={col.key}
+                                                        className={`p-2 text-table ${hasDon ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
+                                                        onClick={(e) => {
+                                                            if (hasDon) {
+                                                                e.stopPropagation();
+                                                                navigate(`/applicationdetail/${maDon}`);
+                                                            }
+                                                        }}
+                                                    >
+                                                        {hasDon
+                                                            ? hasSoDon
+                                                                ? content
+                                                                : "Chưa có số đơn"
+                                                            : "Không có đơn đăng ký"}
+                                                    </td>
+                                                );
+                                            }
+
+                                            if (col.key === "nguoiXuLyChinh") {
+                                                return (
+                                                    <td key={col.key} className={commonClass}>
+                                                        {caseItem.nguoiXuLyChinh ? (
+                                                            <div>{caseItem.nguoiXuLyChinh.tenNhanSu}</div>
+                                                        ) : (
+                                                            <span>—</span>
+                                                        )}
+                                                    </td>
+                                                );
+                                            }
+
+                                            if (col.key === "nhanSuKhac") {
+                                                return (
+                                                    <td key={col.key} className={commonClass}>
+                                                        {Array.isArray(caseItem.nhanSuKhac) && caseItem.nhanSuKhac.length > 0 ? (
+                                                            caseItem.nhanSuKhac.map((ns, idx) => (
+                                                                <div key={idx}>{ns.tenNhanSu} ({ns.vaiTro})</div>
+                                                            ))
+                                                        ) : (
+                                                            <span>—</span>
+                                                        )}
+                                                    </td>
+                                                );
+                                            }
+
+                                            if (col.key === "trangThaiVuViec") {
+                                                const statusMap = {
+                                                    dang_xu_ly: "Đang xử lý",
+                                                    hoan_thanh: "Hoàn thành",
+                                                    dong: "Đóng",
+                                                    rut_don: "Rút đơn",
+                                                };
+                                                return (
+                                                    <td key={col.key} className={commonClass}>
+                                                        {statusMap[content] || "Không xác định"}
+                                                    </td>
+                                                );
+                                            }
+
+                                            return <td key={col.key} className={commonClass}>{content}</td>;
+                                        })}
+
+                                        <td className="p-2 relative">
+                                            {(role === 'admin' || role === 'staff') && (
+                                                <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
+                                                    <button
+                                                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                                        onClick={() => navigate(`/caseedit/${caseItem.id}`)}
+                                                    >
+                                                        📝
+                                                    </button>
+                                                    <button
+                                                        className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                                        onClick={() => {
+                                                            setCaseToDelete(caseItem.id);
+                                                            setShowDeleteModal(true);
+                                                        }}
+                                                    >
+                                                        🗑️
+                                                    </button>
+                                                    {caseItem.tenLoaiVuViec === "Nhãn hiệu" && caseItem.tenLoaiDon === "Đơn đăng ký mới" && (
+                                                        <button
+                                                            className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
+                                                            onClick={() =>
+                                                                caseItem.maDonDangKy
+                                                                    ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
+                                                                    : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
+                                                            }
+                                                        >
+                                                            📄
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={columns.length + 2} className="text-center py-6 text-gray-500 italic">
+                                        Không có bản ghi nào
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
+
                     </table>
                 </Spin>
 

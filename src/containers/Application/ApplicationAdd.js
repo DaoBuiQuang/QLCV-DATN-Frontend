@@ -66,6 +66,7 @@ function ApplicationAdd() {
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
     const [ngayGuiBangChoKH, setNgayGuiBangChoKH] = useState(null);
     const [soBang, setSoBang] = useState("");
+    const [quyetDinhSo, setQuyetDinhSo] = useState("");
     const [ngayCapBang, setNgayCapBang] = useState(null);
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
 
@@ -147,10 +148,19 @@ function ApplicationAdd() {
     };
 
     useEffect(() => {
+        if (soBang) {
+            setTrangThaiDon("Đơn đăng ký hoàn tất");
+            setDaChonNgayNopDon(true);
+            setDaChonNgayHoanThanhHSTL(true);
+            setDaChonNgayCongBoDon(true);
+            setDaChonNgayThamDinhNoiDung(true);
+            setDaChonNgayTraLoiThamDinhNoiDung(true);
+            setDaChonHoanTatThuTucNhapBang(true);
+        }
         if (ngayNopDon) {
             const duKien = dayjs(ngayNopDon).add(1, 'month').format('YYYY-MM-DD');
             setNgayHoanThanhHSTL_DuKien(duKien);
-
+            setNgayKQThamDinhHinhThuc_DuKien(duKien);
             // 👉 Chỉ set ngày hết hạn nếu chưa có
             if (!ngayHetHanBang) {
                 const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
@@ -158,20 +168,22 @@ function ApplicationAdd() {
             }
 
             setDaChonNgayNopDon(true);
-            updateTrangThaiDon("Hoàn thành tài liệu");
+            setDaChonNgayHoanThanhHSTL(true);
+            updateTrangThaiDon("Thẩm định hình thức");
         } else {
             setNgayHoanThanhHSTL_DuKien(null);
+            setNgayKQThamDinhHinhThuc_DuKien(null);
             setNgayHetHanBang(null);
         }
 
-        if (ngayHoanThanhHSTL) {
-            // if (!ngayKQThamDinhHinhThuc_DuKien) {
-            const duKien = dayjs(ngayHoanThanhHSTL).add(1, 'month').format('YYYY-MM-DD');
-            setNgayKQThamDinhHinhThuc_DuKien(duKien);
-            // }
-            setDaChonNgayHoanThanhHSTL(true);
-            updateTrangThaiDon("Thẩm định hình thức");
-        }
+        // if (ngayHoanThanhHSTL) {
+        //     // if (!ngayKQThamDinhHinhThuc_DuKien) {
+        //     const duKien = dayjs(ngayHoanThanhHSTL).add(1, 'month').format('YYYY-MM-DD');
+        //     setNgayKQThamDinhHinhThuc_DuKien(duKien);
+        //     // }
+        //     setDaChonNgayHoanThanhHSTL(true);
+        //     updateTrangThaiDon("Thẩm định hình thức");
+        // }
 
         if (ngayKQThamDinhHinhThuc) {
             // if (!ngayCongBo_DuKien) {
@@ -247,7 +259,7 @@ function ApplicationAdd() {
         }
 
         if (ngayGuiBangChoKH) {
-            updateTrangThaiDon("Đơn đăng ký thành công");
+            updateTrangThaiDon("Đơn đăng ký hoàn tất");
         }
 
     }, [
@@ -322,6 +334,7 @@ function ApplicationAdd() {
                     ngayCapBang: ngayCapBang,
                     ngayHetHanBang: ngayHetHanBang,
                     soBang: soBang,
+                    quyetDinhSo: quyetDinhSo,
                     taiLieus: taiLieuList,
                     nhanHieu
                 },
@@ -407,6 +420,9 @@ function ApplicationAdd() {
                                         format="DD/MM/YYYY"
                                         placeholder="Chọn ngày nộp đơn"
                                         className="mt-1 w-full"
+                                        disabledDate={(current) => {
+                                            return current && current > dayjs().endOf("day");
+                                        }}
                                     />
                                 </div>
 
@@ -569,11 +585,13 @@ function ApplicationAdd() {
                             />
                         </div>
                     )}
-                    {daChonHoanTatThuTucNhapBang && (
+                    {(daChonNgayTraLoiThamDinhNoiDung || (!trangThaiTraLoiKQThamDinhND && daChonNgayThamDinhNoiDung)) && (
                         <div className="col-span-2">
                             <DegreeInformation
                                 soBang={soBang}
                                 setSoBang={setSoBang}
+                                quyetDinhSo={quyetDinhSo}
+                                setQuyetDinhSo={setQuyetDinhSo}
                                 ngayCapBang={ngayCapBang}
                                 setNgayCapBang={setNgayCapBang}
                                 ngayHetHanBang={ngayHetHanBang}

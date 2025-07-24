@@ -9,7 +9,8 @@ function CustomerEdit() {
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { maKhachHang } = useParams();
+    const { id } = useParams();
+    const [maKhachHang, setMaKhachHang] = useState("");
     const [tenVietTatKH, setTenVietTatKH] = useState("");
     const [tenKhachHang, setTenKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
@@ -52,8 +53,9 @@ function CustomerEdit() {
                 const response = await callAPI({
                     method: "post",
                     endpoint: "/customer/detail",
-                    data: { maKhachHang }
+                    data: { id }
                 });
+                setMaKhachHang(response.maKhachHang || "");
                 setTenVietTatKH(response.tenVietTatKH || "");
                 setTenKhachHang(response.tenKhachHang || "");
                 setMaDoiTac(response.maDoiTac || "");
@@ -73,10 +75,10 @@ function CustomerEdit() {
             }
         };
 
-        if (maKhachHang) {
+        if (id) {
             fetchCustomerDetail();
         }
-    }, [maKhachHang]);
+    }, [id]);
     const fetchCountries = async () => {
         try {
             const response = await callAPI({
@@ -129,6 +131,7 @@ function CustomerEdit() {
                 method: "put",
                 endpoint: "/customer/edit",
                 data: {
+                    id,
                     maKhachHang,
                     tenVietTatKH,
                     tenKhachHang,
@@ -140,7 +143,7 @@ function CustomerEdit() {
                     ghiChu,
                     maQuocGia,
                     trangThai,
-                   maNganhNghe: maNganhNghe === "" ? null : maNganhNghe
+                    maNganhNghe: maNganhNghe === "" ? null : maNganhNghe
                 },
             });
             await showSuccess(t("successTitle"), t("capNhapKhachHangThanhCong"));
@@ -162,12 +165,25 @@ function CustomerEdit() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-gray-700 text-left">{t("maKhachHang")}<span className="text-red-500">*</span></label>
-                            <input
+                            {/* <input
                                 type="text"
                                 value={maKhachHang}
                                 readOnly
                                 className="w-full p-2 mt-1 border rounded-lg text-input bg-gray-200"
+                            /> */}
+                            <input
+                                type="text"
+                                value={maKhachHang}
+                                onChange={(e) => {
+                                    setMaKhachHang(e.target.value);
+                                    validateField("maKhachHang", e.target.value);
+                                }}
+                                placeholder="Nhập mã khách hàng"
+                                className="w-full p-2 mt-1 border rounded-lg text-input"
                             />
+                            {errors.maKhachHang && (
+                                <p className="text-red-500 text-xs mt-1 text-left">{errors.maKhachHang}</p>
+                            )}
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left">{t("tenVietTatKH")} <span className="text-red-500">*</span></label>
@@ -239,16 +255,16 @@ function CustomerEdit() {
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left">{t("nguoilienhe")}</label>
-                            <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập người liên hệ"/>
+                            <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập người liên hệ" />
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left">{t("diaChi")}</label>
-                            <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập địa chỉ"/>
+                            <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập địa chỉ" />
                         </div>
 
                         <div>
                             <label className="block text-gray-700 text-left">{t("sdt")}</label>
-                            <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập số điện thoại"/>
+                            <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập số điện thoại" />
                         </div>
 
                         <div>
@@ -265,17 +281,17 @@ function CustomerEdit() {
 
                         <div>
                             <label className="block text-gray-700 text-left">{t("moTa")}</label>
-                            <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mô tả"/>
+                            <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mô tả" />
                         </div>
 
                         <div>
                             <label className="block text-gray-700 text-left">{t("ghiChu")}</label>
-                            <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input"  placeholder="Nhập ghi chú"/>
+                            <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập ghi chú" />
                         </div>
 
                         <div>
                             <label className="block text-gray-700 text-left">{t("maKhachHangCu")}</label>
-                            <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mã khách hàng cũ"/>
+                            <input type="text" value={maKhachHangCu} onChange={(e) => setMaKhachHangCu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mã khách hàng cũ" />
                         </div>
                     </div>
                 </Spin>

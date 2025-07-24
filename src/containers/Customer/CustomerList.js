@@ -58,6 +58,7 @@ function CustomerList() {
     const fetchCustomers = async (searchValue, partnerId, countryId, industryId, page = 1, size = 10) => {
         setLoading(true);
         try {
+            localStorage.setItem("customerListPage", page);
             const response = await callAPI({
                 method: "post",
                 endpoint: "/customer/list",
@@ -78,6 +79,10 @@ function CustomerList() {
             setPageSize(response.pagination?.pageSize || 10);
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu khách hàng:", error);
+            setCustomers([]);
+            setTotalItems(0);
+            setPageIndex(1);
+            setPageSize(10);
         } finally {
             setLoading(false);
         }
@@ -100,7 +105,9 @@ function CustomerList() {
     };
 
     useEffect(() => {
-        fetchCustomers("");
+        const savedPage = parseInt(localStorage.getItem("customerListPage") || "1", 10);
+        fetchCustomers("", null, null, null, savedPage, pageSize);
+        localStorage.setItem("customerListPage", "1");
         fetchCountries();
         fetchPartners();
         fetchIndustries();
@@ -113,7 +120,7 @@ function CustomerList() {
             await callAPI({
                 method: "post",
                 endpoint: "/customer/delete",
-                data: { maKhachHang: customerToDelete },
+                data: { id: customerToDelete },
             });
             setShowDeleteModal(false);
             setCustomerToDelete(null);
@@ -137,9 +144,22 @@ function CustomerList() {
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry, 1, pageSize);
+                            }
+                        }}
                         placeholder="🔍 Nhập tên khách hàng"
                         className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
                     />
+
+                    {/* <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="🔍 Nhập tên khách hàng"
+                        className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
+                    /> */}
                     <div className="flex gap-3">
                         <button
                             onClick={() => fetchCustomers(searchTerm, selectedPartner, selectedCountry, selectedIndustry, 1, pageSize)}
@@ -231,56 +251,65 @@ function CustomerList() {
 
 
                         <tbody>
-                            {customers.map((cus, idx) => (
-                                <tr
-                                    key={cus.maKhachHang}
-                                    className="group hover:bg-gray-100 text-center border-b relative"
-                                >
-                                    <td className="p-2 text-table">{idx + 1}</td>
-                                    {columns.map((col) => {
-                                        const content = cus[col.key];
+                            {customers.length > 0 ? (
+                                customers.map((cus, idx) => (
+                                    <tr
+                                        key={cus.maKhachHang}
+                                        className="group hover:bg-gray-100 text-center border-b relative"
+                                    >
+                                        <td className="p-2 text-table">{(pageIndex - 1) * pageSize + idx + 1}</td>
+                                        {columns.map((col) => {
+                                            const content = cus[col.key];
 
-                                        if (col.key === "maKhachHang") {
-                                            return (
-                                                <td
-                                                    key={col.key}
-                                                    className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        navigate(`/customerdetail/${cus.maKhachHang}`);
-                                                    }}
-                                                >
-                                                    {content}
-                                                </td>
-                                            );
-                                        }
+                                            if (col.key === "maKhachHang") {
+                                                return (
+                                                    <td
+                                                        key={col.key}
+                                                        className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            navigate(`/customerdetail/${cus.id}`);
+                                                        }}
+                                                    >
+                                                        {content}
+                                                    </td>
+                                                );
+                                            }
 
-                                        return <td key={col.key} className="p-2 text-table">{content}</td>;
-                                    })}
-                                    <td className="p-2 relative">
-                                        {(role === "admin" || role === "staff") && (
-                                            <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
-                                                <button
-                                                    className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                    onClick={() => navigate(`/customeredit/${cus.maKhachHang}`)}
-                                                >
-                                                    📝
-                                                </button>
-                                                <button
-                                                    className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                                    onClick={() => {
-                                                        setCustomerToDelete(cus.maKhachHang);
-                                                        setShowDeleteModal(true);
-                                                    }}
-                                                >
-                                                    🗑️
-                                                </button>
-                                            </div>
-                                        )}
+                                            return <td key={col.key} className="p-2 text-table">{content}</td>;
+                                        })}
+                                        <td className="p-2 relative">
+                                            {(role === "admin" || role === "staff") && (
+                                                <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
+                                                    <button
+                                                        className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                                                        onClick={() => navigate(`/customeredit/${cus.id}`)}
+                                                    >
+                                                        📝
+                                                    </button>
+                                                    <button
+                                                        className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                                                        onClick={() => {
+                                                            setCustomerToDelete(cus.id);
+                                                            setShowDeleteModal(true);
+                                                        }}
+                                                    >
+                                                        🗑️
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={columns.length + 2} className="text-center py-6 text-gray-500 italic">
+                                        Không có bản ghi nào
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
+
                     </table>
 
                 </Spin>

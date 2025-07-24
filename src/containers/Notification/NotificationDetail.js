@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Button, Modal, Table } from "antd";
 import callAPI from "../../utils/api";
 
 const NotificationDetail = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [notification, setNotification] = useState(null);
+    const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
+    // Lấy chi tiết thông báo
     useEffect(() => {
         if (!id) return;
 
@@ -32,28 +36,41 @@ const NotificationDetail = () => {
         fetchNotificationDetail();
     }, [id]);
 
-    const handleRestore = async () => {
-        if (!notification?.data?.maKhachHang || !notification?.data?.maNhanSuCapNhap) {
-            alert("Dữ liệu không hợp lệ");
-            return;
-        }
+    // Hàm lấy lịch sử chỉnh sửa
+    const loadHistory = async () => {
+        debugger
+        if (!notification?.title || !notification?.data) return;
+        try {
+            const ma = notification.data.maDoiTac || notification.data.maKhachHang;
+            if (!ma) return;
 
-        const confirm = window.confirm("Bạn có chắc muốn khôi phục khách hàng này không?");
+            const res = await callAPI({
+                method: "POST",
+                endpoint: "/history/by-notification",
+                data: { title: notification.title, ma }
+            });
+            setHistory(res);
+            setModalVisible(true);
+        } catch (err) {
+            console.error("Lỗi lấy lịch sử:", err);
+        }
+    };
+
+    // Hàm rollback
+    const handleRollback = async (logId) => {
+        const confirm = window.confirm("Bạn có chắc muốn rollback về phiên bản này?");
         if (!confirm) return;
 
         try {
             setLoading(true);
             await callAPI({
-                method: "PUT",
-                endpoint: "/customer/restore",
-                data: {
-                    maKhachHang: notification.data.maKhachHang,
-                }
+                method: "POST",
+                endpoint: `/rollback/${logId}`
             });
-            alert("Khôi phục khách hàng thành công!");
-            navigate("/customerlist"); 
+            alert("Rollback thành công!");
+            navigate("/customerlist");
         } catch (err) {
-            alert("Lỗi khi khôi phục: " + err.message);
+            alert("Lỗi rollback: " + err.message);
         } finally {
             setLoading(false);
         }
@@ -62,6 +79,49 @@ const NotificationDetail = () => {
     if (loading) return <div>Đang tải...</div>;
     if (error) return <div className="text-red-500">Lỗi: {error}</div>;
     if (!notification) return <div>Chưa có thông báo</div>;
+
+    // Cấu hình bảng lịch sử
+    const columns = [
+        {
+            title: "Thời gian",
+            dataIndex: "timestamp",
+            key: "timestamp",
+            render: (ts) => new Date(ts).toLocaleString(),
+        },
+        {
+            title: "Người chỉnh sửa",
+            dataIndex: "changedBy",
+            key: "changedBy",
+        },
+        {
+            title: "Hành động",
+            dataIndex: "action",
+            key: "action",
+            render: (action) => {
+                switch (action) {
+                    case "UPDATE": return "Sửa";
+                    case "DELETE": return "Xóa";
+                    case "CREATE": return "Thêm";
+                    default: return action;
+                }
+            }
+        },
+        {
+            title: "Thao tác",
+            key: "action",
+            render: (_, record, index) => {
+                if (index === 0 && record.action === "DELETE") {
+                    return (
+                        <Button type="primary" onClick={() => handleRollback(record.id)}>
+                            Khôi phục
+                        </Button>
+                    );
+                }
+                return null;
+            },
+
+        },
+    ];
 
     return (
         <div className="max-w-3xl mx-auto p-6 bg-gray-50 rounded-md shadow-md font-sans mt-10">
@@ -77,16 +137,13 @@ const NotificationDetail = () => {
                 <span className="font-semibold">Người cập nhật:</span> {notification.maNhanSu}
             </p>
             <p className="mb-2">
-                <span className="font-semibold">Thời gian gửi:</span>{" "}
-                {new Date(notification.sentAt).toLocaleString()}
+                <span className="font-semibold">Thời gian gửi:</span> {new Date(notification.sentAt).toLocaleString()}
             </p>
             <p className="mb-6">
-                <span className="font-semibold">Trạng thái đọc:</span>{" "}
-                {notification.isRead ? "Đã đọc" : "Chưa đọc"}
+                <span className="font-semibold">Trạng thái đọc:</span> {notification.isRead ? "Đã đọc" : "Chưa đọc"}
             </p>
 
             <h3 className="text-xl font-semibold mb-3">Chi tiết thay đổi:</h3>
-
             {notification.data?.changes?.length > 0 ? (
                 <table className="w-full border border-gray-300 bg-white rounded-md shadow-sm">
                     <thead className="bg-gray-100">
@@ -98,10 +155,7 @@ const NotificationDetail = () => {
                     </thead>
                     <tbody>
                         {notification.data.changes.map(({ field, oldValue, newValue }, index) => (
-                            <tr
-                                key={index}
-                                className={index % 2 === 0 ? "bg-gray-50" : ""}
-                            >
+                            <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : ""}>
                                 <td className="p-3 border-b border-gray-200 text-left">{field}</td>
                                 <td className="p-3 border-b border-gray-200 text-gray-600 italic text-left">{oldValue ?? "null"}</td>
                                 <td className="p-3 border-b border-gray-200 font-semibold text-left">{newValue ?? "null"}</td>
@@ -113,17 +167,19 @@ const NotificationDetail = () => {
                 <p>Không có thay đổi nào.</p>
             )}
 
-            {/* Nút khôi phục nếu action là delete */}
-            {/* {notification.data?.action === "delete" && notification.data?.maKhachHang && (
-                <div className="mt-6">
-                    <button
-                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                        onClick={handleRestore}
-                    >
-                        Khôi phục
-                    </button>
-                </div>
-            )} */}
+            <Button type="primary" onClick={loadHistory} className="mt-4">
+                Xem lịch sử chỉnh sửa
+            </Button>
+
+            <Modal
+                title="Lịch sử chỉnh sửa"
+                open={modalVisible}
+                onCancel={() => setModalVisible(false)}
+                footer={null}
+                width={800}
+            >
+                <Table dataSource={history} columns={columns} rowKey="id" pagination={false} />
+            </Modal>
         </div>
     );
 };

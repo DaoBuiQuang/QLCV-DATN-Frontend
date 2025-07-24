@@ -51,19 +51,24 @@ function ProductAndServicesList() {
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                fetchItems(searchTerm);
+                            }
+                        }}
                         placeholder="🔍 Nhập tên sản phẩm/dịch vụ hoặc mô tả"
                         className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
                     />
                     <div className="flex gap-3">
                         <button
                             onClick={() => fetchItems(searchTerm)}
-                             className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Tìm kiếm
                         </button>
                         <button
                             onClick={() => navigate("/productandservicesadd")}
-                             className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Thêm mới
                         </button>

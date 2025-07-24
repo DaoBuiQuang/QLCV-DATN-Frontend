@@ -57,6 +57,8 @@ import NotificationPopup from "../containers/Notification/NotificationPopup";
 import DashboardApplications from "../containers/Dashboard/DashboardApplication";
 import DashboardCountry from "../containers/Dashboard/DashboardCountry";
 import DashboardPartner from "../containers/Dashboard/DashboardPartner";
+import { Upload } from "lucide-react";
+import ExcelUpload from "../containers/UploadExcel/UploadExcel";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -118,8 +120,8 @@ const AppRoutes = ({ notification, setNotification }) => {
         <Route element={<MainLayout notification={notification} setNotification={setNotification} />}>
           <Route path="/customerlist" element={<CustomerList />} />
           <Route path="/customeradd" element={<CustomerAdd></CustomerAdd>} />
-          <Route path="/customeredit/:maKhachHang" element={<CustomerEdit></CustomerEdit>} />
-          <Route path="/customerdetail/:maKhachHang" element={<CustomerDetail></CustomerDetail>} />
+          <Route path="/customeredit/:id" element={<CustomerEdit></CustomerEdit>} />
+          <Route path="/customerdetail/:id" element={<CustomerDetail></CustomerDetail>} />
 
           <Route path="/stafflist" element={<StaffList />} />
           <Route path="/staffadd" element={<StaffAdd></StaffAdd>} />
@@ -139,8 +141,8 @@ const AppRoutes = ({ notification, setNotification }) => {
 
           <Route path="/partnerlist" element={<PartnerList></PartnerList>} />
           <Route path="/partneradd" element={<PartnerAdd></PartnerAdd>} />
-          <Route path="/partneredit/:maDoiTac" element={<PartnerEdit></PartnerEdit>} />
-          <Route path="/partnerdetail/:maDoiTac" element={<PartnerDetail></PartnerDetail>} />
+          <Route path="/partneredit/:id" element={<PartnerEdit></PartnerEdit>} />
+          <Route path="/partnerdetail/:id" element={<PartnerDetail></PartnerDetail>} />
 
           <Route path="/casetypelist" element={<CaseTypeList></CaseTypeList>} />
           <Route path="/casetypeadd" element={<CaseTypeAdd></CaseTypeAdd>} />
@@ -149,8 +151,8 @@ const AppRoutes = ({ notification, setNotification }) => {
 
           <Route path="/caselist" element={<CaseList></CaseList>} />
           <Route path="/caseadd" element={<CaseAdd></CaseAdd>} />
-          <Route path="/caseedit/:maHoSoVuViec" element={<CaseEdit></CaseEdit>} />
-          <Route path="/casedetail/:maHoSoVuViec" element={<CaseDetail></CaseDetail>} />
+          <Route path="/caseedit/:id" element={<CaseEdit></CaseEdit>} />
+          <Route path="/casedetail/:id" element={<CaseDetail></CaseDetail>} />
 
           <Route path="/applicationtypelist" element={<ApplicationTypeList></ApplicationTypeList>} />
           <Route path="/applicationtypeadd" element={<ApplicationTypeAdd></ApplicationTypeAdd>} />
@@ -182,6 +184,8 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/dashboard/application" element={<DashboardApplications />} />
           <Route path="/dashboard/country" element={<DashboardCountry />} />
           <Route path="/dashboard/partner" element={<DashboardPartner />} />
+
+          <Route path="/upload" element={<ExcelUpload></ExcelUpload>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

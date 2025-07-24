@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import callAPI from "../../utils/api";
 import { useNavigate, useParams } from "react-router-dom";
-import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
+// import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 
 function CountryDetail() {
   const navigate = useNavigate();
@@ -83,13 +83,13 @@ function CountryDetail() {
           </button>
 
           {/* Gọi ExportWordButton và truyền data + fileName */}
-          <ExportWordButton
+          {/* <ExportWordButton
             data={{
               MaQuocGia: maQuocGia,
               TenQuocGia: tenQuocGia,
             }}
             fileName={`ThongTinQuocGia_${maQuocGia}`}
-          />
+          /> */}
         </div>
       </div>
     </div>

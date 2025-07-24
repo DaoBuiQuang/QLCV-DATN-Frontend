@@ -6,6 +6,8 @@ import 'dayjs/locale/vi'
 const DegreeInformation = ({
     soBang,
     setSoBang,
+    quyetDinhSo,
+    setQuyetDinhSo,
     ngayCapBang,
     setNgayCapBang,
     ngayHetHanBang,
@@ -27,6 +29,18 @@ const DegreeInformation = ({
                         className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
                         disabled={isViewOnly}
                         placeholder='Nhập số bằng'
+                    />
+                </div>
+                <div className="flex-1">
+                    <label className="block text-gray-700 text-left">Quyết định số</label>
+                    <input
+                        type="text"
+                        value={quyetDinhSo}
+                        onChange={(e) => setQuyetDinhSo(e.target.value)}
+                        // onChange={(e) => setSoBang(e.target.value)}
+                        className={`w-full p-2 mt-1 border rounded-lg text-input ${isViewOnly ? 'bg-gray-200' : ''}`}
+                        disabled={isViewOnly}
+                        placeholder='Nhập quyết định số'
                     />
                 </div>
                 <div>
