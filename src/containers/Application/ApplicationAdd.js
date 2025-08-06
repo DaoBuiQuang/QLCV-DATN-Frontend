@@ -74,6 +74,8 @@ function ApplicationAdd() {
     const [buocXuLy, setBuocXuLy] = useState("");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
+    const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
+    const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
 
@@ -336,6 +338,8 @@ function ApplicationAdd() {
                     soBang: soBang,
                     quyetDinhSo: quyetDinhSo,
                     taiLieus: taiLieuList,
+                    giayUyQuyenGoc: giayUyQuyenGoc || true,
+                    maUyQuyen: maUyQuyen || null,
                     nhanHieu
                 },
             });
@@ -359,7 +363,18 @@ function ApplicationAdd() {
         <div className="p-1 bg-gray-100 flex  items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm đơn đăng ký nhãn hiệu mới</h2>
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-semibold text-gray-700">
+                        📌 Thêm đơn đăng ký nhãn hiệu mới
+                    </h2>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"
+                        alt="Cờ Việt Nam"
+                        className="w-20 h-15"
+                    />
+                </div>
+
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div >
@@ -493,7 +508,13 @@ function ApplicationAdd() {
                     )}
                     {daChonNgayNopDon && (
                         <div className="col-span-2">
-                            <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly} />
+                            <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly}
+                                maHoSoVuViec={maHoSoVuViec}
+                                giayUyQuyenGoc={giayUyQuyenGoc}
+                                setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                                maUyQuyen={maUyQuyen}
+                                setMaUyQuyen={setMaUyQuyen}
+                            />
                         </div>
                     )}
                     {daChonNgayHoanThanhHSTL && (

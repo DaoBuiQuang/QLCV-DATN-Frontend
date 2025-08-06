@@ -93,7 +93,7 @@ function MenuLeft() {
                     <li><NavLink to="/joblist" className={navLinkClass}><Briefcase size={16} /><span>{t("nganhNghe")}</span></NavLink></li>
                     <li><NavLink to="/countrylist" className={navLinkClass}><Globe size={16} /><span>{t("quocGia")}</span></NavLink></li>
                     <li><NavLink to="/casetypelist" className={navLinkClass}><Layers size={16} /><span>{t("loaiVuViec")}</span></NavLink></li>
-                    <li><NavLink to="/applicationtypelist" className={navLinkClass}><Briefcase size={16} /><span>{t("loaiDonDangKy")}</span></NavLink></li>
+                    <li><NavLink to="/applicationtypelist" className={navLinkClass}><Briefcase size={16} /><span>Loại đơn</span></NavLink></li>
                     <li><NavLink to="/brandlist" className={navLinkClass}><Tag size={16} /><span>{t("nhanHieu")}</span></NavLink></li>
                     <li><NavLink to="/productandserviceslist" className={navLinkClass}><ShoppingCart size={16} /><span>{t("sanPhamDichVu")}</span></NavLink></li>
 

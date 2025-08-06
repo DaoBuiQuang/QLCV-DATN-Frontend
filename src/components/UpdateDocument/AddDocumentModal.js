@@ -28,7 +28,7 @@ function AddDocumentModal({
     return (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
-                <h2 className="text-lg font-semibold mb-4">📎 Thêm tài liệu</h2>
+                <h2 className="text-lg font-semibold mb-4">📎{editingIndex !== null ? "Cập nhật" : "Thêm"} tài liệu</h2>
 
                 <label className="block text-sm font-medium text-gray-700">Tên tài liệu</label>
                 <input

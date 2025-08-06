@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import AddDocumentModal from "../UpdateDocument/AddDocumentModal";
-
-const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOnly }) => {
+import callAPI from "../../utils/api";
+import Select from "react-select";
+const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOnly, maHoSoVuViec, giayUyQuyenGoc, setGiayUyQuyenGoc, maUyQuyen, setMaUyQuyen }) => {
     const [dsTaiLieu, setDsTaiLieu] = useState([]);
+    const [soDons, setSoDons] = useState([]);
     const [modalState, setModalState] = useState({
         isOpen: false,
         fileName: "",
@@ -10,7 +12,9 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
         status: "Đã nộp",
         editingIndex: null
     });
-
+    useEffect(() => {
+        fetchSoDonByGiayUyQuyen();
+    }, []);
     useEffect(() => {
         let docs = [];
         if (initialTaiLieus?.length) {
@@ -23,7 +27,40 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
         }
         setDsTaiLieu(docs);
         onTaiLieuChange?.(docs);
+        // if (!giayUyQuyenGoc) {
+        // fetchSoDonByGiayUyQuyen();
+        // }
     }, [initialTaiLieus, isAddOnly]);
+    const fetchSoDonByGiayUyQuyen = async () => {
+        try {
+            // Bước 1: Gọi API để lấy maKhachHang từ maHoSoVuViec
+            const khachHangRes = await callAPI({
+                method: "post",
+                endpoint: "/application/getMaKhachHangByMaHoSoVuViec",
+                data: { maHoSoVuViec }
+            });
+
+            const maKhachHang = khachHangRes?.maKhachHang;
+
+            if (!maKhachHang) {
+                console.warn("Không tìm thấy mã khách hàng từ mã hồ sơ vụ việc.");
+                setSoDons([]); // clear nếu không có
+                return;
+            }
+
+            // Bước 2: Gọi API để lấy danh sách số đơn có giấy ủy quyền gốc theo maKhachHang
+            const soDonRes = await callAPI({
+                method: "post",
+                endpoint: "/application/getApplicationByGiayUyQuyenGoc",
+                data: { maKhachHang }
+            });
+
+            setSoDons(soDonRes); // giả sử trả về mảng các đơn
+        } catch (error) {
+            console.error("Lỗi khi lấy số đơn theo giấy ủy quyền gốc:", error);
+        }
+    };
+
 
 
     const updateTaiLieuList = (newList) => {
@@ -71,10 +108,55 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
             updateTaiLieuList(newList);
         }
     };
+    const formatOptions = (data, valueKey, labelKey) => {
+        return data.map(item => ({
+            value: item[valueKey],
+            label: item[labelKey]
+        }));
+    };
 
     return (
         <div className="mt-6">
             <h3 className="text-sm font-medium mb-2">Danh sách tài liệu</h3>
+            <div className="mb-4 flex flex-col md:flex-row md:items-center md:gap-4">
+                {/* Checkbox - chiếm 1/2 */}
+                <div className="w-full md:w-1/2 flex items-center gap-2">
+                    <input
+                        type="checkbox"
+                        checked={giayUyQuyenGoc}
+                        onChange={(e) => {
+                            setGiayUyQuyenGoc(e.target.checked);
+                            if (e.target.checked) {
+                                setMaUyQuyen(null); // reset nếu chọn lại là gốc
+                            }
+                        }}
+                    />
+                    <label className="text-sm font-medium">
+                        Đây là giấy ủy quyền gốc
+                    </label>
+                </div>
+
+                {/* Select - chiếm 1/2 */}
+                {!giayUyQuyenGoc && (
+                    <div className="w-full md:w-1/2">
+                        <label className="block text-gray-700 text-left">
+                            Chọn số đơn có giấy ủy quyền gốc
+                        </label>
+                        <Select
+                            options={formatOptions(soDons, "soDon", "soDon")}
+                            value={
+                                maUyQuyen
+                                    ? formatOptions(soDons, "soDon", "soDon").find(opt => opt.value === maUyQuyen)
+                                    : null
+                            }
+                            onChange={selectedOption => setMaUyQuyen(selectedOption?.value)}
+                            placeholder="Chọn số đơn"
+                            className="w-full mt-1 rounded-lg text-left"
+                            isClearable
+                        />
+                    </div>
+                )}
+            </div>
 
             {dsTaiLieu.length === 0 ? (
                 <p className="text-sm text-gray-500">Chưa có tài liệu nào.</p>
@@ -113,22 +195,59 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
                                         ) : <span className="text-gray-400 italic">Không có</span>}
                                     </td>
                                     <td className="px-4 py-1 border text-center">
-                                        <input
-                                            type="checkbox"
-                                            checked={tl.trangThai === "Đã nộp"}
-                                            onChange={() => {
-                                                const updatedList = [...dsTaiLieu];
-                                                updatedList[idx].trangThai = tl.trangThai === "Đã nộp" ? "Chưa nộp" : "Đã nộp";
-                                                updateTaiLieuList(updatedList);
-                                            }}
+                                        <div className="flex justify-center gap-2">
+                                            <label className="flex items-center gap-1">
+                                                <input
+                                                    type="radio"
+                                                    name={`trangThai-${idx}`}
+                                                    value="Đã nộp"
+                                                    checked={tl.trangThai === "Đã nộp"}
+                                                    onChange={() => {
+                                                        const updatedList = [...dsTaiLieu];
+                                                        updatedList[idx].trangThai = "Đã nộp";
+                                                        updateTaiLieuList(updatedList);
+                                                    }}
+                                                    disabled={isViewOnly}
+                                                />
+                                                Đã nộp
+                                            </label>
+
+                                            <label className="flex items-center gap-1">
+                                                <input
+                                                    type="radio"
+                                                    name={`trangThai-${idx}`}
+                                                    value="Chưa nộp"
+                                                    checked={tl.trangThai === "Chưa nộp"}
+                                                    onChange={() => {
+                                                        const updatedList = [...dsTaiLieu];
+                                                        updatedList[idx].trangThai = "Chưa nộp";
+                                                        updateTaiLieuList(updatedList);
+                                                    }}
+                                                    disabled={isViewOnly}
+                                                />
+                                                Chưa nộp
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-1 border text-center">
+                                        <button
+                                            onClick={() => handleEdit(idx)}
+                                            className="text-yellow-600 hover:text-yellow-800 font-medium mr-3"
+                                            title="Chỉnh sửa"
                                             disabled={isViewOnly}
-                                        />
+                                        >
+                                            Sửa
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(idx)}
+                                            className="text-red-600 hover:text-red-800 font-medium"
+                                            title="Xóa"
+                                            disabled={isViewOnly}
+                                        >
+                                            Xóa
+                                        </button>
                                     </td>
 
-                                    <td className="px-4 py-1 border text-center">
-                                        <button onClick={() => handleEdit(idx)} className="text-yellow-600 hover:text-yellow-800 text-xl mr-2" title="Chỉnh sửa" disabled={isViewOnly}>📝</button>
-                                        <button onClick={() => handleDelete(idx)} className="text-red-600 hover:text-red-800 text-xl" title="Xóa" disabled={isViewOnly}>🗑️</button>
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>

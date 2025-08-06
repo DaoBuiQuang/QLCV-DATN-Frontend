@@ -71,6 +71,8 @@ function ApplicationDetailTest() {
     const [trangThaiDon, setTrangThaiDon] = useState("");
     const [buocXuLy, setBuocXuLy] = useState("");
     const [taiLieuList, setTaiLieuList] = useState([]);
+    const [maUyQuyen, setMaUyQuyen] = useState(null);
+    const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
 
@@ -185,6 +187,8 @@ function ApplicationDetailTest() {
                 setNgayHetHanBang(formatDate(response.ngayHetHanBang));
                 setTrangThaiDon(response.trangThaiDon);
                 setTaiLieuList(response.taiLieu)
+                setMaUyQuyen(response.maUyQuyen || null);
+                setGiayUyQuyenGoc(response.giayUyQuyenGoc);
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -217,10 +221,18 @@ function ApplicationDetailTest() {
         <div className="p-1 bg-gray-100 flex items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
-                {/* <h2 className="text-2xl font-semibold text-gray-700 mb-4"> Thông tin đơn đăng ký nhãn hiệu</h2> */}
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-semibold text-gray-700">
+                        📌 Thêm đơn đăng ký nhãn hiệu mới
+                    </h2>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"
+                        alt="Cờ Việt Nam"
+                        className="w-20 h-15"
+                    />
+                </div>
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                        <div className="text-xl font-semibold text-gray-700 mb-4">📌Thông tin chi tiết đơn đăng ký</div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-800 text-sm">
                             {/* Thông tin chung */}
@@ -266,12 +278,12 @@ function ApplicationDetailTest() {
                                     ))}
                                 </ul>
                             </div>
-                             {soBang && (
+                            {soBang && (
                                 <div className="text-left">
                                     <span className="font-medium">Số bằng:</span> {soBang}
                                 </div>
                             )}
-                             {quyetDinhSo && (
+                            {quyetDinhSo && (
                                 <div className="text-left">
                                     <span className="font-medium">Quyết định số:</span> {quyetDinhSo}
                                 </div>
@@ -290,12 +302,12 @@ function ApplicationDetailTest() {
                             )}
 
                             {/* {trangThaiHoanThanhHSTL && ( */}
-                                <div className="text-left">
-                                    <span className="font-medium">Trạng thái hoàn thiện hồ sơ:</span> {trangThaiHoanThanhHSTL}
-                                    {taiLieuList?.some(tl => tl.trangThai === "Chưa nộp") && (
-                                        <span className="text-red-600 ml-2">(Cần bổ sung)</span>
-                                    )}
-                                </div>
+                            <div className="text-left">
+                                <span className="font-medium">Trạng thái hoàn thiện hồ sơ:</span> {trangThaiHoanThanhHSTL}
+                                {taiLieuList?.some(tl => tl.trangThai === "Chưa nộp") && (
+                                    <span className="text-red-600 ml-2">(Cần bổ sung)</span>
+                                )}
+                            </div>
                             {/* )} */}
 
 
@@ -407,7 +419,7 @@ function ApplicationDetailTest() {
                                 </div>
                             )}
 
-                           
+
                             {ngayCapBang && (
                                 <div className="text-left">
                                     <span className="font-medium">Ngày cấp bằng:</span> {formatDateVN(ngayCapBang)}
@@ -419,6 +431,13 @@ function ApplicationDetailTest() {
                                     <span className="font-medium">Ngày hết hạn bằng:</span> {formatDateVN(ngayHetHanBang)}
                                 </div>
                             )}
+                            {giayUyQuyenGoc === false && (
+                                <div className="text-left">
+                                    <span className="font-medium">Mã đơn của giấy ủy quyền gốc:</span> {/* Bạn có thể thay bằng biến nếu cần */}
+                                    {maUyQuyen || "Chưa có"}
+                                </div>
+                            )}
+
                         </div>
                         {/* Danh sách tài liệu */}
                         <div className="mt-8">
@@ -516,6 +535,7 @@ function ApplicationDetailTest() {
                             diaChi,
                             ngayCongBo_DuKien,
                             ngayCongBo,
+                            giayUyQuyenGoc: maUyQuyen,
                             image: linkAnh,
                             maSPDVList: maSPDVList.join(', '),
                             ngayHienTai: formatVietnameseDate(),

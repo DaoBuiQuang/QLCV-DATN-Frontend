@@ -16,6 +16,7 @@ function CaseList() {
     const [searchTerm, setSearchTerm] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [caseToDelete, setCaseToDelete] = useState(null);
+    const [caseMaToDelete, setCaseMaToDelete] = useState(null);
     const [applicationTypes, setApplicationTypes] = useState([]);
     const [selectedApplicationTypes, setSelectedApplicationType] = useState("");
     const [countries, setCountries] = useState([]);
@@ -200,10 +201,13 @@ function CaseList() {
             await callAPI({
                 method: "post",
                 endpoint: "/case/delete",
-                data: { id: caseToDelete },
+                data: { id: caseToDelete,
+                    maHoSoVuViec: caseMaToDelete
+                 },
             });
             setShowDeleteModal(false);
             setCaseToDelete(null);
+            setCaseMaToDelete(null);
             fetchCases(searchTerm);
         } catch (error) {
             console.error("Lỗi khi xóa hồ sơ vụ việc:", error);
@@ -472,6 +476,7 @@ function CaseList() {
                                                         className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                                                         onClick={() => {
                                                             setCaseToDelete(caseItem.id);
+                                                            setCaseMaToDelete(caseItem.maHoSoVuViec);
                                                             setShowDeleteModal(true);
                                                         }}
                                                     >

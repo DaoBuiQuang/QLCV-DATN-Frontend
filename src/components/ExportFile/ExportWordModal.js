@@ -189,6 +189,7 @@ function ExportWordModal({ data, fileName = "export", open, onClose }) {
             <li>✔️ <code>{'{quyetDinhSo}'}</code> – Quyết định số</li>
             <li>✔️ <code>{'{ngayCapBang}'}</code> – Ngày cấp bằng</li>
             <li>✔️ <code>{'{ngayGuiBangChoKH}'}</code> – Ngày gửi bằng cho khách hàng</li>
+            <li>✔️ <code>{'{giayUyQuyenGoc}'}</code> – Số đơn của giấy ủy quyền gốc</li>
 
           </ul>
           <p style={{ fontSize: 13, color: "#888" }}>
