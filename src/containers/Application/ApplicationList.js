@@ -229,7 +229,7 @@ function ApplicationList() {
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng ký nhãn hiệu</h2>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng ký nhãn hiệu Việt Nam</h2>
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
           <input
             type="text"

@@ -61,7 +61,9 @@ function ExportWordModal({ data, fileName = "export", open, onClose }) {
             };
             img.src = tagValue;
           });
-        }
+        },
+         align: 'left', // một số bản ImageModule hỗ trợ align
+        usePlaceholderAlign: false
       });
 
 
@@ -180,9 +182,9 @@ function ExportWordModal({ data, fileName = "export", open, onClose }) {
             <li>✔️ <code>{'{soDon}'}</code> – Số đơn</li>
             <li>✔️ <code>{'{diaChi}'}</code> – Địa chỉ</li>
             <li>✔️ <code>{'{ngayCongBo}'}</code> – Ngày công bố đơn</li>
-            <li>✔️ <code>{'{ngayNhanThongBaoTuChoiHT}'}</code> – Ngày nhận thông báo từ chối thẩm định hình thức</li>
+            <li>✔️ <code>{'{ngayNhanThongBaoTuChoiHT}'}</code> – Ngày thông báo từ chối thẩm định hình thức</li>
             <li>✔️ <code>{'{hanTraLoiHT}'}</code> – Hạn trả lời HT</li>
-            <li>✔️ <code>{'{ngayNhanThongBaoTuChoiND}'}</code> – Ngày nhận thông báo từ chối thẩm định nội dung</li>
+            <li>✔️ <code>{'{ngayNhanThongBaoTuChoiND}'}</code> – Ngày thông báo từ chối thẩm định nội dung</li>
             <li>✔️ <code>{'{hanTraLoiND}'}</code> – Hạn trả lời ND</li>
             <li>✔️ <code>{'{maSPDVList}'}</code> – Danh sách nhóm sản phẩm & dịch vụ</li>
             <li>✔️ <code>{'{soBang}'}</code> – Số bằng</li>

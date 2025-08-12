@@ -10,7 +10,8 @@ import { Spin } from "antd";
 function CaseDetail() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { maHoSoVuViec } = useParams();
+    const { id } = useParams();
+    const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maKhachHang, setMaKhachHang] = useState("");
     const [maDoiTac, setMaDoiTac] = useState("");
     const [noiDungVuViec, setNoiDungVuViec] = useState("");
@@ -99,11 +100,11 @@ function CaseDetail() {
             const response = await callAPI({
                 method: "post",
                 endpoint: "/case/detail",
-                data: { maHoSoVuViec }
+                data: { id }
             });
 
             if (response) {
-
+                setMaHoSoVuViec(response.maHoSoVuViec);
                 setMaKhachHang(response.maKhachHang);
                 setMaDoiTac(response.maDoiTac);
                 setNoiDungVuViec(response.noiDungVuViec);

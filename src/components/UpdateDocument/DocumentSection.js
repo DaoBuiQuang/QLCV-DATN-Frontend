@@ -25,11 +25,15 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
                 { tenTaiLieu: "Tài liệu bổ sung", linkTaiLieu: "", trangThai: "Chưa nộp" },
             ];
         }
-        setDsTaiLieu(docs);
-        onTaiLieuChange?.(docs);
-        // if (!giayUyQuyenGoc) {
-        // fetchSoDonByGiayUyQuyen();
-        // }
+
+        // So sánh mảng hiện tại để tránh set lại gây loop
+        const isSame =
+            JSON.stringify(docs) === JSON.stringify(dsTaiLieu);
+
+        if (!isSame) {
+            setDsTaiLieu(docs);
+            onTaiLieuChange?.(docs);
+        }
     }, [initialTaiLieus, isAddOnly]);
     const fetchSoDonByGiayUyQuyen = async () => {
         try {
@@ -119,7 +123,7 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
         <div className="mt-6">
             <h3 className="text-sm font-medium mb-2">Danh sách tài liệu</h3>
             <div className="mb-4 flex flex-col md:flex-row md:items-center md:gap-4">
-                {/* Checkbox - chiếm 1/2 */}
+
                 <div className="w-full md:w-1/2 flex items-center gap-2">
                     <input
                         type="checkbox"
@@ -135,8 +139,6 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
                         Đây là giấy ủy quyền gốc
                     </label>
                 </div>
-
-                {/* Select - chiếm 1/2 */}
                 {!giayUyQuyenGoc && (
                     <div className="w-full md:w-1/2">
                         <label className="block text-gray-700 text-left">

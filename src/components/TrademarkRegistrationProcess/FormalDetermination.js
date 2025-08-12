@@ -266,7 +266,7 @@ const FormalDetermination = ({
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-10 gap-3 items-center">
                                     <div className="md:col-span-3">
-                                        <label className="block text-gray-600 text-left">Ngày nhận thông báo từ chối</label>
+                                        <label className="block text-gray-600 text-left">Ngày thông báo từ chối</label>
                                         <DatePicker
                                             value={refusal.ngayNhanThongBaoTuChoiTD ? dayjs(refusal.ngayNhanThongBaoTuChoiTD) : null}
                                             onChange={(date) => {
@@ -277,7 +277,7 @@ const FormalDetermination = ({
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
-                                            placeholder="Chọn ngày nhận thông báo từ chối"
+                                            placeholder="Chọn ngày thông báo từ chối"
                                             disabled={isViewOnly}
                                             className="mt-1 w-full text-left"
                                         />

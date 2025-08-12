@@ -301,6 +301,7 @@ function ApplicationEdit() {
     const detailApplication = async () => {
         setLoading(true);
         try {
+            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "application/detail",

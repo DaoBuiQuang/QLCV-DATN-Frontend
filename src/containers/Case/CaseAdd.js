@@ -263,6 +263,24 @@ function CaseAdd() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Thêm hồ sơ vụ việc mới</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
+                            onChange={selectedOption => {
+                                setMaQuocGia(selectedOption?.value)
+                                const value = selectedOption?.value || "";
+                                validateField("maQuocGia", value);
+                            }}
+                            placeholder="Chọn quốc gia"
+                            className="w-full  mt-1  rounded-lg  text-left"
+                            isClearable
+                        />
+                        {errors.maQuocGia && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
+                        )}
+                    </div>
                     <div className="flex-1">
                         <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
                         <input
@@ -396,24 +414,7 @@ function CaseAdd() {
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiDon}</p>
                         )}
                     </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
-                        <Select
-                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                            value={maQuocGia ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === maQuocGia) : null}
-                            onChange={selectedOption => {
-                                setMaQuocGia(selectedOption?.value)
-                                const value = selectedOption?.value || "";
-                                validateField("maQuocGia", value);
-                            }}
-                            placeholder="Chọn quốc gia"
-                            className="w-full  mt-1  rounded-lg  text-left"
-                            isClearable
-                        />
-                        {errors.maQuocGia && (
-                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
-                        )}
-                    </div>
+
                     {/* <div>
                         <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
                         <Select

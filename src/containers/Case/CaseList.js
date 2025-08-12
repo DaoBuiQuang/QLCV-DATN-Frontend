@@ -39,6 +39,7 @@ function CaseList() {
         "soDon",
         "noiDungVuViec",
         "trangThaiVuViec",
+        "tenQuocGia",
         "tenKhachHang",
         "nguoiXuLyChinh",
     ]);
@@ -201,9 +202,10 @@ function CaseList() {
             await callAPI({
                 method: "post",
                 endpoint: "/case/delete",
-                data: { id: caseToDelete,
+                data: {
+                    id: caseToDelete,
                     maHoSoVuViec: caseMaToDelete
-                 },
+                },
             });
             setShowDeleteModal(false);
             setCaseToDelete(null);
@@ -272,6 +274,17 @@ function CaseList() {
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
+                      <div className="w-full md:w-1/6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Quốc gia</label>
+                        <Select
+                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
+                            value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
+                            onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
+                            placeholder="Chọn quốc gia"
+                            className="text-left"
+                            isClearable
+                        />
+                           </div>
                     <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Người XL chính</label>
                         <Select
@@ -316,17 +329,8 @@ function CaseList() {
                             isClearable
                         />
                     </div>
-                    <div className="w-full md:w-1/6">
-                        <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Quốc gia</label>
-                        <Select
-                            options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
-                            value={selectedCountry ? formatOptions(countries, "maQuocGia", "tenQuocGia").find(opt => opt.value === selectedCountry) : null}
-                            onChange={selectedOption => setSelectedCountry(selectedOption?.value)}
-                            placeholder="Chọn quốc gia"
-                            className="text-left"
-                            isClearable
-                        />
-                    </div>
+                  
+                 
                     <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Đối tác</label>
                         <Select
@@ -395,10 +399,13 @@ function CaseList() {
                                                 );
                                             }
 
-                                            if (col.key === "soDon") {
-                                                const maDon = caseItem.maDonDangKy;
+                                            if (col.key === "soDon" || col.key === "soDonKH") {
+                                                const maQuocGia = caseItem.maQuocGia;
+                                                const maDon = maQuocGia === "KH" ? caseItem.maDonDangKyKH : caseItem.maDonDangKy;
+                                                const soDon = maQuocGia === "KH" ? caseItem.soDonKH : caseItem.soDon;
+
                                                 const hasDon = !!maDon;
-                                                const hasSoDon = !!content;
+                                                const hasSoDon = !!soDon;
 
                                                 return (
                                                     <td
@@ -407,18 +414,20 @@ function CaseList() {
                                                         onClick={(e) => {
                                                             if (hasDon) {
                                                                 e.stopPropagation();
-                                                                navigate(`/applicationdetail/${maDon}`);
+                                                                navigate(`/applicationdetail${maQuocGia === "KH" ? "_kh" : ""}/${maDon}`);
                                                             }
                                                         }}
                                                     >
                                                         {hasDon
                                                             ? hasSoDon
-                                                                ? content
+                                                                ? soDon
                                                                 : "Chưa có số đơn"
                                                             : "Không có đơn đăng ký"}
                                                     </td>
                                                 );
                                             }
+
+
 
                                             if (col.key === "nguoiXuLyChinh") {
                                                 return (
@@ -482,18 +491,21 @@ function CaseList() {
                                                     >
                                                         🗑️
                                                     </button>
-                                                    {caseItem.tenLoaiVuViec === "Nhãn hiệu" && caseItem.tenLoaiDon === "Đơn đăng ký mới" && (
-                                                        <button
-                                                            className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
-                                                            onClick={() =>
-                                                                caseItem.maDonDangKy
-                                                                    ? navigate(`/applicationedit/${caseItem.maDonDangKy}`)
-                                                                    : navigate(`/applicationadd/${caseItem.maHoSoVuViec}`)
-                                                            }
-                                                        >
-                                                            📄
-                                                        </button>
-                                                    )}
+                                                    <button
+                                                        className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `${(caseItem.maDonDangKy || caseItem.maDonDangKyKH)
+                                                                    ? `/applicationedit${caseItem.maQuocGia === "KH" ? "_kh" : ""}/${caseItem.maDonDangKy || caseItem.maDonDangKyKH}`
+                                                                    : `/applicationadd${caseItem.maQuocGia === "KH" ? "_kh" : ""}/${caseItem.maHoSoVuViec}`
+                                                                }`
+                                                            )
+                                                        }
+
+                                                    >
+                                                        📄
+                                                    </button>
+
                                                 </div>
                                             )}
                                         </td>
