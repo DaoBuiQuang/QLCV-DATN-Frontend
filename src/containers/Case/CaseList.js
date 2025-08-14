@@ -285,7 +285,7 @@ function CaseList() {
                             isClearable
                         />
                            </div>
-                    <div className="w-full md:w-1/6">
+                    {/* <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Người XL chính</label>
                         <Select
                             options={formatOptions(staffs, "maNhanSu", "hoTen")}
@@ -295,7 +295,7 @@ function CaseList() {
                             className="text-left"
                             isClearable
                         />
-                    </div>
+                    </div> */}
                     <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Loại vụ việc</label>
                         <Select

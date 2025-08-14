@@ -338,7 +338,7 @@ function ApplicationAdd() {
                     soBang: soBang,
                     quyetDinhSo: quyetDinhSo,
                     taiLieus: taiLieuList,
-                    giayUyQuyenGoc: giayUyQuyenGoc || true,
+                    giayUyQuyenGoc: giayUyQuyenGoc,
                     maUyQuyen: maUyQuyen || null,
                     nhanHieu
                 },

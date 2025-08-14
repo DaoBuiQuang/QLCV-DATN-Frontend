@@ -444,7 +444,7 @@ function ApplicationKD_VNEdit() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-semibold text-gray-700">
-                        📌 Cập nhập đơn đăng ký nhãn hiệu mới
+                        📌 Cập nhập đơn đăng ký kiểu dáng mới
                     </h2>
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"

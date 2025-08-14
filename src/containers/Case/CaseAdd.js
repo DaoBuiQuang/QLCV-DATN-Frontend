@@ -329,7 +329,36 @@ function CaseAdd() {
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.noiDungVuViec}</p>
                         )}
                     </div>
+                    <div>
+                        <label className="block text-gray-700 text-left">Đối tác</label>
+                        <Select
+                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
+                            value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
+                            onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
+                            placeholder="Chọn đối tác"
+                            className="w-full  mt-1  rounded-lg  text-left"
+                            isClearable
+                        />
+                    </div>
 
+                    <div>
+                        <label className="block text-gray-700 text-left ">Loại vụ việc <span className="text-red-500">*</span></label>
+                        <Select
+                            options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
+                            value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
+                            onChange={selectedOption => {
+                                setMaLoaiVuViec(selectedOption?.value)
+                                const value = selectedOption?.value || "";
+                                validateField("maLoaiVuViec", value);
+                            }}
+                            placeholder="Chọn loại vụ việc"
+                            className="w-full  mt-1  rounded-lg  text-left"
+                            isClearable
+                        />
+                        {errors.maLoaiVuViec && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiVuViec}</p>
+                        )}
+                    </div>
                     <div>
                         <label className="block text-gray-700 text-left">Ngày tiếp nhận <span className="text-red-500">*</span></label>
                         <DatePicker
@@ -356,7 +385,24 @@ function CaseAdd() {
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.ngayTiepNhan}</p>
                         )}
                     </div>
-
+                    <div>
+                        <label className="block text-gray-700 text-left">Loại đơn <span className="text-red-500">*</span></label>
+                        <Select
+                            options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
+                            value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
+                            onChange={selectedOption => {
+                                setMaLoaiDon(selectedOption?.value)
+                                const value = selectedOption?.value || "";
+                                validateField("maLoaiDon", value);
+                            }}
+                            placeholder="Chọn loại đơn"
+                            className="w-full mt-1 rounded-lg h-10 text-left"
+                            isClearable
+                        />
+                        {errors.maLoaiDon && (
+                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiDon}</p>
+                        )}
+                    </div>
                     <div>
                         <label className="block text-gray-700 text-left">Ngày xử lý </label>
                         <DatePicker
@@ -378,42 +424,7 @@ function CaseAdd() {
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-gray-700 text-left ">Loại vụ việc <span className="text-red-500">*</span></label>
-                        <Select
-                            options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
-                            value={maLoaiVuViec ? formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec").find(opt => opt.value === maLoaiVuViec) : null}
-                            onChange={selectedOption => {
-                                setMaLoaiVuViec(selectedOption?.value)
-                                const value = selectedOption?.value || "";
-                                validateField("maLoaiVuViec", value);
-                            }}
-                            placeholder="Chọn loại vụ việc"
-                            className="w-full  mt-1  rounded-lg  text-left"
-                            isClearable
-                        />
-                        {errors.maLoaiVuViec && (
-                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiVuViec}</p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-left">Loại đơn đăng ký <span className="text-red-500">*</span></label>
-                        <Select
-                            options={formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon")}
-                            value={maLoaiDon ? formatOptions(applicationtypes, "maLoaiDon", "tenLoaiDon").find(opt => opt.value === maLoaiDon) : null}
-                            onChange={selectedOption => {
-                                setMaLoaiDon(selectedOption?.value)
-                                const value = selectedOption?.value || "";
-                                validateField("maLoaiDon", value);
-                            }}
-                            placeholder="Chọn loại đơn đăng ký"
-                            className="w-full mt-1 rounded-lg h-10 text-left"
-                            isClearable
-                        />
-                        {errors.maLoaiDon && (
-                            <p className="text-red-500 text-xs mt-1 text-left">{errors.maLoaiDon}</p>
-                        )}
-                    </div>
+
 
                     {/* <div>
                         <label className="block text-gray-700 text-left">Quốc gia vụ việc <span className="text-red-500">*</span></label>
@@ -432,17 +443,7 @@ function CaseAdd() {
                             <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
                         )}
                     </div> */}
-                    <div>
-                        <label className="block text-gray-700 text-left">Đối tác</label>
-                        <Select
-                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
-                            value={maDoiTac ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === maDoiTac) : null}
-                            onChange={selectedOption => setMaDoiTac(selectedOption?.value)}
-                            placeholder="Chọn đối tác"
-                            className="w-full  mt-1  rounded-lg  text-left"
-                            isClearable
-                        />
-                    </div>
+
                     <div>
                         <label className="block text-gray-700 text-left">Người xử lí chính</label>
                         <Select

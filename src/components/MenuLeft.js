@@ -26,7 +26,7 @@ function MenuLeft() {
             settings: ["/changepassword", "/profile"].some(path =>
                 location.pathname.startsWith(path)
             ),
-            application: ["/applicationlist", "/applicationlist_kh"].some(path =>
+            application: ["/applicationlist", "/applicationlist_kh", "application_kdlist_vn"].some(path =>
                 location.pathname.startsWith(path)
             ),
         });
@@ -82,6 +82,12 @@ function MenuLeft() {
                                         <NavLink to="/applicationlist_kh" className={navLinkClass}>
                                             <PieChart size={14} />
                                             <span>Đơn đăng ký NH_Cam</span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to="/application_kdlist_vn" className={navLinkClass}>
+                                            <PieChart size={14} />
+                                            <span>Đơn đăng ký KD_VN</span>
                                         </NavLink>
                                     </li>
                                 </ul>
