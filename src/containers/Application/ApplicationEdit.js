@@ -170,7 +170,7 @@ function ApplicationEdit() {
             setNgayHoanThanhHSTL_DuKien(duKien);
             setNgayKQThamDinhHinhThuc_DuKien(duKien);
             // 👉 Chỉ set ngày hết hạn nếu chưa có
-            if (!ngayHetHanBang) {
+            if (!ngayHetHanBang && soBang) {
                 const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
                 setNgayHetHanBang(hetHanBang);
             }
@@ -267,6 +267,7 @@ function ApplicationEdit() {
         }
 
     }, [
+        soBang,
         ngayNopDon,
         ngayHoanThanhHSTL,
         ngayKQThamDinhHinhThuc,
@@ -646,7 +647,7 @@ function ApplicationEdit() {
                                     className="mt-2"
                                 >
                                     <Radio value={true}>Phản hồi</Radio>
-                                    <Radio value={false}>Chờ nhận đơn</Radio>
+                                    <Radio value={false}>Chờ nhận bằng</Radio>
                                 </Radio.Group>
                             </div>
                         )}

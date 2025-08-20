@@ -215,7 +215,11 @@ function ApplicationDetail_KH() {
             .sort((a, b) => new Date(b.ngayNhanThongBaoTuChoiTD) - new Date(a.ngayNhanThongBaoTuChoiTD))[0] || null;
     };
     const tuChoiND = getLatestThongBao(lichSuThamDinh);
-
+     const handleApplicationEdit = () => {
+        if (maDonDangKy) {
+            navigate(`/applicationedit_kh/${maDonDangKy}`);
+        }
+    };
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center space-y-4">
             {/* <DonProgress trangThaiDon={trangThaiDon} /> */}
@@ -224,7 +228,7 @@ function ApplicationDetail_KH() {
                     <h2 className="text-2xl font-semibold text-gray-700">
                         📌 Thông tin đơn đăng ký nhãn hiệu mới
                     </h2>
-                     <img
+                    <img
                         src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg"
                         alt="Cờ Campuchia"
                         className="w-20 h-15"
@@ -545,7 +549,12 @@ function ApplicationDetail_KH() {
                         fileName={`ThongDonDangKy_${maDonDangKy}`}
                     />
                 </div>
-
+                <button
+                    onClick={handleApplicationEdit}
+                    className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
+                >
+                    Sửa thông tin đơn
+                </button>
                 <Modal
                     title="📄 Lịch sử nhận thông báo từ chối thẩm định hình thức"
                     open={isModalTDOpen}
@@ -571,8 +580,6 @@ function ApplicationDetail_KH() {
                         ]}
                     />
                 </Modal>
-
-
             </div>
         </div>
     );

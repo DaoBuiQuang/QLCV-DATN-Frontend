@@ -154,18 +154,20 @@ function ApplicationEdit_KH() {
         //     setNgayKQThamDinhHinhThuc_DuKien(null);
         //     setNgayHetHanBang(null);
         // }
-        if (ngayHoanThanhHSTL) {
+        if (ngayNopDon) {
             // if (!ngayKQThamDinhND_DuKien) {
-            const duKien1 = dayjs(ngayHoanThanhHSTL).add(2, 'month').format('YYYY-MM-DD');
-            const duKien = dayjs(ngayHoanThanhHSTL).add(6, 'month').format('YYYY-MM-DD');
+            const duKien1 = dayjs(ngayNopDon).add(2, 'month').format('YYYY-MM-DD');
+            const duKien = dayjs(ngayNopDon).add(6, 'month').format('YYYY-MM-DD');
             setNgayHoanThanhHSTL_DuKien(duKien1);
             setNgayKQThamDinhND_DuKien(duKien);
             // }
             // setDaChonNgayCongBoDon(true);
                updateTrangThaiDon("Thẩm định");
         } else {
+             setNgayHoanThanhHSTL_DuKien(null);
             setNgayKQThamDinhND_DuKien(null);
         }
+
 
         // const baseNgay = ngayNhanKQYKien || ngayThongBaoCapBang;
         // if (ngayKQThamDinhND) {
@@ -512,7 +514,7 @@ function ApplicationEdit_KH() {
                 </Spin>
                 <div className="flex justify-center gap-4 mt-4">
                     <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                    <button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Sửa đơn đăng ký</button>
+                    <button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Lưu thông tin</button>
                 </div>
                 <div className="mt-4">
                     {/* <ExportWordButton

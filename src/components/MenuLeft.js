@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
     PieChart, Users, Briefcase, Handshake, Globe, UserCheck,
     FileText, Layers, Settings, Tag, ShoppingCart, LayoutDashboard, Key, User,
-    ChevronDown, ChevronUp // 👈 Icon thêm vào
+    ChevronDown, ChevronUp
 } from "lucide-react";
 import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,7 @@ function MenuLeft() {
             settings: ["/changepassword", "/profile"].some(path =>
                 location.pathname.startsWith(path)
             ),
-            application: ["/applicationlist", "/applicationlist_kh", "application_kdlist_vn"].some(path =>
+            application: ["/applicationlist", "/applicationlist_kh", "/application_gh_nh_vn_list", "application_gh_nh_vn_list"].some(path =>
                 location.pathname.startsWith(path)
             ),
         });
@@ -65,7 +65,7 @@ function MenuLeft() {
                             >
                                 <div className="flex items-center space-x-2">
                                     <PieChart size={16} color={openSettingSubmenu.application ? "#009999" : undefined} />
-                                    <span>Đơn đăng ký</span>
+                                    <span>Nhãn hiệu</span>
                                 </div>
                                 {openSettingSubmenu.application ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                             </button>
@@ -84,10 +84,16 @@ function MenuLeft() {
                                             <span>Đơn đăng ký NH_Cam</span>
                                         </NavLink>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <NavLink to="/application_kdlist_vn" className={navLinkClass}>
                                             <PieChart size={14} />
                                             <span>Đơn đăng ký KD_VN</span>
+                                        </NavLink>
+                                    </li> */}
+                                    <li>
+                                        <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                                            <PieChart size={14} />
+                                            <span>Đơn gia hạn NH_VN</span>
                                         </NavLink>
                                     </li>
                                 </ul>

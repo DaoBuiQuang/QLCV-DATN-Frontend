@@ -274,7 +274,7 @@ function CaseList() {
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                      <div className="w-full md:w-1/6">
+                    <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Quốc gia</label>
                         <Select
                             options={formatOptions(countries, "maQuocGia", "tenQuocGia")}
@@ -284,7 +284,7 @@ function CaseList() {
                             className="text-left"
                             isClearable
                         />
-                           </div>
+                    </div>
                     {/* <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Người XL chính</label>
                         <Select
@@ -329,8 +329,8 @@ function CaseList() {
                             isClearable
                         />
                     </div>
-                  
-                 
+
+
                     <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Đối tác</label>
                         <Select
@@ -399,10 +399,30 @@ function CaseList() {
                                                 );
                                             }
 
-                                            if (col.key === "soDon" || col.key === "soDonKH") {
+                                            if (col.key === "soDon" || col.key === "soDonKH" || col.key === "soDonGiaHan") {
                                                 const maQuocGia = caseItem.maQuocGia;
-                                                const maDon = maQuocGia === "KH" ? caseItem.maDonDangKyKH : caseItem.maDonDangKy;
-                                                const soDon = maQuocGia === "KH" ? caseItem.soDonKH : caseItem.soDon;
+
+                                                // Ưu tiên xác định loại đơn
+                                                let maDon = null;
+                                                let soDon = null;
+                                                let link = null;
+
+                                                if (caseItem.maDonGiaHan) {
+                                                    // Đơn gia hạn
+                                                    maDon = caseItem.maDonGiaHan;
+                                                    soDon = caseItem.soDonGiaHan;
+                                                    link = `/application_gh_nh_vn_detail/${maDon}`;
+                                                } else if (maQuocGia === "KH") {
+                                                    // Đơn KH
+                                                    maDon = caseItem.maDonDangKyKH;
+                                                    soDon = caseItem.soDonKH;
+                                                    link = `/applicationdetail_kh/${maDon}`;
+                                                } else {
+                                                    // Đơn thường
+                                                    maDon = caseItem.maDonDangKy;
+                                                    soDon = caseItem.soDon;
+                                                    link = `/applicationdetail/${maDon}`;
+                                                }
 
                                                 const hasDon = !!maDon;
                                                 const hasSoDon = !!soDon;
@@ -414,7 +434,7 @@ function CaseList() {
                                                         onClick={(e) => {
                                                             if (hasDon) {
                                                                 e.stopPropagation();
-                                                                navigate(`/applicationdetail${maQuocGia === "KH" ? "_kh" : ""}/${maDon}`);
+                                                                navigate(link);
                                                             }
                                                         }}
                                                     >
@@ -426,9 +446,6 @@ function CaseList() {
                                                     </td>
                                                 );
                                             }
-
-
-
                                             if (col.key === "nguoiXuLyChinh") {
                                                 return (
                                                     <td key={col.key} className={commonClass}>
@@ -493,19 +510,30 @@ function CaseList() {
                                                     </button>
                                                     <button
                                                         className="px-3 py-1 bg-blue-200 text-blue-600 rounded-md hover:bg-blue-300"
-                                                        onClick={() =>
-                                                            navigate(
-                                                                `${(caseItem.maDonDangKy || caseItem.maDonDangKyKH)
-                                                                    ? `/applicationedit${caseItem.maQuocGia === "KH" ? "_kh" : ""}/${caseItem.maDonDangKy || caseItem.maDonDangKyKH}`
-                                                                    : `/applicationadd${caseItem.maQuocGia === "KH" ? "_kh" : ""}/${caseItem.maHoSoVuViec}`
-                                                                }`
-                                                            )
-                                                        }
-
+                                                        onClick={() => {
+                                                            if (caseItem.maDonGiaHan || caseItem.soDonGiaHan) {
+                                                                // Nếu có đơn gia hạn
+                                                                navigate(
+                                                                    `${caseItem.soDonGiaHan
+                                                                        ? `/application_gh_nh_vn_edit/${caseItem.maDonGiaHan}`
+                                                                        : `/application_gh_nh_vn_add/${caseItem.maHoSoVuViec}/${caseItem.id}`
+                                                                    }`
+                                                                );
+                                                            } else {
+                                                                // Nếu là đơn đăng ký thường
+                                                                navigate(
+                                                                    `${caseItem.maDonDangKy || caseItem.maDonDangKyKH
+                                                                        ? `/applicationedit${caseItem.maQuocGia === "KH" ? "_kh" : ""
+                                                                        }/${caseItem.maDonDangKy || caseItem.maDonDangKyKH}`
+                                                                        : `/applicationadd${caseItem.maQuocGia === "KH" ? "_kh" : ""
+                                                                        }/${caseItem.maHoSoVuViec}/${caseItem.id}`
+                                                                    }`
+                                                                );
+                                                            }
+                                                        }}
                                                     >
                                                         📄
                                                     </button>
-
                                                 </div>
                                             )}
                                         </td>

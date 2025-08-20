@@ -124,7 +124,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
+        data: { searchText: searchValue, tenNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
       });
       setApplications(response.data || []);
       setTotalItems(response.pagination?.totalItems || 0);
@@ -286,8 +286,8 @@ function ApplicationList() {
             <div className="w-full md:w-1/5">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Nhãn hiệu</label>
               <Select
-                options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
-                value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
+                options={formatOptions(brands, "tenNhanHieu", "tenNhanHieu")}
+                value={selectedBrand ? formatOptions(brands, "tenNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
                 onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
                 placeholder="Chọn nhãn hiệu"
                 className="text-left"

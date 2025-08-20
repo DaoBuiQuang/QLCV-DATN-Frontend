@@ -34,7 +34,7 @@ function ApplicationList_KH() {
   const navigate = useNavigate();
 
   const [brands, setBrands] = useState([]);
-  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState(null);
   const [productAndService, setProductAndService] = useState([]);
   const [selectedProductAndService, setSelectedProductAndService] = useState([]);
   const [selectedTrangThaiDon, setSelectedTrangThaiDon] = useState(null);
@@ -118,7 +118,7 @@ function ApplicationList_KH() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application_kh/list",
-        data: { searchText: searchValue, maNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
+        data: { searchText: searchValue, tenNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
       });
       setApplications(response.data || []);
       setTotalItems(response.pagination?.totalItems || 0);
@@ -176,12 +176,12 @@ function ApplicationList_KH() {
 
   const fieldOptions = [
     { value: "ngayNopDon", label: "Ngày nộp đơn" },
-    { value: "ngayHoanThanhHoSoTaiLieu", label: "Ngày Hoàn thành tài liệu" },
-    { value: "ngayKQThamDinhHinhThuc", label: "Ngày chấp nhận đơn hợp lệ" },
-    { value: "ngayCongBoDon", label: "Ngày công bố đơn" },
-    { value: "ngayKQThamDinhND", label: "Ngày kết quả thẩm định nội dung đơn" },
-    { value: "ngayThongBaoCapBang", label: "Ngày thông báo cấp bằng" },
-    { value: "ngayNopPhiCapBang", label: "Ngày nộp phí cấp bằng" },
+    // { value: "ngayHoanThanhHoSoTaiLieu", label: "Ngày Hoàn thành tài liệu" },
+    // { value: "ngayKQThamDinhHinhThuc", label: "Ngày chấp nhận đơn hợp lệ" },
+    // { value: "ngayCongBoDon", label: "Ngày công bố đơn" },
+    // { value: "ngayKQThamDinhND", label: "Ngày kết quả thẩm định nội dung đơn" },
+    // { value: "ngayThongBaoCapBang", label: "Ngày thông báo cấp bằng" },
+    // { value: "ngayNopPhiCapBang", label: "Ngày nộp phí cấp bằng" },
     { value: "ngayGuiBangChoKhachHang", label: "Ngày gửi bằng cho khách hàng" },
     { value: "ngayHetHanBang", label: "Ngày hết hạn bằng" },
     // Thêm trường khác nếu cần
@@ -280,8 +280,8 @@ function ApplicationList_KH() {
             <div className="w-full md:w-1/5">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Nhãn hiệu</label>
               <Select
-                options={formatOptions(brands, "maNhanHieu", "tenNhanHieu")}
-                value={selectedBrand ? formatOptions(brands, "maNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
+                options={formatOptions(brands, "tenNhanHieu", "tenNhanHieu")}
+                value={selectedBrand ? formatOptions(brands, "tenNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
                 onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
                 placeholder="Chọn nhãn hiệu"
                 className="text-left"
@@ -308,7 +308,7 @@ function ApplicationList_KH() {
             </div>
 
             {/* Trạng thái đơn */}
-            <div className="w-full md:w-1/5">
+            {/* <div className="w-full md:w-1/5">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Trạng thái đơn</label>
               <Select
                 options={trangThaiDonOptions}
@@ -320,7 +320,7 @@ function ApplicationList_KH() {
                 className="text-left"
                 isClearable
               />
-            </div>
+            </div> */}
             <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Lọc theo hạn xử lý</label>
               <Select
@@ -476,20 +476,20 @@ function ApplicationList_KH() {
                         </td>
                       );
                     }
-                    // if (col.key === "maDonDangKy") {
-                    //   return (
-                    //     <td
-                    //       key={col.key}
-                    //       className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
-                    //       onClick={(e) => {
-                    //         e.stopPropagation();
-                    //         navigate(`/applicationdetail/${app.maDonDangKy}`);
-                    //       }}
-                    //     >
-                    //       {app.maDonDangKy}
-                    //     </td>
-                    //   );
-                    // }
+                    if (col.key === "maDonDangKy") {
+                      return (
+                        <td
+                          key={col.key}
+                          className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/applicationdetail/${app.maDonDangKy}`);
+                          }}
+                        >
+                          {app.maDonDangKy}
+                        </td>
+                      );
+                    }
 
                     if (col.key === "dsSPDV") {
                       return (

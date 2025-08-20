@@ -435,7 +435,7 @@ function ApplicationAdd_KH() {
                         className={`px-4 py-2 rounded-lg text-white ${isFormValid
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-blue-300 cursor-not-allowed"
-                            }`}>Thêm đơn đăng ký</button>
+                            }`}>Lưu thông tin</button>
                 </div>
             </div>
         </div>

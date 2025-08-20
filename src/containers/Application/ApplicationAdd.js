@@ -19,6 +19,7 @@ import BrandBasicForm from "../../components/BrandBasicForm";
 function ApplicationAdd() {
     const navigate = useNavigate();
     const { maHoSoVuViec } = useParams();
+    const {id} = useParams();
     const isAddOnly = true
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
@@ -164,7 +165,7 @@ function ApplicationAdd() {
             setNgayHoanThanhHSTL_DuKien(duKien);
             setNgayKQThamDinhHinhThuc_DuKien(duKien);
             // 👉 Chỉ set ngày hết hạn nếu chưa có
-            if (!ngayHetHanBang) {
+            if (!ngayHetHanBang && soBang) {
                 const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
                 setNgayHetHanBang(hetHanBang);
             }
@@ -265,6 +266,7 @@ function ApplicationAdd() {
         }
 
     }, [
+        soBang,
         ngayNopDon,
         ngayHoanThanhHSTL,
         ngayKQThamDinhHinhThuc,
@@ -300,6 +302,7 @@ function ApplicationAdd() {
                 endpoint: "/application/add",
                 data: {
                     maHoSoVuViec: maHoSoVuViec,
+                    idHoSoVuViec: id,
                     soDon: soDon,
                     maNhanHieu: maNhanHieuOld,
                     maSPDVList: maSPDVList,
@@ -568,7 +571,7 @@ function ApplicationAdd() {
                                 className="mt-2"
                             >
                                 <Radio value={true}>Phản hồi</Radio>
-                                <Radio value={false}>Chờ nhận đơn</Radio>
+                                <Radio value={false}>Chờ nhận bằng</Radio>
                             </Radio.Group>
                         </div>
                     )}

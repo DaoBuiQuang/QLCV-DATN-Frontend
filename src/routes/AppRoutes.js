@@ -67,6 +67,12 @@ import ApplicationKD_VNList from "../containers/ApplicationKD_VN/ApplicationKD_V
 import ApplicationKD_VNAdd from "../containers/ApplicationKD_VN/ApplicationKD_VNAdd.js";
 import ApplicationKD_VNEdit from "../containers/ApplicationKD_VN/ApplicationKD_VNEdit.js";
 import ApplicationKD_VNDetail from "../containers/ApplicationKD_VN/ApplicationKD_VNDetail.js";
+import Application_GH_VNList from "../containers/Application_GH_NH_VN/Application_GH_NH_VNList.js";
+import Application_GH_VNAdd from "../containers/Application_GH_NH_VN/Application_GH_NH_VNAdd.js";
+import Application_GH_NH_VNAdd from "../containers/Application_GH_NH_VN/Application_GH_NH_VNAdd.js";
+import Application_GH_NH_VNList from "../containers/Application_GH_NH_VN/Application_GH_NH_VNList.js";
+import Application_GH_NH_VNEdit from "../containers/Application_GH_NH_VN/Application_GH_NH_VNEdit.js";
+import Application_GH_NH_VNDetail from "../containers/Application_GH_NH_VN/Application_GH_NH_VNDetail.js";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -97,7 +103,7 @@ const MainLayout = ({ notification, setNotification }) => {
       <div className={`flex flex-col flex-1 transition-all duration-300 ${isMenuOpen ? "ml-56" : "ml-0"}`}>
         <Header
           toggleMenu={() => setIsMenuOpen(!isMenuOpen)}
-          isMenuOpen={isMenuOpen} 
+          isMenuOpen={isMenuOpen}
         />
         <main
           className="flex-1 p-4 bg-gray-100"
@@ -169,6 +175,10 @@ const AppRoutes = ({ notification, setNotification }) => {
 
           <Route path="/applicationlist" element={<ApplicationList></ApplicationList>} />
           <Route path="/applicationadd/:maHoSoVuViec" element={<ApplicationAdd></ApplicationAdd>} />
+          <Route
+            path="/applicationadd/:maHoSoVuViec/:id"
+            element={<ApplicationAdd />}
+          />
           <Route path="/applicationadd" element={<ApplicationAdd />} />
           <Route path="/applicationedit/:maDonDangKy" element={<ApplicationEdit></ApplicationEdit>} />
           {/* <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetail></ApplicationDetail>} /> */}
@@ -196,13 +206,22 @@ const AppRoutes = ({ notification, setNotification }) => {
 
           <Route path="/applicationlist_kh" element={<ApplicationList_KH></ApplicationList_KH>} />
           <Route path="/applicationadd_kh/:maHoSoVuViec" element={<ApplicationAdd_KH></ApplicationAdd_KH>} />
+          <Route
+            path="/applicationadd_kh/:maHoSoVuViec/:id"
+            element={<ApplicationAdd_KH />}
+          />
           <Route path="/applicationedit_kh/:maDonDangKy" element={<ApplicationEdit_KH></ApplicationEdit_KH>} />
           <Route path="/applicationdetail_kh/:maDonDangKy" element={<ApplicationDetail_KH></ApplicationDetail_KH>} />
 
           <Route path="/application_kdlist_vn" element={<ApplicationKD_VNList></ApplicationKD_VNList>} />
-          <Route path="/application_kdadd_vn/:maHoSoVuViec" element={<ApplicationKD_VNAdd></ApplicationKD_VNAdd>} />
+          <Route path="/application_kdadd_vn/:maHoSoVuViec/:id" element={<ApplicationKD_VNAdd></ApplicationKD_VNAdd>} />
           <Route path="/application_kdedit_vn/:maDonDangKy" element={<ApplicationKD_VNEdit></ApplicationKD_VNEdit>} />
           <Route path="/application_kddetail_vn/:maDonDangKy" element={<ApplicationKD_VNDetail></ApplicationKD_VNDetail>} />
+
+          <Route path="/application_gh_nh_vn_list" element={<Application_GH_NH_VNList></Application_GH_NH_VNList>} />
+          <Route path="/application_gh_nh_vn_add/:maHoSoVuViec/:id" element={<Application_GH_NH_VNAdd></Application_GH_NH_VNAdd>} />
+          <Route path="/application_gh_nh_vn_edit/:maDonGiaHan" element={<Application_GH_NH_VNEdit></Application_GH_NH_VNEdit>} />
+          <Route path="/application_gh_nh_vn_detail/:maDonGiaHan" element={<Application_GH_NH_VNDetail></Application_GH_NH_VNDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 
