@@ -53,11 +53,11 @@ function PartnerList() {
   };
 
   useEffect(() => {
-     const savedPage = parseInt(localStorage.getItem("partnerListPage") || "1", 10);
+    const savedPage = parseInt(localStorage.getItem("partnerListPage") || "1", 10);
     fetchCountries();
 
     fetchPartners("", "", savedPage, pageSize);
-        localStorage.setItem("partnerListPage", "1");
+    localStorage.setItem("partnerListPage", "1");
   }, []);
 
   // Hàm xử lý xóa đối tác
@@ -144,6 +144,12 @@ function PartnerList() {
             <th className="p-2 text-table">Mã đối tác</th>
             <th className="p-2 text-table">Tên đối tác</th>
             <th className="p-2 text-table">Tên quốc gia</th>
+            <th className="p-2 text-table">Người liên hệ</th>
+            <th className="p-2 text-table">Mô tả</th>
+            <th className="p-2 text-table">Địa chỉ</th>
+            <th className="p-2 text-table">Số điện thoại</th>
+            <th className="p-2 text-table">Ghi chú</th>
+            <th className="p-2 text-table">Email</th>
             <th className="p-2 text-center text-table"></th>
           </tr>
         </thead>
@@ -162,6 +168,13 @@ function PartnerList() {
               </td>
               <td className="p-2 text-table">{partner.tenDoiTac}</td>
               <td className="p-2 text-table">{partner.tenQuocGia}</td>
+              <td className="p-2 text-table">{partner.nguoiLienHe}</td>
+              <td className="p-2 text-table">{partner.moTa}</td>
+              <td className="p-2 text-table">{partner.diaChi}</td>
+              <td className="p-2 text-table">{partner.sdt}</td>
+              <td className="p-2 text-table">{partner.ghiChu}</td>
+              <td className="p-2 text-table">{partner.email}</td>
+
               <td className="p-2 relative">
                 {(role === "admin" || role === "staff") && (
                   <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">

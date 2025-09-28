@@ -10,10 +10,25 @@ import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification.js";
 import BrandBasicForm from "../../components/BrandBasicForm.js";
 import FormGiaHan from "../../components/commom/FormGiaHan.js";
+import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 function Application_GH_NH_VNEdit() {
     const navigate = useNavigate();
+    const tenLoaiDon = "Đơn gia hạn tại Việt Nam"
     const [loading, setLoading] = useState(false);
     const { maDonGiaHan } = useParams();
+    const [idKhachHang, setIdKhachHang] = useState(null);
+    const [maKhachHang, setMaKhachHang] = useState("");
+    const [idDoiTac, setIdDoiTac] = useState(null)
+    const [maDoiTac, setMaDoiTac] = useState("");
+    const [clientsRef, setClientsRef] = useState("");
+    const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
+    const [ngayXuLy, setNgayXuLy] = useState(null);
+    const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [nhanSuVuViec, setNhanSuVuViec] = useState("");
+    const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState("");
+    const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState("");
+    const [ngayDongHS, setNgayDongHS] = useState(null);
+    const [ngayRutHS, setNgayRutHS] = useState(null);
     // const { id } = useParams();
     // const { maHoSoVuViec } = useParams();
     const [maHoSoVuViec, setMaHoSoVuViec] = useState(null);
@@ -62,6 +77,7 @@ function Application_GH_NH_VNEdit() {
     const [ngayNopYKien, setNgayNopYKien] = useState(null);
     const [ketQuaYKien, setKetQuaYKien] = useState(null);
     const [taiLieuList, setTaiLieuList] = useState([]);
+    const [vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
@@ -179,7 +195,7 @@ function Application_GH_NH_VNEdit() {
         fetchItems();
         detailApplication();
     }, [])
-     const formatOptions = (data, valueKey, labelKey) => {
+    const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
             value: item[valueKey],
             label: item[labelKey]
@@ -200,7 +216,16 @@ function Application_GH_NH_VNEdit() {
             });
 
             if (response) {
+                setIdKhachHang(response.idKhachHang);
+                setIdDoiTac(response.idDoiTac);
+                setClientsRef(response.clientsRef);
+                setNgayTiepNhan(response.ngayTiepNhan);
+                setNgayXuLy(response.ngayXuLy);
+                setTrangThaiVuViec(response.trangThaiVuViec)
                 setMaHoSoVuViec(response.maHoSoVuViec);
+                setNguoiXuLyChinh(response.maNguoiXuLy1);
+                setNguoiXuLyPhu(response.maNguoiXuLy2);
+
                 setSoDon(response.soDon)
                 setMaNhanHieu(response.NhanHieu.maNhanHieu);
                 setTenNhanHieu(response.NhanHieu.tenNhanHieu);
@@ -238,6 +263,7 @@ function Application_GH_NH_VNEdit() {
                 setTaiLieuList(response.TaiLieuGH_NH_VN);
                 setGiayUyQuyenGoc(response.giayUyQuyenGoc);
                 setMaUyQuyen(response.maUyQuyen || null);
+                setVuViecList(response.vuViec)
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -251,6 +277,21 @@ function Application_GH_NH_VNEdit() {
                 method: "put",
                 endpoint: "/application_gh_nh_vn/edit",
                 data: {
+                    maHoSo: maHoSoVuViec,
+                    idKhachHang: idKhachHang,
+                    // maKhachHang: maKhachHang,
+
+                    idDoiTac: idDoiTac,
+                    clientsRef: clientsRef,
+                    ngayTiepNhan: ngayTiepNhan,
+                    ngayXuLy: ngayXuLy,
+                    maNguoiXuLy1: nguoiXuLyChinh,
+                    maNguoiXuLy2: nguoiXuLyPhu,
+                    trangThaiVuViec: trangThaiVuViec,
+                    ngayDongHS: ngayDongHS,
+                    ngayRutHS: ngayRutHS,
+
+
                     maDonGiaHan: maDonGiaHan,
                     maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
@@ -261,7 +302,7 @@ function Application_GH_NH_VNEdit() {
                     ghiChu: ghiChu,
                     ngayNopDon: ngayNopDon,
 
-                    ngayNopYCGiaHan:  ngayNopYCGiaHan || null,
+                    ngayNopYCGiaHan: ngayNopYCGiaHan || null,
                     donGoc: donGoc,
                     ngayKQThamDinh_DuKien: ngayKQThamDinh_DuKien || null,
                     trangThaiThamDinh: trangThaiThamDinh,
@@ -275,15 +316,16 @@ function Application_GH_NH_VNEdit() {
                     ngayDangBa: ngayDangBa || null,
 
                     ngayNhanBang: ngayNhanBang || null,
-                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH   || null,
+                    ngayGuiBangChoKhachHang: ngayGuiBangChoKH || null,
                     ngayCapBang: ngayCapBang || null,
-                    ngayHetHanBang: ngayHetHanBang  || null,
+                    ngayHetHanBang: ngayHetHanBang || null,
                     soBang: soBang,
                     quyetDinhSo: quyetDinhSo,
                     taiLieus: taiLieuList,
                     giayUyQuyenGoc: giayUyQuyenGoc || true,
                     maUyQuyen: maUyQuyen || null,
-                    nhanHieu
+                    nhanHieu,
+                    vuViecs: vuViecList,
                 },
             });
             await showSuccess("Thành công!", "Sửa đơn gia hạn nhãn hiệu tại Việt Nam thành công!");
@@ -300,7 +342,9 @@ function Application_GH_NH_VNEdit() {
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
     };
-
+    const handleVuViecChange = (list) => {
+        setVuViecList(list);
+    }
     return (
         <div className="p-1 bg-gray-100 flex  items-center justify-center space-y-4">
             {/* <DonProgress trangThaiDon={trangThaiDon} /> */}
@@ -482,6 +526,18 @@ function Application_GH_NH_VNEdit() {
                             setNgayHetHanBang={setNgayHetHanBang}
                             ngayGuiBangChoKH={ngayGuiBangChoKH}
                             setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                        />
+                    </div>
+                    <div className="col-span-2">
+                        <DSVuViec
+                            maHoSo={maHoSoVuViec}
+                            onVuViecChange={handleVuViecChange} initialVuViecs={vuViecList}
+                            maHoSoVuViec={maHoSoVuViec}
+                            giayUyQuyenGoc={giayUyQuyenGoc}
+                            setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                            maUyQuyen={maUyQuyen}
+                            setMaUyQuyen={setMaUyQuyen}
+                            tenLoaiDon={tenLoaiDon}
                         />
                     </div>
                 </div>

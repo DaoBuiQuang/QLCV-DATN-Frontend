@@ -14,10 +14,28 @@ import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification.js";
 import BrandBasicForm from "../../components/BrandBasicForm.js";
 import { Spin } from "antd";
+import FormHoSo from "../../components/commom/FormHoSo.js";
+import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 function ApplicationEdit_KH() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const { maDonDangKy } = useParams();
+    const [loaiDon, setLoaiDon] = useState(1)
+    const [idKhachHang, setIdKhachHang] = useState(null);
+    const [maKhachHang, setMaKhachHang] = useState("");
+    const [idDoiTac, setIdDoiTac] = useState(null)
+    const [maDoiTac, setMaDoiTac] = useState("");
+    const [clientsRef, setClientsRef] = useState("");
+    const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
+    const [ngayXuLy, setNgayXuLy] = useState(null);
+    const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [nhanSuVuViec, setNhanSuVuViec] = useState("");
+    const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState("");
+    const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState("");
+    const [ngayDongHS, setNgayDongHS] = useState(null);
+    const [ngayRutHS, setNgayRutHS] = useState(null);
+
+
     const isEditOnly = true
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [soDon, setSoDon] = useState("")
@@ -55,6 +73,7 @@ function ApplicationEdit_KH() {
     const [buocXuLy, setBuocXuLy] = useState("");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
+    const [vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
@@ -162,9 +181,9 @@ function ApplicationEdit_KH() {
             setNgayKQThamDinhND_DuKien(duKien);
             // }
             // setDaChonNgayCongBoDon(true);
-               updateTrangThaiDon("Thẩm định");
+            updateTrangThaiDon("Thẩm định");
         } else {
-             setNgayHoanThanhHSTL_DuKien(null);
+            setNgayHoanThanhHSTL_DuKien(null);
             setNgayKQThamDinhND_DuKien(null);
         }
 
@@ -212,6 +231,16 @@ function ApplicationEdit_KH() {
             });
 
             if (response) {
+                setIdKhachHang(response.idKhachHang);
+                setIdDoiTac(response.idDoiTac);
+                setClientsRef(response.clientsRef);
+                setNgayTiepNhan(response.ngayTiepNhan);
+                setNgayXuLy(response.ngayXuLy);
+                setTrangThaiVuViec(response.trangThaiVuViec)
+                setMaHoSoVuViec(response.maHoSoVuViec);
+                setNguoiXuLyChinh(response.maNguoiXuLy1);
+                setNguoiXuLyPhu(response.maNguoiXuLy2);
+
                 setMaHoSoVuViec(response.maHoSoVuViec);
                 setSoDon(response.soDon)
                 setMaNhanHieu(response.nhanHieu.maNhanHieu);
@@ -244,6 +273,7 @@ function ApplicationEdit_KH() {
                 setTaiLieuList(response.taiLieuChuaNop_KH);
                 setGiayUyQuyenGoc(response.giayUyQuyenGoc);
                 setMaUyQuyen(response.maUyQuyen || null);
+                setVuViecList(response.vuViec)
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -254,11 +284,24 @@ function ApplicationEdit_KH() {
 
     const handleApplication = async () => {
         try {
-            debugger
             await callAPI({
                 method: "put",
                 endpoint: "/application_kh/edit",
                 data: {
+                    maHoSo: maHoSoVuViec,
+                    idKhachHang: idKhachHang,
+                    // maKhachHang: maKhachHang,
+
+                    idDoiTac: idDoiTac,
+                    clientsRef: clientsRef,
+                    ngayTiepNhan: ngayTiepNhan,
+                    ngayXuLy: ngayXuLy,
+                    maNguoiXuLy1: nguoiXuLyChinh,
+                    maNguoiXuLy2: nguoiXuLyPhu,
+                    trangThaiVuViec: trangThaiVuViec,
+                    ngayDongHS: ngayDongHS,
+                    ngayRutHS: ngayRutHS,
+
                     maDonDangKy: maDonDangKy,
                     maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
@@ -290,7 +333,8 @@ function ApplicationEdit_KH() {
                     taiLieus: taiLieuList,
                     giayUyQuyenGoc: giayUyQuyenGoc,
                     maUyQuyen: maUyQuyen || null,
-                    nhanHieu
+                    nhanHieu,
+                    vuViecs: vuViecList,
                 },
             });
             await showSuccess("Thành công!", "Cập nhật đơn đăng ký nhãn hiệu thành công!");
@@ -308,10 +352,10 @@ function ApplicationEdit_KH() {
     const handleTaiLieuChange = (list) => {
         setTaiLieuList(list);
     };
+    const handleVuViecChange = (list) => {
+        setVuViecList(list);
+    }
 
-    useEffect(() => {
-        console.log("DocumentSection mounted or updated", giayUyQuyenGoc);
-    }, [giayUyQuyenGoc]);
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center space-y-4">
             {/* <DonProgress trangThaiDon={trangThaiDon} /> */}
@@ -326,20 +370,46 @@ function ApplicationEdit_KH() {
                         className="w-20 h-15"
                     />
                 </div>
+                <FormHoSo
+                    soDon={soDon}
+                    setSoDon={setSoDon}
+                    loaiDon={loaiDon}
+                    setLoaiDon={setLoaiDon}
+                    maHoSoVuViec={maHoSoVuViec}
+                    setMaHoSoVuViec={setMaHoSoVuViec}
+                    idKhachHang={idKhachHang}
+                    setIdKhachHang={setIdKhachHang}
+                    idDoiTac={idDoiTac}
+                    setIdDoiTac={setIdDoiTac}
+                    maKhachHang={maKhachHang}
+                    setMaKhachHang={setMaKhachHang}
+                    maDoiTac={maDoiTac}
+                    setMaDoiTac={setMaDoiTac}
+                    clientsRef={clientsRef}
+                    setClientsRef={setClientsRef}
+                    ngayTiepNhan={ngayTiepNhan}
+                    setNgayTiepNhan={setNgayTiepNhan}
+                    ngayXuLy={ngayXuLy}
+                    setNgayXuLy={setNgayXuLy}
+                    trangThaiVuViec={trangThaiVuViec}
+                    setTrangThaiVuViec={setTrangThaiVuViec}
+                    nhanSuVuViec={nhanSuVuViec}
+                    setNhanSuVuViec={setNhanSuVuViec}
+                    nguoiXuLyChinh={nguoiXuLyChinh}
+                    setNguoiXuLyChinh={setNguoiXuLyChinh}
+                    nguoiXuLyPhu={nguoiXuLyPhu}
+                    setNguoiXuLyPhu={setNguoiXuLyPhu}
+                    ngayDongHS={ngayDongHS}
+                    setNgayDongHS={setNgayDongHS}
+                    ngayRutHS={ngayRutHS}
+                    setNgayRutHS={setNgayRutHS}
+                    ngayNopDon={ngayNopDon}
+                    setNgayNopDon={setNgayNopDon}
+                />
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div >
-                                <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc</label>
-                                <input
-                                    type="text"
-                                    value={maHoSoVuViec}
-                                    onChange={(e) => setMaHoSoVuViec(e.target.value)}
-                                    className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                    disabled
-                                />
-                            </div>
-                            <div >
+                            {/* <div >
                                 <label className="block text-gray-700 text-left">Số đơn</label>
                                 <input
                                     type="text"
@@ -348,7 +418,7 @@ function ApplicationEdit_KH() {
                                     onChange={(e) => setSoDon(e.target.value)}
                                     className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                                 />
-                            </div>
+                            </div> */}
 
                             <div>
                                 <label className="block text-gray-700 text-left">Trạng thái đơn</label>
@@ -507,6 +577,17 @@ function ApplicationEdit_KH() {
                                 setNgayHetHanBang={setNgayHetHanBang}
                                 ngayGuiBangChoKH={ngayGuiBangChoKH}
                                 setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                            />
+                        </div>
+                        <div className="col-span-2">
+                            <DSVuViec
+                                maHoSo={maHoSoVuViec}
+                                onVuViecChange={handleVuViecChange} initialVuViecs={vuViecList}
+                                maHoSoVuViec={maHoSoVuViec}
+                                giayUyQuyenGoc={giayUyQuyenGoc}
+                                setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                                maUyQuyen={maUyQuyen}
+                                setMaUyQuyen={setMaUyQuyen}
                             />
                         </div>
                         {/* )} */}

@@ -73,6 +73,7 @@ function ApplicationList_KH() {
   const allFieldOptions = [
     { label: "Số Đơn", labelEn: "App No", key: "soDon" },
     { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
+    {label: "Tên khách hàng", labelEn:"Client Name", key: "tenKhachHang"},
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
     { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
     { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiDon" },
@@ -82,7 +83,7 @@ function ApplicationList_KH() {
     { label: "Ngày nộp đơn", labelEn: "Filing Date", key: "ngayNopDon" },
     { label: "Ngày hoàn thành TL", labelEn: "Doc Completion", key: "ngayHoanThanhHoSoTaiLieu" },
     { label: "Ngày có KQ thẩm định", labelEn: "Formality Exam Result", key: "ngayKQThamDinh" },
-   
+
     { label: "Ngày nhận bằng", labelEn: "Certificate Receipt", key: "ngayNhanBang" },
     { label: "Số bằng", key: "soBang" },
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
@@ -251,6 +252,12 @@ function ApplicationList_KH() {
               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Tìm kiếm
+            </button>
+            <button
+              onClick={() => navigate("/applicationadd_kh")}
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
+            >
+              Thêm mới
             </button>
             <button
               onClick={() => exportToExcel(applications, allFieldOptions, 'DanhSachDonDK')}

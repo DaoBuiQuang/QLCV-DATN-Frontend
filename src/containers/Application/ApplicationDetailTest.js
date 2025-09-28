@@ -8,6 +8,7 @@ import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
 import { Table, Modal, Button, Spin } from "antd";
 import ExportWordModal from "../../components/ExportFile/ExportWordModal.js";
+import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 
 function ApplicationDetailTest() {
     const navigate = useNavigate();
@@ -71,11 +72,13 @@ function ApplicationDetailTest() {
     const [trangThaiDon, setTrangThaiDon] = useState("");
     const [buocXuLy, setBuocXuLy] = useState("");
     const [taiLieuList, setTaiLieuList] = useState([]);
+    const [vuViecList, setVuViecList] = useState([])
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
-
+    const [ghiChu, setGhiChu] = useState("");
+    const [loaiDon, setLoaiDon] = useState(null);
     const [isModalHTOpen, setIsModalHTOpen] = useState(false);
     const [isModalNDOpen, setIsModalNDOpen] = useState(false);
     const formatVietnameseDate = (date = new Date()) => {
@@ -136,13 +139,13 @@ function ApplicationDetailTest() {
 
             if (response) {
                 setMaHoSoVuViec(response.maHoSoVuViec);
-                if (response.hoSoVuViec) {
-                    setNoiDungVuViec(response.hoSoVuViec.noiDungVuViec || "");
-                    setMaKhachHang(response.hoSoVuViec.maKhachHang || "");
-                    setTenKhachHang(response.hoSoVuViec.khachHang?.tenKhachHang || "");
-                    setDiaChi(response.hoSoVuViec.khachHang?.diaChi || "");
-                    setSoDienThoai(response.hoSoVuViec.khachHang?.sdt || "");
-                }
+                setLoaiDon(response.loaiDon);
+                setNoiDungVuViec(response.noiDung || "");
+                setMaKhachHang(response.maKhachHang || "");
+                setTenKhachHang(response.khachHang?.tenKhachHang || "");
+                setDiaChi(response.khachHang?.diaChi || "");
+                setSoDienThoai(response.khachHang?.sdt || "");
+
                 setSoDon(response.soDon)
                 setMaNhanHieu(response.nhanHieu.maNhanHieu);
                 setTenNhanHieu(response.nhanHieu.tenNhanHieu);
@@ -189,6 +192,9 @@ function ApplicationDetailTest() {
                 setTaiLieuList(response.taiLieu)
                 setMaUyQuyen(response.maUyQuyen || null);
                 setGiayUyQuyenGoc(response.giayUyQuyenGoc);
+
+                setGhiChu(response.ghiChu || "");
+                setVuViecList(response.vuViec || [])
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -222,13 +228,16 @@ function ApplicationDetailTest() {
             navigate(`/applicationedit/${maDonDangKy}`);
         }
     };
+    const handleVuViecChange = (list) => {
+        setVuViecList(list);
+    }
     return (
         <div className="p-1 bg-gray-100 flex items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-semibold text-gray-700">
-                        📌 Thêm đơn đăng ký nhãn hiệu mới
+                    <h2 className="text-2xl font-semibold text-gray-700 uppercase">
+                        📌 Thông tin đơn đăng ký nhãn hiệu
                     </h2>
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"
@@ -241,8 +250,9 @@ function ApplicationDetailTest() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-800 text-sm">
                             {/* Thông tin chung */}
-                            <div className="text-left"><span className="font-medium">Mã hồ sơ vụ việc:</span> {maHoSoVuViec}</div>
-                            <div className="text-left"><span className="font-medium">Tên vụ việc:</span> {noiDungVuViec}</div>
+                            <div className="text-left"><span className="font-medium">Mã hồ sơ:</span> {maHoSoVuViec}</div>
+                            <div className="text-left"><span className="font-medium">Loại đơn:</span> {loaiDon === 1 ? "Đơn gốc" : loaiDon === 2 ? "Đơn sửa đổi" : loaiDon === 3 ? "Đơn tách" : loaiDon === 4 ? "Đơn chuyển nhượng" : ""}</div>
+                            <div className="text-left"><span className="font-medium">Client ref's:</span> {noiDungVuViec}</div>
                             <div className="text-left"><span className="font-medium">Mã khách hàng:</span> {maKhachHang}</div>
                             <div className="text-left"><span className="font-medium">Tên khách hàng:</span> {tenKhachHang}</div>
                             <div className="text-left"><span className="font-medium">Địa chỉ:</span> {diaChi}</div>
@@ -251,197 +261,195 @@ function ApplicationDetailTest() {
                             <div className="text-left"><span className="font-medium">Ngày nộp đơn: </span>{formatDateVN(ngayNopDon)}</div>
                             {/* <div className="text-left"><span className="font-medium">Mã nhãn hiệu:</span> {maNhanHieu}</div> */}
                             <div className="text-left"><span className="font-medium">Tên nhãn hiệu:</span> {tenNhanHieu}</div>
-
-                            <div className="col-span-1 md:col-span-2 text-center my-4">
-                                {linkAnh ? (
-                                    <img
-                                        src={linkAnh}
-                                        alt="Ảnh nhãn hiệu"
-                                        className="h-32 mx-auto border rounded-md shadow-sm"
-                                    />
-                                ) : (
-                                    <div className="italic text-gray-400">Không có ảnh</div>
-                                )}
-                            </div>
-
-                            <div className="text-left"><span className="font-medium">Trạng thái đơn:</span> {trangThaiDon}</div>
-                            {/* <div className="text-left"><span className="font-medium">Bước xử lý:</span> {buocXuLy}</div> */}
-                            <div className="text-left m-0 p-0">
-                                <span className="font-medium">Hạn trả lời:</span> {formatDateVN(hanTraLoi)} {daysLeft(hanTraLoi)}
-                            </div>
-
-                            <div className="text-left m-0 p-0">
-                                <span className="font-medium">Hạn xử lý:</span> {formatDateVN(hanXuLy)} {daysLeft(hanXuLy)}
-                            </div>
-
-                            {/* Sản phẩm dịch vụ */}
                             <div className="md:col-span-2 text-left">
-                                <span className="font-medium">Sản phẩm dịch vụ:</span>
-                                <ul className="list-disc list-inside ml-4 mt-1 text-gray-700">
-                                    {maSPDVList?.map((item, index) => (
-                                        <li key={index}>Nhóm SPDV: {item}</li>
-                                    ))}
-                                </ul>
+                                <span className="font-medium">Danh sách nhóm Sản phẩm dịch vụ:</span>{" "}
+                                <span className="text-gray-700">
+                                    {maSPDVList?.length > 0
+                                        ? maSPDVList.join(", ")
+                                        : "Không có dữ liệu"}
+                                </span>
                             </div>
-                            {soBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Số bằng:</span> {soBang}
-                                </div>
-                            )}
-                            {quyetDinhSo && (
-                                <div className="text-left">
-                                    <span className="font-medium">Quyết định số:</span> {quyetDinhSo}
-                                </div>
-                            )}
-                            {/* Các mốc thời gian khác */}
-                            {ngayHoanThanhHSTL_DuKien && (
-                                <div className="text-left m-0 p-0">
-                                    <span className="font-medium">Ngày hoàn thành hồ sơ (dự kiến):</span> {formatDateVN(ngayHoanThanhHSTL_DuKien)}
-                                </div>
-                            )}
 
-                            {ngayHoanThanhHSTL && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày hoàn thành hồ sơ:</span> {formatDateVN(ngayHoanThanhHSTL)}
-                                </div>
-                            )}
+                            {/* Ảnh + Ghi chú */}
+                            <div className="col-span-1 md:col-span-2 my-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* Ghi chú bên trái */}
 
-                            {/* {trangThaiHoanThanhHSTL && ( */}
-                            <div className="text-left">
-                                <span className="font-medium">Trạng thái hoàn thiện hồ sơ:</span> {trangThaiHoanThanhHSTL}
-                                {taiLieuList?.some(tl => tl.trangThai === "Chưa nộp") && (
-                                    <span className="text-red-600 ml-2">(Cần bổ sung)</span>
-                                )}
+
+                                    {/* Ảnh bên phải */}
+                                    <div className="flex justify-center items-center">
+                                        {linkAnh ? (
+                                            <img
+                                                src={linkAnh}
+                                                alt="Ảnh nhãn hiệu"
+                                                className="h-40 border rounded-md shadow-sm"
+                                            />
+                                        ) : (
+                                            <div className="italic text-gray-400">Không có ảnh</div>
+                                        )}
+                                    </div>
+                                    <div className="text-left">
+                                        <span className="font-medium">Ghi chú:</span>
+                                        <p className="mt-1 text-gray-700 italic">
+                                            {ghiChu || "Chưa có ghi chú"}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            {/* )} */}
 
-
-                            {ngayKQThamDinhHinhThuc_DuKien && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày KQ TĐ hình thức (dự kiến):</span> {formatDateVN(ngayKQThamDinhHinhThuc_DuKien)}
+                            {/* Khối 2 cột */}
+                            <div className="col-span-1 md:col-span-2 mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Tình trạng xử lý */}
+                                <div>
+                                    <h2 className="text-base font-semibold mb-2 text-left">Tình trạng xử lý</h2>
+                                    <div className="space-y-2 text-sm text-gray-800">
+                                        {ngayNopDon && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayNopDon)}</span>
+                                                <span>Ngày nộp đơn</span>
+                                            </div>
+                                        )}
+                                        {ngayHoanThanhHSTL && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayHoanThanhHSTL)}</span>
+                                                <span>Ngày hoàn thành hồ sơ</span>
+                                            </div>
+                                        )}
+                                        {ngayKQThamDinhHinhThuc && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayKQThamDinhHinhThuc)}</span>
+                                                <span>Ngày KQ TĐ hình thức</span>
+                                            </div>
+                                        )}
+                                        {ngayKQThamDinhHinhThuc_DK_SauKN && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayKQThamDinhHinhThuc_DK_SauKN)}</span>
+                                                <span>Ngày KQ TĐ hình thức sau khiếu nại</span>
+                                            </div>
+                                        )}
+                                        {ngayCongBo && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayCongBo)}</span>
+                                                <span>Ngày công bố</span>
+                                            </div>
+                                        )}
+                                        {ngayKQThamDinhND && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayKQThamDinhND)}</span>
+                                                <span>Ngày KQ TĐ nội dung</span>
+                                            </div>
+                                        )}
+                                        {ngayKQThamDinhND_DK_SauKN && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayKQThamDinhHinhThuc_DK_SauKN)}</span>
+                                                <span>Ngày KQ TĐ nội dung sau khiếu nại</span>
+                                            </div>
+                                        )}
+                                        {ngayTraLoiKQThamDinhND && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayTraLoiKQThamDinhND)}</span>
+                                                <span>Ngày trả lời TĐND</span>
+                                            </div>
+                                        )}
+                                        {ngayThongBaoCapBang && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayThongBaoCapBang)}</span>
+                                                <span>Ngày thông báo cấp bằng</span>
+                                            </div>
+                                        )}
+                                        {ngayNopYKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayNopYKien)}</span>
+                                                <span>Ngày nộp ý kiến</span>
+                                            </div>
+                                        )}
+                                        {ngayNhanKQYKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayNhanKQYKien)}</span>
+                                                <span>Ngày nhận KQ ý kiến</span>
+                                            </div>
+                                        )}
+                                        {ngayPhanHoiKQYKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayPhanHoiKQYKien)}</span>
+                                                <span>Ngày phản hồi KQ ý kiến</span>
+                                            </div>
+                                        )}
+                                        {ngayNopPhiCapBang && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayNopPhiCapBang)}</span>
+                                                <span>Ngày nộp phí cấp bằng</span>
+                                            </div>
+                                        )}
+                                        {ngayNhanBang && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayNhanBang)}</span>
+                                                <span>Ngày nhận bằng</span>
+                                            </div>
+                                        )}
+                                        {ngayGuiBangChoKH && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayGuiBangChoKH)}</span>
+                                                <span>Ngày gửi bằng cho KH</span>
+                                            </div>
+                                        )}
+                                        {ngayCapBang && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayCapBang)}</span>
+                                                <span>Ngày cấp bằng</span>
+                                            </div>
+                                        )}
+                                        {ngayHetHanBang && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayHetHanBang)}</span>
+                                                <span>Ngày hết hạn bằng</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            )}
 
-                            {ngayKQThamDinhHinhThuc && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày KQ TĐ hình thức:</span> {formatDateVN(ngayKQThamDinhHinhThuc)}
+                                {/* Ngày dự kiến */}
+                                <div>
+                                    <h2 className="text-base font-semibold mb-2 text-left">Ngày dự kiến</h2>
+                                    <div className="space-y-2 text-sm text-gray-800">
+                                        <div className="flex " style={{ height: '20px' }}>
+                                            <span className="w-32 font-medium"> </span>
+                                            <span> </span>
+                                        </div>
+                                        {ngayHoanThanhHSTL_DuKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayHoanThanhHSTL_DuKien)}</span>
+                                                <span>Hoàn thành hồ sơ (dự kiến)</span>
+                                            </div>
+                                        )}
+                                        {ngayKQThamDinhHinhThuc_DuKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayKQThamDinhHinhThuc_DuKien)}</span>
+                                                <span>KQ TĐ hình thức (dự kiến)</span>
+                                            </div>
+                                        )}
+                                        {ngayCongBo_DuKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayCongBo_DuKien)}</span>
+                                                <span>Công bố (dự kiến)</span>
+                                            </div>
+                                        )}
+                                        {ngayKQThamDinhND_DuKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayKQThamDinhND_DuKien)}</span>
+                                                <span>KQ TĐ nội dung (dự kiến)</span>
+                                            </div>
+                                        )}
+                                        {ngayTraLoiKQThamDinhND_DuKien && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(ngayTraLoiKQThamDinhND_DuKien)}</span>
+                                                <span>Trả lời TĐND (dự kiến)</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            )}
+                            </div>
 
-                            {ngayKQThamDinhHinhThuc_DK_SauKN && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày KQ TĐ hình thức sau KN:</span> {formatDateVN(ngayKQThamDinhHinhThuc_DK_SauKN)}
-                                </div>
-                            )}
-
-                            {ngayCongBo_DuKien && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày công bố (dự kiến):</span> {formatDateVN(ngayCongBo_DuKien)}
-                                </div>
-                            )}
-
-                            {ngayCongBo && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày công bố:</span> {formatDateVN(ngayCongBo)}
-                                </div>
-                            )}
-
-                            {ngayKQThamDinhND_DuKien && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày KQ TĐ nội dung (dự kiến):</span> {formatDateVN(ngayKQThamDinhND_DuKien)}
-                                </div>
-                            )}
-
-                            {ngayKQThamDinhND && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày KQ TĐ nội dung:</span> {formatDateVN(ngayKQThamDinhND)}
-                                </div>
-                            )}
-
-                            {ngayKQThamDinhND_DK_SauKN && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày KQ TĐ nội dung sau KN:</span> {formatDateVN(ngayKQThamDinhND_DK_SauKN)}
-                                </div>
-                            )}
-
-                            {ngayTraLoiKQThamDinhND_DuKien && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày trả lời TĐND (dự kiến):</span> {formatDateVN(ngayTraLoiKQThamDinhND_DuKien)}
-                                </div>
-                            )}
-
-                            {ngayTraLoiKQThamDinhND && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày trả lời TĐND:</span> {formatDateVN(ngayTraLoiKQThamDinhND)}
-                                </div>
-                            )}
-
-                            {ngayThongBaoCapBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày thông báo cấp bằng:</span> {formatDateVN(ngayThongBaoCapBang)}
-                                </div>
-                            )}
-
-                            {trangThaiCapBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Trạng thái cấp bằng:</span> {trangThaiCapBang}
-                                </div>
-                            )}
-
-                            {ngayNopYKien && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày nộp ý kiến:</span> {formatDateVN(ngayNopYKien)}
-                                </div>
-                            )}
-
-                            {ngayNhanKQYKien && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày nhận KQ ý kiến:</span> {formatDateVN(ngayNhanKQYKien)}
-                                </div>
-                            )}
-
-                            {ketQuaYKien && (
-                                <div className="text-left">
-                                    <span className="font-medium">Kết quả ý kiến:</span> {ketQuaYKien}
-                                </div>
-                            )}
-
-                            {ngayNopPhiCapBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày nộp phí cấp bằng:</span> {formatDateVN(ngayNopPhiCapBang)}
-                                </div>
-                            )}
-
-                            {ngayNhanBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày nhận bằng:</span> {formatDateVN(ngayNhanBang)}
-                                </div>
-                            )}
-
-                            {ngayGuiBangChoKH && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày gửi bằng cho KH:</span> {formatDateVN(ngayGuiBangChoKH)}
-                                </div>
-                            )}
-
-
-                            {ngayCapBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày cấp bằng:</span> {formatDateVN(ngayCapBang)}
-                                </div>
-                            )}
-
-                            {ngayHetHanBang && (
-                                <div className="text-left">
-                                    <span className="font-medium">Ngày hết hạn bằng:</span> {formatDateVN(ngayHetHanBang)}
-                                </div>
-                            )}
-                            {giayUyQuyenGoc === false && (
-                                <div className="text-left">
-                                    <span className="font-medium">Mã đơn của giấy ủy quyền gốc:</span> {/* Bạn có thể thay bằng biến nếu cần */}
-                                    {maUyQuyen || "Chưa có"}
-                                </div>
-                            )}
 
                         </div>
                         {/* Danh sách tài liệu */}
@@ -495,7 +503,20 @@ function ApplicationDetailTest() {
                                         </tr>
                                     )}
                                 </tbody>
+
                             </table>
+                            <div className="col-span-2">
+                                <DSVuViec
+                                    maHoSo={maHoSoVuViec}
+                                    onVuViecChange={handleVuViecChange} initialVuViecs={vuViecList}
+                                    maHoSoVuViec={maHoSoVuViec}
+                                    giayUyQuyenGoc={giayUyQuyenGoc}
+                                    setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                                    maUyQuyen={maUyQuyen}
+                                    setMaUyQuyen={setMaUyQuyen}
+                                    isViewOnly={isViewOnly}
+                                />
+                            </div>
                             <div className="flex gap-3 mb-4">
                                 <Button type="primary" style={{ backgroundColor: "#009999", borderColor: "#009999" }} onClick={() => setIsModalHTOpen(true)}>📄 Xem lịch sử nhận thông báo từ chối thẩm định hình thức</Button>
                                 <Button type="primary" style={{ backgroundColor: "#009999", borderColor: "#009999" }} onClick={() => setIsModalNDOpen(true)}>📄 Xem lịch sử nhân thông báo từ chối thẩm định nội dung</Button>
@@ -505,16 +526,30 @@ function ApplicationDetailTest() {
                     </div>
                 </Spin>
 
-                <div className="flex justify-center gap-4 mt-4">
-                    <button onClick={() => navigate(-1)} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Quay lại</button>
-                </div>
+
                 <div className="mt-4">
-                    <button
-                        onClick={() => setOpenModal(true)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                    >
-                        In Word: Thông tin Đơn Đăng Ký
-                    </button>
+                    <div className="flex justify-center gap-4 mt-4">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg"
+                        >
+                            Quay lại
+                        </button>
+
+                        <button
+                            onClick={() => setOpenModal(true)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                        >
+                            In Word: Thông tin Đơn Đăng Ký
+                        </button>
+
+                        <button
+                            onClick={handleApplicationEdit}
+                            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
+                        >
+                            Sửa thông tin đơn
+                        </button>
+                    </div>
 
                     <ExportWordModal
                         open={openModal}
@@ -522,7 +557,7 @@ function ApplicationDetailTest() {
                         data={{
                             soBang,
                             quyetDinhSo,
-                            ngayCapBang,
+                            ngayCapBang: formatDateVN(ngayCapBang),
                             ngayGuiBangChoKH,
                             maHoSoVuViec,
                             tenKhachHang,
@@ -593,12 +628,6 @@ function ApplicationDetailTest() {
                         ]}
                     />
                 </Modal>
-                <button
-                    onClick={handleApplicationEdit}
-                    className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
-                >
-                    Sửa thông tin đơn
-                </button>
                 <Modal
                     title="📄 Lịch sử nhận thông báo từ chối thẩm định nội dung"
                     open={isModalNDOpen}

@@ -1,217 +1,438 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
-    PieChart, Users, Briefcase, Handshake, Globe, UserCheck,
-    FileText, Layers, Settings, Tag, ShoppingCart, LayoutDashboard, Key, User,
-    ChevronDown, ChevronUp
+  PieChart, Users, Briefcase, Handshake, Globe, UserCheck,
+  FileText, Settings, Tag, ShoppingCart, LayoutDashboard,
+  Key, User, ChevronDown, ChevronUp, DollarSign, Search
 } from "lucide-react";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { setOpenAtLevel } from "../features/uiSlice";
 import logoweb from "../assets/image/logo-web-big.jpg";
 
 function MenuLeft() {
-    const location = useLocation();
-    const role = useSelector((state) => state.auth.role);
-    const { t } = useTranslation();
+  const location = useLocation();
+  const role = useSelector((state) => state.auth.role);
+  const { t } = useTranslation();
 
-    const [openSettingSubmenu, setOpenSettingSubmenu] = useState({
-        dashboard: false,
-        settings: false,
-        application: false,
-    });
+  // ✅ Dùng Redux thay cho useState
+  const dispatch = useDispatch();
+  const openMenu = useSelector((s) => s.ui.openMenu);
 
-    useEffect(() => {
-        setOpenSettingSubmenu({
-            dashboard: location.pathname.startsWith("/dashboard"),
-            settings: ["/changepassword", "/profile"].some(path =>
-                location.pathname.startsWith(path)
-            ),
-            application: ["/applicationlist", "/applicationlist_kh", "/application_gh_nh_vn_list", "application_gh_nh_vn_list"].some(path =>
-                location.pathname.startsWith(path)
-            ),
-        });
-    }, [location.pathname]);
+  const navLinkClass = ({ isActive }) =>
+    `flex items-center space-x-2 p-2 rounded-lg w-full transition 
+    ${isActive
+      ? "border border-[#009999] text-[#009999] fill-[#009999]"
+      : "hover:border hover:border-[#009999] hover:text-[#009999] hover:fill-[#009999]"}`;
 
-    const navLinkClass = ({ isActive }) =>
-        `flex items-center space-x-2 p-2 rounded-lg w-full transition 
-        ${isActive
-            ? "border border-[#009999] text-[#009999] fill-[#009999]"
-            : "hover:border hover:border-[#009999] hover:text-[#009999] hover:fill-[#009999]"}`;
-
+  // ✅ Duy nhất 1 renderMenuGroup dùng Redux openMenu + setOpenAtLevel
+  const renderMenuGroup = (parentKey, key, title, iconRenderer, children) => {
+    const isOpen = openMenu[parentKey] === key;
     return (
-        <aside className="bg-white w-56 h-screen shadow-md flex flex-col overflow-y-auto">
-            {/* Logo */}
-            <div className="p-2 flex justify-center">
-                <img src={logoweb} alt="Logo" className="w-32" />
-            </div>
+      <li>
+        <button
+          onClick={() => dispatch(setOpenAtLevel({ parent: parentKey, key }))}
+          className={`flex items-center justify-between p-2 rounded-lg w-full transition 
+            ${isOpen ? "border border-[#009999] text-[#009999]" : "hover:border hover:border-[#009999] hover:text-[#009999]"}`}
+        >
+          <div className="flex items-center space-x-2">
+            {iconRenderer?.(isOpen)}
+            <span>{title}</span>
+          </div>
+          {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </button>
 
-            <nav className="flex-1 px-4 py-4">
-                <ul className="space-y-2 text-[#009999] text-sm font-bold">
-                    {/* Đơn đăng ký */}
-                    <li>
-                        <div>
-                            <button
-                                onClick={() =>
-                                    setOpenSettingSubmenu((prev) => ({
-                                        ...prev,
-                                        application: !prev.application,
-                                    }))
-                                }
-                                className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${
-                                    openSettingSubmenu.application
-                                        ? "border border-[#009999] text-[#009999]"
-                                        : "hover:border hover:border-[#009999] hover:text-[#009999]"
-                                }`}
-                            >
-                                <div className="flex items-center space-x-2">
-                                    <PieChart size={16} color={openSettingSubmenu.application ? "#009999" : undefined} />
-                                    <span>Nhãn hiệu</span>
-                                </div>
-                                {openSettingSubmenu.application ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                            </button>
-
-                            {openSettingSubmenu.application && (
-                                <ul className="ml-6 mt-1 space-y-1 text-sm">
-                                    <li>
-                                        <NavLink to="/applicationlist" className={navLinkClass}>
-                                            <PieChart size={14} />
-                                            <span>Đơn đăng ký NH_VN</span>
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/applicationlist_kh" className={navLinkClass}>
-                                            <PieChart size={14} />
-                                            <span>Đơn đăng ký NH_Cam</span>
-                                        </NavLink>
-                                    </li>
-                                    {/* <li>
-                                        <NavLink to="/application_kdlist_vn" className={navLinkClass}>
-                                            <PieChart size={14} />
-                                            <span>Đơn đăng ký KD_VN</span>
-                                        </NavLink>
-                                    </li> */}
-                                    <li>
-                                        <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
-                                            <PieChart size={14} />
-                                            <span>Đơn gia hạn NH_VN</span>
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            )}
-                        </div>
-                    </li>
-
-                    {/* Các mục không có submenu */}
-                    <li><NavLink to="/caselist" className={navLinkClass}><FileText size={16} /><span>{t("hoSoVuViec")}</span></NavLink></li>
-                    <li><NavLink to="/customerlist" className={navLinkClass}><Users size={16} /><span>{t("khachHang")}</span></NavLink></li>
-                    {/* Dashboard */}
-                    <li>
-                        <div>
-                            <button
-                                onClick={() =>
-                                    setOpenSettingSubmenu((prev) => ({
-                                        ...prev,
-                                        dashboard: !prev.dashboard,
-                                    }))
-                                }
-                                className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${
-                                    openSettingSubmenu.dashboard
-                                        ? "border border-[#009999] text-[#009999]"
-                                        : "hover:border hover:border-[#009999] hover:text-[#009999]"
-                                }`}
-                            >
-                                <div className="flex items-center space-x-2">
-                                    <LayoutDashboard size={16} color={openSettingSubmenu.dashboard ? "#009999" : undefined} />
-                                    <span>{t("dashboard")}</span>
-                                </div>
-                                {openSettingSubmenu.dashboard ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                            </button>
-
-                            {openSettingSubmenu.dashboard && (
-                                <ul className="ml-6 mt-1 space-y-1 text-sm">
-                                    <li>
-                                        <NavLink to="/dashboard/application" className={navLinkClass}>
-                                            <PieChart size={14} />
-                                            <span>{t("thongKeDonDangKy")}</span>
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/dashboard/country" className={navLinkClass}>
-                                            <Globe size={14} />
-                                            <span>{t("thongKeQuocGia")}</span>
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/dashboard/partner" className={navLinkClass}>
-                                            <Handshake size={14} />
-                                            <span>{t("thongKeDoiTac")}</span>
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            )}
-                        </div>
-                    </li>
-                    <li><NavLink to="/partnerlist" className={navLinkClass}><Handshake size={16} /><span>{t("doiTac")}</span></NavLink></li>
-                    <li><NavLink to="/joblist" className={navLinkClass}><Briefcase size={16} /><span>{t("nganhNghe")}</span></NavLink></li>
-                    <li><NavLink to="/countrylist" className={navLinkClass}><Globe size={16} /><span>{t("quocGia")}</span></NavLink></li>
-                    <li><NavLink to="/casetypelist" className={navLinkClass}><Layers size={16} /><span>{t("loaiVuViec")}</span></NavLink></li>
-                    <li><NavLink to="/applicationtypelist" className={navLinkClass}><Briefcase size={16} /><span>Loại đơn</span></NavLink></li>
-                    <li><NavLink to="/brandlist" className={navLinkClass}><Tag size={16} /><span>{t("nhanHieu")}</span></NavLink></li>
-                    <li><NavLink to="/productandserviceslist" className={navLinkClass}><ShoppingCart size={16} /><span>{t("sanPhamDichVu")}</span></NavLink></li>
-
-                    {(role === "admin" || role === "staff") && (
-                        <li><NavLink to="/stafflist" className={navLinkClass}><UserCheck size={16} /><span>{t("nhanSu")}</span></NavLink></li>
-                    )}
-
-                    {/* Cài đặt */}
-                    <li>
-                        <button
-                            onClick={() =>
-                                setOpenSettingSubmenu((prev) => ({
-                                    ...prev,
-                                    settings: !prev.settings,
-                                }))
-                            }
-                            className={`flex items-center justify-between space-x-2 p-2 rounded-lg w-full transition ${
-                                location.pathname.startsWith("/settings") ||
-                                location.pathname === "/changepassword" ||
-                                location.pathname === "/profile"
-                                    ? "border border-[#009999] text-[#009999]"
-                                    : "hover:border hover:border-[#009999] hover:text-[#009999]"
-                            }`}
-                        >
-                            <div className="flex items-center space-x-2">
-                                <Settings size={16} color={
-                                    location.pathname.startsWith("/settings") ||
-                                    location.pathname === "/changepassword" ||
-                                    location.pathname === "/profile" ? "#009999" : undefined
-                                } />
-                                <span>{t("caiDat")}</span>
-                            </div>
-                            {openSettingSubmenu.settings ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                        </button>
-
-                        {openSettingSubmenu.settings && (
-                            <ul className="ml-6 mt-1 space-y-1 text-sm">
-                                <li>
-                                    <NavLink to="/changepassword" className={navLinkClass}>
-                                        <Key size={14} />
-                                        <span>{t("doiMatKhau")}</span>
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/profile" className={navLinkClass}>
-                                        <User size={14} />
-                                        <span>{t("thongTinTaiKhoan")}</span>
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        )}
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+        {isOpen && <ul className="ml-6 mt-1 space-y-1 text-sm">{children}</ul>}
+      </li>
     );
+  };
+
+  return (
+    <aside className="bg-white w-[280px] h-screen shadow-md flex flex-col overflow-y-auto">
+      {/* Logo */}
+      <NavLink
+        to="/"
+        className="p-2 flex justify-center hover:opacity-80 transition-opacity"
+      >
+        <img src="https://ipac.vn/image/catalog/brands/LOGO-chuan-mau-2.png" alt="Logo" className="w-32" />
+      </NavLink>
+
+      <nav className="flex-1 px-4 py-4">
+        <ul className="space-y-2 text-[#009999] text-sm font-bold">
+
+          {/* VIỆT NAM */}
+          {renderMenuGroup(
+            "root",
+            "vietnam",
+            "VIỆT NAM",
+            (open) => <img
+              src="https://flagcdn.com/w20/vn.png"
+              alt="Vietnam flag"
+              width={20}
+              height={14}
+              style={{ borderRadius: 2 }}
+            />,
+            <>
+              {renderMenuGroup(
+                "vietnam",
+                "nhanhieu",
+                "Nhãn hiệu",
+                (open) => <Tag size={16} color={open ? "#009999" : undefined} />,
+                <>
+                  <li>
+                    <NavLink to="/applicationlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn đăng ký</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/gcn_nhlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Giấy chứng nhận(văn bằng)</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn gia hạn GCN</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn sửa đổi GCN</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn chuyển nhượng GCN</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {renderMenuGroup(
+                "vietnam",
+                "kieudang",
+                "Kiểu dáng CN",
+                (open) => <LayoutDashboard size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "vietnam",
+                "sangche",
+                "Sáng chế & GPHI",
+                (open) => <Briefcase size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "vietnam",
+                "banquyen",
+                "Bản quyền",
+                (open) => <FileText size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "vietnam",
+                "tracuu",
+                "Tra cứu nhãn hiệu",
+                (open) => <Search size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "vietnam",
+                "tuvan",
+                "Tư vấn chung",
+                (open) => <Handshake size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              <li>
+                <NavLink to="/caselist" className={navLinkClass}>
+                  <FileText size={14} />
+                  <span className="text-left w-full">Danh sách nghiệp vụ</span>
+                </NavLink>
+              </li>
+
+              {renderMenuGroup(
+                "vietnam",
+                "billing",
+                "Thanh toán",
+                (open) => <DollarSign size={16} color={open ? "#009999" : undefined} />,
+                <>
+                  <li>
+                    <NavLink to="/vuviec_bill" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ yêu cầu thanh toán</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/vuviec_bill_chua_duyet" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ yêu cầu thanh toán chưa duyệt</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/vuviec_bill_tu_choi" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ bị từ chối yêu cầu thanh toán</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/vuviec_bill_da_duyet" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ yêu cầu thanh toán đã duyệt</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/debitnote_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đề nghị thanh toán (DebitNote)</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {renderMenuGroup(
+                "vietnam",
+                "baocao",
+                "Báo cáo - Thống kê",
+                (open) => <PieChart size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+            </>
+          )}
+
+          {/* CAMPUCHIA */}
+          {renderMenuGroup(
+            "root",
+            "cambodia",
+            "CAMPUCHIA",
+            (open) => <img
+              src="https://flagcdn.com/w20/kh.png"
+              alt="Cambodia flag"
+              width={20}
+              height={14}
+              style={{ borderRadius: 2 }}
+            />,
+            <>
+              {renderMenuGroup(
+                "cambodia",
+                "nhanhieu_kh",
+                "Nhãn hiệu",
+                (open) => <Tag size={16} color={open ? "#009999" : undefined} />,
+                <>
+                  <li>
+                    <NavLink to="/applicationlist_kh" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn đăng ký</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {renderMenuGroup(
+                "cambodia",
+                "kieudang",
+                "Kiểu dáng CN",
+                (open) => <LayoutDashboard size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "cambodia",
+                "sangche",
+                "Sáng chế & GPHI",
+                (open) => <Briefcase size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "cambodia",
+                "banquyen",
+                "Bản quyền",
+                (open) => <FileText size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "cambodia",
+                "tracuu",
+                "Tra cứu nhãn hiệu",
+                (open) => <Search size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              {renderMenuGroup(
+                "cambodia",
+                "tuvan",
+                "Tư vấn chung",
+                (open) => <Handshake size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+
+              <li>
+                <NavLink to="/case_khlist" className={navLinkClass}>
+                  <FileText size={14} />
+                  <span className="text-left w-full">Danh sách vụ việc</span>
+                </NavLink>
+              </li>
+
+              {renderMenuGroup(
+                "cambodia",
+                "billing",
+                "Thanh toán",
+                (open) => <DollarSign size={16} color={open ? "#009999" : undefined} />,
+                <>
+                  <li>
+                    <NavLink to="/vuviec_bill_kh" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ yêu cầu thanh toán</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/vuviec_bill_kh_tu_choi" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ yêu cầu thanh toán bị từ chối</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/vuviec_bill_kh_chua_duyet" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ yêu cầu thanh toán chưa duyệt</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/vuviec_bill_kh_da_duyet" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Nghiệp vụ yêu cầu thanh toán được duyệt</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/debitnote_kh_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đề nghị thanh toán (DebitNote)</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {renderMenuGroup(
+                "cambodia",
+                "baocao",
+                "Báo cáo - Thống kê",
+                (open) => <PieChart size={16} color={open ? "#009999" : undefined} />,
+                <></>
+              )}
+            </>
+          )}
+
+          {/* TÌM KIẾM */}
+          {renderMenuGroup(
+            "root",
+            "timkiem",
+            "Tìm kiếm",
+            (open) => <Search size={16} color={open ? "#009999" : undefined} />,
+            <>
+              <li>
+                <NavLink to="/brandlist" className={navLinkClass}>
+                  <Tag size={14} />
+                  <span className="text-left w-full">{t("nhanHieu")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/vuviec_bill" className={navLinkClass}>
+                  <FileText size={14} />
+                  <span className="text-left w-full">Billing</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/debitnote" className={navLinkClass}>
+                  <FileText size={14} />
+                  <span className="text-left w-full">Đề nghị thanh toán (DebitNote)</span>
+                </NavLink>
+              </li>
+            </>
+          )}
+
+          {/* HỆ THỐNG */}
+          {renderMenuGroup(
+            "root",
+            "system",
+            "Hệ thống",
+            (open) => <Settings size={16} color={open ? "#009999" : undefined} />,
+            <>
+              <li>
+                <NavLink to="/customerlist" className={navLinkClass}>
+                  <Users size={14} />
+                  <span className="text-left w-full">{t("khachHang")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/partnerlist" className={navLinkClass}>
+                  <Handshake size={14} />
+                  <span className="text-left w-full">{t("doiTac")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/joblist" className={navLinkClass}>
+                  <Briefcase size={14} />
+                  <span className="text-left w-full">{t("nganhNghe")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/countrylist" className={navLinkClass}>
+                  <Globe size={14} />
+                  <span className="text-left w-full">{t("quocGia")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/productandserviceslist" className={navLinkClass}>
+                  <ShoppingCart size={14} />
+                  <span className="text-left w-full">{t("sanPhamDichVu")}</span>
+                </NavLink>
+              </li>
+              {(role === "admin" || role === "staff") && (
+                <li>
+                  <NavLink to="/stafflist" className={navLinkClass}>
+                    <UserCheck size={14} />
+                    <span className="text-left w-full">{t("nhanSu")}</span>
+                  </NavLink>
+                </li>
+              )}
+            </>
+          )}
+
+          {/* QUẢN TRỊ */}
+          {renderMenuGroup(
+            "root",
+            "settings",
+            "Quản trị",
+            (open) => <User size={16} color={open ? "#009999" : undefined} />,
+            <>
+              <li>
+                <NavLink to="/changepassword" className={navLinkClass}>
+                  <Key size={14} />
+                  <span className="text-left w-full">{t("doiMatKhau")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/profile" className={navLinkClass}>
+                  <User size={14} />
+                  <span className="text-left w-full">{t("thongTinTaiKhoan")}</span>
+                </NavLink>
+              </li>
+            </>
+          )}
+        </ul>
+      </nav>
+    </aside>
+  );
 }
 
 export default MenuLeft;

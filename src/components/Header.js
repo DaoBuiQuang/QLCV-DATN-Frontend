@@ -66,7 +66,7 @@ function Header({ toggleMenu, isMenuOpen }) {
         style={{
           width:
             isMenuOpen && window.innerWidth >= 1024
-              ? "calc(100vw - 224px)"
+              ? "calc(100vw - 280px)"
               : "100vw",
         }}
       >

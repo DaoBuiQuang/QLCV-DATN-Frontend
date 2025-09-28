@@ -12,7 +12,7 @@ const AnnouncementOfApplication = ({
 }) => {
     return (
         <div className="flex-1">
-            <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Công bố đơn</h3>
+            <h3 className="text-lg font-semibold text-blue-700 mb-2 uppercase">📌 Công bố đơn</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label className="block text-gray-700 text-left">Ngày công bố đơn dự kiến</label>

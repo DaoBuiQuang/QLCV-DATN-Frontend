@@ -79,9 +79,9 @@ function Application_GH_NH_VNList() {
         { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiDon" },
         { label: "Hạn trả lời Cục", labelEn: "Official Deadline", key: "hanTraLoi" },
         { label: "Hạn Cục xử lý", labelEn: "Soft Deadline", key: "hanXuLy" },
-        
+
         { label: "Ngày nộp đơn", labelEn: "Filing Date", key: "ngayNopDon" },
-       
+
 
         { label: "Ngày nhận bằng", labelEn: "Certificate Receipt", key: "ngayNhanBang" },
         { label: "Số bằng", key: "soBang" },
@@ -91,7 +91,7 @@ function Application_GH_NH_VNList() {
     ];
 
     const hiddenFieldKeys = [
-    
+
         "ngayTraLoiKQThamDinhND",
         "ngayNopPhiCapBang",
         "soBang",
@@ -248,6 +248,12 @@ function Application_GH_NH_VNList() {
                             className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Tìm kiếm
+                        </button>
+                        <button
+                            onClick={() => navigate("/application_gh_nh_vn_add")}
+                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
+                        >
+                            Thêm mới
                         </button>
                         <button
                             onClick={() => exportToExcel(applications, allFieldOptions, 'DanhSachDonDK')}

@@ -11,6 +11,7 @@ function ApplicationDetail() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const { maDonDangKy } = useParams();
+    
     const isViewOnly = true
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [soDon, setSoDon] = useState("")

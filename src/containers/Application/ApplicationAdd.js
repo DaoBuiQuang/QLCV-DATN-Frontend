@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Form, useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api";
 import Select from "react-select";
@@ -16,10 +16,28 @@ import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification";
 import BrandBasicForm from "../../components/BrandBasicForm";
+import FormHoSo from "../../components/commom/FormHoSo.js";
+import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 function ApplicationAdd() {
     const navigate = useNavigate();
-    const { maHoSoVuViec } = useParams();
-    const {id} = useParams();
+
+    const { id } = useParams();
+    const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
+    const [loaiDon, setLoaiDon] = useState(1); // 1: Đơn gốc, 2: Đơn sửa đổi, 3: Đơn tách, 4: Đơn chuyển nhượng
+    const [idKhachHang, setIdKhachHang] = useState(null);
+    const [maKhachHang, setMaKhachHang] = useState("");
+    const [idDoiTac, setIdDoiTac] = useState(null)
+    const [maDoiTac, setMaDoiTac] = useState("");
+    const [clientsRef, setClientsRef] = useState("");
+    const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
+    const [ngayXuLy, setNgayXuLy] = useState(null);
+    const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [nhanSuVuViec, setNhanSuVuViec] = useState("");
+    const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState("");
+    const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState("");
+    const [ngayDongHS, setNgayDongHS] = useState(null);
+    const [ngayRutHS, setNgayRutHS] = useState(null);
+
     const isAddOnly = true
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
@@ -75,6 +93,7 @@ function ApplicationAdd() {
     const [buocXuLy, setBuocXuLy] = useState("");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
+     const[vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
@@ -301,8 +320,21 @@ function ApplicationAdd() {
                 method: "post",
                 endpoint: "/application/add",
                 data: {
-                    maHoSoVuViec: maHoSoVuViec,
-                    idHoSoVuViec: id,
+                    maHoSo: maHoSoVuViec,
+                    loaiDon: loaiDon,
+                    idKhachHang: idKhachHang,
+                    // maKhachHang: maKhachHang,
+
+                    idDoiTac: idDoiTac,
+                    // maDoiTac: maDoiTac,
+
+                    clientsRef: clientsRef,
+                    ngayTiepNhan: ngayTiepNhan,
+                    ngayXuLy: ngayXuLy,
+                    trangThaiVuViec: trangThaiVuViec,
+                    ngayDongHS: ngayDongHS,
+                    ngayRutHS: ngayRutHS,
+
                     soDon: soDon,
                     maNhanHieu: maNhanHieuOld,
                     maSPDVList: maSPDVList,
@@ -343,7 +375,8 @@ function ApplicationAdd() {
                     taiLieus: taiLieuList,
                     giayUyQuyenGoc: giayUyQuyenGoc,
                     maUyQuyen: maUyQuyen || null,
-                    nhanHieu
+                    nhanHieu,
+                    vuViecs: vuViecList,
                 },
             });
             await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
@@ -362,13 +395,16 @@ function ApplicationAdd() {
         setTaiLieuList(list);
     };
 
+     const handleVuViecChange = (list) => {
+        setVuViecList(list);
+    }
     return (
         <div className="p-1 bg-gray-100 flex  items-center justify-center space-y-4">
             <DonProgress trangThaiDon={trangThaiDon} />
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-semibold text-gray-700">
-                        📌 Thêm đơn đăng ký nhãn hiệu mới
+                    <h2 className="text-2xl font-semibold text-gray-700 uppercase">
+                        📌 Thêm đơn đăng ký nhãn hiệu mới Việt Nam
                     </h2>
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"
@@ -376,31 +412,46 @@ function ApplicationAdd() {
                         className="w-20 h-15"
                     />
                 </div>
+                <FormHoSo
+                    soDon={soDon}
+                    
+                    setSoDon={setSoDon}
+                    loaiDon={loaiDon}
+                    setLoaiDon={setLoaiDon}
+                    ngayNopDon={ngayNopDon}
+                    setNgayNopDon={setNgayNopDon}
+                    maHoSoVuViec={maHoSoVuViec}
+                    setMaHoSoVuViec={setMaHoSoVuViec}
+                    idKhachHang={idKhachHang}
+                    setIdKhachHang={setIdKhachHang}
+                    idDoiTac={idDoiTac}
+                    setIdDoiTac={setIdDoiTac}
+                    maKhachHang={maKhachHang}
+                    setMaKhachHang={setMaKhachHang}
+                    maDoiTac={maDoiTac}
+                    setMaDoiTac={setMaDoiTac}
+                    clientsRef={clientsRef}
+                    setClientsRef={setClientsRef}
+                    ngayTiepNhan={ngayTiepNhan}
+                    setNgayTiepNhan={setNgayTiepNhan}
+                    ngayXuLy={ngayXuLy}
+                    setNgayXuLy={setNgayXuLy}
+                    trangThaiVuViec={trangThaiVuViec}
+                    setTrangThaiVuViec={setTrangThaiVuViec}
+                    nhanSuVuViec={nhanSuVuViec}
+                    setNhanSuVuViec={setNhanSuVuViec}
+                    nguoiXuLyChinh={nguoiXuLyChinh}
+                    setNguoiXuLyChinh={setNguoiXuLyChinh}
+                    nguoiXuLyPhu={nguoiXuLyPhu}
+                    setNguoiXuLyPhu={setNguoiXuLyPhu}
+                    ngayDongHS={ngayDongHS}
+                    setNgayDongHS={setNgayDongHS}
+                    ngayRutHS={ngayRutHS}
+                    setNgayRutHS={setNgayRutHS}
+                />
 
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div >
-                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={maHoSoVuViec}
-
-                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                disabled
-                            />
-                        </div>
-                        <div >
-                            <label className="block text-gray-700 text-left ">Số đơn</label>
-                            <input
-                                type="text"
-                                value={soDon}
-                                placeholder="Nhập số đơn"
-                                onChange={(e) => setSoDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg text-input h-10"
-                            />
-                        </div>
-
                         <div>
                             <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                             <input
@@ -424,7 +475,7 @@ function ApplicationAdd() {
                         <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Cột trái: Ngày nộp đơn + Danh sách sản phẩm dịch vụ */}
                             <div className="flex flex-col gap-4">
-                                <div>
+                                {/* <div>
                                     <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
                                     <DatePicker
                                         value={ngayNopDon ? dayjs(ngayNopDon) : null}
@@ -442,7 +493,7 @@ function ApplicationAdd() {
                                             return current && current > dayjs().endOf("day");
                                         }}
                                     />
-                                </div>
+                                </div> */}
 
                                 <div>
                                     <label className="block text-gray-700 text-left">Danh sách sản phẩm dịch vụ <span className="text-red-500">*</span></label>
@@ -625,6 +676,17 @@ function ApplicationAdd() {
                             />
                         </div>
                     )}
+                    <div className="col-span-2">
+                        <DSVuViec
+                            maHoSo={maHoSoVuViec}
+                            onVuViecChange={handleVuViecChange} initialVuViecs={vuViecList}
+                            maHoSoVuViec={maHoSoVuViec}
+                            giayUyQuyenGoc={giayUyQuyenGoc}
+                            setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                            maUyQuyen={maUyQuyen}
+                            setMaUyQuyen={setMaUyQuyen}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex justify-center gap-4 mt-4">

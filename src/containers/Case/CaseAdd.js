@@ -245,6 +245,7 @@ function CaseAdd() {
     };
     const handleMaKhachHangChange = async (selectedOption) => {
         if (selectedOption) {
+            debugger
             const value = selectedOption.value;
             setMaKhachHang(value);
             validateField("maKhachHang", value);
@@ -460,7 +461,7 @@ function CaseAdd() {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 text-left">Trạng thái vụ việc<span className="text-red-500">*</span> </label>
+                            <label className="block text-gray-700 text-left">Trạng thái vụ việc <span className="text-red-500">*</span> </label>
                             <Select
                                 options={formatOptions(statusOptions, "value", "label")}
                                 value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}

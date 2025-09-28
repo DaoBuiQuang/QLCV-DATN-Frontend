@@ -10,10 +10,25 @@ import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification.js";
 import BrandBasicForm from "../../components/BrandBasicForm.js";
 import FormGiaHan from "../../components/commom/FormGiaHan.js";
+import FormHoSo from "../../components/commom/FormHoSo.js";
+import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 function Application_GH_NH_VNAdd() {
     const navigate = useNavigate();
-    const { id } = useParams();
-    const { maHoSoVuViec } = useParams();
+
+    const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
+    const [idKhachHang, setIdKhachHang] = useState(null);
+    const [maKhachHang, setMaKhachHang] = useState("");
+    const [idDoiTac, setIdDoiTac] = useState(null)
+    const [maDoiTac, setMaDoiTac] = useState("");
+    const [clientsRef, setClientsRef] = useState("");
+    const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
+    const [ngayXuLy, setNgayXuLy] = useState(null);
+    const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [nhanSuVuViec, setNhanSuVuViec] = useState("");
+    const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState("");
+    const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState("");
+    const [ngayDongHS, setNgayDongHS] = useState(null);
+    const [ngayRutHS, setNgayRutHS] = useState(null);
     const isAddOnly = true
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
@@ -59,6 +74,7 @@ function Application_GH_NH_VNAdd() {
     const [ngayNopYKien, setNgayNopYKien] = useState(null);
     const [ketQuaYKien, setKetQuaYKien] = useState(null);
     const [taiLieuList, setTaiLieuList] = useState([]);
+    const [vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
@@ -184,7 +200,20 @@ function Application_GH_NH_VNAdd() {
                 method: "post",
                 endpoint: "/application_gh_nh_vn/add",
                 data: {
-                    idHoSoVuViec: id,
+                    maHoSo: maHoSoVuViec,
+                    idKhachHang: idKhachHang,
+                    // maKhachHang: maKhachHang,
+
+                    idDoiTac: idDoiTac,
+                    // maDoiTac: maDoiTac,
+
+                    clientsRef: clientsRef,
+                    ngayTiepNhan: ngayTiepNhan,
+                    ngayXuLy: ngayXuLy,
+                    trangThaiVuViec: trangThaiVuViec,
+                    ngayDongHS: ngayDongHS,
+                    ngayRutHS: ngayRutHS,
+
                     maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
                     maNhanHieu: maNhanHieuOld,
@@ -216,10 +245,11 @@ function Application_GH_NH_VNAdd() {
                     taiLieus: taiLieuList,
                     giayUyQuyenGoc: giayUyQuyenGoc || true,
                     maUyQuyen: maUyQuyen || null,
-                    nhanHieu
+                    nhanHieu,
+                    vuViecs: vuViecList,
                 },
             });
-            await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
+            await showSuccess("Thành công!", "Thêm đơn gia hạn văn bằng thành công!");
             navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
@@ -234,6 +264,9 @@ function Application_GH_NH_VNAdd() {
         setTaiLieuList(list);
     };
 
+    const handleVuViecChange = (list) => {
+        setVuViecList(list);
+    }
     return (
         <div className="p-1 bg-gray-100 flex  items-center justify-center space-y-4">
             {/* <DonProgress trangThaiDon={trangThaiDon} /> */}
@@ -248,28 +281,42 @@ function Application_GH_NH_VNAdd() {
                         className="w-20 h-15"
                     />
                 </div>
+                <FormHoSo
+                    soDon={soDon}
+                    setSoDon={setSoDon}
+                    ngayNopDon={ngayNopDon}
+                    setNgayNopDon={setNgayNopDon}
+                    maHoSoVuViec={maHoSoVuViec}
+                    setMaHoSoVuViec={setMaHoSoVuViec}
+                    idKhachHang={idKhachHang}
+                    setIdKhachHang={setIdKhachHang}
+                    idDoiTac={idDoiTac}
+                    setIdDoiTac={setIdDoiTac}
+                    maKhachHang={maKhachHang}
+                    setMaKhachHang={setMaKhachHang}
+                    maDoiTac={maDoiTac}
+                    setMaDoiTac={setMaDoiTac}
+                    clientsRef={clientsRef}
+                    setClientsRef={setClientsRef}
+                    ngayTiepNhan={ngayTiepNhan}
+                    setNgayTiepNhan={setNgayTiepNhan}
+                    ngayXuLy={ngayXuLy}
+                    setNgayXuLy={setNgayXuLy}
+                    trangThaiVuViec={trangThaiVuViec}
+                    setTrangThaiVuViec={setTrangThaiVuViec}
+                    nhanSuVuViec={nhanSuVuViec}
+                    setNhanSuVuViec={setNhanSuVuViec}
+                    nguoiXuLyChinh={nguoiXuLyChinh}
+                    setNguoiXuLyChinh={setNguoiXuLyChinh}
+                    nguoiXuLyPhu={nguoiXuLyPhu}
+                    setNguoiXuLyPhu={setNguoiXuLyPhu}
+                    ngayDongHS={ngayDongHS}
+                    setNgayDongHS={setNgayDongHS}
+                    ngayRutHS={ngayRutHS}
+                    setNgayRutHS={setNgayRutHS}
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div >
-                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={maHoSoVuViec}
-
-                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                disabled
-                            />
-                        </div>
-                        <div >
-                            <label className="block text-gray-700 text-left ">Số đơn</label>
-                            <input
-                                type="text"
-                                value={soDon}
-                                placeholder="Nhập số đơn"
-                                onChange={(e) => setSoDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg text-input h-10"
-                            />
-                        </div>
 
                         <div>
                             <label className="block text-gray-700 text-left">Trạng thái đơn</label>
@@ -365,7 +412,7 @@ function Application_GH_NH_VNAdd() {
                             />
                         </div>
                     </div>
-                     <div className="col-span-2">
+                    <div className="col-span-2">
                         <DocumentSection_KH onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList}
                             maHoSoVuViec={maHoSoVuViec}
                             giayUyQuyenGoc={giayUyQuyenGoc}
@@ -415,6 +462,17 @@ function Application_GH_NH_VNAdd() {
                             setNgayHetHanBang={setNgayHetHanBang}
                             ngayGuiBangChoKH={ngayGuiBangChoKH}
                             setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                        />
+                    </div>
+                    <div className="col-span-2">
+                        <DSVuViec
+                            maHoSo={maHoSoVuViec}
+                            onVuViecChange={handleVuViecChange} initialVuViecs={vuViecList}
+                            maHoSoVuViec={maHoSoVuViec}
+                            giayUyQuyenGoc={giayUyQuyenGoc}
+                            setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                            maUyQuyen={maUyQuyen}
+                            setMaUyQuyen={setMaUyQuyen}
                         />
                     </div>
                 </div>

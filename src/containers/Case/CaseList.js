@@ -8,6 +8,9 @@ import { Modal } from "antd";
 import { Spin, Pagination } from "antd";
 import { useTranslation } from "react-i18next";
 import { exportToExcel } from "../../components/ExportFile/ExportExcel";
+import AddVuViecModal from "../../components/VuViecForm/AddVuViecModal";
+import CaseDetailModal from "../../components/VuViecForm/CaseDetailModal";
+import EditVuViecModal from "../../components/VuViecForm/EditVuViecModal";
 function CaseList() {
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
@@ -33,33 +36,43 @@ function CaseList() {
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
+    const [showDetailModal, setShowDetailModal] = useState(false);
+    const [selectedCase, setSelectedCase] = useState(null);
     const [showFieldModal, setShowFieldModal] = useState(false);
     const [selectedFields, setSelectedFields] = useState([
-        "maHoSoVuViec",
+        "maHoSo",
         "soDon",
-        "noiDungVuViec",
-        "trangThaiVuViec",
-        "tenQuocGia",
+        "tenVuViec",
+        "moTa",
         "tenKhachHang",
-        "nguoiXuLyChinh",
+        "xuatBill",
+        "tenNhanHieu",
+        "deadline",
+        "softDeadline",
+        "soTien",
+        "tenQuocGia",
+        "trangThaiYCTT",
     ]);
 
     const allFieldOptions = [
-        { key: "maHoSoVuViec", label: "Mã hồ sơ", labelEn: "Matter Code" },
-        { key: "soDon", label: "Số đơn", labelEn: "App No" },
-        { key: "noiDungVuViec", label: "Tên vụ việc", labelEn: "Matter Name" },
-        { key: "trangThaiVuViec", label: "Trạng thái", labelEn: "Status" },
-        // { key: "buocXuLyHienTai", label: "Bước xử lý hiện tại" },
-        { key: "ngayTiepNhan", label: "Ngày tiếp nhận", labelEn: "Instruction Date" },
-        { key: "ngayTao", label: "Ngày tạo" },
-        { key: "ngayCapNhap", label: "Ngày Cập nhật", },
-        { key: "tenKhachHang", label: "Tên khách hàng", labelEn: "Client Name" },
-        { key: "tenQuocGia", label: "Quốc gia", labelEn: "Country" },
-        { key: "tenLoaiVuViec", label: "Loại vụ việc", labelEn: "Type of IP" },
-        { key: "tenLoaiDon", label: "Loại đơn", labelEn: "App Type" },
-        { key: "nguoiXuLyChinh", label: "Người xử lý chính" },
-        { key: "nhanSuKhac", label: "Nhân sự khác", labelEn: "Person" },
-        // { key: "nhanSuXuLy", label: "Nhân sự xử lý" },
+        // { label: "Mã đơn DK", labelEn: "Matter code", key: "maDonDangKy" },
+        { label: "Mã hồ sơ", labelEn: "Matter code", key: "maHoSo" },
+        //  { label: "Client's ref", labelEn: "Deadline For Granting Payment", key: "hanNopPhiCapBang" },
+        { label: "Số Đơn", labelEn: "App No", key: "soDon" },
+
+        { label: "Tên khách hàng", labelEn: "Client Name", key: "tenKhachHang" },
+        { label: "Tên vụ việc", labelEn: "Matter name", key: "tenVuViec" },
+        { label: "Mô tả", labelEn: "", key: "moTa" },
+        // { label: "Matter name", labelEn: "Trademark", key: "tenNhanHieu" },
+        { label: "Cần thanh toán", labelEn: "Bill", key: "xuatBill" },
+        { label: "Ngày Debit note", labelEn: "Next stage", key: "trangThaiDon" },
+        { label: "Deadline", labelEn: "Deadline", key: "deadline" },
+        { label: "Soft Deadline", labelEn: "Soft Deadline", key: "softDeadline" },
+        { label: "Số tiền", labelEn: "soTien", key: "soTien" },
+        { label: "Debit Note", labelEn: "Số Debit Note", key: "trangThaiHoanThienHoSoTaiLieu" },
+        { label: "Tên quốc gia", labelEn: "tenQuocGia", key: "tenQuocGia" },
+        // {label: "Trạng thái", labelEn:"", key: "trangThaiYCTT"}
+
     ];
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -73,12 +86,12 @@ function CaseList() {
             localStorage.setItem("caseListPage", page);
             const response = await callAPI({
                 method: "post",
-                endpoint: "/case/list",
+                endpoint: "/vuviec/list",
                 data: {
                     searchText: searchValue,
-                    maDoiTac: partnerId,
+                    idDoiTac: partnerId,
                     maQuocGia: countryId,
-                    maKhachHang: customerId,
+                    idKhachHang: customerId,
                     maLoaiVuViec: casetypeId,
                     maNhanSu: staffId,
                     fields: selectedFields,
@@ -218,10 +231,19 @@ function CaseList() {
     const columns = allFieldOptions
         .filter(field => selectedFields.includes(field.key))
         .map(field => ({ label: field.label, labelEn: field.labelEn, key: field.key }));
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedCaseEdit, setSelectedCaseEdit] = useState(null);
+
+    const handleOpenModal = (caseItem) => {
+        setSelectedCaseEdit(caseItem);
+        setIsModalOpen(true);
+    };
+
     return (
         <div className="p-1 bg-gray-100 ">
             <div className="bg-white p-4 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách hồ sơ vụ việc</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4 uppercase">📌 Danh sách nghiệp vụ</h2>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
                     <input
                         type="text"
@@ -241,7 +263,7 @@ function CaseList() {
                                 );
                             }
                         }}
-                        placeholder="🔍 Nhập tên vụ việc hoặc mã vụ việc"
+                        placeholder="🔍 Nhập tên vụ việc hoặc mã hồ sơ"
                         className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
                     />
 
@@ -253,18 +275,7 @@ function CaseList() {
                             Tìm kiếm
                         </button>
 
-                        <button
-                            onClick={() => navigate("/caseadd")}
-                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
-                        >
-                            Thêm mới
-                        </button>
-                        <button
-                            onClick={() => exportToExcel(cases, allFieldOptions, "DSHoSoVuViec")}
-                            className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
-                        >
-                            Xuất Excel
-                        </button>
+
                         <button
                             onClick={() => setShowFieldModal(true)}
                             className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
@@ -296,7 +307,7 @@ function CaseList() {
                             isClearable
                         />
                     </div> */}
-                    <div className="w-full md:w-1/6">
+                    {/* <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Loại vụ việc</label>
                         <Select
                             options={formatOptions(casetypes, "maLoaiVuViec", "tenLoaiVuViec")}
@@ -317,12 +328,12 @@ function CaseList() {
                             className="text-left"
                             isClearable
                         />
-                    </div>
+                    </div> */}
                     <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Khách hàng</label>
                         <Select
-                            options={formatOptions(customers, "maKhachHang", "tenKhachHang")}
-                            value={selectedCustomer ? formatOptions(customers, "maKhachHang", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
+                            options={formatOptions(customers, "id", "tenKhachHang")}
+                            value={selectedCustomer ? formatOptions(customers, "id", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
                             onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
                             placeholder="Chọn khách hàng"
                             className="text-left"
@@ -334,8 +345,8 @@ function CaseList() {
                     <div className="w-full md:w-1/6">
                         <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Đối tác</label>
                         <Select
-                            options={formatOptions(partners, "maDoiTac", "tenDoiTac")}
-                            value={selectedPartner ? formatOptions(partners, "maDoiTac", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
+                            options={formatOptions(partners, "id", "tenDoiTac")}
+                            value={selectedPartner ? formatOptions(partners, "id", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
                             onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
                             placeholder="Chọn đối tác"
                             className="text-left"
@@ -398,51 +409,17 @@ function CaseList() {
                                                     </td>
                                                 );
                                             }
-
-                                            if (col.key === "soDon" || col.key === "soDonKH" || col.key === "soDonGiaHan") {
-                                                const maQuocGia = caseItem.maQuocGia;
-
-                                                // Ưu tiên xác định loại đơn
-                                                let maDon = null;
-                                                let soDon = null;
-                                                let link = null;
-
-                                                if (caseItem.maDonGiaHan) {
-                                                    // Đơn gia hạn
-                                                    maDon = caseItem.maDonGiaHan;
-                                                    soDon = caseItem.soDonGiaHan;
-                                                    link = `/application_gh_nh_vn_detail/${maDon}`;
-                                                } else if (maQuocGia === "KH") {
-                                                    // Đơn KH
-                                                    maDon = caseItem.maDonDangKyKH;
-                                                    soDon = caseItem.soDonKH;
-                                                    link = `/applicationdetail_kh/${maDon}`;
-                                                } else {
-                                                    // Đơn thường
-                                                    maDon = caseItem.maDonDangKy;
-                                                    soDon = caseItem.soDon;
-                                                    link = `/applicationdetail/${maDon}`;
-                                                }
-
-                                                const hasDon = !!maDon;
-                                                const hasSoDon = !!soDon;
-
+                                            if (col.key === "soDon") {
                                                 return (
                                                     <td
                                                         key={col.key}
-                                                        className={`p-2 text-table ${hasDon ? "text-blue-500 cursor-pointer hover:underline" : "text-gray-500"}`}
-                                                        onClick={(e) => {
-                                                            if (hasDon) {
-                                                                e.stopPropagation();
-                                                                navigate(link);
-                                                            }
+                                                        className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
+                                                        onClick={e => {
+                                                            e.stopPropagation();
+                                                            navigate(`/applicationdetail/${caseItem.maDon}`);
                                                         }}
                                                     >
-                                                        {hasDon
-                                                            ? hasSoDon
-                                                                ? soDon
-                                                                : "Chưa có số đơn"
-                                                            : "Không có đơn đăng ký"}
+                                                        {content}
                                                     </td>
                                                 );
                                             }
@@ -454,6 +431,13 @@ function CaseList() {
                                                         ) : (
                                                             <span>—</span>
                                                         )}
+                                                    </td>
+                                                );
+                                            }
+                                            if (col.key === "xuatBill") {
+                                                return (
+                                                    <td key={col.key} className={commonClass}>
+                                                        {caseItem.xuatBill ? "Việc cần thanh toán" : "Chưa cần thanh toán"}
                                                     </td>
                                                 );
                                             }
@@ -471,7 +455,15 @@ function CaseList() {
                                                     </td>
                                                 );
                                             }
-
+                                            if (col.key === "soTien") {
+                                                return (
+                                                    <td key={col.key} className={commonClass}>
+                                                        {caseItem.soTien
+                                                            ? `${caseItem.soTien.toLocaleString("vi-VN")} ${caseItem.loaiTienTe || ""}`
+                                                            : "—"}
+                                                    </td>
+                                                );
+                                            }
                                             if (col.key === "trangThaiVuViec") {
                                                 const statusMap = {
                                                     dang_xu_ly: "Đang xử lý",
@@ -493,12 +485,22 @@ function CaseList() {
                                             {(role === 'admin' || role === 'staff') && (
                                                 <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                                                     <button
+                                                        className="px-3 py-1 bg-blue-200 rounded-md hover:bg-blue-300"
+                                                        onClick={() => {
+                                                            setSelectedCase(caseItem);
+                                                            setShowDetailModal(true);
+                                                        }}
+                                                    >
+                                                        Xem
+                                                    </button>
+                                                    <button
                                                         className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                        onClick={() => navigate(`/caseedit/${caseItem.id}`)}
+                                                        onClick={() => handleOpenModal(caseItem)}
                                                     >
                                                         📝
                                                     </button>
-                                                    <button
+
+                                                    {/* <button
                                                         className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                                                         onClick={() => {
                                                             setCaseToDelete(caseItem.id);
@@ -533,7 +535,7 @@ function CaseList() {
                                                         }}
                                                     >
                                                         📄
-                                                    </button>
+                                                    </button> */}
                                                 </div>
                                             )}
                                         </td>
@@ -599,6 +601,20 @@ function CaseList() {
             >
                 <p>Bạn có chắc chắn muốn xóa hồ sơ vụ việc này không?</p>
             </Modal>
+            <EditVuViecModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={(data) => {
+                    console.log("Dữ liệu lưu:", data);
+                    setIsModalOpen(false);
+                }}
+                record={selectedCaseEdit}
+            />
+            <CaseDetailModal
+                visible={showDetailModal}
+                record={selectedCase}
+                onClose={() => setShowDetailModal(false)}
+            ></CaseDetailModal>
         </div>
     );
 }

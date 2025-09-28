@@ -12,9 +12,9 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
         status: "Đã nộp",
         editingIndex: null
     });
-    useEffect(() => {
-        fetchSoDonByGiayUyQuyen();
-    }, []);
+    // useEffect(() => {
+    //     fetchSoDonByGiayUyQuyen();
+    // }, []);
     useEffect(() => {
         let docs = [];
         if (initialTaiLieus?.length) {
@@ -35,35 +35,35 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
             onTaiLieuChange?.(docs);
         }
     }, [initialTaiLieus, isAddOnly]);
-    const fetchSoDonByGiayUyQuyen = async () => {
-        try {
-            // Bước 1: Gọi API để lấy maKhachHang từ maHoSoVuViec
-            const khachHangRes = await callAPI({
-                method: "post",
-                endpoint: "/application/getMaKhachHangByMaHoSoVuViec",
-                data: { maHoSoVuViec }
-            });
+    // const fetchSoDonByGiayUyQuyen = async () => {
+    //     try {
+    //         // Bước 1: Gọi API để lấy maKhachHang từ maHoSoVuViec
+    //         const khachHangRes = await callAPI({
+    //             method: "post",
+    //             endpoint: "/application/getMaKhachHangByMaHoSoVuViec",
+    //             data: { maHoSoVuViec }
+    //         });
 
-            const maKhachHang = khachHangRes?.maKhachHang;
+    //         const maKhachHang = khachHangRes?.maKhachHang;
 
-            if (!maKhachHang) {
-                console.warn("Không tìm thấy mã khách hàng từ mã hồ sơ vụ việc.");
-                setSoDons([]); // clear nếu không có
-                return;
-            }
+    //         if (!maKhachHang) {
+    //             console.warn("Không tìm thấy mã khách hàng từ mã hồ sơ vụ việc.");
+    //             setSoDons([]); // clear nếu không có
+    //             return;
+    //         }
 
-            // Bước 2: Gọi API để lấy danh sách số đơn có giấy ủy quyền gốc theo maKhachHang
-            const soDonRes = await callAPI({
-                method: "post",
-                endpoint: "/application/getApplicationByGiayUyQuyenGoc",
-                data: { maKhachHang }
-            });
+    //         // Bước 2: Gọi API để lấy danh sách số đơn có giấy ủy quyền gốc theo maKhachHang
+    //         const soDonRes = await callAPI({
+    //             method: "post",
+    //             endpoint: "/application/getApplicationByGiayUyQuyenGoc",
+    //             data: { maKhachHang }
+    //         });
 
-            setSoDons(soDonRes); // giả sử trả về mảng các đơn
-        } catch (error) {
-            console.error("Lỗi khi lấy số đơn theo giấy ủy quyền gốc:", error);
-        }
-    };
+    //         setSoDons(soDonRes); // giả sử trả về mảng các đơn
+    //     } catch (error) {
+    //         console.error("Lỗi khi lấy số đơn theo giấy ủy quyền gốc:", error);
+    //     }
+    // };
 
 
 
@@ -142,22 +142,18 @@ const DocumentSection = ({ initialTaiLieus, onTaiLieuChange, isAddOnly, isViewOn
                 {!giayUyQuyenGoc && (
                     <div className="w-full md:w-1/2">
                         <label className="block text-gray-700 text-left">
-                            Chọn số đơn có giấy ủy quyền gốc
+                            Nhập số đơn có giấy ủy quyền gốc
                         </label>
-                        <Select
-                            options={formatOptions(soDons, "soDon", "soDon")}
-                            value={
-                                maUyQuyen
-                                    ? formatOptions(soDons, "soDon", "soDon").find(opt => opt.value === maUyQuyen)
-                                    : null
-                            }
-                            onChange={selectedOption => setMaUyQuyen(selectedOption?.value)}
-                            placeholder="Chọn số đơn"
-                            className="w-full mt-1 rounded-lg text-left"
-                            isClearable
+                        <input
+                            type="text"
+                            value={maUyQuyen || ""}
+                            onChange={e => setMaUyQuyen(e.target.value)}
+                            placeholder="Nhập số đơn"
+                            className="w-full mt-1 rounded-lg text-left border p-2"
                         />
                     </div>
                 )}
+
             </div>
 
             {dsTaiLieu.length === 0 ? (

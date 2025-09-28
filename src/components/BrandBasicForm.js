@@ -157,7 +157,7 @@ function BrandBasicForm({
           <div className="w-1/2">
             {!isViewOnly && (
               <>
-                <label className="block text-gray-700 text-left">Chọn ảnh</label>
+                <label className="block text-gray-700 text-left">Mẫu ảnh nhãn hiệu</label>
                 <input
                   type="file"
                   accept="image/*"

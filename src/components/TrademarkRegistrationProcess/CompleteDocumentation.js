@@ -21,7 +21,7 @@ const CompleteDocumentation = ({
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌Hoàn thành tài liệu</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-gray-700 text-left">Ngày Hoàn thành tài liệu dự kiến</label>
+                    <label className="block text-gray-700 text-left">Ngày Hoàn thành tài liệu bắt buôc</label>
                     {/* <input
                         type="date"
                         value={ngayHoanThanhHSTL_DuKien}

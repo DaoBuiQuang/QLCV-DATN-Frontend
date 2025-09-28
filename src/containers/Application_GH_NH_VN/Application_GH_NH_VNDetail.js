@@ -120,13 +120,13 @@ function Application_GH_NH_VNDetail() {
 
             if (response) {
                 setMaHoSoVuViec(response.maHoSoVuViec);
-                if (response.hoSoVuViec) {
-                    setNoiDungVuViec(response.hoSoVuViec.noiDungVuViec || "");
-                    setMaKhachHang(response.hoSoVuViec.maKhachHang || "");
-                    setTenKhachHang(response.hoSoVuViec.khachHang?.tenKhachHang || "");
-                    setDiaChi(response.hoSoVuViec.khachHang?.diaChi || "");
-                    setSoDienThoai(response.hoSoVuViec.khachHang?.sdt || "");
-                }
+                // if (response.hoSoVuViec) {
+                    setNoiDungVuViec(response.noiDungVuViec || "");
+                    setMaKhachHang(response.maKhachHang || "");
+                    setTenKhachHang(response.khachHang?.tenKhachHang || "");
+                    setDiaChi(response.khachHang?.diaChi || "");
+                    setSoDienThoai(response.khachHang?.sdt || "");
+                // }
                 setSoDon(response.soDon)
                 setMaNhanHieu(response.NhanHieu.maNhanHieu);
                 setTenNhanHieu(response.NhanHieu.tenNhanHieu);

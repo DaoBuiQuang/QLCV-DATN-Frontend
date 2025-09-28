@@ -57,7 +57,7 @@ import NotificationPopup from "../containers/Notification/NotificationPopup";
 import DashboardApplications from "../containers/Dashboard/DashboardApplication";
 import DashboardCountry from "../containers/Dashboard/DashboardCountry";
 import DashboardPartner from "../containers/Dashboard/DashboardPartner";
-import { Upload } from "lucide-react";
+import { Home, Upload } from "lucide-react";
 import ExcelUpload from "../containers/UploadExcel/UploadExcel";
 import ApplicationDetail_KH from "../containers/Application_KH/ApplicationDetail_KH.js";
 import ApplicationList_KH from "../containers/Application_KH/ApplicationList_KH";
@@ -73,6 +73,25 @@ import Application_GH_NH_VNAdd from "../containers/Application_GH_NH_VN/Applicat
 import Application_GH_NH_VNList from "../containers/Application_GH_NH_VN/Application_GH_NH_VNList.js";
 import Application_GH_NH_VNEdit from "../containers/Application_GH_NH_VN/Application_GH_NH_VNEdit.js";
 import Application_GH_NH_VNDetail from "../containers/Application_GH_NH_VN/Application_GH_NH_VNDetail.js";
+import VuViec_BillList from "../containers/Bill/VuViec_BillList.js";
+import DebitNoteAdd from "../containers/DebitNote/debitNoteAdd.js";
+import HomePage from "../containers/Home/HomePage.js";
+import Application_SD_NH_VNAdd from "../containers/Application_SD_NH_VN/Application_SD_NH_VNAdd.js";
+import Application_TD_NH_VNAdd from "../containers/Application_TD_NH_VN/Application_TD_NH_VNAdd.js";
+import DebitNoteList from "../containers/DebitNote/debitNoteList.js";
+import DebitNoteDetail from "../containers/DebitNote/debitNoteDetail.js";
+import Case_KHList from "../containers/Case/Case_KHList.js";
+import VuViec_Bill_KHList from "../containers/Bill/VuViec_Bill_KHList.js";
+import DebitNote_KHList from "../containers/DebitNote/debitNote_KHList.js";
+import VuViec_BillChuaDuyetList from "../containers/Bill/VuViec_BillChuaDuyetList.js";
+import VuViec_Bill_KHChuaDuyetList from "../containers/Bill/VuViec_Bill_KHChuaDuyetList.js";
+import VuViec_Bill_VN_FullList from "../containers/Bill/VuViec_Bill_VN_FullList.js";
+import VuViec_BillBiTuChoiList from "../containers/Bill/VuViec_BillBiTuChoiList.js";
+import DebitNoteEdit from "../containers/DebitNote/detailNoteEdit.js";
+import VuViec_Bill_KH_FullList from "../containers/Bill/VuViec_Bill_KH_FullList.js";
+import VuViec_Bil_KHBiTuChoiList from "../containers/Bill/VuViec_Bil_KHBiTuChoiList.js";
+import GCN_NH_VNList from "../containers/GCN_NH_VN/GCN_NH_VNList.js";
+import GCN_NH_VNDetail from "../containers/GCN_NH_VN/GCN_NH_VNDetail.js";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -94,13 +113,13 @@ const MainLayout = ({ notification, setNotification }) => {
   return (
     <div className="flex h-screen overflow-x-hidden">
       <div
-        className={`fixed top-0 left-0 h-full w-56 bg-white shadow-md transform transition-transform duration-300 
-        ${isMenuOpen ? "translate-x-0" : "-translate-x-56"}`}
+        className={`fixed top-0 left-0 h-full w-[280px] bg-white shadow-md transform transition-transform duration-300 
+        ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <MenuLeft />
       </div>
 
-      <div className={`flex flex-col flex-1 transition-all duration-300 ${isMenuOpen ? "ml-56" : "ml-0"}`}>
+      <div className={`flex flex-col flex-1 transition-all duration-300 ${isMenuOpen ? "ml-[280px]" : "ml-0"}`}>
         <Header
           toggleMenu={() => setIsMenuOpen(!isMenuOpen)}
           isMenuOpen={isMenuOpen}
@@ -109,7 +128,7 @@ const MainLayout = ({ notification, setNotification }) => {
           className="flex-1 p-4 bg-gray-100"
           style={{
             width: window.innerWidth >= 1024
-              ? (isMenuOpen ? 'calc(100vw - 224px)' : '100vw')
+              ? (isMenuOpen ? 'calc(100vw - 280px)' : '100vw')
               : '100vw'
           }}
         >
@@ -132,6 +151,7 @@ const AppRoutes = ({ notification, setNotification }) => {
     <Router>
       <Routes>
         <Route element={<MainLayout notification={notification} setNotification={setNotification} />}>
+          <Route path="/" element={<HomePage></HomePage>} />
           <Route path="/customerlist" element={<CustomerList />} />
           <Route path="/customeradd" element={<CustomerAdd></CustomerAdd>} />
           <Route path="/customeredit/:id" element={<CustomerEdit></CustomerEdit>} />
@@ -183,6 +203,7 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/applicationedit/:maDonDangKy" element={<ApplicationEdit></ApplicationEdit>} />
           {/* <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetail></ApplicationDetail>} /> */}
           <Route path="/applicationdetail/:maDonDangKy" element={<ApplicationDetailTest></ApplicationDetailTest>} />
+          <Route path="/applicationdetail/:soDon" element={<ApplicationDetailTest></ApplicationDetailTest>} />
 
           <Route path="/brandlist" element={<BrandList></BrandList>} />
           <Route path="/brandadd" element={<BrandAdd></BrandAdd>} />
@@ -198,7 +219,9 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/profile" element={<Profile></Profile>} />
 
           <Route path="/notificationdetail/:id" element={<NotificationDetail></NotificationDetail>} />
-          <Route path="/" element={<DashboardApplications />} />
+          <Route path="/dashboard" element={<Dashboard></Dashboard>} />
+          {/* <Route path="/" element={<DashboardApplications />} /> */}
+
           <Route path="/dashboard/application" element={<DashboardApplications />} />
           <Route path="/dashboard/country" element={<DashboardCountry />} />
           <Route path="/dashboard/partner" element={<DashboardPartner />} />
@@ -210,6 +233,10 @@ const AppRoutes = ({ notification, setNotification }) => {
             path="/applicationadd_kh/:maHoSoVuViec/:id"
             element={<ApplicationAdd_KH />}
           />
+          <Route
+            path="/applicationadd_kh"
+            element={<ApplicationAdd_KH />}
+          />
           <Route path="/applicationedit_kh/:maDonDangKy" element={<ApplicationEdit_KH></ApplicationEdit_KH>} />
           <Route path="/applicationdetail_kh/:maDonDangKy" element={<ApplicationDetail_KH></ApplicationDetail_KH>} />
 
@@ -219,9 +246,33 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/application_kddetail_vn/:maDonDangKy" element={<ApplicationKD_VNDetail></ApplicationKD_VNDetail>} />
 
           <Route path="/application_gh_nh_vn_list" element={<Application_GH_NH_VNList></Application_GH_NH_VNList>} />
-          <Route path="/application_gh_nh_vn_add/:maHoSoVuViec/:id" element={<Application_GH_NH_VNAdd></Application_GH_NH_VNAdd>} />
+          <Route path="/application_gh_nh_vn_add" element={<Application_GH_NH_VNAdd></Application_GH_NH_VNAdd>} />
           <Route path="/application_gh_nh_vn_edit/:maDonGiaHan" element={<Application_GH_NH_VNEdit></Application_GH_NH_VNEdit>} />
           <Route path="/application_gh_nh_vn_detail/:maDonGiaHan" element={<Application_GH_NH_VNDetail></Application_GH_NH_VNDetail>} />
+
+          <Route path="/application_sd_nh_vn_list" element={<Application_GH_VNList></Application_GH_VNList>} />
+          <Route path="/application_sd_nh_vn_add/:maDonDangKy" element={<Application_SD_NH_VNAdd></Application_SD_NH_VNAdd>} />
+          <Route path="/application_td_nh_vn_add/:maDonDangKy" element={<Application_TD_NH_VNAdd></Application_TD_NH_VNAdd>} />
+         
+          <Route path="/vuviec_bill" element={<VuViec_Bill_VN_FullList></VuViec_Bill_VN_FullList>} />
+          <Route path="/vuviec_bill_da_duyet" element={<VuViec_BillList></VuViec_BillList>} />
+          <Route path="/vuviec_bill_kh" element={<VuViec_Bill_KH_FullList></VuViec_Bill_KH_FullList>} />
+          <Route path="/vuviec_bill_kh_da_duyet" element={<VuViec_Bill_KHList></VuViec_Bill_KHList>} />
+          <Route path="/vuviec_bill_chua_duyet" element ={<VuViec_BillChuaDuyetList></VuViec_BillChuaDuyetList>}/>
+          <Route path="/vuviec_bill_kh_chua_duyet" element = {<VuViec_Bill_KHChuaDuyetList></VuViec_Bill_KHChuaDuyetList>}/>
+
+            <Route path="/vuviec_bill_tu_choi" element ={<VuViec_BillBiTuChoiList></VuViec_BillBiTuChoiList>}/>
+           <Route path="/vuviec_bill_kh_tu_choi" element ={<VuViec_Bil_KHBiTuChoiList></VuViec_Bil_KHBiTuChoiList>}/>
+
+          <Route path="/debitnote_add" element={<DebitNoteAdd></DebitNoteAdd>} />
+          <Route path="/debitnote_list" element={<DebitNoteList></DebitNoteList>} />
+          <Route path="/debitnote_kh_list" element={<DebitNote_KHList></DebitNote_KHList>} />
+          <Route path="/debitnote_detail/:id" element={<DebitNoteDetail></DebitNoteDetail>} />
+          <Route path="/debitnote_edit/:id" element={<DebitNoteEdit></DebitNoteEdit>} />
+
+          <Route path="/case_khlist" element={<Case_KHList></Case_KHList>} />
+          <Route path="/gcn_nhlist" element={<GCN_NH_VNList></GCN_NH_VNList>} />
+          <Route path="/gcn_nhdetail/:id" element={<GCN_NH_VNDetail></GCN_NH_VNDetail>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

@@ -187,6 +187,7 @@ const DiphimaProcess = ({
                                 disabled={isViewOnly}
                                 className="mt-1 w-full"
                             />
+                             <label className="block text-gray-700 text-left"><span className="text-red-500">*</span> Luật sư phải tạo vụ việc nộp phí cấp bằng và yêu cầu xuất bill, nếu chưa thu phí cấp bằng của khách hàng</label>
                         </div>
                         <div>
                             <label className="block text-gray-700 text-left">Ngày nhận bằng</label>

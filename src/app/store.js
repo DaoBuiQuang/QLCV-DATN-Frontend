@@ -1,12 +1,12 @@
-// src/app/store.js
 import { configureStore } from '@reduxjs/toolkit';
+import uiReducer from '../features/uiSlice';                 // <-- import đúng reducer UI
 import authReducer from '../features/authSlice';
-import notìicationReducer from '../features/notificationSlice';
-import { notification } from 'antd';
+import notificationReducer from '../features/notificationSlice';  // <-- sửa tên
 
 export const store = configureStore({
   reducer: {
+    ui: uiReducer,               // <-- dùng đúng biến
     auth: authReducer,
-    notification: notìicationReducer,
+    notification: notificationReducer,
   },
 });

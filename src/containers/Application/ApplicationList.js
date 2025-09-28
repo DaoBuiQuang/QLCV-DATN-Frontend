@@ -45,7 +45,7 @@ function ApplicationList() {
   const [selectedHanXuLy, setSelectedHanXuLy] = useState(null);
   const [sortByHanXuLy, setSortByHanXuLy] = useState(false);
   const [selectedHanTraLoi, setSelectedHanTraLoi] = useState(null);
-  const [sortByHanTraLoi, setSortByHanTraLoi] = useState(true);
+  const [sortByHanTraLoi, setSortByHanTraLoi] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -68,12 +68,14 @@ function ApplicationList() {
     { value: "Trả lời thẩm định nội dung", label: "Trả lời thẩm định nội dung" },
     { value: "Hoàn tất nhận bằng", label: "Hoàn tất nhận bằng" },
     { value: "Chờ nhận bằng", label: "Chờ nhận bằng" },
+    { label: "Loại đơn", labelEn: "Application Type", key: "loaiDon" },
   ];
 
   const allFieldOptions = [
     // { label: "Mã đơn DK", labelEn: "Matter code", key: "maDonDangKy" },
     { label: "Số Đơn", labelEn: "App No", key: "soDon" },
     { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
+    { label: "Tên khách hàng", labelEn: "Client Name", key: "tenKhachHang" },
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
     { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
     { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiDon" },
@@ -94,6 +96,7 @@ function ApplicationList() {
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
     { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
     { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
+    { label: "Loại đơn", labelEn: "Application Type", key: "loaiDon" },
 
   ];
   const hiddenFieldKeys = [
@@ -257,6 +260,12 @@ function ApplicationList() {
               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Tìm kiếm
+            </button>
+            <button
+              onClick={() => navigate("/applicationadd")}
+              className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
+            >
+              Thêm mới
             </button>
             <button
               onClick={() => exportToExcel(applications, allFieldOptions, 'DanhSachDonDK')}
@@ -479,6 +488,29 @@ function ApplicationList() {
                               ? content
                               : "Chưa có số đơn"
                             : "Không có đơn đăng ký"}
+                        </td>
+                      );
+                    }
+                    if (col.key === "loaiDon") {
+                      let text = "";
+                      switch (app.loaiDon) {
+                        case 1:
+                          text = "Đơn gốc";
+                          break;
+                        case 2:
+                          text = "Đơn sửa đổi";
+                          break;
+                        case 3:
+                          text = "Đơn tách";
+                          break;
+                        default:
+                          text = "Không xác định";
+                          break;
+                      }
+
+                      return (
+                        <td key={col.key} className="p-2 text-table">
+                          {text}
                         </td>
                       );
                     }

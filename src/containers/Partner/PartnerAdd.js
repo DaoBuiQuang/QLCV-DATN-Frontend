@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import callAPI from "../../utils/api";
 import Select from "react-select";
 import { showSuccess, showError } from "../../components/commom/Notification";
 function PartnerAdd() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [maDoiTac, setMaDoiTac] = useState("");
   const [tenDoiTac, setTenDoiTac] = useState("");
   const [maQuocGia, setMaQuocGia] = useState("");
+  const [nguoiLienHe, setNguoiLienHe] = useState("");
+  const [moTa, setMoTa] = useState("");
+  const [diaChi, setDiaChi] = useState("");
+  const [sdt, setSdt] = useState("");
+  const [ghiChu, setGhiChu] = useState("");
+  const [email, setEmail] = useState("");
   const [countries, setCountries] = useState([]);
 
   const [errors, setErrors] = useState({});
@@ -51,6 +59,12 @@ function PartnerAdd() {
           maDoiTac,
           tenDoiTac,
           maQuocGia,
+          nguoiLienHe,
+          moTa,
+          diaChi,
+          sdt,
+          ghiChu,
+          email
         },
       });
       await showSuccess("Thành công!", "Thêm đối tác thành công!");
@@ -122,6 +136,32 @@ function PartnerAdd() {
             {errors.maQuocGia && (
               <p className="text-red-500 text-xs mt-1 text-left">{errors.maQuocGia}</p>
             )}
+          </div>
+          <div>
+            <label className="block text-gray-700 text-left">{t("nguoilienhe")}</label>
+            <input type="text" value={nguoiLienHe} onChange={(e) => setNguoiLienHe(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập người liên hệ" />
+          </div>
+          <div>
+            <label className="block text-gray-700 text-left">{t("diaChi")}</label>
+            <input type="text" value={diaChi} onChange={(e) => setDiaChi(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập địa chỉ" />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 text-left">{t("sdt")}</label>
+            <input type="text" value={sdt} onChange={(e) => setSdt(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập số điện thoại" />
+          </div>
+          <div>
+            <label className="block text-gray-700 text-left">Email</label>
+            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập email" />
+          </div>
+          <div>
+            <label className="block text-gray-700 text-left">{t("moTa")}</label>
+            <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mô tả" />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 text-left">{t("ghiChu")}</label>
+            <input type="text" value={ghiChu} onChange={(e) => setGhiChu(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập ghi chú" />
           </div>
         </div>
 

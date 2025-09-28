@@ -7,15 +7,31 @@ import DocumentSection from "../../components/UpdateDocument/DocumentSection.js"
 import ContentReview_KH from "../../components/TrademarkRegistrationProcess/KH/ContentReview_KH.js";
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation.js";
 import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation.js";
-import DonProgress from "../../components/commom/DonProgess.js";
 import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification.js";
 import BrandBasicForm from "../../components/BrandBasicForm.js";
+import FormHoSo from "../../components/commom/FormHoSo.js";
+import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 function ApplicationAdd_KH() {
     const navigate = useNavigate();
-    const { maHoSoVuViec } = useParams();
+
     const isAddOnly = true
+    const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
+    const [loaiDon, setLoaiDon] = useState(1)
+    const [idKhachHang, setIdKhachHang] = useState(null);
+    const [maKhachHang, setMaKhachHang] = useState("");
+    const [idDoiTac, setIdDoiTac] = useState(null)
+    const [maDoiTac, setMaDoiTac] = useState("");
+    const [clientsRef, setClientsRef] = useState("");
+    const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
+    const [ngayXuLy, setNgayXuLy] = useState(null);
+    const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [nhanSuVuViec, setNhanSuVuViec] = useState("");
+    const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState("");
+    const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState("");
+    const [ngayDongHS, setNgayDongHS] = useState(null);
+    const [ngayRutHS, setNgayRutHS] = useState(null);
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [maNhanHieuOld, setMaNhanHieuOld] = useState("");
@@ -51,6 +67,7 @@ function ApplicationAdd_KH() {
     const [buocXuLy, setBuocXuLy] = useState("");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
+    const [vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
@@ -195,7 +212,22 @@ function ApplicationAdd_KH() {
                 method: "post",
                 endpoint: "/application_kh/add",
                 data: {
-                    maHoSoVuViec: maHoSoVuViec,
+                    maHoSo: maHoSoVuViec,
+                    idKhachHang: idKhachHang,
+                    // maKhachHang: maKhachHang,
+
+                    idDoiTac: idDoiTac,
+                    // maDoiTac: maDoiTac,
+
+                    clientsRef: clientsRef,
+                    ngayTiepNhan: ngayTiepNhan,
+                    ngayXuLy: ngayXuLy,
+                    maNguoiXuLy1: nguoiXuLyChinh,
+                    maNguoiXuLy2: nguoiXuLyPhu,
+                    trangThaiVuViec: trangThaiVuViec,
+                    ngayDongHS: ngayDongHS,
+                    ngayRutHS: ngayRutHS,
+
                     soDon: soDon,
                     maNhanHieu: maNhanHieuOld,
                     maSPDVList: maSPDVList,
@@ -220,7 +252,8 @@ function ApplicationAdd_KH() {
                     taiLieus: taiLieuList,
                     giayUyQuyenGoc: giayUyQuyenGoc || true,
                     maUyQuyen: maUyQuyen || null,
-                    nhanHieu
+                    nhanHieu,
+                    vuViecs: vuViecList,
                 },
             });
             await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
@@ -238,13 +271,16 @@ function ApplicationAdd_KH() {
         setTaiLieuList(list);
     };
 
+    const handleVuViecChange = (list) => {
+        setVuViecList(list);
+    }
     return (
         <div className="p-1 bg-gray-100 flex  items-center justify-center space-y-4">
             {/* <DonProgress trangThaiDon={trangThaiDon} /> */}
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-semibold text-gray-700">
-                        📌 Thêm đơn đăng ký nhãn hiệu mới
+                    <h2 className="text-2xl font-semibold text-gray-700 uppercase">
+                        📌 Thêm đơn đăng ký nhãn hiệu mới Campuchia
                     </h2>
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg"
@@ -252,9 +288,45 @@ function ApplicationAdd_KH() {
                         className="w-20 h-15"
                     />
                 </div>
+                <FormHoSo
+                    soDon={soDon}
+                    setSoDon={setSoDon}
+                    loaiDon={loaiDon}
+                    setLoaiDon={setLoaiDon}
+                    maHoSoVuViec={maHoSoVuViec}
+                    setMaHoSoVuViec={setMaHoSoVuViec}
+                    idKhachHang={idKhachHang}
+                    setIdKhachHang={setIdKhachHang}
+                    idDoiTac={idDoiTac}
+                    setIdDoiTac={setIdDoiTac}
+                    maKhachHang={maKhachHang}
+                    setMaKhachHang={setMaKhachHang}
+                    maDoiTac={maDoiTac}
+                    setMaDoiTac={setMaDoiTac}
+                    clientsRef={clientsRef}
+                    setClientsRef={setClientsRef}
+                    ngayTiepNhan={ngayTiepNhan}
+                    setNgayTiepNhan={setNgayTiepNhan}
+                    ngayXuLy={ngayXuLy}
+                    setNgayXuLy={setNgayXuLy}
+                    trangThaiVuViec={trangThaiVuViec}
+                    setTrangThaiVuViec={setTrangThaiVuViec}
+                    nhanSuVuViec={nhanSuVuViec}
+                    setNhanSuVuViec={setNhanSuVuViec}
+                    nguoiXuLyChinh={nguoiXuLyChinh}
+                    setNguoiXuLyChinh={setNguoiXuLyChinh}
+                    nguoiXuLyPhu={nguoiXuLyPhu}
+                    setNguoiXuLyPhu={setNguoiXuLyPhu}
+                    ngayDongHS={ngayDongHS}
+                    setNgayDongHS={setNgayDongHS}
+                    ngayRutHS={ngayRutHS}
+                    setNgayRutHS={setNgayRutHS}
+                    ngayNopDon={ngayNopDon}
+                    setNgayNopDon={setNgayNopDon}
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div >
+                        {/* <div >
                             <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
@@ -273,7 +345,7 @@ function ApplicationAdd_KH() {
                                 onChange={(e) => setSoDon(e.target.value)}
                                 className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                             />
-                        </div>
+                        </div> */}
 
                         <div>
                             <label className="block text-gray-700 text-left">Trạng thái đơn</label>
@@ -371,61 +443,72 @@ function ApplicationAdd_KH() {
                     </div>
 
                     {/* {daChonNgayNopDon && ( */}
-                        <div className="col-span-2">
-                            <CompleteDocumentation
-                                ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
-                                setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
-                                ngayHoanThanhHSTL={ngayHoanThanhHSTL}
-                                setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
-                                trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
-                                setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
-                                formatOptions={formatOptions}
-                            />
-                        </div>
+                    <div className="col-span-2">
+                        <CompleteDocumentation
+                            ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
+                            setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
+                            ngayHoanThanhHSTL={ngayHoanThanhHSTL}
+                            setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
+                            trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
+                            setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
+                            formatOptions={formatOptions}
+                        />
+                    </div>
                     {/* )} */}
                     {/* {daChonNgayNopDon && ( */}
-                        <div className="col-span-2">
-                            <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly}
-                                maHoSoVuViec={maHoSoVuViec}
-                                giayUyQuyenGoc={giayUyQuyenGoc}
-                                setGiayUyQuyenGoc={setGiayUyQuyenGoc}
-                                maUyQuyen={maUyQuyen}
-                                setMaUyQuyen={setMaUyQuyen}
-                            />
-                        </div>
+                    <div className="col-span-2">
+                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly}
+                            maHoSoVuViec={maHoSoVuViec}
+                            giayUyQuyenGoc={giayUyQuyenGoc}
+                            setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                            maUyQuyen={maUyQuyen}
+                            setMaUyQuyen={setMaUyQuyen}
+                        />
+                    </div>
                     {/* )} */}
                     {/* {daChonNgayHoanThanhHSTL && ( */}
-                        <div className="col-span-2">
-                            <ContentReview_KH
-                                ngayKQThamDinhND_DuKien={ngayKQThamDinhND_DuKien}
-                                setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
-                                ngayKQThamDinhND={ngayKQThamDinhND}
-                                setNgayKQThamDinhND={setNgayKQThamDinhND}
-                                lichSuThamDinhND={lichSuThamDinhND}
-                                setLichSuThamDinhND={setLichSuThamDinhND}
-                                ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
-                                setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
-                                buocXuLy={buocXuLy}
-                                setBuocXuLy={setBuocXuLy}
-                            />
-                        </div>
+                    <div className="col-span-2">
+                        <ContentReview_KH
+                            ngayKQThamDinhND_DuKien={ngayKQThamDinhND_DuKien}
+                            setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
+                            ngayKQThamDinhND={ngayKQThamDinhND}
+                            setNgayKQThamDinhND={setNgayKQThamDinhND}
+                            lichSuThamDinhND={lichSuThamDinhND}
+                            setLichSuThamDinhND={setLichSuThamDinhND}
+                            ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
+                            setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
+                            buocXuLy={buocXuLy}
+                            setBuocXuLy={setBuocXuLy}
+                        />
+                    </div>
                     {/* )} */}
-                   
+
                     {/* {(daChonNgayThamDinhNoiDung || (!trangThaiTraLoiKQThamDinhND && daChonNgayThamDinhNoiDung)) && ( */}
-                        <div className="col-span-2">
-                            <DegreeInformation
-                                soBang={soBang}
-                                setSoBang={setSoBang}
-                                quyetDinhSo={quyetDinhSo}
-                                setQuyetDinhSo={setQuyetDinhSo}
-                                ngayCapBang={ngayCapBang}
-                                setNgayCapBang={setNgayCapBang}
-                                ngayHetHanBang={ngayHetHanBang}
-                                setNgayHetHanBang={setNgayHetHanBang}
-                                ngayGuiBangChoKH={ngayGuiBangChoKH}
-                                setNgayGuiBangChoKH={setNgayGuiBangChoKH}
-                            />
-                        </div>
+                    <div className="col-span-2">
+                        <DegreeInformation
+                            soBang={soBang}
+                            setSoBang={setSoBang}
+                            quyetDinhSo={quyetDinhSo}
+                            setQuyetDinhSo={setQuyetDinhSo}
+                            ngayCapBang={ngayCapBang}
+                            setNgayCapBang={setNgayCapBang}
+                            ngayHetHanBang={ngayHetHanBang}
+                            setNgayHetHanBang={setNgayHetHanBang}
+                            ngayGuiBangChoKH={ngayGuiBangChoKH}
+                            setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                        />
+                    </div>
+                    <div className="col-span-2">
+                        <DSVuViec
+                            maHoSo={maHoSoVuViec}
+                            onVuViecChange={handleVuViecChange} initialVuViecs={vuViecList}
+                            maHoSoVuViec={maHoSoVuViec}
+                            giayUyQuyenGoc={giayUyQuyenGoc}
+                            setGiayUyQuyenGoc={setGiayUyQuyenGoc}
+                            maUyQuyen={maUyQuyen}
+                            setMaUyQuyen={setMaUyQuyen}
+                        />
+                    </div>
                     {/* )} */}
                 </div>
 
