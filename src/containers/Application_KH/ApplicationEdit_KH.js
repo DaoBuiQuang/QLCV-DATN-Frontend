@@ -155,45 +155,32 @@ function ApplicationEdit_KH() {
             setDaChonNgayThamDinhNoiDung(true);
             setDaChonHoanTatThuTucNhapBang(true);
         }
-        // if (ngayNopDon) {
-        //     const duKien = dayjs(ngayNopDon).add(1, 'month').format('YYYY-MM-DD');
-        //     setNgayHoanThanhHSTL_DuKien(duKien);
-        //     setNgayKQThamDinhHinhThuc_DuKien(duKien);
-        //     // 👉 Chỉ set ngày hết hạn nếu chưa có
-        //     if (!ngayHetHanBang) {
-        //         const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
-        //         setNgayHetHanBang(hetHanBang);
-        //     }
-
-        //     setDaChonNgayNopDon(true);
-        //     setDaChonNgayHoanThanhHSTL(true);
-        //     updateTrangThaiDon("Thẩm định hình thức");
-        // } else {
-        //     setNgayHoanThanhHSTL_DuKien(null);
-        //     setNgayKQThamDinhHinhThuc_DuKien(null);
-        //     setNgayHetHanBang(null);
-        // }
         if (ngayNopDon) {
+            const duKien = dayjs(ngayNopDon).add(59, 'day').format('YYYY-MM-DD');
+            setNgayHoanThanhHSTL_DuKien(duKien);
+            // 👉 Chỉ set ngày hết hạn nếu chưa có
+            if (!ngayHetHanBang && soBang) {
+                const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
+                setNgayHetHanBang(hetHanBang);
+            }
+            setDaChonNgayNopDon(true);
+            updateTrangThaiDon("Hoàn thành hồ sơ tài liệu");
+        } else {
+            setNgayHoanThanhHSTL_DuKien(null);
+            setNgayHetHanBang(null);
+        }
+        if (ngayHoanThanhHSTL) {
             // if (!ngayKQThamDinhND_DuKien) {
-            const duKien1 = dayjs(ngayNopDon).add(2, 'month').format('YYYY-MM-DD');
-            const duKien = dayjs(ngayNopDon).add(6, 'month').format('YYYY-MM-DD');
+            const duKien1 = dayjs(ngayHoanThanhHSTL).add(2, 'month').format('YYYY-MM-DD');
+            const duKien = dayjs(ngayHoanThanhHSTL).add(6, 'month').format('YYYY-MM-DD');
             setNgayHoanThanhHSTL_DuKien(duKien1);
             setNgayKQThamDinhND_DuKien(duKien);
             // }
             // setDaChonNgayCongBoDon(true);
             updateTrangThaiDon("Thẩm định");
         } else {
-            setNgayHoanThanhHSTL_DuKien(null);
             setNgayKQThamDinhND_DuKien(null);
         }
-
-
-        // const baseNgay = ngayNhanKQYKien || ngayThongBaoCapBang;
-        // if (ngayKQThamDinhND) {
-        //     setDaChonNgayThamDinhNoiDung(true);
-        //     updateTrangThaiDon("Gửi bằng cho khách hàng");
-        // }
-
         if (ngayKQThamDinhND) {
             updateTrangThaiDon("Đơn đăng ký hoàn tất");
         }
@@ -209,6 +196,7 @@ function ApplicationEdit_KH() {
         ngayKQThamDinhND_DuKien,
         daChonNgayThamDinhNoiDung,
     ]);
+
 
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({

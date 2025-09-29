@@ -92,6 +92,7 @@ import VuViec_Bill_KH_FullList from "../containers/Bill/VuViec_Bill_KH_FullList.
 import VuViec_Bil_KHBiTuChoiList from "../containers/Bill/VuViec_Bil_KHBiTuChoiList.js";
 import GCN_NH_VNList from "../containers/GCN_NH_VN/GCN_NH_VNList.js";
 import GCN_NH_VNDetail from "../containers/GCN_NH_VN/GCN_NH_VNDetail.js";
+import GCN_NH_VNAdd from "../containers/GCN_NH_VN/GCN_NH_VNAdd.js";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -253,16 +254,16 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/application_sd_nh_vn_list" element={<Application_GH_VNList></Application_GH_VNList>} />
           <Route path="/application_sd_nh_vn_add/:maDonDangKy" element={<Application_SD_NH_VNAdd></Application_SD_NH_VNAdd>} />
           <Route path="/application_td_nh_vn_add/:maDonDangKy" element={<Application_TD_NH_VNAdd></Application_TD_NH_VNAdd>} />
-         
+
           <Route path="/vuviec_bill" element={<VuViec_Bill_VN_FullList></VuViec_Bill_VN_FullList>} />
           <Route path="/vuviec_bill_da_duyet" element={<VuViec_BillList></VuViec_BillList>} />
           <Route path="/vuviec_bill_kh" element={<VuViec_Bill_KH_FullList></VuViec_Bill_KH_FullList>} />
           <Route path="/vuviec_bill_kh_da_duyet" element={<VuViec_Bill_KHList></VuViec_Bill_KHList>} />
-          <Route path="/vuviec_bill_chua_duyet" element ={<VuViec_BillChuaDuyetList></VuViec_BillChuaDuyetList>}/>
-          <Route path="/vuviec_bill_kh_chua_duyet" element = {<VuViec_Bill_KHChuaDuyetList></VuViec_Bill_KHChuaDuyetList>}/>
+          <Route path="/vuviec_bill_chua_duyet" element={<VuViec_BillChuaDuyetList></VuViec_BillChuaDuyetList>} />
+          <Route path="/vuviec_bill_kh_chua_duyet" element={<VuViec_Bill_KHChuaDuyetList></VuViec_Bill_KHChuaDuyetList>} />
 
-            <Route path="/vuviec_bill_tu_choi" element ={<VuViec_BillBiTuChoiList></VuViec_BillBiTuChoiList>}/>
-           <Route path="/vuviec_bill_kh_tu_choi" element ={<VuViec_Bil_KHBiTuChoiList></VuViec_Bil_KHBiTuChoiList>}/>
+          <Route path="/vuviec_bill_tu_choi" element={<VuViec_BillBiTuChoiList></VuViec_BillBiTuChoiList>} />
+          <Route path="/vuviec_bill_kh_tu_choi" element={<VuViec_Bil_KHBiTuChoiList></VuViec_Bil_KHBiTuChoiList>} />
 
           <Route path="/debitnote_add" element={<DebitNoteAdd></DebitNoteAdd>} />
           <Route path="/debitnote_list" element={<DebitNoteList></DebitNoteList>} />
@@ -273,6 +274,7 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/case_khlist" element={<Case_KHList></Case_KHList>} />
           <Route path="/gcn_nhlist" element={<GCN_NH_VNList></GCN_NH_VNList>} />
           <Route path="/gcn_nhdetail/:id" element={<GCN_NH_VNDetail></GCN_NH_VNDetail>} />
+          <Route path="/gcn_nhadd" element={<GCN_NH_VNAdd></GCN_NH_VNAdd>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

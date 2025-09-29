@@ -193,7 +193,7 @@ function FormHoSo({
                     />
                 </div>
                 <div className="flex-1">
-                    <label className="block text-gray-700 text-left">Chọn khách hàng <span className="text-red-500">*</span></label>
+                    <label className="block text-gray-700 text-left">Khách hàng <span className="text-red-500">*</span></label>
                     <Select
                         options={formatOptions(customers, "id", "maKhachHang", "tenKhachHang")}
                         value={idKhachHang ? formatOptions(customers, "id", "maKhachHang", "tenKhachHang").find(opt => opt.id === idKhachHang) : null}

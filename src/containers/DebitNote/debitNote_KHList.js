@@ -64,7 +64,7 @@ function DebitNote_KHList() {
         { label: "Ngày thanh toán", labelEn: "", key: "ngayThanhToan" },
         { label: "Ngày gửi hóa đơn", labelEn: "", key: "ngayGuiHoaDon" },
         { label: "Ngày xuất", labelEn: "", key: "ngayXuat" },
-        {label: "Ghi chú", labelEn:"Note", key:"ghiChu"}
+        { label: "Ghi chú", labelEn: "Note", key: "ghiChu" }
     ];
     const formatOptions = (data, valueKey, labelKey) => {
         return data.map(item => ({
@@ -144,7 +144,7 @@ function DebitNote_KHList() {
             console.error("Lỗi khi lấy dữ liệu khách hàng", error);
         }
     };
-   
+
     useEffect(() => {
         const savedPage = parseInt(localStorage.getItem("caseListPage") || "1", 10);
         fetchDebitNote(
@@ -268,7 +268,9 @@ function DebitNote_KHList() {
                     </div>
                 </div>
             </div>
-
+            <div className="mb-2 text-left text-gray-600 text-xl">
+                {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
+            </div>
             <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">

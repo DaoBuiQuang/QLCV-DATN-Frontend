@@ -305,7 +305,9 @@ function VuViec_Bil_KHBiTuChoiList() {
                     </div>
                 </div>
             </div>
-
+            <div className="mb-2 text-left text-gray-600 text-xl">
+                {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
+            </div>
             <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">

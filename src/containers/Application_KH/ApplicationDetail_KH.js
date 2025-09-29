@@ -255,7 +255,7 @@ function ApplicationDetail_KH() {
                   </div>
                   <div className="text-left">
                     <span className="font-medium">Ghi chú:</span>
-                    <p className="mt-1 text-gray-700 italic">
+                    <p className="mt-1 text-gray-700 italic whitespace-pre-line">
                       {ghiChu || "Chưa có ghi chú"}
                     </p>
                   </div>

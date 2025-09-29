@@ -49,7 +49,10 @@ function ApplicationList() {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
-
+  const [partners, setPartners] = useState([]);
+  const [selectedPartner, setSelectedPartner] = useState("");
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState("");
   const filterCondition = {
     selectedField: selectedField?.value || "",
     fromDate,
@@ -76,6 +79,7 @@ function ApplicationList() {
     { label: "Số Đơn", labelEn: "App No", key: "soDon" },
     { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
     { label: "Tên khách hàng", labelEn: "Client Name", key: "tenKhachHang" },
+    { label: "Tên đối tác", labelEn: "Partner Name", key: "tenDoiTac" },
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
     { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
     { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiDon" },
@@ -127,7 +131,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue, tenNhanHieu: selectedBrand, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
+        data: { searchText: searchValue, tenNhanHieu: selectedBrand, idDoiTac:selectedPartner, idKhachHang:selectedCustomer, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
       });
       setApplications(response.data || []);
       setTotalItems(response.pagination?.totalItems || 0);
@@ -149,6 +153,31 @@ function ApplicationList() {
       setBrands(response);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu nhãn hiệu:", error);
+    }
+  };
+  const fetchPartners = async () => {
+    try {
+      const response = await callAPI({
+        method: "post",
+        endpoint: "/partner/all",
+        data: {},
+      });
+      setPartners(response);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
+    }
+  };
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await callAPI({
+        method: "post",
+        endpoint: "/customers/by-name",
+        data: {},
+      });
+      setCustomers(response);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu khách hàng", error);
     }
   };
   const fetchItems = async () => {
@@ -177,6 +206,8 @@ function ApplicationList() {
     }
     fetchBrands();
     fetchItems();
+    fetchPartners();
+    fetchCustomers();
   }, []);
   const columns = allFieldOptions
     .filter(field => selectedFields.includes(field.key))
@@ -243,17 +274,9 @@ function ApplicationList() {
                 fetchApplications(searchTerm, 1, pageSize);
               }
             }}
-            placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
+            placeholder="🔍 Nhập số đơn hoặc mã hồ sơ"
             className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
-
-          {/* <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
-            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
-          /> */}
           <div className="flex gap-3">
             <button
               onClick={() => fetchApplications(searchTerm, 1, pageSize)}
@@ -280,19 +303,35 @@ function ApplicationList() {
               Chọn cột hiển thị
             </button>
           </div>
-
-
         </div>
-        {/* <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="bg-gray-600 hover:bg-gray-700 text-white px-5 py-1 rounded-lg shadow-md transition"
-        >
-          {showFilters ? "Ẩn bộ lọc" : "🔽 Bộ lọc nâng cao"}
-        </button> */}
         <div className="">
           <div className="flex flex-wrap gap-3">
+            <div className="w-full md:w-1/6">
+              <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Khách hàng</label>
+              <Select
+                options={formatOptions(customers, "id", "tenKhachHang")}
+                value={selectedCustomer ? formatOptions(customers, "id", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
+                onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
+                placeholder="Chọn khách hàng"
+                className="text-left"
+                isClearable
+              />
+            </div>
+
+
+            <div className="w-full md:w-1/6">
+              <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Đối tác</label>
+              <Select
+                options={formatOptions(partners, "id", "tenDoiTac")}
+                value={selectedPartner ? formatOptions(partners, "id", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
+                onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
+                placeholder="Chọn đối tác"
+                className="text-left"
+                isClearable
+              />
+            </div>
             {/* Nhãn hiệu */}
-            <div className="w-full md:w-1/5">
+            <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Nhãn hiệu</label>
               <Select
                 options={formatOptions(brands, "tenNhanHieu", "tenNhanHieu")}
@@ -305,7 +344,7 @@ function ApplicationList() {
             </div>
 
             {/* Sản phẩm dịch vụ */}
-            <div className="w-full md:w-1/5">
+            <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Sản phẩm dịch vụ</label>
               <Select
                 options={formatOptions(productAndService, "maSPDV", "tenSPDV")}
@@ -323,7 +362,7 @@ function ApplicationList() {
             </div>
 
             {/* Trạng thái đơn */}
-            <div className="w-full md:w-1/5">
+            <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Trạng thái đơn</label>
               <Select
                 options={trangThaiDonOptions}
@@ -422,7 +461,12 @@ function ApplicationList() {
         </div>
 
       </div>
+      <div className="mb-2 text-left text-gray-600 text-xl">
+        {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
+      </div>
+
       <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
+
         <Spin spinning={loading} tip="Loading..." size="large">
           <table className="w-full border-collapse bg-white text-sm ">
             <thead>

@@ -34,7 +34,7 @@ function VuViec_BillBiTuChoiList() {
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-     const [showDetailModal, setShowDetailModal] = useState(false);
+    const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedCase, setSelectedCase] = useState(null);
     const [showFieldModal, setShowFieldModal] = useState(false);
     const [selectedFields, setSelectedFields] = useState([
@@ -304,7 +304,9 @@ function VuViec_BillBiTuChoiList() {
                     </div>
                 </div>
             </div>
-
+            <div className="mb-2 text-left text-gray-600 text-xl">
+                {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
+            </div>
             <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">
@@ -496,7 +498,7 @@ function VuViec_BillBiTuChoiList() {
             >
                 <p>Bạn có chắc chắn muốn xóa hồ sơ vụ việc này không?</p>
             </Modal>
-             <CaseDetailModal
+            <CaseDetailModal
                 visible={showDetailModal}
                 record={selectedCase}
                 onClose={() => setShowDetailModal(false)}

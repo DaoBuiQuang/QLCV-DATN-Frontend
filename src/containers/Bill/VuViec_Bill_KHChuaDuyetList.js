@@ -35,8 +35,8 @@ function VuViec_BillChuaDuyetList() {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
-   const [showDetailModal, setShowDetailModal] = useState(false);
-    const [selectedCase, setSelectedCase] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedCase, setSelectedCase] = useState(null);
   const [showFieldModal, setShowFieldModal] = useState(false);
   const [selectedFields, setSelectedFields] = useState([
     "maHoSo",
@@ -443,7 +443,9 @@ function VuViec_BillChuaDuyetList() {
           </div>
         </div>
       </div>
-
+      <div className="mb-2 text-left text-gray-600 text-xl">
+        {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
+      </div>
       <div className="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
         <Spin spinning={loading} tip="Loading..." size="large">
           <table className="w-full border-collapse bg-white text-sm">

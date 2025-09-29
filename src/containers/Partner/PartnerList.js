@@ -136,7 +136,9 @@ function PartnerList() {
           /> */}
         </div>
       </div>
-
+      <div className="mb-2 text-left text-gray-600 text-xl">
+        {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
+      </div>
       <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
         <thead>
           <tr className=" text-[#667085] text-center font-normal">

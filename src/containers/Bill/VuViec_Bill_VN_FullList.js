@@ -266,7 +266,9 @@ function VuViec_Bill_VN_FullList() {
                     </div>
                 </div>
             </div>
-
+            <div className="mb-2 text-left text-gray-600 text-xl">
+                {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
+            </div>
             <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
                 <Spin spinning={loading} tip="Loading..." size="large">
                     <table className="w-full border-collapse bg-white text-sm">
@@ -372,7 +374,7 @@ function VuViec_Bill_VN_FullList() {
                                                         setShowDetailModal(true);
                                                     }}
                                                 >
-                                                 Xem
+                                                    Xem
                                                 </button>
 
                                                 {/* Tạo đề nghị thanh toán chỉ hiển thị khi đủ điều kiện */}

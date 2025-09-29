@@ -149,10 +149,10 @@ function ApplicationAdd_KH() {
             setDaChonHoanTatThuTucNhapBang(true);
         }
         if (ngayNopDon) {
-            const duKien = dayjs(ngayNopDon).add(2, 'month').format('YYYY-MM-DD');
+            const duKien = dayjs(ngayNopDon).add(59, 'day').format('YYYY-MM-DD');
             setNgayHoanThanhHSTL_DuKien(duKien);
             // 👉 Chỉ set ngày hết hạn nếu chưa có
-            if (!ngayHetHanBang) {
+            if (!ngayHetHanBang && soBang) {
                 const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
                 setNgayHetHanBang(hetHanBang);
             }
@@ -175,14 +175,6 @@ function ApplicationAdd_KH() {
         } else {
             setNgayKQThamDinhND_DuKien(null);
         }
-
-        // const baseNgay = ngayNhanKQYKien || ngayThongBaoCapBang;
-        // if (ngayKQThamDinhND) {
-        //     debugger
-        //     setDaChonNgayThamDinhNoiDung(true);
-        //     updateTrangThaiDon("Gửi bằng cho khách hàng");
-        // }
-
         if (ngayKQThamDinhND) {
             updateTrangThaiDon("Đơn đăng ký hoàn tất");
         }

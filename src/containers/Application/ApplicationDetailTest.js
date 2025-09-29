@@ -145,7 +145,6 @@ function ApplicationDetailTest() {
                 setTenKhachHang(response.khachHang?.tenKhachHang || "");
                 setDiaChi(response.khachHang?.diaChi || "");
                 setSoDienThoai(response.khachHang?.sdt || "");
-
                 setSoDon(response.soDon)
                 setMaNhanHieu(response.nhanHieu.maNhanHieu);
                 setTenNhanHieu(response.nhanHieu.tenNhanHieu);
@@ -218,7 +217,7 @@ function ApplicationDetailTest() {
         if (!Array.isArray(list)) return null;
 
         return list
-            .filter(item => item.ngayNhanThongBaoTuChoiTD) // lọc có ngày
+            .filter(item => item.ngayNhanThongBaoTuChoiTD)
             .sort((a, b) => new Date(b.ngayNhanThongBaoTuChoiTD) - new Date(a.ngayNhanThongBaoTuChoiTD))[0] || null;
     };
     const tuChoiND = getLatestThongBao(lichSuThamDinhND);
@@ -273,10 +272,6 @@ function ApplicationDetailTest() {
                             {/* Ảnh + Ghi chú */}
                             <div className="col-span-1 md:col-span-2 my-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {/* Ghi chú bên trái */}
-
-
-                                    {/* Ảnh bên phải */}
                                     <div className="flex justify-center items-center">
                                         {linkAnh ? (
                                             <img
@@ -290,9 +285,10 @@ function ApplicationDetailTest() {
                                     </div>
                                     <div className="text-left">
                                         <span className="font-medium">Ghi chú:</span>
-                                        <p className="mt-1 text-gray-700 italic">
+                                        <p className="mt-1 text-gray-700 italic whitespace-pre-line">
                                             {ghiChu || "Chưa có ghi chú"}
                                         </p>
+
                                     </div>
                                 </div>
                             </div>
