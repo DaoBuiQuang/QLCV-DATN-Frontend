@@ -194,7 +194,6 @@ function CaseAdd() {
     // Add case
     const handleAddCase = async () => {
         try {
-            debugger
             const res = await callAPI({
                 method: "post",
                 endpoint: "/case/add",
@@ -245,7 +244,6 @@ function CaseAdd() {
     };
     const handleMaKhachHangChange = async (selectedOption) => {
         if (selectedOption) {
-            debugger
             const value = selectedOption.value;
             setMaKhachHang(value);
             validateField("maKhachHang", value);

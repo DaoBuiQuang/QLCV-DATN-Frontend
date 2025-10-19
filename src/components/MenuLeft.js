@@ -233,6 +233,36 @@ function MenuLeft() {
                       <span className="text-left w-full">Đơn đăng ký</span>
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink to="/gcn_nh_camlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Giấy chứng nhận(văn bằng)</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/affidavitlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn nộp tuyên thệ sử dụng - Affidavit</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn gia hạn GCN</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn sửa đổi GCN</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn chuyển nhượng GCN</span>
+                    </NavLink>
+                  </li>
                 </>
               )}
 

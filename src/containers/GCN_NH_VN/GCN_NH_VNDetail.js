@@ -1,12 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Button, message } from "antd";
 import callAPI from "../../utils/api";
+
+import GCN_NH_Info from "../../components/commom/GCN_NH_Info";
+import FormGiaHan from "../../components/commom/FormGiaHan";
+import { showSuccess, showError, showWarning } from "../../components/commom/Notification";
+import DocumentSection_KH from "../../components/TrademarkRegistrationProcess/KH/DocumentSection_KH";
 
 function GCN_NH_VNDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState(null);
 
+  const [showFormGiaHan, setShowFormGiaHan] = useState(false);
+  const [soDon, setSoDon] = useState(null);
+  const [ngayNopYCGiaHan, setNgayNopYCGiaHan] = useState(null);
+  const [donGoc, setDonGoc] = useState(null);
+  const [ngayKQThamDinh_DuKien, setNgayKQThamDinh_DuKien] = useState(null);
+  const [trangThaiThamDinh, setTrangThaiThamDinh] = useState(null);
+  const [ngayThongBaoTuChoiGiaHan, setNgayThongBaoTuChoiGiaHan] = useState(null);
+  const [hanTraLoiTuChoiGiaHan, setHanTraLoiTuChoiGiaHan] = useState(null);
+  const [ngayTraLoiThongBaoTuChoiGiaHan, setNgayTraLoiThongBaoTuChoiGiaHan] = useState(null);
+  const [trangThaiTuChoiGiaHan, setTrangThaiTuChoiGiaHan] = useState(null);
+  const [ngayQuyetDinhTuChoiGiaHan, setNgayQuyetDinhTuChoiGiaHan] = useState(null);
+  const [ngayQuyetDinhGiaHan_DuKien, setNgayQuyetDinhGiaHan_DuKien] = useState(null);
+  const [ngayQuyetDinhGiaHan, setNgayQuyetDinhGiaHan] = useState(null);
+  const [ngayDangBa, setNgayDangBa] = useState(null);
+  const [taiLieuList, setTaiLieuList] = useState([]);
+  const [idGCN_NH, setIdGCN_NH] = useState(null);
+
+  // ✅ Lấy chi tiết GCN
   const fetchDetail = async () => {
     try {
       const response = await callAPI({
@@ -15,6 +39,7 @@ function GCN_NH_VNDetail() {
         data: { id },
       });
       setData(response);
+      setIdGCN_NH(response?.id);
     } catch (error) {
       console.error("Lỗi khi lấy chi tiết GCN_NH:", error);
     }
@@ -26,73 +51,147 @@ function GCN_NH_VNDetail() {
 
   if (!data) return <div className="p-4">Đang tải dữ liệu...</div>;
 
-  // helper render
-  const renderRow = (label, value) => (
-    <div className="flex mb-3">
-      <span className="w-56 font-semibold text-gray-700 text-left">{label}:</span>
-      <span className="text-gray-900">{value || "—"}</span>
-    </div>
-  );
+  // ✅ Gửi form Gia hạn lên API
+  const handleSubmitGiaHan = async () => {
+    const payload = {
+      idGCN_NH,
+      soDon,
+      ngayNopYCGiaHan,
+      donGoc,
+      ngayKQThamDinh_DuKien,
+      trangThaiThamDinh,
+      ngayThongBaoTuChoiGiaHan,
+      hanTraLoiTuChoiGiaHan,
+      ngayTraLoiThongBaoTuChoiGiaHan,
+      trangThaiTuChoiGiaHan,
+      ngayQuyetDinhTuChoiGiaHan,
+      ngayQuyetDinhGiaHan_DuKien,
+      ngayQuyetDinhGiaHan,
+      ngayDangBa,
+      taiLieuList,
+    };
 
+    try {
+      const res = await callAPI({
+        method: "post",
+        endpoint: "/application_gh_nh_vn/add",
+        data: payload,
+      });
+      await showSuccess("Thành công!", "Thêm đơn gia hạn thành công!");
+      setShowFormGiaHan(false);
+    } catch (error) {
+      showError("Thất bại!", "Không thể thêm đơn gia hạn.", error);
+      console.error("Lỗi khi thêm đơn gia hạn:", error);
+      message.error("Đã xảy ra lỗi khi thêm đơn gia hạn!");
+    }
+  };
+  const handleTaiLieuChange = (list) => {
+    setTaiLieuList(list);
+  };
   return (
     <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-4xl">
-        {/* Tiêu đề */}
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-5xl">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center border-b pb-4">
-          Thông tin GCN Nhãn hiệu
+          Thông tin GCN Nhãn hiệu Việt Nam
         </h2>
 
-        {/* Ảnh thương hiệu */}
-        <div className="flex flex-col items-center gap-6 mb-8">
-          {data.linkAnh && (
-            <div className="text-center">
-              <p className="font-semibold text-gray-700 mb-2">Mẫu nhãn</p>
-              <img
-                src={data.linkAnh}
-                alt="Logo nhãn hiệu"
-                className="max-h-64 rounded-lg border shadow-md"
-              />
-            </div>
-          )}
+        {/* ✅ Hiển thị thông tin GCN */}
+        <GCN_NH_Info data={data} />
 
-          {data.anhBang && (
-            <div className="text-center">
-              <p className="font-semibold text-gray-700 mb-2">Ảnh bằng</p>
-              <img
-                src={data.anhBang}
-                alt="Ảnh bằng GCN"
-                className="max-h-64 rounded-lg border shadow-md"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Thông tin chi tiết */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
-          {renderRow("Số bằng", data.soBang)}
-          {renderRow("Số đơn", data.soDon)}
-          {renderRow("Mã hồ sơ", data.maHoSo)}
-          {renderRow("Chủ đơn / Chủ bằng", data.tenKhachHang)}
-          {renderRow("Địa chỉ", data.diaChiKhachHang)}
-          {renderRow("Đại diện SHCN", data.tenDoiTac)}
-          {renderRow("Tên nhãn hiệu", data.tenNhanHieu)}
-          {renderRow("Danh sách nhóm SPDV", data.dsNhomSPDV)}
-          {renderRow("Chi tiết nhóm SPDV", data.chiTietNhomSPDV)}
-          {renderRow("Màu sắc nhãn hiệu", data.mauSacNH)}
-          {renderRow("Ngày nộp đơn", data.ngayNopDon)}
-          {renderRow("Ngày cấp bằng", data.ngayCapBang)}
-          {renderRow("Ghi chú", data.ghiChu)}
-        </div>
-
-        {/* Nút quay lại */}
-        <div className="flex justify-center mt-8">
+        {/* ✅ Các nút hành động */}
+        <div className="flex justify-center mt-8 gap-4 flex-wrap">
           <button
-            className="bg-blue-600 text-white font-semibold hover:bg-blue-700 px-8 py-3 rounded-lg shadow-md transition"
+            className="bg-gray-500 text-white font-medium hover:bg-gray-600 px-6 py-3 rounded-lg shadow transition"
             onClick={() => navigate(-1)}
           >
             ← Quay lại
           </button>
+
+          <button
+            onClick={() => navigate(`/gcn_nh_vnedit/${id})`)}
+            className="bg-[#009999] hover:bg-[#007a7a] text-white font-medium px-6 py-3 rounded-lg shadow transition"
+          >
+            Sửa thông tin
+          </button>
+
+          <button
+            onClick={() => {
+              const today = new Date();
+              const hanGiaHan = new Date(data?.hanGiaHan);
+
+              // So sánh ngày (bỏ phần giờ)
+              const isPastDeadline = hanGiaHan < new Date(today.toDateString());
+
+              if (!isPastDeadline) {
+                showWarning(
+                  "Cảnh báo!",
+                  ` Chưa đến hạn nộp đơn gia hạn (hạn là ${hanGiaHan.toLocaleDateString("vi-VN")})`
+                );
+                return;
+              }
+
+              // Nếu đã quá hạn -> mở form
+              setShowFormGiaHan(true);
+            }}
+            className="bg-[#009999] hover:bg-[#007a7a] text-white font-medium px-6 py-3 rounded-lg shadow transition"
+          >
+            Thêm mới Đơn Gia Hạn
+          </button>
+
+
+
+          <button
+            onClick={() => navigate("/applicationadd")}
+            className="bg-[#009999] hover:bg-[#007a7a] text-white font-medium px-6 py-3 rounded-lg shadow transition"
+          >
+            Thêm mới Đơn Sửa Đổi
+          </button>
         </div>
+
+        {/* ✅ Form Gia hạn */}
+        {showFormGiaHan && (
+          <div className="mt-10 border-t pt-6">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Thêm mới Đơn Gia Hạn</h3>
+            <div className="col-span-2">
+              <DocumentSection_KH onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList}
+              />
+            </div>
+            <FormGiaHan
+              soDon={soDon}
+              setSoDon={setSoDon}
+              ngayNopYCGiaHan={ngayNopYCGiaHan}
+              setNgayNopYCGiaHan={setNgayNopYCGiaHan}
+              donGoc={donGoc}
+              setDonGoc={setDonGoc}
+              ngayKQThamDinh_DuKien={ngayKQThamDinh_DuKien}
+              setNgayKQThamDinh_DuKien={setNgayKQThamDinh_DuKien}
+              trangThaiThamDinh={trangThaiThamDinh}
+              setTrangThaiThamDinh={setTrangThaiThamDinh}
+              ngayThongBaoTuChoiGiaHan={ngayThongBaoTuChoiGiaHan}
+              setNgayThongBaoTuChoiGiaHan={setNgayThongBaoTuChoiGiaHan}
+              hanTraLoiTuChoiGiaHan={hanTraLoiTuChoiGiaHan}
+              setHanTraLoiTuChoiGiaHan={setHanTraLoiTuChoiGiaHan}
+              ngayTraLoiThongBaoTuChoiGiaHan={ngayTraLoiThongBaoTuChoiGiaHan}
+              setNgayTraLoiThongBaoTuChoiGiaHan={setNgayTraLoiThongBaoTuChoiGiaHan}
+              trangThaiTuChoiGiaHan={trangThaiTuChoiGiaHan}
+              setTrangThaiTuChoiGiaHan={setTrangThaiTuChoiGiaHan}
+              ngayQuyetDinhTuChoiGiaHan={ngayQuyetDinhTuChoiGiaHan}
+              setNgayQuyetDinhTuChoiGiaHan={setNgayQuyetDinhTuChoiGiaHan}
+              ngayQuyetDinhGiaHan_DuKien={ngayQuyetDinhGiaHan_DuKien}
+              setNgayQuyetDinhGiaHan_DuKien={setNgayQuyetDinhGiaHan_DuKien}
+              ngayQuyetDinhGiaHan={ngayQuyetDinhGiaHan}
+              setNgayQuyetDinhGiaHan={setNgayQuyetDinhGiaHan}
+              ngayDangBa={ngayDangBa}
+              setNgayDangBa={setNgayDangBa}
+            />
+
+            <div className="flex justify-end mt-6">
+              <Button type="primary" className="bg-[#009999]" onClick={handleSubmitGiaHan}>
+                Lưu Đơn Gia Hạn
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

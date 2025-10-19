@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
 import { Modal, Pagination } from "antd";
 
-function Application_GH_NH_VNList() {
+function GCN_NH_CAMList() {
     const { t } = useTranslation();
     const role = useSelector((state) => state.auth.role);
-    const [donGiaHans, setDonGiaHans] = useState([]);
+    const [gcn_nhs, setGCN_NHS] = useState([]);
     const [countries, setCountries] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -25,14 +25,14 @@ function Application_GH_NH_VNList() {
             localStorage.setItem("partnerListPage", page);
             const response = await callAPI({
                 method: "post",
-                endpoint: "/application_gh_nh_vn/list",
+                endpoint: "/gcn_nh_kh/list",
                 data: {
                     soBang: searchValue,
                     pageSize: size,
                     pageIndex: page,
                 },
             });
-            setDonGiaHans(response.data);
+            setGCN_NHS(response.data);
             setTotalItems(response.pagination?.totalItems || 0);
             setPageIndex(response.pagination?.pageIndex || 1);
             setPageSize(response.pagination?.pageSize || 10);
@@ -86,7 +86,7 @@ function Application_GH_NH_VNList() {
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn gia hạn văn bằng Việt Nam</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách giấy chứng nhận (văn bằng) Campuchia</h2>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
                     <input
                         type="text"
@@ -142,15 +142,10 @@ function Application_GH_NH_VNList() {
                 {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
             </div>
             <div className="w-full overflow-x-auto">
-                <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
+                <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow ">
                     <thead>
                         <tr className=" text-[#667085] text-center font-normal">
                             <th className="p-2 text-table">STT</th>
-                            <th className="p-2 text-table">Số đơn gia hạn</th>
-                            <th className="p-2 text-table">Ngày nộp yêu cầu gia hạn</th>
-                            <th className="p-2 text-table">Ngày quyết định gia hạn</th>
-                            <th className="p-2 text-table">Ngày đăng bạ</th>
-                            <th className="p-2 text-table">Ghi chú</th>
                             <th className="p-2 text-table">Số bằng</th>
                             <th className="p-2 text-table">Số đơn</th>
                             <th className="p-2 text-table">Mã hồ sơ</th>
@@ -160,51 +155,138 @@ function Application_GH_NH_VNList() {
                             <th className="p-2 text-table">Nhóm SPDV</th>
                             <th className="p-2 text-table">Ngày nộp đơn</th>
                             <th className="p-2 text-table">Ngày cấp bằng</th>
+                            <th className="p-2 text-table">Ghi chú</th>
+                            <th className="p-2 text-table">Ngày yêu cầu Affidavit</th>
                             <th className="p-2 text-table">Ngày yêu cầu gia hạn</th>
+                            <th className="p-2 text-table">Ngày hết hạn bằng</th>
                             <th className="p-2 text-center text-table"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {donGiaHans.map((donGiaHan, index) => (
+                        {gcn_nhs.map((gcn_nh, index) => (
                             <tr className="group hover:bg-gray-100 text-center border-b relative">
                                 <td className="p-2 text-table">{index + 1}</td>
                                 <td
                                     className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        navigate(`/affidavitedit/${donGiaHan.id}`);
+                                        navigate(`/gcn_nh_camdetail/${gcn_nh.id}`);
                                     }}
                                 >
-                                    {donGiaHan.soDon}
+                                    {gcn_nh.soBang}
                                 </td>
-                                <td className="p-2 text-table">{donGiaHan.ngayNopYCGiaHan ? new Date(donGiaHan.ngayNopYCGiaHan).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.ngayQuyetDinhGiaHan ? new Date(donGiaHan.ngayQuyetDinhGiaHan).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.ngayDangBa ? new Date(donGiaHan.ngayDangBa).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.ghiChu}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.soBang}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.soDon}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.maHoSo}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.KhachHangCuoi?.tenKhachHang}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.DoiTac?.tenDoiTac}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.NhanHieu?.tenNhanHieu}</td>
+                                {/* <td className="p-2 text-table">{gcn_nh.soBang}</td> */}
+                                <td className="p-2 text-table">{gcn_nh.soDon}</td>
+                                <td className="p-2 text-table">{gcn_nh.maHoSo}</td>
+                                <td className="p-2 text-table">{gcn_nh.tenKhachHang}</td>
+                                <td className="p-2 text-table">{gcn_nh.tenDoiTac}</td>
+                                <td className="p-2 text-table">{gcn_nh.tenNhanHieu}</td>
                                 {/* <td className="p-2 text-table">Màu</td> */}
-                                <td className="p-2 text-table">{donGiaHan.gcn.dsNhomSPDV}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.ngayNopDon ? new Date(donGiaHan.gcn.ngayNopDon).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.ngayCapBang ? new Date(donGiaHan.gcn.ngayCapBang).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.hanGiaHan ? new Date(donGiaHan.gcn.hanGiaHan).toLocaleDateString("vi-VN") : ""}</td>
+                                <td className="p-2 text-table">{gcn_nh.dsNhomSPDV}</td>
+                                <td className="p-2 text-table">{gcn_nh.ngayNopDon ? new Date(gcn_nh.ngayNopDon).toLocaleDateString("vi-VN") : ""}</td>
+                                <td className="p-2 text-table">{gcn_nh.ngayCapBang ? new Date(gcn_nh.ngayCapBang).toLocaleDateString("vi-VN") : ""}</td>
+                                <td className="p-2 text-table">{gcn_nh.ghiChu}</td>
+                                <td className="p-2 text-table">
+                                    {gcn_nh.hanNopTuyenThe ? (
+                                        <>
+                                            {new Date(gcn_nh.hanNopTuyenThe).toLocaleDateString("vi-VN")}
+                                            <div
+                                                className={`text-xs font-semibold ${(() => {
+                                                    const diff = Math.ceil(
+                                                        (new Date(gcn_nh.hanNopTuyenThe) - new Date()) /
+                                                        (1000 * 60 * 60 * 24)
+                                                    );
+                                                    return diff < 0 ? "text-red-600" : "text-sky-600";
+                                                })()
+                                                    }`}
+                                            >
+                                                {(() => {
+                                                    const diff = Math.ceil(
+                                                        (new Date(gcn_nh.hanNopTuyenThe) - new Date()) /
+                                                        (1000 * 60 * 60 * 24)
+                                                    );
+                                                    return diff < 0
+                                                        ? `Quá ${Math.abs(diff)} ngày`
+                                                        : `Còn ${diff} ngày `;
+                                                })()}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
+                                </td>
+                                <td className="p-2 text-table">
+                                    {gcn_nh.hanGiaHan ? (
+                                        <>
+                                            {new Date(gcn_nh.hanGiaHan).toLocaleDateString("vi-VN")}
+                                            <div
+                                                className={`text-xs font-semibold ${(() => {
+                                                    const diff = Math.ceil(
+                                                        (new Date(gcn_nh.hanGiaHan) - new Date()) /
+                                                        (1000 * 60 * 60 * 24)
+                                                    );
+                                                    return diff < 0 ? "text-red-600" : "text-sky-600";
+                                                })()
+                                                    }`}
+                                            >
+                                                {(() => {
+                                                    const diff = Math.ceil(
+                                                        (new Date(gcn_nh.hanGiaHan) - new Date()) /
+                                                        (1000 * 60 * 60 * 24)
+                                                    );
+                                                    return diff < 0
+                                                        ? `Quá ${Math.abs(diff)} ngày`
+                                                        : `Còn ${diff} ngày`;
+                                                })()}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
+                                </td>
+                                <td className="p-2 text-table">
+                                    {gcn_nh.ngayHetHanBang ? (
+                                        <>
+                                            {new Date(gcn_nh.ngayHetHanBang).toLocaleDateString("vi-VN")}
+                                            <div
+                                                className={`text-xs font-semibold ${(() => {
+                                                    const diff = Math.ceil(
+                                                        (new Date(gcn_nh.ngayHetHanBang) - new Date()) /
+                                                        (1000 * 60 * 60 * 24)
+                                                    );
+                                                    return diff < 0 ? "text-red-600" : "text-sky-600";
+                                                })()
+                                                    }`}
+                                            >
+                                                {(() => {
+                                                    const diff = Math.ceil(
+                                                        (new Date(gcn_nh.ngayHetHanBang) - new Date()) /
+                                                        (1000 * 60 * 60 * 24)
+                                                    );
+                                                    return diff < 0
+                                                        ? `Quá ${Math.abs(diff)} ngày`
+                                                        : `Còn ${diff} ngày`;
+                                                })()}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
+                                </td>
+
                                 <td className="p-2 relative">
                                     {(role === "admin" || role === "staff") && (
                                         <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                                             <button
                                                 className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                onClick={() => navigate(`/application_gh_nh_vn_edit/${donGiaHan.id}`)}
+                                                onClick={() => navigate(`/gcn_nh_camedit/${gcn_nh.id}`)}
                                             >
                                                 📝
                                             </button>
                                             <button
                                                 className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
                                                 onClick={() => {
-                                                    setPartnerToDelete(donGiaHan.gcn.id);
+                                                    setPartnerToDelete(gcn_nh.id);
                                                     setShowDeleteModal(true);
                                                 }}
                                             >
@@ -216,6 +298,7 @@ function Application_GH_NH_VNList() {
                             </tr>
                         ))}
                     </tbody>
+
                 </table>
             </div>
             <div className="mt-4 flex flex-col items-center space-y-2">
@@ -261,4 +344,4 @@ function Application_GH_NH_VNList() {
     );
 }
 
-export default Application_GH_NH_VNList;
+export default GCN_NH_CAMList;

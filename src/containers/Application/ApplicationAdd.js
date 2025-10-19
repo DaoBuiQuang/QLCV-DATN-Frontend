@@ -31,7 +31,7 @@ function ApplicationAdd() {
     const [clientsRef, setClientsRef] = useState("");
     const [ngayTiepNhan, setNgayTiepNhan] = useState(null);
     const [ngayXuLy, setNgayXuLy] = useState(null);
-    const [trangThaiVuViec, setTrangThaiVuViec] = useState("");
+    const [trangThaiVuViec, setTrangThaiVuViec] = useState(null);
     const [nhanSuVuViec, setNhanSuVuViec] = useState("");
     const [nguoiXuLyChinh, setNguoiXuLyChinh] = useState("");
     const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState("");
@@ -93,11 +93,12 @@ function ApplicationAdd() {
     const [buocXuLy, setBuocXuLy] = useState("");
 
     const [taiLieuList, setTaiLieuList] = useState([]);
-     const[vuViecList, setVuViecList] = useState([])
+    const [vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
+    const [idSoBangOld, setIdSoBangOld] = useState(null);
 
     const [errors, setErrors] = useState({});
     const isFormValid =
@@ -377,6 +378,7 @@ function ApplicationAdd() {
                     maUyQuyen: maUyQuyen || null,
                     nhanHieu,
                     vuViecs: vuViecList,
+                    idSoBangOld: idSoBangOld
                 },
             });
             await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
@@ -395,7 +397,7 @@ function ApplicationAdd() {
         setTaiLieuList(list);
     };
 
-     const handleVuViecChange = (list) => {
+    const handleVuViecChange = (list) => {
         setVuViecList(list);
     }
     return (
@@ -414,7 +416,6 @@ function ApplicationAdd() {
                 </div>
                 <FormHoSo
                     soDon={soDon}
-                    
                     setSoDon={setSoDon}
                     loaiDon={loaiDon}
                     setLoaiDon={setLoaiDon}
@@ -448,12 +449,13 @@ function ApplicationAdd() {
                     setNgayDongHS={setNgayDongHS}
                     ngayRutHS={ngayRutHS}
                     setNgayRutHS={setNgayRutHS}
+
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-gray-700 text-left">Trạng thái đơn</label>
+                            <label className="block text-gray-700 text-left">Tình trạng đơn</label>
                             <input
                                 type="text"
                                 value={trangThaiDon}
@@ -473,7 +475,6 @@ function ApplicationAdd() {
                             />
                         </div>
                         <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Cột trái: Ngày nộp đơn + Danh sách sản phẩm dịch vụ */}
                             <div className="flex flex-col gap-4">
                                 {/* <div>
                                     <label className="block text-gray-700 text-left">Ngày nộp đơn</label>
@@ -615,7 +616,6 @@ function ApplicationAdd() {
                     )}
                     {daChonNgayThamDinhNoiDung && (
                         <div>
-                            {/* <label className="block text-gray-700 text-left">Trạng thái trả lời kết quả thẩm định nội dung</label> */}
                             <Radio.Group
                                 onChange={(e) => setTrangThaiTraLoiKQThamDinhND(e.target.value)}
                                 value={trangThaiTraLoiKQThamDinhND}
@@ -673,6 +673,8 @@ function ApplicationAdd() {
                                 setNgayHetHanBang={setNgayHetHanBang}
                                 ngayGuiBangChoKH={ngayGuiBangChoKH}
                                 setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                                idSoBangOld={idSoBangOld}
+                                setIdSoBangOld={setIdSoBangOld}
                             />
                         </div>
                     )}

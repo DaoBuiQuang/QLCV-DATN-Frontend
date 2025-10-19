@@ -19,22 +19,10 @@ function ApplicationList() {
       tenNhanHieu: "Nhãn hiệu mẫu",
     }
   ]);
-  //   const [applications, setApplications] = useState([
-  //   {
-  //     id: 1,
-  //     name: "Ứng dụng mẫu",
-  //     status: "pending",
-  //     // thêm các trường khác nếu cần
-  //   }
-  // ]);
-
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [applicationToDelete, setApplicationToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-
-  const [brands, setBrands] = useState([]);
-  const [selectedBrand, setSelectedBrand] = useState("");
   const [productAndService, setProductAndService] = useState([]);
   const [selectedProductAndService, setSelectedProductAndService] = useState([]);
   const [selectedTrangThaiDon, setSelectedTrangThaiDon] = useState(null);
@@ -49,10 +37,9 @@ function ApplicationList() {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
-  const [partners, setPartners] = useState([]);
-  const [selectedPartner, setSelectedPartner] = useState("");
-  const [customers, setCustomers] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [partnerName, setPartnerName] = useState("");
+  const [brandName, setBrandName] = useState("");
   const filterCondition = {
     selectedField: selectedField?.value || "",
     fromDate,
@@ -82,7 +69,8 @@ function ApplicationList() {
     { label: "Tên đối tác", labelEn: "Partner Name", key: "tenDoiTac" },
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
     { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
-    { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiDon" },
+    { label: "Tình trạng xử lý đơn", labelEn: "Next stage", key: "tinhTrangDon" },
+    { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiVuViec" },
     { label: "Hạn trả lời Cục", labelEn: "Official Deadline", key: "hanTraLoi" },
     { label: "Hạn Cục xử lý", labelEn: "Soft Deadline", key: "hanXuLy" },
     { label: "Trạng thái hoàn thành TL", labelEn: "Outstanding Documents", key: "trangThaiHoanThienHoSoTaiLieu" },
@@ -131,7 +119,7 @@ function ApplicationList() {
       const response = await callAPI({
         method: "post",
         endpoint: "/application/list",
-        data: { searchText: searchValue, tenNhanHieu: selectedBrand, idDoiTac:selectedPartner, idKhachHang:selectedCustomer, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
+        data: { searchText: searchValue, customerName, partnerName, brandName, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
       });
       setApplications(response.data || []);
       setTotalItems(response.pagination?.totalItems || 0);
@@ -143,43 +131,7 @@ function ApplicationList() {
       setLoading(false);
     }
   };
-  const fetchBrands = async () => {
-    try {
-      const response = await callAPI({
-        method: "post",
-        endpoint: "/brand/shortlist",
-        data: {},
-      });
-      setBrands(response);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu nhãn hiệu:", error);
-    }
-  };
-  const fetchPartners = async () => {
-    try {
-      const response = await callAPI({
-        method: "post",
-        endpoint: "/partner/all",
-        data: {},
-      });
-      setPartners(response);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
-    }
-  };
 
-  const fetchCustomers = async () => {
-    try {
-      const response = await callAPI({
-        method: "post",
-        endpoint: "/customers/by-name",
-        data: {},
-      });
-      setCustomers(response);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu khách hàng", error);
-    }
-  };
   const fetchItems = async () => {
     try {
       const response = await callAPI({
@@ -204,10 +156,7 @@ function ApplicationList() {
     if (!localStorage.getItem("applicationListPage")) {
       localStorage.setItem("applicationListPage", "1");
     }
-    fetchBrands();
     fetchItems();
-    fetchPartners();
-    fetchCustomers();
   }, []);
   const columns = allFieldOptions
     .filter(field => selectedFields.includes(field.key))
@@ -250,7 +199,6 @@ function ApplicationList() {
     fetchApplications(searchTerm);
   };
   const handleClearFilters = () => {
-    setSelectedBrand(null);
     setSelectedProductAndService([]);
     setSelectedTrangThaiDon(null);
     setSelectedField(null);
@@ -307,39 +255,39 @@ function ApplicationList() {
         <div className="">
           <div className="flex flex-wrap gap-3">
             <div className="w-full md:w-1/6">
-              <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Khách hàng</label>
-              <Select
-                options={formatOptions(customers, "id", "tenKhachHang")}
-                value={selectedCustomer ? formatOptions(customers, "id", "tenKhachHang").find(opt => opt.value === selectedCustomer) : null}
-                onChange={selectedOption => setSelectedCustomer(selectedOption?.value)}
-                placeholder="Chọn khách hàng"
-                className="text-left"
-                isClearable
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                Khách hàng
+              </label>
+              <input
+                type="text"
+                value={customerName || ""}
+                onChange={e => setCustomerName(e.target.value)}
+                placeholder="Nhập tên khách hàng"
+                className="border w-full focus:outline-none focus:ring-2 search-input rounded-lg p-2 text-sm"
               />
             </div>
-
-
             <div className="w-full md:w-1/6">
-              <label className="block text-sm font-medium text-gray-700 mb-1  text-left">Đối tác</label>
-              <Select
-                options={formatOptions(partners, "id", "tenDoiTac")}
-                value={selectedPartner ? formatOptions(partners, "id", "tenDoiTac").find(opt => opt.value === selectedPartner) : null}
-                onChange={selectedOption => setSelectedPartner(selectedOption?.value)}
-                placeholder="Chọn đối tác"
-                className="text-left"
-                isClearable
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                Đối tác
+              </label>
+              <input
+                type="text"
+                value={partnerName || ""}
+                onChange={e => setPartnerName(e.target.value)}
+                placeholder="Nhập tên đối tác"
+                className="border w-full focus:outline-none focus:ring-2 search-input rounded-lg p-2 text-sm"
               />
             </div>
-            {/* Nhãn hiệu */}
             <div className="w-full md:w-1/6">
-              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Nhãn hiệu</label>
-              <Select
-                options={formatOptions(brands, "tenNhanHieu", "tenNhanHieu")}
-                value={selectedBrand ? formatOptions(brands, "tenNhanHieu", "tenNhanHieu").find(opt => opt.value === selectedBrand) : null}
-                onChange={selectedOption => setSelectedBrand(selectedOption?.value)}
-                placeholder="Chọn nhãn hiệu"
-                className="text-left"
-                isClearable
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                Nhãn hiệu
+              </label>
+              <input
+                type="text"
+                value={brandName || ""}
+                onChange={e => setBrandName(e.target.value)}
+                placeholder="Nhập tên nhãn hiệu"
+                className="border w-full focus:outline-none focus:ring-2 search-input rounded-lg p-2 text-sm"
               />
             </div>
 
@@ -558,6 +506,34 @@ function ApplicationList() {
                         </td>
                       );
                     }
+                    if (col.key === "trangThaiVuViec") {
+                      let text = "";
+                      switch (app.trangThaiVuViec) {
+                        case "1":
+                          text = "Đang giải quyết";
+                          break;
+                        case "2":
+                          text = "Cấp bằng";
+                          break;
+                        case "3":
+                          text = "Từ chối";
+                          break;
+                        case "4":
+                          text = "Rút đơn";
+                          break;
+                        case "5":
+                          text = "Đóng đơn";
+                          break;
+                        default:
+                          text = "Không xác định";
+                          break;
+                      }
+                      return (
+                        <td key={col.key} className="p-2 text-table">
+                          {text}
+                        </td>
+                      );
+                    }
                     // if (col.key === "maDonDangKy") {
                     //   return (
                     //     <td
@@ -580,8 +556,11 @@ function ApplicationList() {
                         </td>
                       );
                     }
-
+                    //hoàn thiện chỗ này
                     if (col.key === "hanXuLy") {
+                      if (app.trangThaiVuViec === "5") {
+                        return <td key={col.key} className="p-2 font-semibold"></td>;
+                      }
                       let text = "";
                       let textColor = "";
 
@@ -617,6 +596,9 @@ function ApplicationList() {
                       );
                     }
                     if (col.key === "hanTraLoi") {
+                      if (app.trangThaiVuViec === "5") {
+                        return <td key={col.key} className="p-2 font-semibold"></td>;
+                      }
                       let text = "";
                       let textColor = "";
 

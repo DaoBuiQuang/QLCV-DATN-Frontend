@@ -29,13 +29,25 @@ const FormGiaHan = ({
     ngayQuyetDinhGiaHan,
     setNgayQuyetDinhGiaHan,
     ngayDangBa,
-    setNgayDangBa
+    setNgayDangBa,
+    soDon,
+    setSoDon
 }) => {
 
     return (
         <div className="flex-1">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Ngày yêu cầu gia hạn */}
+                <div >
+                    <label className="block text-gray-700 text-left ">Số đơn</label>
+                    <input
+                        type="text"
+                        value={soDon}
+                        placeholder="Nhập số đơn"
+                        onChange={(e) => setSoDon(e.target.value)}
+                        className="w-full p-2 mt-1 border rounded-lg text-input h-10"
+                    />
+                </div>
                 <div>
                     <label className="block text-gray-700 text-left">Ngày yêu cầu gia hạn</label>
                     <DatePicker
@@ -51,7 +63,7 @@ const FormGiaHan = ({
                 </div>
 
                 {/* Đơn gốc */}
-                <div>
+                {/* <div>
                     <label className="block text-gray-700 text-left mt-2">Đơn gốc</label>
                     <Radio.Group
                         onChange={(e) => setDonGoc(e.target.value === "true")}
@@ -61,7 +73,7 @@ const FormGiaHan = ({
                         <Radio value="true">Đơn gốc</Radio>
                         <Radio value="false">Không phải đơn gốc</Radio>
                     </Radio.Group>
-                </div>
+                </div> */}
 
                 {/* Ngày kết quả thẩm định dự kiến */}
                 <div>

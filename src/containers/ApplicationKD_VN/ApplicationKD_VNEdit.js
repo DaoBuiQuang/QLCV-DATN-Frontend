@@ -301,7 +301,6 @@ function ApplicationKD_VNEdit() {
     const detailApplication = async () => {
         setLoading(true);
         try {
-            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "application/detail",
@@ -366,7 +365,6 @@ function ApplicationKD_VNEdit() {
 
     const handleApplication = async () => {
         try {
-            debugger
             await callAPI({
                 method: "put",
                 endpoint: "/application/edit",

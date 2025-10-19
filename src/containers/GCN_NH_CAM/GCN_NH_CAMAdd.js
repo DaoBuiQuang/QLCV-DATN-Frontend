@@ -9,7 +9,7 @@ import { Upload, Button, DatePicker } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 import dayjs from 'dayjs';
-function GCN_NH_VNAdd() {
+function GCN_NH_CAMAdd() {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -45,12 +45,6 @@ function GCN_NH_VNAdd() {
     const [vuViecList, setVuViecList] = useState([]);
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maDonDangKy, setMaDonDangKy] = useState("");
-    const [trangThaiBang, setTrangThaiThaiBang] = useState(null);
-    const statusOptions = [
-        { value: "1", label: "Chưa xử lý" },
-        { value: "2", label: "Đang xử lý gia hạn" },
-        { value: "4", label: "Không xử lý gia hạn" },
-    ];
     const isFormValid =
         soBang.trim() &&
         soDon.trim() &&
@@ -58,7 +52,14 @@ function GCN_NH_VNAdd() {
         idDoiTac
     // Array.isArray(maSPDVList) &&
     // maSPDVList.length > 0;
-
+    const [trangThaiBang, setTrangThaiThaiBang] = useState(null);
+    const statusOptions = [
+        { value: "1", label: "Chưa làm gì" },
+        { value: "2", label: "Đang xử lý gia hạn" },
+        { value: "3", label: "Đang xử lý Affidavit" },
+        { value: "4", label: "Không xử lý gia hạn" },
+        { value: "5", label: "Không xử lý Affidavit" },
+    ];
     const handleFileChange = async (file) => {
         setAnhBang(file);
 
@@ -132,13 +133,13 @@ function GCN_NH_VNAdd() {
                 tenNhanHieu,
                 hanGiaHanBang,
                 hanNopTuyenThe,
-                anhBangBase64,
+                anhBangBase64, // gửi base64 lên server
                 vuViecs: vuViecList
             };
 
             await callAPI({
                 method: "post",
-                endpoint: "/gcn_nh_vn/add",
+                endpoint: "/gcn_nh_cam/add",
                 data: payload,
             });
 
@@ -232,7 +233,7 @@ function GCN_NH_VNAdd() {
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-                    📌 Thêm Giấy chứng nhận (Văn bằng) Việt Nam
+                    📌 Thêm Giấy chứng nhận (Văn bằng) Campuchia
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="flex-1">
@@ -441,6 +442,20 @@ function GCN_NH_VNAdd() {
                         />
                     </div>
                     <div>
+                        <label className="block text-gray-700 text-left">Hạn nộp tuyên thệ</label>
+                        <DatePicker
+                            value={hanNopTuyenThe ? dayjs(hanNopTuyenThe) : null}
+                            onChange={(date) => {
+                                setHanNopTuyenThe(
+                                    date && date.isValid() ? date.format("YYYY-MM-DD") : null
+                                );
+                            }}
+                            format="DD/MM/YYYY"
+                            placeholder="Chọn hạn nộp tuyên thệ"
+                            className="mt-1 w-full"
+                        />
+                    </div>
+                    <div>
                         <label className="block text-gray-700 text-left">
                             Trạng thái xử lý bằng
                             <span className="text-red-500">*</span>
@@ -537,4 +552,4 @@ function GCN_NH_VNAdd() {
     );
 }
 
-export default GCN_NH_VNAdd;
+export default GCN_NH_CAMAdd;

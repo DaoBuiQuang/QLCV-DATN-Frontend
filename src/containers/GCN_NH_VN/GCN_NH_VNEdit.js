@@ -1,6 +1,6 @@
 //Chưa đẩy lên 29/09
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import callAPI from "../../utils/api";
 import { showSuccess, showError } from "../../components/commom/Notification";
@@ -9,7 +9,8 @@ import { Upload, Button, DatePicker } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 import dayjs from 'dayjs';
-function GCN_NH_VNAdd() {
+function GCN_NH_VNEdit() {
+    const { id } = useParams();
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -58,7 +59,51 @@ function GCN_NH_VNAdd() {
         idDoiTac
     // Array.isArray(maSPDVList) &&
     // maSPDVList.length > 0;
+    const fetchDetail = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/gcn_nh/detail",
+                data: { id },
+            });
 
+            if (response) {
+                const item = response;
+
+                // Gán dữ liệu từ API về state
+                setSoBang(item.soBang || "");
+                setSoDon(item.soDon || "");
+                setIdKhachHang(item.idKhachHang || "");
+                setIdDoiTac(item.idDoiTac || "");
+                setMaKhachHang(item.maKhachHang || null);
+                setMaDoiTac(item.maDoiTac || null);
+                setMaNhanHieu(item.maNhanHieu || null);
+                setTenNhanHieu(item.tenNhanHieu || "");
+                setMaHoSo(item.maHoSo || "");
+                setQuyetDinhSo(item.quyetDinhSo || "");
+                setMaUyQuyen(item.maUyQuyen || "");
+                setGhiChu(item.ghiChu || "");
+                setNgayNopDon(item.ngayNopDon || null);
+                setNgayCapBang(item.ngayCapBang || null);
+                setNgayHetHanBang(item.ngayHetHanBang || null);
+                setHanGiaHanBang(item.hanGiaHanBang || null);
+                setHanNopTuyenThe(item.hanNopTuyenThe || null);
+                setChiTietNhomSPDV(item.chiTietNhomSPDV || "");
+                setMauSac(item.mauSacNH || "");
+                setProductAndService(item.productAndService || []);
+                setDsNhomSPDV(item.dsNhomSPDV || null);
+                setAnhBangBase64(item.anhBang || null);
+                setVuViecList(item.vuViecs || []);
+            }
+        } catch (error) {
+            console.error("❌ Lỗi khi lấy chi tiết GCN_NH:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        if (id) fetchDetail();
+    }, [id]);
     const handleFileChange = async (file) => {
         setAnhBang(file);
 
@@ -72,12 +117,6 @@ function GCN_NH_VNAdd() {
     // Validate
     const validateField = (field, value) => {
         let error = "";
-
-        // if (field === "maSPDVList") {
-        //     if (!Array.isArray(value) || value.length === 0) {
-        //         error = "Sản phẩm dịch vụ không được để trống";
-        //     }
-        // } else {
         if (!value || (typeof value === "string" && !value.trim())) {
             if (field === "soBang") error = "Số bằng không được để trống";
             if (field === "soDon") error = "Số đơn không được để trống";
@@ -112,9 +151,10 @@ function GCN_NH_VNAdd() {
     }, [ngayCapBang]);
 
     // Submit
-    const handleAddGCN = async () => {
+    const handleEditGCN = async () => {
         try {
             const payload = {
+                id,
                 soBang,
                 soDon,
                 idKhachHang,
@@ -127,22 +167,22 @@ function GCN_NH_VNAdd() {
                 ngayCapBang,
                 ngayHetHanBang,
                 chiTietNhomSPDV,
-                mauSac,
+                mauSacNH: mauSac,
                 maNhanHieu,
                 tenNhanHieu,
-                hanGiaHanBang,
+                hanGiaHan: hanGiaHanBang,
                 hanNopTuyenThe,
-                anhBangBase64,
+                linkAnh: anhBang,
                 vuViecs: vuViecList
             };
 
             await callAPI({
-                method: "post",
-                endpoint: "/gcn_nh_vn/add",
+                method: "put",
+                endpoint: "/gcn_nh_vn/edit",
                 data: payload,
             });
 
-            await showSuccess("Thành công!", "Thêm giấy chứng nhận thành công!");
+            await showSuccess("Thành công!", "Cập nhật giấy chứng nhận thành công!");
             navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
@@ -232,7 +272,7 @@ function GCN_NH_VNAdd() {
         <div className="p-1 bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-                    📌 Thêm Giấy chứng nhận (Văn bằng) Việt Nam
+                    📌 Cập nhật Giấy chứng nhận (Văn bằng)
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="flex-1">
@@ -441,8 +481,22 @@ function GCN_NH_VNAdd() {
                         />
                     </div>
                     <div>
+                        <label className="block text-gray-700 text-left">Hạn nộp tuyên thệ</label>
+                        <DatePicker
+                            value={hanNopTuyenThe ? dayjs(hanNopTuyenThe) : null}
+                            onChange={(date) => {
+                                setHanNopTuyenThe(
+                                    date && date.isValid() ? date.format("YYYY-MM-DD") : null
+                                );
+                            }}
+                            format="DD/MM/YYYY"
+                            placeholder="Chọn hạn nộp tuyên thệ"
+                            className="mt-1 w-full"
+                        />
+                    </div>
+                    <div>
                         <label className="block text-gray-700 text-left">
-                            Trạng thái xử lý bằng
+                            Trạng thái bằng
                             <span className="text-red-500">*</span>
                         </label>
 
@@ -469,18 +523,24 @@ function GCN_NH_VNAdd() {
                             </Button>
                         </Upload>
 
-                        {anhBang && (
+                        {(anhBang || anhBangBase64) && (
                             <div className="mt-3">
-                                <p className="text-green-600">✔️ Đã chọn: {anhBang.name}</p>
+                                {anhBang && (
+                                    <p className="text-green-600">
+                                        ✔️ Đã chọn: {anhBang.name}
+                                    </p>
+                                )}
+
                                 <img
-                                    src={URL.createObjectURL(anhBang)}
+                                    src={
+                                        `${anhBangBase64}` // khi lấy từ API
+                                    }
                                     alt="preview"
                                     className="mt-2 rounded-lg border w-64 h-auto"
                                 />
                             </div>
                         )}
                     </div>
-
 
                     <div className="md:col-span-2">
                         <label className="block text-gray-700 text-left">Chi tiết nhóm sản phẩm dịch vụ</label>
@@ -522,14 +582,14 @@ function GCN_NH_VNAdd() {
                         Quay lại
                     </button>
                     <button
-                        onClick={handleAddGCN}
+                        onClick={handleEditGCN}
                         disabled={!isFormValid}
                         className={`px-4 py-2 rounded-lg text-white ${isFormValid
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-blue-300 cursor-not-allowed"
                             }`}
                     >
-                        Thêm giấy chứng nhận
+                        Lưu thông tin giấy chứng nhận
                     </button>
                 </div>
             </div>
@@ -537,4 +597,4 @@ function GCN_NH_VNAdd() {
     );
 }
 
-export default GCN_NH_VNAdd;
+export default GCN_NH_VNEdit;

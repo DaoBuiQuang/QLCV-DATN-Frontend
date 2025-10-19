@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
 import callAPI from "../../utils/api";
 import Select from "react-select";
@@ -37,11 +37,14 @@ function FormHoSo({
     // ID riêng để gửi API
     // const [idKhachHang, setIdKhachHang] = useState(null);
     // const [idDoiTac, setIdDoiTac] = useState(null);
+
     const statusOptions = [
         { value: "1", label: "Đang giải quyết" },
         { value: "2", label: "Cấp bằng" },
         { value: "3", label: "Từ chối" },
-        { value: "4", label: "Rút đơn" }
+        { value: "4", label: "Rút đơn" },
+        { value: "6", label: "Ngừng theo đuổi" },
+        { value: "5", label: "Đóng đơn" }
     ];
     const isFormValid =
         idKhachHang;
@@ -88,6 +91,7 @@ function FormHoSo({
         fetchPartners();
         fetchCustomers();
         fetchStaffs();
+        console.log("trangThaiVuViec ", trangThaiVuViec)
     }, []);
 
     // Select handlers
@@ -128,8 +132,29 @@ function FormHoSo({
         { value: 3, label: "Đơn tách" },
         { value: 4, label: "Đơn chuyển nhượng" }
     ];
-    // Thêm hồ sơ
+    useEffect(() => {
+        debugger
+        if (trangThaiVuViec != null && trangThaiVuViec !== undefined) {
+            const getTrangThaiVuViecLabel = (value) => {
+                const statusMap = {
+                    1: "Đang giải quyết",
+                    2: "Cấp bằng",
+                    3: "Từ chối",
+                    4: "Rút đơn",
+                    5: "Đóng đơn"
+                };
+                return statusMap[value] || "Không xác định";
+            };
 
+            const label = getTrangThaiVuViecLabel(trangThaiVuViec);
+            console.log("🔹 Trạng thái vụ việc hiện tại:", label);
+
+            // nếu muốn hiển thị popup, toast hoặc setState thì thêm ở đây
+            // showInfo(`Trạng thái vụ việc: ${label}`);
+        }
+    }, [trangThaiVuViec]);
+
+    // Thêm hồ sơ
     return (
         <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
@@ -306,14 +331,29 @@ function FormHoSo({
                     />
                 </div> */}
                 <div>
-                    <label className="block text-gray-700 text-left">Trạng thái hồ sơ <span className="text-red-500">*</span> </label>
+                    <label className="block text-gray-700 text-left">
+                        Trạng thái đơn (trangThaiVuViec)
+                        <span className="text-red-500">*</span>
+                    </label>
+
                     <Select
-                        options={formatOptions(statusOptions, "", "value", "label")}
-                        value={trangThaiVuViec ? statusOptions.find(opt => opt.value === trangThaiVuViec) : null}
-                        onChange={selectedOption => setTrangThaiVuViec(selectedOption?.value)}
+                        options={statusOptions}
+                        value={statusOptions.find(opt => opt.value === String(trangThaiVuViec))}
+                        onChange={(option) => setTrangThaiVuViec(option?.value || "1")}
                         placeholder="Chọn trạng thái"
-                        className="w-full mt-1 rounded-lg text-left"
                         isClearable
+                        className="w-full mt-1 rounded-lg text-left"
+                        formatOptionLabel={(option) => (
+                            <span style={{ color: option.value === "5" ? "red" : "inherit" }}>
+                                {option.label}
+                            </span>
+                        )}
+                        styles={{
+                            singleValue: (base, { data }) => ({
+                                ...base,
+                                color: data.value === "5" ? "red" : base.color,
+                            }),
+                        }}
                     />
                 </div>
                 {trangThaiVuViec === "dong" && (

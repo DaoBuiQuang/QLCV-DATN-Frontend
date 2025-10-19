@@ -93,6 +93,13 @@ import VuViec_Bil_KHBiTuChoiList from "../containers/Bill/VuViec_Bil_KHBiTuChoiL
 import GCN_NH_VNList from "../containers/GCN_NH_VN/GCN_NH_VNList.js";
 import GCN_NH_VNDetail from "../containers/GCN_NH_VN/GCN_NH_VNDetail.js";
 import GCN_NH_VNAdd from "../containers/GCN_NH_VN/GCN_NH_VNAdd.js";
+import GCN_NH_CAMList from "../containers/GCN_NH_CAM/GCN_NH_CAMList.js";
+import GCN_NH_CAMAdd from "../containers/GCN_NH_CAM/GCN_NH_CAMAdd.js";
+import GCN_NH_CAMDetail from "../containers/GCN_NH_CAM/GCN_NH_CAMDetail.js";
+import AffidavitList from "../containers/GCN_NH_CAM/AffidavitList.js";
+import GCN_NH_CAMEdit from "../containers/GCN_NH_CAM/GCN_NH_CAMEdit.js";
+import AffdavitEdit from "../containers/GCN_NH_CAM/AffidavitEdit.js";
+import GCN_NH_VNEdit from "../containers/GCN_NH_VN/GCN_NH_VNEdit.js";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -248,8 +255,8 @@ const AppRoutes = ({ notification, setNotification }) => {
 
           <Route path="/application_gh_nh_vn_list" element={<Application_GH_NH_VNList></Application_GH_NH_VNList>} />
           <Route path="/application_gh_nh_vn_add" element={<Application_GH_NH_VNAdd></Application_GH_NH_VNAdd>} />
-          <Route path="/application_gh_nh_vn_edit/:maDonGiaHan" element={<Application_GH_NH_VNEdit></Application_GH_NH_VNEdit>} />
-          <Route path="/application_gh_nh_vn_detail/:maDonGiaHan" element={<Application_GH_NH_VNDetail></Application_GH_NH_VNDetail>} />
+          <Route path="/application_gh_nh_vn_edit/:id" element={<Application_GH_NH_VNEdit></Application_GH_NH_VNEdit>} />
+          <Route path="/application_gh_nh_vn_detail/:id" element={<Application_GH_NH_VNDetail></Application_GH_NH_VNDetail>} />
 
           <Route path="/application_sd_nh_vn_list" element={<Application_GH_VNList></Application_GH_VNList>} />
           <Route path="/application_sd_nh_vn_add/:maDonDangKy" element={<Application_SD_NH_VNAdd></Application_SD_NH_VNAdd>} />
@@ -275,6 +282,13 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/gcn_nhlist" element={<GCN_NH_VNList></GCN_NH_VNList>} />
           <Route path="/gcn_nhdetail/:id" element={<GCN_NH_VNDetail></GCN_NH_VNDetail>} />
           <Route path="/gcn_nhadd" element={<GCN_NH_VNAdd></GCN_NH_VNAdd>} />
+          <Route path="/gcn_nh_vnedit/:id" element={<GCN_NH_VNEdit></GCN_NH_VNEdit>} />
+          <Route path="/gcn_nh_camlist" element={<GCN_NH_CAMList></GCN_NH_CAMList>} />
+          <Route path="/gcn_nh_camadd" element={<GCN_NH_CAMAdd></GCN_NH_CAMAdd>} />
+          <Route path="/gcn_nh_camedit/:id" element={<GCN_NH_CAMEdit></GCN_NH_CAMEdit>} />
+          <Route path="/gcn_nh_camdetail/:id" element={<GCN_NH_CAMDetail></GCN_NH_CAMDetail>} />
+          <Route path="/affidavitlist" element={<AffidavitList></AffidavitList>} />
+          <Route path="/affidavitedit/:id" element={<AffdavitEdit></AffdavitEdit>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

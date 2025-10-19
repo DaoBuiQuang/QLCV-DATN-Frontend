@@ -283,7 +283,7 @@ function DebitNoteAdd() {
             </div>
 
             <div className="grid grid-cols-3 gap-2">
-              <span className="font-semibold">Debit Note No:</span>
+              <span className="font-semibold">Debit Note No: <span className="text-red-500">*</span></span>
               <input
                 type="text"
                 className="border-b border-gray-400 focus:outline-none col-span-2"

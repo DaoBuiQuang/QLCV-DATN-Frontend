@@ -232,6 +232,7 @@ function ApplicationDetail_KH() {
               <div className="text-left"><span className="font-medium">Địa chỉ:</span> {diaChi}</div>
               <div className="text-left"><span className="font-medium">Số điện thoại:</span> {soDienThoai}</div>
               <div className="text-left"><span className="font-medium">Số đơn:</span> {soDon}</div>
+              <div className="text-left"><span className="font-medium">Số bằng:</span> {soBang}</div>
               <div className="text-left"><span className="font-medium">Ngày nộp đơn:</span> {formatDateVN(ngayNopDon)}</div>
               <div className="text-left"><span className="font-medium">Tên nhãn hiệu:</span> {tenNhanHieu}</div>
 

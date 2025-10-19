@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
 import { Modal, Pagination } from "antd";
 
-function Application_GH_NH_VNList() {
+function AffidavitList() {
     const { t } = useTranslation();
     const role = useSelector((state) => state.auth.role);
-    const [donGiaHans, setDonGiaHans] = useState([]);
+    const [affidavits, setAffidavits] = useState([]);
     const [countries, setCountries] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -25,14 +25,14 @@ function Application_GH_NH_VNList() {
             localStorage.setItem("partnerListPage", page);
             const response = await callAPI({
                 method: "post",
-                endpoint: "/application_gh_nh_vn/list",
+                endpoint: "/affidavit/list",
                 data: {
                     soBang: searchValue,
                     pageSize: size,
                     pageIndex: page,
                 },
             });
-            setDonGiaHans(response.data);
+            setAffidavits(response.data);
             setTotalItems(response.pagination?.totalItems || 0);
             setPageIndex(response.pagination?.pageIndex || 1);
             setPageSize(response.pagination?.pageSize || 10);
@@ -86,7 +86,7 @@ function Application_GH_NH_VNList() {
     return (
         <div className="p-1 bg-gray-100 min-h-screen">
             <div className="bg-white p-4 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn gia hạn văn bằng Việt Nam</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn nộp tuyên thệ sử dụng - Affidavit</h2>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
                     <input
                         type="text"
@@ -108,12 +108,12 @@ function Application_GH_NH_VNList() {
                         >
                             Tìm kiếm
                         </button>
-                        <button
+                        {/* <button
                             onClick={() => navigate("/gcn_nh_camadd")}
                             className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
                         >
                             Thêm mới
-                        </button>
+                        </button> */}
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -141,83 +141,86 @@ function Application_GH_NH_VNList() {
             <div className="mb-2 text-left text-gray-600 text-xl">
                 {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
             </div>
-            <div className="w-full overflow-x-auto">
-                <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
-                    <thead>
-                        <tr className=" text-[#667085] text-center font-normal">
-                            <th className="p-2 text-table">STT</th>
-                            <th className="p-2 text-table">Số đơn gia hạn</th>
-                            <th className="p-2 text-table">Ngày nộp yêu cầu gia hạn</th>
-                            <th className="p-2 text-table">Ngày quyết định gia hạn</th>
-                            <th className="p-2 text-table">Ngày đăng bạ</th>
-                            <th className="p-2 text-table">Ghi chú</th>
-                            <th className="p-2 text-table">Số bằng</th>
-                            <th className="p-2 text-table">Số đơn</th>
-                            <th className="p-2 text-table">Mã hồ sơ</th>
-                            <th className="p-2 text-table">Tên chủ bằng</th>
-                            <th className="p-2 text-table">Đại diện SHCN</th>
-                            <th className="p-2 text-table">Tên nhãn hiệu</th>
-                            <th className="p-2 text-table">Nhóm SPDV</th>
-                            <th className="p-2 text-table">Ngày nộp đơn</th>
-                            <th className="p-2 text-table">Ngày cấp bằng</th>
-                            <th className="p-2 text-table">Ngày yêu cầu gia hạn</th>
-                            <th className="p-2 text-center text-table"></th>
+            <table className="w-full border-collapse bg-white text-sm mt-4 overflow-hidden rounded-lg border shadow">
+                <thead>
+                    <tr className=" text-[#667085] text-center font-normal">
+                        <th className="p-2 text-table">STT</th>
+                        <th className="p-2 text-table">Số Affidavit</th>
+                        <th className="p-2 text-table">Lần nộp</th>
+                        <th className="p-2 text-table">Ngày nộp</th>
+                        <th className="p-2 text-table">Ngày ghi nhận</th>
+                        <th className="p-2 text-table">Ghi chú</th>
+
+                        <th className="p-2 text-table">Số bằng</th>
+                        <th className="p-2 text-table">Số đơn</th>
+                        <th className="p-2 text-table">Mã hồ sơ</th>
+                        <th className="p-2 text-table">Tên chủ bằng</th>
+                        <th className="p-2 text-table">Đại diện SHCN</th>
+                        <th className="p-2 text-table">Tên nhãn hiệu</th>
+                        <th className="p-2 text-table">Hạn nộp tuyên thệ</th>
+                        <th className="p-2 text-table">Nhóm SPDV</th>
+                        <th className="p-2 text-table">Ngày nộp đơn</th>
+                        <th className="p-2 text-table">Ngày cấp bằng</th>
+                        <th className="p-2 text-center text-table"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {affidavits.map((affidavit, index) => (
+                        <tr className="group hover:bg-gray-100 text-center border-b relative">
+                            <td className="p-2 text-table">{index + 1}</td>
+                            <td
+                                className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/affidavitedit/${affidavit.id}`);
+                                }}
+                            >
+                                {affidavit.soAffidavit}
+                            </td>
+                            <td className="p-2 text-table">{affidavit.lanNop}</td>
+                            <td className="p-2 text-table">{affidavit.ngayNop}</td>
+                            <td className="p-2 text-table">{affidavit.ngayGhiNhan}</td>
+                            <td className="p-2 text-table">{affidavit.ghiChu}</td>
+                        
+                            <td className="p-2 text-table">{affidavit.gcn.soBang}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.soDon}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.maHoSo}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.KhachHangCuoi?.tenKhachHang}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.DoiTac?.tenDoiTac}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.NhanHieu?.tenNhanHieu}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.hanNopTuyenThe}</td>
+                            {/* <td className="p-2 text-table">Màu</td> */}
+                            <td className="p-2 text-table">{affidavit.gcn.dsNhomSPDV}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.ngayNopDon}</td>
+                            <td className="p-2 text-table">{affidavit.gcn.ngayCapBang}</td>
+                       
+                         
+                            <td className="p-2 relative">
+                                {(role === "admin" || role === "staff") && (
+                                    <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
+                                        <button
+                      className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+                      onClick={() => navigate(`/affidavitedit/${affidavit.id}`)}
+                    >
+                      📝
+                    </button>
+                    <button
+                      className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
+                      onClick={() => {
+                        setPartnerToDelete(affidavit.gcn.id);
+                        setShowDeleteModal(true);
+                      }}
+                    >
+                      🗑️
+                    </button>
+                                    </div>
+                                )}
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {donGiaHans.map((donGiaHan, index) => (
-                            <tr className="group hover:bg-gray-100 text-center border-b relative">
-                                <td className="p-2 text-table">{index + 1}</td>
-                                <td
-                                    className="p-2 text-table text-blue-500 cursor-pointer hover:underline"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate(`/affidavitedit/${donGiaHan.id}`);
-                                    }}
-                                >
-                                    {donGiaHan.soDon}
-                                </td>
-                                <td className="p-2 text-table">{donGiaHan.ngayNopYCGiaHan ? new Date(donGiaHan.ngayNopYCGiaHan).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.ngayQuyetDinhGiaHan ? new Date(donGiaHan.ngayQuyetDinhGiaHan).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.ngayDangBa ? new Date(donGiaHan.ngayDangBa).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.ghiChu}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.soBang}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.soDon}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.maHoSo}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.KhachHangCuoi?.tenKhachHang}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.DoiTac?.tenDoiTac}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.NhanHieu?.tenNhanHieu}</td>
-                                {/* <td className="p-2 text-table">Màu</td> */}
-                                <td className="p-2 text-table">{donGiaHan.gcn.dsNhomSPDV}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.ngayNopDon ? new Date(donGiaHan.gcn.ngayNopDon).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.ngayCapBang ? new Date(donGiaHan.gcn.ngayCapBang).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 text-table">{donGiaHan.gcn.hanGiaHan ? new Date(donGiaHan.gcn.hanGiaHan).toLocaleDateString("vi-VN") : ""}</td>
-                                <td className="p-2 relative">
-                                    {(role === "admin" || role === "staff") && (
-                                        <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
-                                            <button
-                                                className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                onClick={() => navigate(`/application_gh_nh_vn_edit/${donGiaHan.id}`)}
-                                            >
-                                                📝
-                                            </button>
-                                            <button
-                                                className="px-3 py-1 bg-red-200 text-red-600 rounded-md hover:bg-red-300"
-                                                onClick={() => {
-                                                    setPartnerToDelete(donGiaHan.gcn.id);
-                                                    setShowDeleteModal(true);
-                                                }}
-                                            >
-                                                🗑️
-                                            </button>
-                                        </div>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                    ))}
+                </tbody>
+
+            </table>
             <div className="mt-4 flex flex-col items-center space-y-2">
                 {totalItems > 0 && (
                     <div className="text-sm text-gray-500 text-center ">
@@ -261,4 +264,4 @@ function Application_GH_NH_VNList() {
     );
 }
 
-export default Application_GH_NH_VNList;
+export default AffidavitList;

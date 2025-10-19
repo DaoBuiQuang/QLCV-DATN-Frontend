@@ -12,10 +12,8 @@ const NotificationDetail = () => {
     const [error, setError] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
-    // Lấy chi tiết thông báo
     useEffect(() => {
         if (!id) return;
-
         const fetchNotificationDetail = async () => {
             setLoading(true);
             setError(null);
@@ -32,13 +30,11 @@ const NotificationDetail = () => {
                 setLoading(false);
             }
         };
-
         fetchNotificationDetail();
     }, [id]);
 
     // Hàm lấy lịch sử chỉnh sửa
     const loadHistory = async () => {
-        debugger
         if (!notification?.title || !notification?.data) return;
         try {
             const ma = notification.data.maDoiTac || notification.data.maKhachHang;
@@ -80,7 +76,6 @@ const NotificationDetail = () => {
     if (error) return <div className="text-red-500">Lỗi: {error}</div>;
     if (!notification) return <div>Chưa có thông báo</div>;
 
-    // Cấu hình bảng lịch sử
     const columns = [
         {
             title: "Thời gian",

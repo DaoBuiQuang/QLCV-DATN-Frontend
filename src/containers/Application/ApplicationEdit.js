@@ -101,6 +101,7 @@ function ApplicationEdit() {
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
+    const [idSoBangOld, setIdSoBangOld] = useState(null);
 
     const [errors, setErrors] = useState({});
     const isFormValid =
@@ -190,6 +191,7 @@ function ApplicationEdit() {
             setDaChonNgayThamDinhNoiDung(true);
             setDaChonNgayTraLoiThamDinhNoiDung(true);
             setDaChonHoanTatThuTucNhapBang(true);
+            setTrangThaiVuViec(5);
         }
         if (ngayNopDon) {
             const duKien = dayjs(ngayNopDon).add(1, 'month').format('YYYY-MM-DD');
@@ -341,7 +343,6 @@ function ApplicationEdit() {
                 setClientsRef(response.clientsRef);
                 setNgayTiepNhan(response.ngayTiepNhan);
                 setNgayXuLy(response.ngayXuLy);
-                setTrangThaiVuViec(response.trangThaiVuViec)
                 setMaHoSoVuViec(response.maHoSoVuViec);
                 setNguoiXuLyChinh(response.maNguoiXuLy1);
                 setNguoiXuLyPhu(response.maNguoiXuLy2);
@@ -350,6 +351,7 @@ function ApplicationEdit() {
                 setMaNhanHieu(response.nhanHieu.maNhanHieu);
                 setTenNhanHieu(response.nhanHieu.tenNhanHieu);
                 setLinkAnh(response.nhanHieu.linkAnh);
+                
                 setTrangThaiDon(response.trangThaiDon);
                 setBuocXuLy(response.buocXuLy);
                 setMaSPDVList(response.maSPDVList);
@@ -393,6 +395,7 @@ function ApplicationEdit() {
                 setGiayUyQuyenGoc(response.giayUyQuyenGoc);
                 setMaUyQuyen(response.maUyQuyen || null);
                 setVuViecList(response.vuViec)
+                setTrangThaiVuViec(String(response.trangThaiVuViec || "1"));
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -470,6 +473,7 @@ function ApplicationEdit() {
                     maUyQuyen: maUyQuyen || null,
                     nhanHieu,
                     vuViecs: vuViecList,
+                    idSoBangOld: idSoBangOld
                 },
             });
             await showSuccess("Thành công!", "Cập nhật đơn đăng ký nhãn hiệu thành công!");
@@ -544,6 +548,7 @@ function ApplicationEdit() {
                         setNgayDongHS={setNgayDongHS}
                         ngayRutHS={ngayRutHS}
                         setNgayRutHS={setNgayRutHS}
+
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
                         <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -569,7 +574,7 @@ function ApplicationEdit() {
                             </div> */}
 
                             <div>
-                                <label className="block text-gray-700 text-left">Trạng thái đơn</label>
+                                <label className="block text-gray-700 text-left">Tình trạng đơn</label>
                                 <input
                                     type="text"
                                     value={trangThaiDon}
@@ -772,6 +777,9 @@ function ApplicationEdit() {
                                     setNgayHetHanBang={setNgayHetHanBang}
                                     ngayGuiBangChoKH={ngayGuiBangChoKH}
                                     setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                                    isEditOnly={isEditOnly}
+                                    idSoBangOld={idSoBangOld}
+                                    setIdSoBangOld={setIdSoBangOld}
                                 />
                             </div>
                         )}
@@ -779,7 +787,7 @@ function ApplicationEdit() {
                         <div className="col-span-2">
                             <DSVuViec
                                 maHoSo={maHoSoVuViec}
-                                
+
                                 maDonDangKy={maDonDangKy}
                                 onVuViecChange={handleVuViecChange} initialVuViecs={vuViecList}
                                 maHoSoVuViec={maHoSoVuViec}

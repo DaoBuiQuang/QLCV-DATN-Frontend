@@ -163,6 +163,7 @@ function ApplicationEdit_KH() {
                 const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
                 setNgayHetHanBang(hetHanBang);
             }
+
             setDaChonNgayNopDon(true);
             updateTrangThaiDon("Hoàn thành hồ sơ tài liệu");
         } else {
@@ -173,7 +174,7 @@ function ApplicationEdit_KH() {
             // if (!ngayKQThamDinhND_DuKien) {
             const duKien1 = dayjs(ngayHoanThanhHSTL).add(2, 'month').format('YYYY-MM-DD');
             const duKien = dayjs(ngayHoanThanhHSTL).add(6, 'month').format('YYYY-MM-DD');
-            setNgayHoanThanhHSTL_DuKien(duKien1);
+            // setNgayHoanThanhHSTL_DuKien(duKien1);
             setNgayKQThamDinhND_DuKien(duKien);
             // }
             // setDaChonNgayCongBoDon(true);
@@ -211,7 +212,6 @@ function ApplicationEdit_KH() {
     const detailApplication = async () => {
         setLoading(true);
         try {
-            debugger
             const response = await callAPI({
                 method: "post",
                 endpoint: "application_kh/detail",
@@ -224,7 +224,7 @@ function ApplicationEdit_KH() {
                 setClientsRef(response.clientsRef);
                 setNgayTiepNhan(response.ngayTiepNhan);
                 setNgayXuLy(response.ngayXuLy);
-                setTrangThaiVuViec(response.trangThaiVuViec)
+                setTrangThaiVuViec(response.trangThaiVuViec || "1");
                 setMaHoSoVuViec(response.maHoSoVuViec);
                 setNguoiXuLyChinh(response.maNguoiXuLy1);
                 setNguoiXuLyPhu(response.maNguoiXuLy2);
@@ -239,7 +239,7 @@ function ApplicationEdit_KH() {
                 setMaSPDVList(response.maSPDVList);
                 setGhiChu(response.ghiChu);
                 setNgayNopDon(formatDate(response.ngayNopDon));
-                setNgayHoanThanhHSTL_DuKien(formatDate(response.ngayHoanThanhHoSoTaiLieu_DuKien));
+                //setNgayHoanThanhHSTL_DuKien(formatDate(response.ngayHoanThanhHoSoTaiLieu_DuKien));
                 setNgayHoanThanhHSTL(formatDate(response.ngayHoanThanhHoSoTaiLieu));
                 setTrangThaiHoanThanhHSTL(response.trangThaiHoanThienHoSoTaiLieu);
 
@@ -262,6 +262,7 @@ function ApplicationEdit_KH() {
                 setGiayUyQuyenGoc(response.giayUyQuyenGoc);
                 setMaUyQuyen(response.maUyQuyen || null);
                 setVuViecList(response.vuViec)
+                
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -409,7 +410,7 @@ function ApplicationEdit_KH() {
                             </div> */}
 
                             <div>
-                                <label className="block text-gray-700 text-left">Trạng thái đơn</label>
+                                <label className="block text-gray-700 text-left">Tình trạng đơn</label>
                                 <input
                                     type="text"
                                     value={trangThaiDon}
