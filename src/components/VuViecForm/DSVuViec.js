@@ -10,6 +10,8 @@ const DSVuViec = ({
   onVuViecChange,
   tenLoaiDon,
   maDonDangKy,
+  isGeneralAdvice,
+  isKH
 }) => {
   const [dsVuViec, setDsVuViec] = useState([]);
   const [modalState, setModalState] = useState({
@@ -130,23 +132,26 @@ const DSVuViec = ({
         size="small"
       />
 
-      {!isViewOnly && !dsVuViec.some((vv) => vv.isMainCase) && (
-        <Button
-          type="dashed"
-          className="mt-2 mr-2"
-          onClick={() =>
-            setModalState({
-              isOpen: true,
-              editingIndex: null,
-              record: null,
-              defaultType: "nhan_moi",
-              isMainCaseCheck: true,
-            })
-          }
-        >
-          Tạo nghiệp vụ cho đơn
-        </Button>
-      )}
+      {!isViewOnly &&
+        !isGeneralAdvice &&
+        !dsVuViec.some((vv) => vv.isMainCase) && (
+          <Button
+            type="dashed"
+            className="mt-2 mr-2"
+            onClick={() =>
+              setModalState({
+                isOpen: true,
+                editingIndex: null,
+                record: null,
+                defaultType: "nhan_moi",
+                isMainCaseCheck: true,
+              })
+            }
+          >
+            Tạo nghiệp vụ cho đơn
+          </Button>
+        )}
+
 
       {!isViewOnly && (
         <Button
@@ -174,6 +179,8 @@ const DSVuViec = ({
         record={modalState.record}
         isMainCaseCheck={modalState.isMainCaseCheck}
         tenLoaiDon={tenLoaiDon}
+        isGeneralAdvice={isGeneralAdvice}
+        isKH={isKH}
       />
     </div>
   );

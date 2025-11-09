@@ -3,22 +3,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import callAPI from "../../utils/api.js";
 import Select from "react-select";
-import DocumentSection from "../../components/UpdateDocument/DocumentSection.js";
-import ContentReview_KH from "../../components/TrademarkRegistrationProcess/KH/ContentReview_KH.js";
 import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation.js";
-import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation.js";
+import DocumentSection_KH from "../../components/TrademarkRegistrationProcess/KH/DocumentSection_KH.js";
 import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
 import { showSuccess, showError } from "../../components/commom/Notification.js";
 import BrandBasicForm from "../../components/BrandBasicForm.js";
+import FormGiaHan from "../../components/commom/FormGiaHan.js";
 import FormHoSo from "../../components/commom/FormHoSo.js";
 import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
-function ApplicationAdd_KH() {
+function Application_GH_NH_KHAdd() {
     const navigate = useNavigate();
 
-    const isAddOnly = true
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
-    const [loaiDon, setLoaiDon] = useState(1)
     const [idKhachHang, setIdKhachHang] = useState(null);
     const [maKhachHang, setMaKhachHang] = useState("");
     const [idDoiTac, setIdDoiTac] = useState(null)
@@ -32,6 +29,7 @@ function ApplicationAdd_KH() {
     const [nguoiXuLyPhu, setNguoiXuLyPhu] = useState("");
     const [ngayDongHS, setNgayDongHS] = useState(null);
     const [ngayRutHS, setNgayRutHS] = useState(null);
+    const isAddOnly = true
     const [soDon, setSoDon] = useState("")
     const [ngayNopDon, setNgayNopDon] = useState(null);
     const [maNhanHieuOld, setMaNhanHieuOld] = useState("");
@@ -49,11 +47,18 @@ function ApplicationAdd_KH() {
     const [ngayHoanThanhHSTL, setNgayHoanThanhHSTL] = useState(null);
     const [trangThaiHoanThanhHSTL, setTrangThaiHoanThanhHSTL] = useState("");
 
-    const [ngayKQThamDinhND_DuKien, setNgayKQThamDinhND_DuKien] = useState(null);
-    const [ngayKQThamDinhND, setNgayKQThamDinhND] = useState(null);
-    const [lichSuThamDinhND, setLichSuThamDinhND] = useState([])
-    const [ngayKQThamDinhND_DK_SauKN, setNgayKQThamDinhND_DK_SauKN] = useState(null)
-    const [trangThaiTraLoiKQThamDinhND, setTrangThaiTraLoiKQThamDinhND] = useState(null)
+    const [ngayNopYCGiaHan, setNgayNopYCGiaHan] = useState(null);
+    const [donGoc, setDonGoc] = useState(true);
+    const [ngayKQThamDinh_DuKien, setNgayKQThamDinh_DuKien] = useState(null);
+    const [trangThaiThamDinh, setTrangThaiThamDinh] = useState(true);
+    const [ngayThongBaoTuChoiGiaHan, setNgayThongBaoTuChoiGiaHan] = useState(null);
+    const [hanTraLoiTuChoiGiaHan, setHanTraLoiTuChoiGiaHan] = useState(null);
+    const [ngayTraLoiThongBaoTuChoiGiaHan, setNgayTraLoiThongBaoTuChoiGiaHan] = useState(null);
+    const [trangThaiTuChoiGiaHan, setTrangThaiTuChoiGiaHan] = useState(null);
+    const [ngayQuyetDinhTuChoiGiaHan, setNgayQuyetDinhTuChoiGiaHan] = useState(null);
+    const [ngayQuyetDinhGiaHan_DuKien, setNgayQuyetDinhGiaHan_DuKien] = useState(null);
+    const [ngayQuyetDinhGiaHan, setNgayQuyetDinhGiaHan] = useState(null);
+    const [ngayDangBa, setNgayDangBa] = useState(null);
 
     const [ngayNopPhiCapBang, setNgayNopPhiCapBang] = useState(null);
     const [ngayNhanBang, setNgayNhanBang] = useState(null);
@@ -65,14 +70,16 @@ function ApplicationAdd_KH() {
 
     const [trangThaiDon, setTrangThaiDon] = useState("Nộp đơn");
     const [buocXuLy, setBuocXuLy] = useState("");
-
+    const [trangThaiCapBang, setTrangThaiCapBang] = useState(null);
+    const [ngayNopYKien, setNgayNopYKien] = useState(null);
+    const [ketQuaYKien, setKetQuaYKien] = useState(null);
     const [taiLieuList, setTaiLieuList] = useState([]);
     const [vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
     const [maUyQuyen, setMaUyQuyen] = useState(null);
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
-    const isKH = true;
+
     const [errors, setErrors] = useState({});
     const isFormValid =
         (maHoSoVuViec || "").trim() !== "" &&
@@ -149,10 +156,10 @@ function ApplicationAdd_KH() {
             setDaChonHoanTatThuTucNhapBang(true);
         }
         if (ngayNopDon) {
-            const duKien = dayjs(ngayNopDon).add(59, 'day').format('YYYY-MM-DD');
+            const duKien = dayjs(ngayNopDon).add(2, 'month').format('YYYY-MM-DD');
             setNgayHoanThanhHSTL_DuKien(duKien);
             // 👉 Chỉ set ngày hết hạn nếu chưa có
-            if (!ngayHetHanBang && soBang) {
+            if (!ngayHetHanBang) {
                 const hetHanBang = dayjs(ngayNopDon).add(10, 'year').format('YYYY-MM-DD');
                 setNgayHetHanBang(hetHanBang);
             }
@@ -164,30 +171,19 @@ function ApplicationAdd_KH() {
             setNgayHetHanBang(null);
         }
         if (ngayHoanThanhHSTL) {
-            // if (!ngayKQThamDinhND_DuKien) {
             const duKien1 = dayjs(ngayHoanThanhHSTL).add(2, 'month').format('YYYY-MM-DD');
             const duKien = dayjs(ngayHoanThanhHSTL).add(6, 'month').format('YYYY-MM-DD');
-            // setNgayHoanThanhHSTL_DuKien(duKien1);
-            setNgayKQThamDinhND_DuKien(duKien);
-            // }
-            // setDaChonNgayCongBoDon(true);
+            setNgayHoanThanhHSTL_DuKien(duKien1);
             updateTrangThaiDon("Thẩm định");
         } else {
-            setNgayKQThamDinhND_DuKien(null);
-        }
-        if (ngayKQThamDinhND) {
-            updateTrangThaiDon("Đơn đăng ký hoàn tất");
         }
 
     }, [
         ngayNopDon,
         ngayHoanThanhHSTL,
-        ngayKQThamDinhND,
-        trangThaiTraLoiKQThamDinhND,
         ngayNhanBang,
         ngayGuiBangChoKH,
         ngayHoanThanhHSTL_DuKien,
-        ngayKQThamDinhND_DuKien,
         daChonNgayThamDinhNoiDung,
     ]);
 
@@ -202,7 +198,7 @@ function ApplicationAdd_KH() {
         try {
             await callAPI({
                 method: "post",
-                endpoint: "/application_kh/add",
+                endpoint: "/application_gh_nh_kh/add",
                 data: {
                     maHoSo: maHoSoVuViec,
                     idKhachHang: idKhachHang,
@@ -214,12 +210,11 @@ function ApplicationAdd_KH() {
                     clientsRef: clientsRef,
                     ngayTiepNhan: ngayTiepNhan,
                     ngayXuLy: ngayXuLy,
-                    maNguoiXuLy1: nguoiXuLyChinh,
-                    maNguoiXuLy2: nguoiXuLyPhu,
                     trangThaiVuViec: trangThaiVuViec,
                     ngayDongHS: ngayDongHS,
                     ngayRutHS: ngayRutHS,
 
+                    maHoSoVuViec: maHoSoVuViec,
                     soDon: soDon,
                     maNhanHieu: maNhanHieuOld,
                     maSPDVList: maSPDVList,
@@ -227,13 +222,19 @@ function ApplicationAdd_KH() {
                     buocXuLy: buocXuLy,
                     ghiChu: ghiChu,
                     ngayNopDon: ngayNopDon,
-                    ngayHoanThanhHoSoTaiLieu_DuKien: ngayHoanThanhHSTL_DuKien,
-                    ngayHoanThanhHoSoTaiLieu: ngayHoanThanhHSTL,
-                    trangThaiHoanThienHoSoTaiLieu: trangThaiHoanThanhHSTL,
-                    ngayKQThamDinh_DuKien: ngayKQThamDinhND_DuKien,
-                    ngayKQThamDinh: ngayKQThamDinhND,
-                    lichSuThamDinh: lichSuThamDinhND,
-                    ngayKQThamDinh_DK_SauKN: ngayKQThamDinhND_DK_SauKN,
+
+                    ngayNopYCGiaHan: ngayNopYCGiaHan,
+                    donGoc: donGoc,
+                    ngayKQThamDinh_DuKien: ngayKQThamDinh_DuKien,
+                    trangThaiThamDinh: trangThaiThamDinh,
+                    ngayThongBaoTuChoiGiaHan: ngayThongBaoTuChoiGiaHan,
+                    hanTraLoiTuChoiGiaHan: hanTraLoiTuChoiGiaHan,
+                    ngayTraLoiThongBaoTuChoiGiaHan: ngayTraLoiThongBaoTuChoiGiaHan,
+                    trangThaiTuChoiGiaHan: trangThaiTuChoiGiaHan,
+                    ngayQuyetDinhTuChoiGiaHan: ngayQuyetDinhTuChoiGiaHan,
+                    ngayQuyetDinhGiaHan_DuKien: ngayQuyetDinhGiaHan_DuKien,
+                    ngayQuyetDinhGiaHan: ngayQuyetDinhGiaHan,
+                    ngayDangBa: ngayDangBa,
 
                     ngayNhanBang: ngayNhanBang,
                     ngayGuiBangChoKhachHang: ngayGuiBangChoKH,
@@ -248,7 +249,7 @@ function ApplicationAdd_KH() {
                     vuViecs: vuViecList,
                 },
             });
-            await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
+            await showSuccess("Thành công!", "Thêm đơn gia hạn văn bằng thành công!");
             navigate(-1);
         } catch (error) {
             showError("Thất bại!", "Đã xảy ra lỗi.", error);
@@ -271,10 +272,10 @@ function ApplicationAdd_KH() {
             {/* <DonProgress trangThaiDon={trangThaiDon} /> */}
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-semibold text-gray-700 uppercase">
-                        📌 Thêm đơn đăng ký nhãn hiệu mới Campuchia
+                    <h2 className="text-2xl font-semibold text-gray-700">
+                        📌 Thêm đơn gia hạn nhãn hiệu Campuchia
                     </h2>
-                    <img
+                   <img
                         src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg"
                         alt="Cờ Campuchia"
                         className="w-20 h-15"
@@ -283,8 +284,8 @@ function ApplicationAdd_KH() {
                 <FormHoSo
                     soDon={soDon}
                     setSoDon={setSoDon}
-                    loaiDon={loaiDon}
-                    setLoaiDon={setLoaiDon}
+                    ngayNopDon={ngayNopDon}
+                    setNgayNopDon={setNgayNopDon}
                     maHoSoVuViec={maHoSoVuViec}
                     setMaHoSoVuViec={setMaHoSoVuViec}
                     idKhachHang={idKhachHang}
@@ -313,34 +314,12 @@ function ApplicationAdd_KH() {
                     setNgayDongHS={setNgayDongHS}
                     ngayRutHS={ngayRutHS}
                     setNgayRutHS={setNgayRutHS}
-                    ngayNopDon={ngayNopDon}
-                    setNgayNopDon={setNgayNopDon}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* <div >
-                            <label className="block text-gray-700 text-left">Mã hồ sơ vụ việc <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={maHoSoVuViec}
-
-                                className="w-full p-2 mt-1 border rounded-lg text-input h-10 bg-gray-200"
-                                disabled
-                            />
-                        </div>
-                        <div >
-                            <label className="block text-gray-700 text-left ">Số đơn</label>
-                            <input
-                                type="text"
-                                value={soDon}
-                                placeholder="Nhập số đơn"
-                                onChange={(e) => setSoDon(e.target.value)}
-                                className="w-full p-2 mt-1 border rounded-lg text-input h-10"
-                            />
-                        </div> */}
 
                         <div>
-                            <label className="block text-gray-700 text-left">Tình trạng đơn</label>
+                            <label className="block text-gray-700 text-left">Trạng thái đơn</label>
                             <input
                                 type="text"
                                 value={trangThaiDon}
@@ -433,23 +412,8 @@ function ApplicationAdd_KH() {
                             />
                         </div>
                     </div>
-
-                    {/* {daChonNgayNopDon && ( */}
                     <div className="col-span-2">
-                        <CompleteDocumentation
-                            ngayHoanThanhHSTL_DuKien={ngayHoanThanhHSTL_DuKien}
-                            setNgayHoanThanhHSTL_DuKien={setNgayHoanThanhHSTL_DuKien}
-                            ngayHoanThanhHSTL={ngayHoanThanhHSTL}
-                            setNgayHoanThanhHSTL={setNgayHoanThanhHSTL}
-                            trangThaiHoanThanhHSTL={trangThaiHoanThanhHSTL}
-                            setTrangThaiHoanThanhHSTL={setTrangThaiHoanThanhHSTL}
-                            formatOptions={formatOptions}
-                        />
-                    </div>
-                    {/* )} */}
-                    {/* {daChonNgayNopDon && ( */}
-                    <div className="col-span-2">
-                        <DocumentSection onTaiLieuChange={handleTaiLieuChange} isAddOnly={isAddOnly}
+                        <DocumentSection_KH onTaiLieuChange={handleTaiLieuChange} initialTaiLieus={taiLieuList}
                             maHoSoVuViec={maHoSoVuViec}
                             giayUyQuyenGoc={giayUyQuyenGoc}
                             setGiayUyQuyenGoc={setGiayUyQuyenGoc}
@@ -457,24 +421,34 @@ function ApplicationAdd_KH() {
                             setMaUyQuyen={setMaUyQuyen}
                         />
                     </div>
-                    {/* )} */}
-                    {/* {daChonNgayHoanThanhHSTL && ( */}
                     <div className="col-span-2">
-                        <ContentReview_KH
-                            ngayKQThamDinhND_DuKien={ngayKQThamDinhND_DuKien}
-                            setNgayKQThamDinhND_DuKien={setNgayKQThamDinhND_DuKien}
-                            ngayKQThamDinhND={ngayKQThamDinhND}
-                            setNgayKQThamDinhND={setNgayKQThamDinhND}
-                            lichSuThamDinhND={lichSuThamDinhND}
-                            setLichSuThamDinhND={setLichSuThamDinhND}
-                            ngayKQThamDinhND_DK_SauKN={ngayKQThamDinhND_DK_SauKN}
-                            setNgayKQThamDinhND_DK_SauKN={setNgayKQThamDinhND_DK_SauKN}
-                            buocXuLy={buocXuLy}
-                            setBuocXuLy={setBuocXuLy}
+                        <FormGiaHan
+                            ngayNopYCGiaHan={ngayNopYCGiaHan}
+                            setNgayNopYCGiaHan={setNgayNopYCGiaHan}
+                            donGoc={donGoc}
+                            setDonGoc={setDonGoc}
+                            ngayKQThamDinh_DuKien={ngayKQThamDinh_DuKien}
+                            setNgayKQThamDinh_DuKien={setNgayKQThamDinh_DuKien}
+                            trangThaiThamDinh={trangThaiThamDinh}
+                            setTrangThaiThamDinh={setTrangThaiThamDinh}
+                            ngayThongBaoTuChoiGiaHan={ngayThongBaoTuChoiGiaHan}
+                            setNgayThongBaoTuChoiGiaHan={setNgayThongBaoTuChoiGiaHan}
+                            hanTraLoiTuChoiGiaHan={hanTraLoiTuChoiGiaHan}
+                            setHanTraLoiTuChoiGiaHan={setHanTraLoiTuChoiGiaHan}
+                            ngayTraLoiThongBaoTuChoiGiaHan={ngayTraLoiThongBaoTuChoiGiaHan}
+                            setNgayTraLoiThongBaoTuChoiGiaHan={setNgayTraLoiThongBaoTuChoiGiaHan}
+                            trangThaiTuChoiGiaHan={trangThaiTuChoiGiaHan}
+                            setTrangThaiTuChoiGiaHan={setTrangThaiTuChoiGiaHan}
+                            ngayQuyetDinhTuChoiGiaHan={ngayQuyetDinhTuChoiGiaHan}
+                            setNgayQuyetDinhTuChoiGiaHan={setNgayQuyetDinhTuChoiGiaHan}
+                            ngayQuyetDinhGiaHan_DuKien={ngayQuyetDinhGiaHan_DuKien}
+                            setNgayQuyetDinhGiaHan_DuKien={setNgayQuyetDinhGiaHan_DuKien}
+                            ngayQuyetDinhGiaHan={ngayQuyetDinhGiaHan}
+                            setNgayQuyetDinhGiaHan={setNgayQuyetDinhGiaHan}
+                            ngayDangBa={ngayDangBa}
+                            setNgayDangBa={setNgayDangBa}
                         />
                     </div>
-                    {/* )} */}
-
                     {/* {(daChonNgayThamDinhNoiDung || (!trangThaiTraLoiKQThamDinhND && daChonNgayThamDinhNoiDung)) && ( */}
                     <div className="col-span-2">
                         <DegreeInformation
@@ -499,10 +473,8 @@ function ApplicationAdd_KH() {
                             setGiayUyQuyenGoc={setGiayUyQuyenGoc}
                             maUyQuyen={maUyQuyen}
                             setMaUyQuyen={setMaUyQuyen}
-                            isKH={isKH}
                         />
                     </div>
-                    {/* )} */}
                 </div>
 
                 <div className="flex justify-center gap-4 mt-4">
@@ -518,4 +490,4 @@ function ApplicationAdd_KH() {
     );
 }
 
-export default ApplicationAdd_KH;
+export default Application_GH_NH_KHAdd;

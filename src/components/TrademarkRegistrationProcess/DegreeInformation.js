@@ -57,7 +57,7 @@ const DegreeInformation = ({
         <div className="flex-1">
             <h3 className="text-lg font-semibold text-blue-700 mb-2">📌 Thông tin bằng</h3>
 
-            <div className="col-span-1 flex justify-end">
+            {/* <div className="col-span-1 flex justify-end">
                 <button
                     type="button"
                     onClick={handleToggleMode}
@@ -67,7 +67,7 @@ const DegreeInformation = ({
                         ? "← Tạo giấy chứng nhận (văn bằng) mới"
                         : "→ Chọn giấy chứng nhận (văn bằng) có sẵn?"}
                 </button>
-            </div>
+            </div> */}
 
             {showSelectExisting && !soBang ? (
                 <div className="mt-2">

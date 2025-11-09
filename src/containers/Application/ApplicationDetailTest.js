@@ -79,6 +79,7 @@ function ApplicationDetailTest() {
     const [productAndService, setProductAndService] = useState([]);
     const [ghiChu, setGhiChu] = useState("");
     const [loaiDon, setLoaiDon] = useState(null);
+    const [donGoc, setDonGoc] = useState(null);
     const [isModalHTOpen, setIsModalHTOpen] = useState(false);
     const [isModalNDOpen, setIsModalNDOpen] = useState(false);
     const formatVietnameseDate = (date = new Date()) => {
@@ -193,7 +194,8 @@ function ApplicationDetailTest() {
                 setGiayUyQuyenGoc(response.giayUyQuyenGoc);
 
                 setGhiChu(response.ghiChu || "");
-                setVuViecList(response.vuViec || [])
+                setVuViecList(response.vuViec || []);
+                setDonGoc(response.donGoc || null);
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -446,8 +448,6 @@ function ApplicationDetailTest() {
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                         {/* Danh sách tài liệu */}
                         <div className="mt-8">
@@ -539,15 +539,15 @@ function ApplicationDetailTest() {
                         >
                             In Word: Thông tin Đơn Đăng Ký
                         </button>
-
-                        <button
-                            onClick={handleApplicationEdit}
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
-                        >
-                            Sửa thông tin đơn
-                        </button>
+                        {donGoc !== 1 && (
+                            <button
+                                onClick={handleApplicationEdit}
+                                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
+                            >
+                                Sửa thông tin đơn
+                            </button>
+                        )}
                     </div>
-
                     <ExportWordModal
                         open={openModal}
                         onClose={() => setOpenModal(false)}

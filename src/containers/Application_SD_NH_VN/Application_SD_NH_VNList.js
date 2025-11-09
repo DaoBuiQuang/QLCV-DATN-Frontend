@@ -8,19 +8,21 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { DatePicker, Modal, Spin, Pagination } from 'antd';
 import { useTranslation } from "react-i18next";
-function ApplicationList_KH() {
+function Application_SD_NH_VNList() {
   const role = useSelector((state) => state.auth.role);
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [applications, setApplications] = useState([]);
-
+  const [applications, setApplications] = useState([
+    {
+      soDon: "123456",
+      maHoSoVuViec: "HSVV001",
+      tenNhanHieu: "Nhãn hiệu mẫu",
+    }
+  ]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [applicationToDelete, setApplicationToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-
-  const [brands, setBrands] = useState([]);
-  const [selectedBrand, setSelectedBrand] = useState(null);
   const [productAndService, setProductAndService] = useState([]);
   const [selectedProductAndService, setSelectedProductAndService] = useState([]);
   const [selectedTrangThaiDon, setSelectedTrangThaiDon] = useState(null);
@@ -31,7 +33,7 @@ function ApplicationList_KH() {
   const [selectedHanXuLy, setSelectedHanXuLy] = useState(null);
   const [sortByHanXuLy, setSortByHanXuLy] = useState(false);
   const [selectedHanTraLoi, setSelectedHanTraLoi] = useState(null);
-  const [sortByHanTraLoi, setSortByHanTraLoi] = useState(true);
+  const [sortByHanTraLoi, setSortByHanTraLoi] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -56,9 +58,11 @@ function ApplicationList_KH() {
     { value: "Trả lời thẩm định nội dung", label: "Trả lời thẩm định nội dung" },
     { value: "Hoàn tất nhận bằng", label: "Hoàn tất nhận bằng" },
     { value: "Chờ nhận bằng", label: "Chờ nhận bằng" },
+    { label: "Loại đơn", labelEn: "Application Type", key: "loaiDon" },
   ];
 
   const allFieldOptions = [
+    // { label: "Mã đơn DK", labelEn: "Matter code", key: "maDonDangKy" },
     { label: "Số Đơn", labelEn: "App No", key: "soDon" },
     { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
     { label: "Tên khách hàng", labelEn: "Client Name", key: "tenKhachHang" },
@@ -66,22 +70,28 @@ function ApplicationList_KH() {
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
     { label: "Ảnh nhãn hiệu", labelEn: "Image", key: "linkAnh" },
     { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
-    { label: "Tình trạng xử lý", labelEn: "Next stage", key: "trangThaiDon" },
-    { label: "Trạng thái đơn", labelEn: "Publication Date", key: "trangThaiVuViec" },
+    { label: "Tình trạng xử lý đơn", labelEn: "Next stage", key: "tinhTrangDon" },
+    { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiVuViec" },
     { label: "Hạn trả lời Cục", labelEn: "Official Deadline", key: "hanTraLoi" },
     { label: "Hạn Cục xử lý", labelEn: "Soft Deadline", key: "hanXuLy" },
     { label: "Trạng thái hoàn thành TL", labelEn: "Outstanding Documents", key: "trangThaiHoanThienHoSoTaiLieu" },
     { label: "Ngày nộp đơn", labelEn: "Filing Date", key: "ngayNopDon" },
     { label: "Ngày hoàn thành TL", labelEn: "Doc Completion", key: "ngayHoanThanhHoSoTaiLieu" },
-    { label: "Ngày có KQ thẩm định", labelEn: "Formality Exam Result", key: "ngayKQThamDinh" },
-
+    { label: "Ngày có KQ thẩm định hình thức", labelEn: "Formality Exam Result", key: "ngayKQThamDinhHinhThuc" },
+    { label: "Ngày công bố đơn", labelEn: "Publication", key: "ngayCongBoDon" },
+    { label: "Ngày kết quả thẩm định nội dung", labelEn: "Substantive Exam Result", key: "ngayKQThamDinhND" },
+    { label: "Ngày TL kết quả thẩm định nội dung", labelEn: "Response To SE", key: "ngayTraLoiKQThamDinhND" },
+    { label: "Ngày thông báo cấp bằng", labelEn: "Notice of Protection", key: "ngayThongBaoCapBang" },
+    { label: "Hạn nộp phí cấp bằng", labelEn: "Deadline For Granting Payment", key: "hanNopPhiCapBang" },
+    { label: "Ngày nộp phí cấp bằng", labelEn: "For Granting Payment", key: "ngayNopPhiCapBang" },
     { label: "Ngày nhận bằng", labelEn: "Certificate Receipt", key: "ngayNhanBang" },
     { label: "Số bằng", key: "soBang" },
     { label: "Ngày cấp bằng", key: "ngayCapBang" },
     { label: "Ngày hết hạn bằng", key: "ngayHetHanBang" },
     { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
-  ];
+    { label: "Loại đơn", labelEn: "Application Type", key: "loaiDon" },
 
+  ];
   const hiddenFieldKeys = [
     "ngayHoanThanhHoSoTaiLieu",
     "ngayKQThamDinhHinhThuc",
@@ -109,7 +119,7 @@ function ApplicationList_KH() {
       localStorage.setItem("applicationListPage", page);
       const response = await callAPI({
         method: "post",
-        endpoint: "/application_kh/list",
+        endpoint: "/application_sd_nh_vn/list",
         data: { searchText: searchValue, customerName, partnerName, brandName, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
       });
       setApplications(response.data || []);
@@ -122,6 +132,7 @@ function ApplicationList_KH() {
       setLoading(false);
     }
   };
+
   const fetchItems = async () => {
     try {
       const response = await callAPI({
@@ -134,7 +145,6 @@ function ApplicationList_KH() {
       console.error("Lỗi khi lấy danh sách sản phẩm/dịch vụ:", error);
     }
   };
-
   const formatOptions = (data, valueKey, labelKey) => {
     return data.map(item => ({
       value: item[valueKey],
@@ -143,7 +153,7 @@ function ApplicationList_KH() {
   };
   useEffect(() => {
     const savedPage = parseInt(localStorage.getItem("applicationListPage") || "1", 10);
-    fetchApplications();
+    fetchApplications("", savedPage, pageSize);
     if (!localStorage.getItem("applicationListPage")) {
       localStorage.setItem("applicationListPage", "1");
     }
@@ -156,12 +166,12 @@ function ApplicationList_KH() {
 
   const fieldOptions = [
     { value: "ngayNopDon", label: "Ngày nộp đơn" },
-    // { value: "ngayHoanThanhHoSoTaiLieu", label: "Ngày Hoàn thành tài liệu" },
-    // { value: "ngayKQThamDinhHinhThuc", label: "Ngày chấp nhận đơn hợp lệ" },
-    // { value: "ngayCongBoDon", label: "Ngày công bố đơn" },
-    // { value: "ngayKQThamDinhND", label: "Ngày kết quả thẩm định nội dung đơn" },
-    // { value: "ngayThongBaoCapBang", label: "Ngày thông báo cấp bằng" },
-    // { value: "ngayNopPhiCapBang", label: "Ngày nộp phí cấp bằng" },
+    { value: "ngayHoanThanhHoSoTaiLieu", label: "Ngày Hoàn thành tài liệu" },
+    { value: "ngayKQThamDinhHinhThuc", label: "Ngày chấp nhận đơn hợp lệ" },
+    { value: "ngayCongBoDon", label: "Ngày công bố đơn" },
+    { value: "ngayKQThamDinhND", label: "Ngày kết quả thẩm định nội dung đơn" },
+    { value: "ngayThongBaoCapBang", label: "Ngày thông báo cấp bằng" },
+    { value: "ngayNopPhiCapBang", label: "Ngày nộp phí cấp bằng" },
     { value: "ngayGuiBangChoKhachHang", label: "Ngày gửi bằng cho khách hàng" },
     { value: "ngayHetHanBang", label: "Ngày hết hạn bằng" },
     // Thêm trường khác nếu cần
@@ -184,13 +194,12 @@ function ApplicationList_KH() {
       .join(", ");
   };
   const handleDeleteApplication = async () => {
-    await callAPI({ method: "post", endpoint: "/application_kh/delete", data: { maDonDangKy: applicationToDelete } });
+    await callAPI({ method: "post", endpoint: "/application/delete", data: { maDonDangKy: applicationToDelete } });
     setShowDeleteModal(false);
     setApplicationToDelete(null);
     fetchApplications(searchTerm);
   };
   const handleClearFilters = () => {
-    setSelectedBrand(null);
     setSelectedProductAndService([]);
     setSelectedTrangThaiDon(null);
     setSelectedField(null);
@@ -203,7 +212,7 @@ function ApplicationList_KH() {
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng ký nhãn hiệu Campuchia</h2>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng ký đã sửa đổi nhãn hiệu Việt Nam</h2>
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
           <input
             type="text"
@@ -214,17 +223,9 @@ function ApplicationList_KH() {
                 fetchApplications(searchTerm, 1, pageSize);
               }
             }}
-            placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
+            placeholder="🔍 Nhập số đơn hoặc mã hồ sơ"
             className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
           />
-
-          {/* <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="🔍 Nhập mã đơn hoặc mã hồ sơ"
-            className="p-3 border border-gray-300 rounded-lg w-full md:w-1/3 focus:outline-none focus:ring-2 search-input"
-          /> */}
           <div className="flex gap-3">
             <button
               onClick={() => fetchApplications(searchTerm, 1, pageSize)}
@@ -232,12 +233,12 @@ function ApplicationList_KH() {
             >
               Tìm kiếm
             </button>
-            <button
-              onClick={() => navigate("/applicationadd_kh")}
+            {/* <button
+              onClick={() => navigate("/applicationadd")}
               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
             >
               Thêm mới
-            </button>
+            </button> */}
             <button
               onClick={() => exportToExcel(applications, allFieldOptions, 'DanhSachDonDK')}
               className="bg-[#009999] hover:bg-[#007a7a] text-white px-5 py-3 rounded-lg shadow-md transition"
@@ -251,15 +252,7 @@ function ApplicationList_KH() {
               Chọn cột hiển thị
             </button>
           </div>
-
-
         </div>
-        {/* <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="bg-gray-600 hover:bg-gray-700 text-white px-5 py-1 rounded-lg shadow-md transition"
-        >
-          {showFilters ? "Ẩn bộ lọc" : "🔽 Bộ lọc nâng cao"}
-        </button> */}
         <div className="">
           <div className="flex flex-wrap gap-3">
             <div className="w-full md:w-1/6">
@@ -298,6 +291,7 @@ function ApplicationList_KH() {
                 className="border w-full focus:outline-none focus:ring-2 search-input rounded-lg p-2 text-sm"
               />
             </div>
+
             {/* Sản phẩm dịch vụ */}
             <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Sản phẩm dịch vụ</label>
@@ -317,7 +311,7 @@ function ApplicationList_KH() {
             </div>
 
             {/* Trạng thái đơn */}
-            {/* <div className="w-full md:w-1/5">
+            <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Trạng thái đơn</label>
               <Select
                 options={trangThaiDonOptions}
@@ -329,14 +323,14 @@ function ApplicationList_KH() {
                 className="text-left"
                 isClearable
               />
-            </div> */}
+            </div>
             <div className="w-full md:w-1/6">
               <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Lọc theo hạn xử lý</label>
               <Select
                 options={hanOptions}
                 value={selectedHanXuLy}
                 onChange={(option) => setSelectedHanXuLy(option)}
-                placeholder="Chọn TG"
+                placeholder="Lọc theo hạn xử lý"
                 isClearable
                 className="text-left"
               />
@@ -360,7 +354,7 @@ function ApplicationList_KH() {
                 options={hanOptions}
                 value={selectedHanTraLoi}
                 onChange={(option) => setSelectedHanTraLoi(option)}
-                placeholder="Chọn TG"
+                placeholder="Lọc theo hạn trả lời"
                 isClearable
                 className="text-left"
               />
@@ -419,7 +413,9 @@ function ApplicationList_KH() {
       <div className="mb-2 text-left text-gray-600 text-xl">
         {t("Tìm thấy")} <b className="text-blue-600">{totalItems}</b> {t("kết quả")}
       </div>
+
       <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
+
         <Spin spinning={loading} tip="Loading..." size="large">
           <table className="w-full border-collapse bg-white text-sm ">
             <thead>
@@ -476,7 +472,7 @@ function ApplicationList_KH() {
                           onClick={(e) => {
                             if (hasDon) {
                               e.stopPropagation();
-                              navigate(`/applicationdetail_kh/${maDon}`);
+                              navigate(`/applicationdetail/${maDon}`);
                             }
                           }}
                         >
@@ -488,20 +484,71 @@ function ApplicationList_KH() {
                         </td>
                       );
                     }
-                    if (col.key === "maDonDangKy") {
+                    if (col.key === "loaiDon") {
+                      let text = "";
+                      switch (app.loaiDon) {
+                        case 1:
+                          text = "Đơn gốc";
+                          break;
+                        case 2:
+                          text = "Đơn sửa đổi";
+                          break;
+                        case 3:
+                          text = "Đơn tách";
+                          break;
+                        default:
+                          text = "Không xác định";
+                          break;
+                      }
+
                       return (
-                        <td
-                          key={col.key}
-                          className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/applicationdetail/${app.maDonDangKy}`);
-                          }}
-                        >
-                          {app.maDonDangKy}
+                        <td key={col.key} className="p-2 text-table">
+                          {text}
                         </td>
                       );
                     }
+                    if (col.key === "trangThaiVuViec") {
+                      let text = "";
+                      switch (app.trangThaiVuViec) {
+                        case "1":
+                          text = "Đang giải quyết";
+                          break;
+                        case "2":
+                          text = "Cấp bằng";
+                          break;
+                        case "3":
+                          text = "Từ chối";
+                          break;
+                        case "4":
+                          text = "Rút đơn";
+                          break;
+                        case "5":
+                          text = "Đóng đơn";
+                          break;
+                        default:
+                          text = "Không xác định";
+                          break;
+                      }
+                      return (
+                        <td key={col.key} className="p-2 text-table">
+                          {text}
+                        </td>
+                      );
+                    }
+                    // if (col.key === "maDonDangKy") {
+                    //   return (
+                    //     <td
+                    //       key={col.key}
+                    //       className={`${commonClass} text-blue-500 cursor-pointer hover:underline`}
+                    //       onClick={(e) => {
+                    //         e.stopPropagation();
+                    //         navigate(`/applicationdetail/${app.maDonDangKy}`);
+                    //       }}
+                    //     >
+                    //       {app.maDonDangKy}
+                    //     </td>
+                    //   );
+                    // }
 
                     if (col.key === "dsSPDV") {
                       return (
@@ -510,7 +557,7 @@ function ApplicationList_KH() {
                         </td>
                       );
                     }
-
+                    //hoàn thiện chỗ này
                     if (col.key === "hanXuLy") {
                       if (app.trangThaiVuViec === "5") {
                         return <td key={col.key} className="p-2 font-semibold"></td>;
@@ -587,34 +634,6 @@ function ApplicationList_KH() {
                         </td>
                       );
                     }
-                    if (col.key === "trangThaiVuViec") {
-                      let text = "";
-                      switch (app.trangThaiVuViec) {
-                        case "1":
-                          text = "Đang giải quyết";
-                          break;
-                        case "2":
-                          text = "Cấp bằng";
-                          break;
-                        case "3":
-                          text = "Từ chối";
-                          break;
-                        case "4":
-                          text = "Rút đơn";
-                          break;
-                        case "5":
-                          text = "Đóng đơn";
-                          break;
-                        default:
-                          text = "Không xác định";
-                          break;
-                      }
-                      return (
-                        <td key={col.key} className="p-2 text-table">
-                          {text}
-                        </td>
-                      );
-                    }
                     if (col.key === "trangThaiHoanThienHoSoTaiLieu") {
                       return (
                         <td className={`p-2 min-w-[120px] ${colIndex < columns.length - 1 ? "" : ""}`} key={col.key}>
@@ -670,19 +689,19 @@ function ApplicationList_KH() {
                         </td>
                       );
                     }
+
                     return (
                       <td key={col.key} className={commonClass}>
                         {content}
                       </td>
                     );
                   })}
-
                   <td className="p-2 text-table">
                     {(role === "admin" || role === "staff") && app.donGoc !== 1 && (
                       <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                         <button
                           className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
-                          onClick={() => navigate(`/applicationedit_kh/${app.maDonDangKy}`)}
+                          onClick={() => navigate(`/applicationedit/${app.maDonDangKy}`)}
                         >
                           📝
                         </button>
@@ -763,4 +782,4 @@ function ApplicationList_KH() {
   );
 }
 
-export default ApplicationList_KH;
+export default Application_SD_NH_VNList;

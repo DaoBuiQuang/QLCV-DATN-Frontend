@@ -43,6 +43,7 @@ function ApplicationEdit_KH() {
     const [maNhanHieu, setMaNhanHieu] = useState("");
     const [tenNhanHieu, setTenNhanHieu] = useState("");
     const [linkAnh, setLinkAnh] = useState("");
+    const isKH = true;
     const nhanHieu = {
         maNhanHieu,
         tenNhanHieu,
@@ -566,6 +567,7 @@ function ApplicationEdit_KH() {
                                 setNgayHetHanBang={setNgayHetHanBang}
                                 ngayGuiBangChoKH={ngayGuiBangChoKH}
                                 setNgayGuiBangChoKH={setNgayGuiBangChoKH}
+                                
                             />
                         </div>
                         <div className="col-span-2">
@@ -577,6 +579,8 @@ function ApplicationEdit_KH() {
                                 setGiayUyQuyenGoc={setGiayUyQuyenGoc}
                                 maUyQuyen={maUyQuyen}
                                 setMaUyQuyen={setMaUyQuyen}
+                                isKH={isKH}
+                                maDonDangKy={maDonDangKy}
                             />
                         </div>
                         {/* )} */}

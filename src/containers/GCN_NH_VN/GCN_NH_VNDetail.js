@@ -7,6 +7,7 @@ import GCN_NH_Info from "../../components/commom/GCN_NH_Info";
 import FormGiaHan from "../../components/commom/FormGiaHan";
 import { showSuccess, showError, showWarning } from "../../components/commom/Notification";
 import DocumentSection_KH from "../../components/TrademarkRegistrationProcess/KH/DocumentSection_KH";
+import FormSuaDoiBang from "../../components/commom/FormSuaDoiBang";
 
 function GCN_NH_VNDetail() {
   const navigate = useNavigate();
@@ -29,7 +30,25 @@ function GCN_NH_VNDetail() {
   const [ngayDangBa, setNgayDangBa] = useState(null);
   const [taiLieuList, setTaiLieuList] = useState([]);
   const [idGCN_NH, setIdGCN_NH] = useState(null);
+  const [showFormSuaDoi, setShowFormSuaDoi] = useState(false);
 
+
+  const [soDonSD, setSoDonSD] = useState("");
+  const [ngayYeuCau, setNgayYeuCau] = useState(null);
+  const [lanSuaDoi, setLanSuaDoi] = useState(1);
+  const [ngayGhiNhanSuaDoi, setNgayGhiNhanSuaDoi] = useState(null);
+  const [duocGhiNhanSuaDoi, setDuocGhiNhanSuaDoi] = useState(false);
+  const [moTaSuaDoi, setMoTaSuaDoi] = useState("");
+  const [suaDoiDaiDien, setSuaDoiDaiDien] = useState(false);
+  const [ndSuaDoiDaiDien, setNdSuaDoiDaiDien] = useState("");
+  const [suaDoiTenChuBang, setSuaDoiTenChuBang] = useState(false);
+  const [ndSuaDoiTenChuBang, setNdSuaDoiTenChuBang] = useState("");
+  const [suaDoiDiaChi, setSuaDoiDiaChi] = useState(false);
+  const [ndSuaDoiDiaChi, setNdSuaDoiDiaChi] = useState("");
+  const [suaNhan, setSuaNhan] = useState(false);
+  const [ndSuaNhan, setNdSuaNhan] = useState("");
+  const [suaNhomSPDV, setSuaNhomSPDV] = useState(false);
+  const [ndSuaNhomSPDV, setNdSuaNhomSPDV] = useState("");
   // ✅ Lấy chi tiết GCN
   const fetchDetail = async () => {
     try {
@@ -85,6 +104,39 @@ function GCN_NH_VNDetail() {
       message.error("Đã xảy ra lỗi khi thêm đơn gia hạn!");
     }
   };
+  const handleSubmitSuaDoi = async () => {
+        try {
+            await callAPI({
+                method: "post",
+                endpoint: "/application_sd_gcn_nh_vn/add",
+                data: {
+                    maHoSo: data.maHoSo,
+                    idGCN_NH_Cu: id,
+                    soDonSD,
+                    ngayYeuCau,
+                    lanSuaDoi,
+                    ngayGhiNhanSuaDoi,
+                    duocGhiNhanSuaDoi,
+                    moTaSuaDoi,
+                    suaDoiDaiDien,
+                    ndSuaDoiDaiDien,
+                    suaDoiTenChuBang,
+                    ndSuaDoiTenChuBang,
+                    suaDoiDiaChi,
+                    ndSuaDoiDiaChi,
+                    suaNhan,
+                    ndSuaNhan,
+                    suaNhomSPDV,
+                    ndSuaNhomSPDV,
+                },
+            });
+            await showSuccess("Thành công!", "Thêm đơn sửa đổi giấy chứng nhận nhãn hiệu thành công!");
+            navigate(-1);
+        } catch (error) {
+            showError("Thất bại!", "Đã xảy ra lỗi.", error);
+            console.error("Lỗi khi Thêm đơn sửa đổi giấy chứng nhận nhãn hiệu!", error);
+        }
+    };
   const handleTaiLieuChange = (list) => {
     setTaiLieuList(list);
   };
@@ -137,16 +189,67 @@ function GCN_NH_VNDetail() {
           >
             Thêm mới Đơn Gia Hạn
           </button>
-
-
-
           <button
-            onClick={() => navigate("/applicationadd")}
+            onClick={() => setShowFormSuaDoi(true)}
             className="bg-[#009999] hover:bg-[#007a7a] text-white font-medium px-6 py-3 rounded-lg shadow transition"
           >
             Thêm mới Đơn Sửa Đổi
           </button>
+          <button
+            onClick={() => setShowFormSuaDoi(true)}
+            className="bg-[#009999] hover:bg-[#007a7a] text-white font-medium px-6 py-3 rounded-lg shadow transition"
+          >
+            Thêm mới Đơn chuyển nhượng
+          </button>
         </div>
+        {showFormSuaDoi && (
+          <div className="mt-10 border-t pt-6">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+              Thêm mới Đơn Sửa Đổi
+            </h3>
+
+            <FormSuaDoiBang
+              idGCN_NH={idGCN_NH}
+              soDonSD={soDonSD}
+              setSoDonSD={setSoDonSD}
+              lanSuaDoi={lanSuaDoi}
+              setLanSuaDoi={setLanSuaDoi}
+              ngayYeuCau={ngayYeuCau}
+              setNgayYeuCau={setNgayYeuCau}
+              ngayGhiNhanSuaDoi={ngayGhiNhanSuaDoi}
+              setNgayGhiNhanSuaDoi={setNgayGhiNhanSuaDoi}
+              duocGhiNhanSuaDoi={duocGhiNhanSuaDoi}
+              setDuocGhiNhanSuaDoi={setDuocGhiNhanSuaDoi}
+              moTaSuaDoi={moTaSuaDoi}
+              setMoTaSuaDoi={setMoTaSuaDoi}
+              suaDoiDaiDien={suaDoiDaiDien}
+              setSuaDoiDaiDien={setSuaDoiDaiDien}
+              ndSuaDoiDaiDien={ndSuaDoiDaiDien}
+              setNdSuaDoiDaiDien={setNdSuaDoiDaiDien}
+              suaDoiTenChuBang={suaDoiTenChuBang}
+              setSuaDoiTenChuBang={setSuaDoiTenChuBang}
+              ndSuaDoiTenChuBang={ndSuaDoiTenChuBang}
+              setNdSuaDoiTenChuBang={setNdSuaDoiTenChuBang}
+              suaDoiDiaChi={suaDoiDiaChi}
+              setSuaDoiDiaChi={setSuaDoiDiaChi}
+              ndSuaDoiDiaChi={ndSuaDoiDiaChi}
+              setNdSuaDoiDiaChi={setNdSuaDoiDiaChi}
+              onClose={() => setShowFormSuaDoi(false)}
+            />
+            <div className="flex justify-end mt-6">
+              <Button
+                type="default"
+                className="bg-gray-500 text-white"
+                onClick={() => setShowFormSuaDoi(false)}
+              >
+                Đóng
+              </Button>
+              <Button type="primary" className="bg-[#009999]" onClick={handleSubmitSuaDoi}>
+                Lưu Đơn sửa đổi
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* ✅ Form Gia hạn */}
         {showFormGiaHan && (
@@ -183,6 +286,10 @@ function GCN_NH_VNDetail() {
               setNgayQuyetDinhGiaHan={setNgayQuyetDinhGiaHan}
               ngayDangBa={ngayDangBa}
               setNgayDangBa={setNgayDangBa}
+              suaNhomSPDV={suaNhomSPDV}
+              setSuaNhomSPDV={setSuaNhomSPDV}
+              ndSuaNhomSPDV={ndSuaNhomSPDV}
+              setNdSuaNhomSPDV={setNdSuaNhomSPDV}
             />
 
             <div className="flex justify-end mt-6">

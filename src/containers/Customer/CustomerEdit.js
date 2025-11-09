@@ -26,12 +26,16 @@ function CustomerEdit() {
     const [countries, setCountries] = useState([]);
     const [partners, setPartners] = useState([]);
     const [industries, setIndustries] = useState([]);
+    const [groups, setGroups] = useState([]);
+    const [idNhomKhachHang, setIdNhomKhachHang] = useState(null);
     const formatOptions = (data, valueKey, labelKey) => {
+        if (!Array.isArray(data)) return []; // ✅ đảm bảo luôn trả về mảng
         return data.map(item => ({
             value: item[valueKey],
-            label: item[labelKey]
+            label: item[labelKey],
         }));
     };
+
     const [errors, setErrors] = useState({});
     const isFormValid = maKhachHang.trim() !== "" && tenVietTatKH.trim() !== "" && tenKhachHang.trim() !== "";
     const validateField = (field, value) => {
@@ -68,6 +72,8 @@ function CustomerEdit() {
                 setMaNganhNghe(response.maNganhNghe || "");
                 setTrangThai(response.trangThai || "Đang hoạt động");
                 setMaKhachHangCu(response.maKhachHangCu || "");
+                setIdNhomKhachHang(response.idNhomKhachHang || null);
+                
             } catch (error) {
                 console.error("Lỗi khi lấy thông tin khách hàng:", error);
             } finally {
@@ -117,11 +123,25 @@ function CustomerEdit() {
             console.error("Lỗi khi lấy dữ liệu ngành nghề:", error);
         }
     };
+    const fetchGroups = async () => {
+        try {
+            const response = await callAPI({
+                method: "post",
+                endpoint: "/group/list",
+                data: {},
+            });
+            console.log("Response nhóm KH:", response);
+            setGroups(response.data || []); // ✅ Lấy đúng mảng data
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu nhóm khách hàng:", error);
+        }
+    };
 
     useEffect(() => {
         fetchCountries();
         fetchPartners();
         fetchIndustries();
+        fetchGroups();
     }, []);
 
     // Add customer
@@ -143,7 +163,8 @@ function CustomerEdit() {
                     ghiChu,
                     maQuocGia,
                     trangThai,
-                    maNganhNghe: maNganhNghe === "" ? null : maNganhNghe
+                    maNganhNghe: maNganhNghe === "" ? null : maNganhNghe,
+                    idNhomKhachHang: idNhomKhachHang,
                 },
             });
             await showSuccess(t("successTitle"), t("capNhapKhachHangThanhCong"));
@@ -278,7 +299,24 @@ function CustomerEdit() {
                                 isClearable
                             />
                         </div>
+                        <div>
+                            <label className="block text-gray-700 text-left">
+                                Nhóm khách hàng
+                            </label>
+                            <Select
+                                options={formatOptions(groups, "id", "tenNhom")}
+                                value={
+                                    idNhomKhachHang
+                                        ? formatOptions(groups, "id", "tenNhom").find(opt => opt.value === idNhomKhachHang)
+                                        : null
+                                }
+                                onChange={(selectedOption) => setIdNhomKhachHang(selectedOption?.value || "")}
+                                placeholder="Chọn nhóm khách hàng"
+                                className="w-full mt-1 rounded-lg text-left"
+                                isClearable
+                            />
 
+                        </div>
                         <div>
                             <label className="block text-gray-700 text-left">{t("moTa")}</label>
                             <input type="text" value={moTa} onChange={(e) => setMoTa(e.target.value)} className="w-full p-2 mt-1 border rounded-lg text-input" placeholder="Nhập mô tả" />

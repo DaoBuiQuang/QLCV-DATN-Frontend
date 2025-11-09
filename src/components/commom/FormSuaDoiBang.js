@@ -1,12 +1,12 @@
+// components/FormSuaDoi.jsx
 import React from "react";
 import dayjs from "dayjs";
-import { DatePicker, Input, Checkbox, Button } from "antd";
-import { useNavigate } from "react-router-dom";
+import { DatePicker, Input, Checkbox } from "antd";
 import "dayjs/locale/vi";
 
 const { TextArea } = Input;
 
-const FormSuaDoi = ({
+const FormSuaDoiBang = ({
   isEditOnly,
   ngayYeuCau,
   setNgayYeuCau,
@@ -16,10 +16,10 @@ const FormSuaDoi = ({
   setSuaDoiDaiDien,
   ndSuaDoiDaiDien,
   setNdSuaDoiDaiDien,
-  suaDoiTenChuDon,
-  setSuaDoiTenChuDon,
-  ndSuaDoiTenChuDon,
-  setNdSuaDoiTenChuDon,
+  suaDoiTenChuBang,
+  setSuaDoiTenChuBang,
+  ndSuaDoiTenChuBang,
+  setNdSuaDoiTenChuBang,
   suaDoiDiaChi,
   setSuaDoiDiaChi,
   ndSuaDoiDiaChi,
@@ -40,10 +40,7 @@ const FormSuaDoi = ({
   setDuocGhiNhanSuaDoi,
   soDonSD,
   setSoDonSD,
-  maDonDangKyGoc
 }) => {
-  const navigate = useNavigate();
-
   // helper: render checkbox + ô nhập ND
   const renderSuaDoiItem = (label, checked, setChecked, value, setValue) => (
     <div className="border rounded-lg p-3 bg-gray-50 space-y-2">
@@ -52,7 +49,7 @@ const FormSuaDoi = ({
           checked={checked || false}
           onChange={(e) => setChecked(e.target.checked)}
           className="!m-0"
-          disabled={isEditOnly}
+          disabled={isEditOnly} // ✅ Disable khi ở chế độ xem
         />
         <span className="font-medium">{label}</span>
       </div>
@@ -63,29 +60,18 @@ const FormSuaDoi = ({
           placeholder={`Nhập nội dung sửa đổi ${label.toLowerCase()}`}
           value={value || ""}
           onChange={(e) => setValue(e.target.value)}
-          disabled={isEditOnly}
+          disabled={isEditOnly} // ✅ Disable ô nhập khi isEditOnly = true
         />
       )}
     </div>
   );
 
+
   return (
     <div className="flex-1">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-semibold text-blue-700 uppercase">
-          📌 Thông tin đơn sửa đổi
-        </h3>
-
-        {/* ✅ Nếu có mã đơn gốc thì hiển thị nút chuyển */}
-        {maDonDangKyGoc && (
-          <Button
-            type="link"
-            onClick={() => navigate(`/applicationdetail/${maDonDangKyGoc}`)}
-          >
-            Xem đơn gốc ({maDonDangKyGoc})
-          </Button>
-        )}
-      </div>
+      <h3 className="text-lg font-semibold text-blue-700 mb-2 uppercase">
+        📌 Thông tin đơn sửa đổi
+      </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Số đơn */}
@@ -126,7 +112,7 @@ const FormSuaDoi = ({
       {/* Các phần sửa đổi */}
       <div className="mt-4 space-y-3">
         {renderSuaDoiItem("Đại diện", suaDoiDaiDien, setSuaDoiDaiDien, ndSuaDoiDaiDien, setNdSuaDoiDaiDien)}
-        {renderSuaDoiItem("Tên chủ đơn", suaDoiTenChuDon, setSuaDoiTenChuDon, ndSuaDoiTenChuDon, setNdSuaDoiTenChuDon)}
+        {renderSuaDoiItem("Tên chủ bằng", suaDoiTenChuBang, setSuaDoiTenChuBang, ndSuaDoiTenChuBang, setNdSuaDoiTenChuBang)}
         {renderSuaDoiItem("Địa chỉ", suaDoiDiaChi, setSuaDoiDiaChi, ndSuaDoiDiaChi, setNdSuaDoiDiaChi)}
         {renderSuaDoiItem("Nhãn", suaNhan, setSuaNhan, ndSuaNhan, setNdSuaNhan)}
         {renderSuaDoiItem("Nhóm SP/DV", suaNhomSPDV, setSuaNhomSPDV, ndSuaNhomSPDV, setNdSuaNhomSPDV)}
@@ -170,4 +156,4 @@ const FormSuaDoi = ({
   );
 };
 
-export default FormSuaDoi;
+export default FormSuaDoiBang;

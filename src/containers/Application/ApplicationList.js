@@ -68,6 +68,7 @@ function ApplicationList() {
     { label: "Tên khách hàng", labelEn: "Client Name", key: "tenKhachHang" },
     { label: "Tên đối tác", labelEn: "Partner Name", key: "tenDoiTac" },
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
+    { label: "Ảnh nhãn hiệu", labelEn: "Image", key: "linkAnh" },
     { label: "Nhóm SPDV", labelEn: "Class", key: "dsSPDV" },
     { label: "Tình trạng xử lý đơn", labelEn: "Next stage", key: "tinhTrangDon" },
     { label: "Trạng thái đơn", labelEn: "Next stage", key: "trangThaiVuViec" },
@@ -414,7 +415,6 @@ function ApplicationList() {
       </div>
 
       <div class="overflow-x-auto mt-4 overflow-hidden rounded-lg border shadow">
-
         <Spin spinning={loading} tip="Loading..." size="large">
           <table className="w-full border-collapse bg-white text-sm ">
             <thead>
@@ -673,6 +673,22 @@ function ApplicationList() {
                         </td>
                       );
                     }
+                    if (col.key === "linkAnh") {
+                      return (
+                        <td key={col.key} className={commonClass}>
+                          {typeof content === "string" && content.startsWith("data:image/") ? (
+                            <img
+                              src={content}
+                              alt="Ảnh"
+                              className="mx-auto max-h-20 rounded shadow-sm object-contain"
+                            />
+                          ) : (
+                            <span className="text-gray-500 italic">Không có ảnh</span>
+                          )}
+                        </td>
+                      );
+                    }
+
                     return (
                       <td key={col.key} className={commonClass}>
                         {content}
@@ -681,7 +697,7 @@ function ApplicationList() {
                   })}
 
                   <td className="p-2 text-table">
-                    {(role === "admin" || role === "staff") && (
+                    {(role === "admin" || role === "staff") && app.donGoc !== 1 && (
                       <div className="hidden group-hover:flex gap-2 absolute right-2 top-1/2 -translate-y-1/2 bg-white p-1 rounded shadow-md z-10">
                         <button
                           className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"

@@ -92,19 +92,25 @@ function MenuLeft() {
                     </NavLink>
                   </li>
                   <li>
+                    <NavLink to="/application_sd_nh_vnlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn sửa đổi đơn đăng ký</span>
+                    </NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn gia hạn GCN</span>
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                    <NavLink to="/application_sd_gcn_nh_vn_list" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn sửa đổi GCN</span>
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                    <NavLink to="/application_cn_gcn_nh_vn_list" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn chuyển nhượng GCN</span>
                     </NavLink>
@@ -144,14 +150,10 @@ function MenuLeft() {
                 <></>
               )}
 
-              {renderMenuGroup(
-                "vietnam",
-                "tuvan",
-                "Tư vấn chung",
-                (open) => <Handshake size={16} color={open ? "#009999" : undefined} />,
-                <></>
-              )}
-
+              <NavLink to="/generaladvicelist_vn" className={navLinkClass}>
+                <FileText size={14} />
+                <span className="text-left w-full">Danh sách tư vấn chung</span>
+              </NavLink>
               <li>
                 <NavLink to="/caselist" className={navLinkClass}>
                   <FileText size={14} />
@@ -246,19 +248,25 @@ function MenuLeft() {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                    <NavLink to="/application_sd_nh_khlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Đơn sửa đổi đơn đăng ký</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/application_gh_nh_kh_list" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn gia hạn GCN</span>
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                    <NavLink to="/application_sd_gcn_nh_khlist" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn sửa đổi GCN</span>
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
+                    <NavLink to="/application_cn_nh_khlist" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn chuyển nhượng GCN</span>
                     </NavLink>
@@ -298,13 +306,10 @@ function MenuLeft() {
                 <></>
               )}
 
-              {renderMenuGroup(
-                "cambodia",
-                "tuvan",
-                "Tư vấn chung",
-                (open) => <Handshake size={16} color={open ? "#009999" : undefined} />,
-                <></>
-              )}
+              <NavLink to="/generaladvicelist_kh" className={navLinkClass}>
+                <FileText size={14} />
+                <span className="text-left w-full">Danh sách tư vấn chung</span>
+              </NavLink>
 
               <li>
                 <NavLink to="/case_khlist" className={navLinkClass}>
@@ -370,12 +375,6 @@ function MenuLeft() {
             (open) => <Search size={16} color={open ? "#009999" : undefined} />,
             <>
               <li>
-                <NavLink to="/brandlist" className={navLinkClass}>
-                  <Tag size={14} />
-                  <span className="text-left w-full">{t("nhanHieu")}</span>
-                </NavLink>
-              </li>
-              <li>
                 <NavLink to="/vuviec_bill" className={navLinkClass}>
                   <FileText size={14} />
                   <span className="text-left w-full">Billing</span>
@@ -407,6 +406,24 @@ function MenuLeft() {
                 <NavLink to="/partnerlist" className={navLinkClass}>
                   <Handshake size={14} />
                   <span className="text-left w-full">{t("doiTac")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/brandlist" className={navLinkClass}>
+                  <Tag size={14} />
+                  <span className="text-left w-full">{t("nhanHieu")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/grouplist" className={navLinkClass}>
+                  <Users size={14} />
+                  <span className="text-left w-full">{"Nhóm khách hàng"}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/contactpersonlist" className={navLinkClass}>
+                  <Users size={14} />
+                  <span className="text-left w-full">{"Người liên hệ"}</span>
                 </NavLink>
               </li>
               <li>

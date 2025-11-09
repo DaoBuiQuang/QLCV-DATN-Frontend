@@ -1,28 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from 'dayjs';
-import callAPI from "../../utils/api";
+import callAPI from "../../utils/api.js";
 import Select from "react-select";
-import DocumentSection from "../../components/UpdateDocument/DocumentSection";
-import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication";
-import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination";
-import ReplyContentRating from "../../components/TrademarkRegistrationProcess/ReplyContentRating";
-import DiphimaProcess from "../../components/TrademarkRegistrationProcess/DiphimaProcess";
-import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation";
-import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview";
-import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation";
+import DocumentSection from "../../components/UpdateDocument/DocumentSection.js";
+import AnnouncementOfApplication from "../../components/TrademarkRegistrationProcess/AnnouncementOfApplication.js";
+import FormalDetermination from "../../components/TrademarkRegistrationProcess/FormalDetermination.js";
+import ReplyContentRating from "../../components/TrademarkRegistrationProcess/ReplyContentRating.js";
+import DiphimaProcess from "../../components/TrademarkRegistrationProcess/DiphimaProcess.js";
+import DegreeInformation from "../../components/TrademarkRegistrationProcess/DegreeInformation.js";
+import ContentReview from "../../components/TrademarkRegistrationProcess/ContentReview.js";
+import CompleteDocumentation from "../../components/TrademarkRegistrationProcess/CompleteDocumentation.js";
 import DonProgress from "../../components/commom/DonProgess.js";
 // import ExportWordButton from "../../components/ExportFile/ExportWordButton.js";
 import { DatePicker, Radio } from 'antd';
 import 'dayjs/locale/vi';
-import { showSuccess, showError } from "../../components/commom/Notification";
-import BrandBasicForm from "../../components/BrandBasicForm";
+import { showSuccess, showError } from "../../components/commom/Notification.js";
+import BrandBasicForm from "../../components/BrandBasicForm.js";
 import { Spin } from "antd";
 import FormHoSo from "../../components/commom/FormHoSo.js";
 import FormSuaDoi from "../../components/commom/FormSuaDoi.js";
 import DSVuViec from "../../components/VuViecForm/DSVuViec.js";
 import ThongTinHoSo from "../../components/commom/ThongTinHoSo.js";
-function Application_SD_NH_VNAdd() {
+function Application_SD_NH_KHAdd() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const isViewOnly = true
@@ -351,7 +351,7 @@ function Application_SD_NH_VNAdd() {
         try {
             const response = await callAPI({
                 method: "post",
-                endpoint: "application/fulldetail",
+                endpoint: "application_kh/fulldetail",
                 data: { maDonDangKy }
             });
 
@@ -425,7 +425,7 @@ function Application_SD_NH_VNAdd() {
         try {
             await callAPI({
                 method: "post",
-                endpoint: "/application_sd_nh_vn/add",
+                endpoint: "/application_sd_nh_kh/add",
                 data: {
                     maHoSo: maHoSoVuViec,
                     maDonDangKyCu: maDonDangKy,
@@ -474,11 +474,11 @@ function Application_SD_NH_VNAdd() {
             <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-semibold text-gray-700 uppercase">
-                        📌 TẠO ĐƠN SỬA ĐỔI NHÃN HIỆU
+                        📌 TẠO ĐƠN SỬA ĐỔI NHÃN HIỆU CAMPUCHIA
                     </h2>
                     <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg"
-                        alt="Cờ Việt Nam"
+                        src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg"
+                        alt="Cờ Campuchia"
                         className="w-20 h-15"
                     />
                 </div>
@@ -530,7 +530,7 @@ function Application_SD_NH_VNAdd() {
                     isViewOnly={isViewOnly}
                 />
 
-                 <FormSuaDoi
+                <FormSuaDoi
 
                     ngayYeuCau={ngayYeuCau}
                     setNgayYeuCau={setNgayYeuCau}
@@ -606,4 +606,4 @@ function Application_SD_NH_VNAdd() {
     );
 }
 
-export default Application_SD_NH_VNAdd;
+export default Application_SD_NH_KHAdd;

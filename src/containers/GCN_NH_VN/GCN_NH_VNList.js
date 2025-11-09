@@ -130,6 +130,7 @@ function GCN_NH_VNList() {
               <th className="p-2 text-table">Tên chủ bằng</th>
               <th className="p-2 text-table">Đại diện SHCN</th>
               <th className="p-2 text-table">Tên nhãn hiệu</th>
+              <th className="p-2 text-table">Ảnh nhãn hiệu</th>
               <th className="p-2 text-table">Nhóm SPDV</th>
               <th className="p-2 text-table">Ngày nộp đơn</th>
               <th className="p-2 text-table">Ngày cấp bằng</th>
@@ -159,6 +160,17 @@ function GCN_NH_VNList() {
                 <td className="p-2 text-table">{gcn_nh.tenKhachHang}</td>
                 <td className="p-2 text-table">{gcn_nh.tenDoiTac}</td>
                 <td className="p-2 text-table">{gcn_nh.tenNhanHieu}</td>
+                <td className="p-2 text-table">
+                  {typeof gcn_nh.linkAnh === "string" && gcn_nh.linkAnh.startsWith("data:image/") ? (
+                    <img
+                      src={gcn_nh.linkAnh}
+                      alt="Ảnh nhãn hiệu"
+                      className="mx-auto max-h-20 rounded shadow-sm object-contain"
+                    />
+                  ) : (
+                    <span className="text-gray-500 italic">Không có ảnh</span>
+                  )}
+                </td>
                 {/* <td className="p-2 text-table">Màu</td> */}
                 <td className="p-2 text-table">{gcn_nh.dsNhomSPDV}</td>
                 <td className="p-2 text-table">{gcn_nh.ngayNopDon ? new Date(gcn_nh.ngayNopDon).toLocaleDateString("vi-VN") : ""}</td>

@@ -164,10 +164,27 @@ function FormHoSo({
                     <input
                         type="text"
                         value={maHoSoVuViec}
-                        onChange={(e) => { setMaHoSoVuViec(e.target.value); validateField("maHoSoVuViec", e.target.value); }}
-                        className="w-full p-2 mt-1 border rounded-lg text-input h-10"
+                        onChange={(e) => {
+                            if (!idKhachHang) {
+                                showError(
+                                    "Thất bại!",
+                                    "Vui lòng chọn khách hàng trước.",
+                                    new Error("Mã hồ sơ yêu cầu chọn khách hàng.")
+                                );
+                                setErrors(prev => ({ ...prev, idKhachHang: "Vui lòng chọn khách hàng trước" }));
+                                return; // không cập nhật giá trị
+                            }
+
+                            const val = e.target.value;
+                            setErrors(prev => ({ ...prev, idKhachHang: undefined }));
+                            setMaHoSoVuViec(val);
+                            validateField("maHoSoVuViec", val);
+                        }}
+                      
                         placeholder="Chọn khách hàng để ra mã hồ sơ"
+                        className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                     />
+
                     {errors.maHoSoVuViec && <p className="text-red-500 text-xs mt-1 text-left">{errors.maHoSoVuViec}</p>}
                 </div>
                 <div>
@@ -179,6 +196,7 @@ function FormHoSo({
                         placeholder="Chọn loại đơn"
                         className="w-full mt-1 rounded-lg text-left"
                         isClearable
+                        isDisabled
                     />
                 </div>
                 <div>
@@ -227,7 +245,7 @@ function FormHoSo({
                         className="w-full mt-1 rounded-lg h-10 text-left"
                         isClearable
                     />
-                    {errors.maKhachHang && <p className="text-red-500 text-xs mt-1 text-left">{errors.idKhachHang}</p>}
+                    {errors.idKhachHang && <p className="text-red-500 text-xs mt-1 text-left">{errors.idKhachHang}</p>}
                 </div>
 
                 <div>

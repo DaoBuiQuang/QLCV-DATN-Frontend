@@ -100,6 +100,25 @@ import AffidavitList from "../containers/GCN_NH_CAM/AffidavitList.js";
 import GCN_NH_CAMEdit from "../containers/GCN_NH_CAM/GCN_NH_CAMEdit.js";
 import AffdavitEdit from "../containers/GCN_NH_CAM/AffidavitEdit.js";
 import GCN_NH_VNEdit from "../containers/GCN_NH_VN/GCN_NH_VNEdit.js";
+import Application_GH_NH_KHList from "../containers/Application_GH_NH_KH/Application_GH_NH_KHList.js";
+import Application_GH_NH_KHAdd from "../containers/Application_GH_NH_KH/Application_GH_NH_KHAdd.js";
+import Application_GH_NH_KHEdit from "../containers/Application_GH_NH_KH/Application_GH_NH_KHEdit.js";
+import Application_GH_NH_KHDetail from "../containers/Application_GH_NH_KH/Application_GH_NH_KHDetail.js";
+import GroupList from "../containers/Group/GroupList.js";
+import GroupAdd from "../containers/Group/GroupAdd.js";
+import GroupEdit from "../containers/Group/GroupEdit.js";
+import GeneralAdviceList_VN from "../containers/GeneralAdvice/GeneralAdviceList_VN.js";
+import GeneralAdviceList_KH from "../containers/GeneralAdvice/GeneralAdviceList_KH.js";
+import GeneralAdviceAdd_VN from "../containers/GeneralAdvice/GeneralAdviceAdd_VN.js";
+import GeneralAdviceEdit_VN from "../containers/GeneralAdvice/GeneralAdviceEdit_VN.js";
+import GeneralAdviceAdd_KH from "../containers/GeneralAdvice/GeneralAdviceAdd_KH.js";
+import GeneralAdviceEdit_KH from "../containers/GeneralAdvice/GeneralAdviceEdit_KH.js";
+import Application_SD_NH_KHAdd from "../containers/Application_SD_NH_KH/Application_SD_NH_KHAdd.js";
+import ContactPersonList from "../containers/ContactPerson/ContactPersonList.js";
+import ContactPersonAdd from "../containers/ContactPerson/ContactPersonAdd.js";
+import ContactPersonEdit from "../containers/ContactPerson/ContactPersonEdit.js";
+import Application_SD_NH_VNList from "../containers/Application_SD_NH_VN/Application_SD_NH_VNList.js";
+import Application_SD_NH_KHList from "../containers/Application_SD_NH_KH/Application_SD_NH_KHList.js";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -258,9 +277,16 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/application_gh_nh_vn_edit/:id" element={<Application_GH_NH_VNEdit></Application_GH_NH_VNEdit>} />
           <Route path="/application_gh_nh_vn_detail/:id" element={<Application_GH_NH_VNDetail></Application_GH_NH_VNDetail>} />
 
+          <Route path="/application_gh_nh_kh_list" element={<Application_GH_NH_KHList></Application_GH_NH_KHList>} />
+          <Route path="/application_gh_nh_kh_add" element={<Application_GH_NH_KHAdd></Application_GH_NH_KHAdd>} />
+          <Route path="/application_gh_nh_kh_edit/:id" element={<Application_GH_NH_KHEdit></Application_GH_NH_KHEdit>} />
+          <Route path="/application_gh_nh_kh_detail/:id" element={<Application_GH_NH_KHDetail></Application_GH_NH_KHDetail>} />
+
           <Route path="/application_sd_nh_vn_list" element={<Application_GH_VNList></Application_GH_VNList>} />
           <Route path="/application_sd_nh_vn_add/:maDonDangKy" element={<Application_SD_NH_VNAdd></Application_SD_NH_VNAdd>} />
           <Route path="/application_td_nh_vn_add/:maDonDangKy" element={<Application_TD_NH_VNAdd></Application_TD_NH_VNAdd>} />
+
+          <Route path="/application_sd_nh_kh_add/:maDonDangKy" element={<Application_SD_NH_KHAdd></Application_SD_NH_KHAdd>} />
 
           <Route path="/vuviec_bill" element={<VuViec_Bill_VN_FullList></VuViec_Bill_VN_FullList>} />
           <Route path="/vuviec_bill_da_duyet" element={<VuViec_BillList></VuViec_BillList>} />
@@ -289,6 +315,24 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/gcn_nh_camdetail/:id" element={<GCN_NH_CAMDetail></GCN_NH_CAMDetail>} />
           <Route path="/affidavitlist" element={<AffidavitList></AffidavitList>} />
           <Route path="/affidavitedit/:id" element={<AffdavitEdit></AffdavitEdit>} />
+
+          <Route path="/grouplist" element={<GroupList></GroupList>} />
+          <Route path="/groupadd" element={<GroupAdd></GroupAdd>} />
+          <Route path="/groupedit/:id" element={<GroupEdit></GroupEdit>} />
+
+          <Route path="/generaladvicelist_vn" element={<GeneralAdviceList_VN></GeneralAdviceList_VN>} />
+          <Route path="/generaladviceadd_vn" element={<GeneralAdviceAdd_VN></GeneralAdviceAdd_VN>} />
+          <Route path="/generaladviceedit_vn/:id" element={<GeneralAdviceEdit_VN></GeneralAdviceEdit_VN>} />
+          <Route path="/generaladvicelist_kh" element={<GeneralAdviceList_KH></GeneralAdviceList_KH>} />
+          <Route path="/generaladviceadd_kh" element={<GeneralAdviceAdd_KH></GeneralAdviceAdd_KH>} />
+          <Route path="/generaladviceedit_kh/:id" element={<GeneralAdviceEdit_KH></GeneralAdviceEdit_KH>} />
+
+          <Route path="/contactpersonlist" element={<ContactPersonList></ContactPersonList>} />
+          <Route path="/contactpersonadd" element={<ContactPersonAdd></ContactPersonAdd>} />
+          <Route path="/contactpersonedit/:id" element={<ContactPersonEdit></ContactPersonEdit>} />
+
+                    <Route path="/application_sd_nh_vnlist" element={<Application_SD_NH_VNList></Application_SD_NH_VNList>} />
+                    <Route path="/application_sd_nh_khlist" element={<Application_SD_NH_KHList></Application_SD_NH_KHList>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

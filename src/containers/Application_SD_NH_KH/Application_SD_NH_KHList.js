@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { DatePicker, Modal, Spin, Pagination } from 'antd';
 import { useTranslation } from "react-i18next";
-function ApplicationList_KH() {
+function Application_SD_NH_KHList() {
   const role = useSelector((state) => state.auth.role);
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
@@ -109,7 +109,7 @@ function ApplicationList_KH() {
       localStorage.setItem("applicationListPage", page);
       const response = await callAPI({
         method: "post",
-        endpoint: "/application_kh/list",
+        endpoint: "/application_sd_nh_kh/list",
         data: { searchText: searchValue, customerName, partnerName, brandName, maSPDVList: selectedProductAndService, trangThaiDon: selectedTrangThaiDon, fields: selectedFields, filterCondition, pageIndex: page, pageSize: size, },
       });
       setApplications(response.data || []);
@@ -203,7 +203,7 @@ function ApplicationList_KH() {
   return (
     <div className="p-1 bg-gray-100 min-h-screen">
       <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng ký nhãn hiệu Campuchia</h2>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">📌 Danh sách đơn đăng ký đã sửa đổi nhãn hiệu Campuchia</h2>
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
           <input
             type="text"
@@ -763,4 +763,4 @@ function ApplicationList_KH() {
   );
 }
 
-export default ApplicationList_KH;
+export default Application_SD_NH_KHList;
