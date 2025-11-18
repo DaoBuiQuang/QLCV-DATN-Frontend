@@ -119,6 +119,10 @@ import ContactPersonAdd from "../containers/ContactPerson/ContactPersonAdd.js";
 import ContactPersonEdit from "../containers/ContactPerson/ContactPersonEdit.js";
 import Application_SD_NH_VNList from "../containers/Application_SD_NH_VN/Application_SD_NH_VNList.js";
 import Application_SD_NH_KHList from "../containers/Application_SD_NH_KH/Application_SD_NH_KHList.js";
+import GCN_NH_VN_SDList from "../containers/GCN_NH_VN_SD/GCN_NH_VN_SDList.js";
+import GCN_NH_CAM_SDList from "../containers/GCN_NH_CAM_SD/GCN_NH_CAM_SDList.js";
+import Application_SD_GCN_NH_KHList from "../containers/GCN_NH_CAM_SD/Application_SD_GCN_NH_KHList.js";
+import Application_SD_GCN_NH_VNList from "../containers/GCN_NH_VN_SD/Application_SD_GCN_NH_VNList.js";
 
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -306,10 +310,12 @@ const AppRoutes = ({ notification, setNotification }) => {
 
           <Route path="/case_khlist" element={<Case_KHList></Case_KHList>} />
           <Route path="/gcn_nhlist" element={<GCN_NH_VNList></GCN_NH_VNList>} />
+          <Route path="/gcn_nh_sdlist" element={<GCN_NH_VN_SDList></GCN_NH_VN_SDList>} />
           <Route path="/gcn_nhdetail/:id" element={<GCN_NH_VNDetail></GCN_NH_VNDetail>} />
           <Route path="/gcn_nhadd" element={<GCN_NH_VNAdd></GCN_NH_VNAdd>} />
           <Route path="/gcn_nh_vnedit/:id" element={<GCN_NH_VNEdit></GCN_NH_VNEdit>} />
           <Route path="/gcn_nh_camlist" element={<GCN_NH_CAMList></GCN_NH_CAMList>} />
+          <Route path="/gcn_nh_sd_camlist" element={<GCN_NH_CAM_SDList></GCN_NH_CAM_SDList>} />
           <Route path="/gcn_nh_camadd" element={<GCN_NH_CAMAdd></GCN_NH_CAMAdd>} />
           <Route path="/gcn_nh_camedit/:id" element={<GCN_NH_CAMEdit></GCN_NH_CAMEdit>} />
           <Route path="/gcn_nh_camdetail/:id" element={<GCN_NH_CAMDetail></GCN_NH_CAMDetail>} />
@@ -331,8 +337,11 @@ const AppRoutes = ({ notification, setNotification }) => {
           <Route path="/contactpersonadd" element={<ContactPersonAdd></ContactPersonAdd>} />
           <Route path="/contactpersonedit/:id" element={<ContactPersonEdit></ContactPersonEdit>} />
 
-                    <Route path="/application_sd_nh_vnlist" element={<Application_SD_NH_VNList></Application_SD_NH_VNList>} />
-                    <Route path="/application_sd_nh_khlist" element={<Application_SD_NH_KHList></Application_SD_NH_KHList>} />
+          <Route path="/application_sd_nh_vnlist" element={<Application_SD_NH_VNList></Application_SD_NH_VNList>} />
+          <Route path="/application_sd_nh_khlist" element={<Application_SD_NH_KHList></Application_SD_NH_KHList>} />
+
+          <Route path="/application_sd_gcn_nh_khlist" element={<Application_SD_GCN_NH_KHList></Application_SD_GCN_NH_KHList>} />
+          <Route path="/application_sd_gcn_nh_vnlist" element={<Application_SD_GCN_NH_VNList></Application_SD_GCN_NH_VNList>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

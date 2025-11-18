@@ -80,6 +80,7 @@ function ApplicationDetailTest() {
     const [ghiChu, setGhiChu] = useState("");
     const [loaiDon, setLoaiDon] = useState(null);
     const [donGoc, setDonGoc] = useState(null);
+    const [donSuaDoi, setDonSuaDoi] = useState({});
     const [isModalHTOpen, setIsModalHTOpen] = useState(false);
     const [isModalNDOpen, setIsModalNDOpen] = useState(false);
     const formatVietnameseDate = (date = new Date()) => {
@@ -196,6 +197,7 @@ function ApplicationDetailTest() {
                 setGhiChu(response.ghiChu || "");
                 setVuViecList(response.vuViec || []);
                 setDonGoc(response.donGoc || null);
+                setDonSuaDoi(response.donSuaDoi || {});
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -350,10 +352,22 @@ function ApplicationDetailTest() {
                                                 <span>Ngày trả lời TĐND</span>
                                             </div>
                                         )}
-                                        {ngayThongBaoCapBang && (
+                                         {ngayThongBaoCapBang && (
                                             <div className="flex">
                                                 <span className="w-32 font-medium">{formatDateVN(ngayThongBaoCapBang)}</span>
                                                 <span>Ngày thông báo cấp bằng</span>
+                                            </div>
+                                        )}
+                                        {donSuaDoi.ngayYeuCau && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(donSuaDoi.ngayYeuCau)}</span>
+                                                <span>Ngày yêu cầu sửa đổi</span>
+                                            </div>
+                                        )}
+                                        {donSuaDoi.ngayGhiNhanSuaDoi && (
+                                            <div className="flex">
+                                                <span className="w-32 font-medium">{formatDateVN(donSuaDoi.ngayGhiNhanSuaDoi)}</span>
+                                                <span>Ngày ghi nhận sửa đổi</span>
                                             </div>
                                         )}
                                         {ngayNopYKien && (
@@ -404,6 +418,7 @@ function ApplicationDetailTest() {
                                                 <span>Ngày hết hạn bằng</span>
                                             </div>
                                         )}
+
                                     </div>
                                 </div>
 

@@ -98,13 +98,19 @@ function MenuLeft() {
                     </NavLink>
                   </li>
                   <li>
+                    <NavLink to="/gcn_nh_sdlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Giấy chứng nhận(văn bằng) đã sửa đổi</span>
+                    </NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn gia hạn GCN</span>
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/application_sd_gcn_nh_vn_list" className={navLinkClass}>
+                    <NavLink to="/application_sd_gcn_nh_vnlist" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Đơn sửa đổi GCN</span>
                     </NavLink>
@@ -239,6 +245,12 @@ function MenuLeft() {
                     <NavLink to="/gcn_nh_camlist" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Giấy chứng nhận(văn bằng)</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/gcn_nh_sd_camlist" className={navLinkClass}>
+                      <FileText size={14} />
+                      <span className="text-left w-full">Giấy chứng nhận(văn bằng) đã sửa đổi</span>
                     </NavLink>
                   </li>
                   <li>
