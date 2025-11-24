@@ -99,7 +99,8 @@ function ApplicationAdd() {
     const [brands, setBrands] = useState([]);
     const [productAndService, setProductAndService] = useState([]);
     const [idSoBangOld, setIdSoBangOld] = useState(null);
-
+    const [idGUQ, setIdGUQ] = useState(null);
+    const [daiDienSHTT, setDaiDienSHTT] = useState("Công ty tư vấn SHTT IPAC");
     const [errors, setErrors] = useState({});
     const isFormValid =
         (maHoSoVuViec || "").trim() !== "" &&
@@ -324,11 +325,7 @@ function ApplicationAdd() {
                     maHoSo: maHoSoVuViec,
                     loaiDon: loaiDon,
                     idKhachHang: idKhachHang,
-                    // maKhachHang: maKhachHang,
-
                     idDoiTac: idDoiTac,
-                    // maDoiTac: maDoiTac,
-
                     clientsRef: clientsRef,
                     ngayTiepNhan: ngayTiepNhan,
                     ngayXuLy: ngayXuLy,
@@ -378,7 +375,9 @@ function ApplicationAdd() {
                     maUyQuyen: maUyQuyen || null,
                     nhanHieu,
                     vuViecs: vuViecList,
-                    idSoBangOld: idSoBangOld
+                    idSoBangOld: idSoBangOld,
+                    idGUQ: idGUQ,
+                    daiDienSHTT: daiDienSHTT,
                 },
             });
             await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
@@ -449,7 +448,9 @@ function ApplicationAdd() {
                     setNgayDongHS={setNgayDongHS}
                     ngayRutHS={ngayRutHS}
                     setNgayRutHS={setNgayRutHS}
-
+                    daiDienSHTT={daiDienSHTT}
+                    setDaiDienSHTT={setDaiDienSHTT}
+                    
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
@@ -569,6 +570,9 @@ function ApplicationAdd() {
                                 setGiayUyQuyenGoc={setGiayUyQuyenGoc}
                                 maUyQuyen={maUyQuyen}
                                 setMaUyQuyen={setMaUyQuyen}
+                                idGUQ={idGUQ}
+                                setIdGUQ={setIdGUQ}
+                                idKhachHang={idKhachHang}
                             />
                         </div>
                     )}

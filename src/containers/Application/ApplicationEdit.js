@@ -123,6 +123,8 @@ function ApplicationEdit() {
     const [suaNhomSPDV, setSuaNhomSPDV] = useState(false);
     const [ndSuaNhomSPDV, setNdSuaNhomSPDV] = useState("");
     const [maDonDangKyGoc, setMaDonDangKyGoc] = useState(null);
+    const [idGUQ, setIdGUQ] = useState(null);
+    const [daiDienSHTT, setDaiDienSHTT] = useState("Công ty tư vấn SHTT IPAC");
     const [donGoc, setDonGoc] = useState(null);
     const [errors, setErrors] = useState({});
     const isFormValid =
@@ -212,7 +214,7 @@ function ApplicationEdit() {
             setDaChonNgayThamDinhNoiDung(true);
             setDaChonNgayTraLoiThamDinhNoiDung(true);
             setDaChonHoanTatThuTucNhapBang(true);
-            setTrangThaiVuViec(5);
+            setTrangThaiVuViec(2);
         }
         if (ngayNopDon) {
             const duKien = dayjs(ngayNopDon).add(1, 'month').format('YYYY-MM-DD');
@@ -418,6 +420,7 @@ function ApplicationEdit() {
                 setVuViecList(response.vuViec)
                 setTrangThaiVuViec(String(response.trangThaiVuViec || "1"));
                 setDonGoc(response.donGoc || null);
+                setIdGUQ(response.idGUQ || null);
                 //Đơn sửa đổi
                 if (response.donSuaDoi) {
                     setIdDonSuaDoi(response.donSuaDoi.id || null);
@@ -450,6 +453,7 @@ function ApplicationEdit() {
 
     const handleApplication = async () => {
         try {
+            debugger
             await callAPI({
                 method: "put",
                 endpoint: "/application/edit",
@@ -518,6 +522,8 @@ function ApplicationEdit() {
                     nhanHieu,
                     vuViecs: vuViecList,
                     idSoBangOld: idSoBangOld,
+                    idGUQ: idGUQ || null,
+                    daiDienSHTT: daiDienSHTT,
                     donSuaDoi: {
                         id: idDonSuaDoi || null, // 🟢 thêm dòng này
                         soDon: soDonSD || "",
@@ -612,7 +618,8 @@ function ApplicationEdit() {
                         setNgayDongHS={setNgayDongHS}
                         ngayRutHS={ngayRutHS}
                         setNgayRutHS={setNgayRutHS}
-
+                        daiDienSHTT={daiDienSHTT}
+                        setDaiDienSHTT={setDaiDienSHTT}
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
                         <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -735,6 +742,9 @@ function ApplicationEdit() {
                                     setGiayUyQuyenGoc={setGiayUyQuyenGoc}
                                     maUyQuyen={maUyQuyen}
                                     setMaUyQuyen={setMaUyQuyen}
+                                    idGUQ={idGUQ}
+                                    setIdGUQ={setIdGUQ}
+                                    idKhachHang={idKhachHang}
                                 />
                             </div>
                         )}

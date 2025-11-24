@@ -72,7 +72,7 @@ function ApplicationEdit_KH() {
 
     const [trangThaiDon, setTrangThaiDon] = useState("");
     const [buocXuLy, setBuocXuLy] = useState("");
-
+    const [idGUQ, setIdGUQ] = useState(null);
     const [taiLieuList, setTaiLieuList] = useState([]);
     const [vuViecList, setVuViecList] = useState([])
     const [giayUyQuyenGoc, setGiayUyQuyenGoc] = useState(true);
@@ -263,7 +263,7 @@ function ApplicationEdit_KH() {
                 setGiayUyQuyenGoc(response.giayUyQuyenGoc);
                 setMaUyQuyen(response.maUyQuyen || null);
                 setVuViecList(response.vuViec)
-                
+
             }
         } catch (error) {
             console.error("Lỗi khi gọi API chi tiết đơn:", error);
@@ -325,6 +325,7 @@ function ApplicationEdit_KH() {
                     maUyQuyen: maUyQuyen || null,
                     nhanHieu,
                     vuViecs: vuViecList,
+                    idGUQ: idGUQ,
                 },
             });
             await showSuccess("Thành công!", "Cập nhật đơn đăng ký nhãn hiệu thành công!");
@@ -525,6 +526,9 @@ function ApplicationEdit_KH() {
                                 setGiayUyQuyenGoc={setGiayUyQuyenGoc}
                                 maUyQuyen={maUyQuyen}
                                 setMaUyQuyen={setMaUyQuyen}
+                                idGUQ={idGUQ}
+                                setIdGUQ={setIdGUQ}
+                                idKhachHang={idKhachHang}
                             />
                         </div>
                         {/* <div className="col-span-2">
@@ -567,7 +571,7 @@ function ApplicationEdit_KH() {
                                 setNgayHetHanBang={setNgayHetHanBang}
                                 ngayGuiBangChoKH={ngayGuiBangChoKH}
                                 setNgayGuiBangChoKH={setNgayGuiBangChoKH}
-                                
+
                             />
                         </div>
                         <div className="col-span-2">

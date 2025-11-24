@@ -123,7 +123,9 @@ import GCN_NH_VN_SDList from "../containers/GCN_NH_VN_SD/GCN_NH_VN_SDList.js";
 import GCN_NH_CAM_SDList from "../containers/GCN_NH_CAM_SD/GCN_NH_CAM_SDList.js";
 import Application_SD_GCN_NH_KHList from "../containers/GCN_NH_CAM_SD/Application_SD_GCN_NH_KHList.js";
 import Application_SD_GCN_NH_VNList from "../containers/GCN_NH_VN_SD/Application_SD_GCN_NH_VNList.js";
-
+import PowerOfAttorneyAdd from "../containers/PowerOfAttorney/PowerOfAttorneyAdd.js";
+import PowerOfAttorneyEdit from "../containers/PowerOfAttorney/PowerOfAttorneyEdit.js";
+import PowerOfAttorneyList from "../containers/PowerOfAttorney/PowerOfAttorneyList.js";
 const MainLayout = ({ notification, setNotification }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   useEffect(() => {
@@ -342,6 +344,10 @@ const AppRoutes = ({ notification, setNotification }) => {
 
           <Route path="/application_sd_gcn_nh_khlist" element={<Application_SD_GCN_NH_KHList></Application_SD_GCN_NH_KHList>} />
           <Route path="/application_sd_gcn_nh_vnlist" element={<Application_SD_GCN_NH_VNList></Application_SD_GCN_NH_VNList>} />
+
+            <Route path="/power-of-attorneylist" element={<PowerOfAttorneyList></PowerOfAttorneyList>} />
+          <Route path="/power-of-attorneyadd" element={<PowerOfAttorneyAdd></PowerOfAttorneyAdd>} />
+          <Route path="/power-of-attorneyedit/:id" element={<PowerOfAttorneyEdit></PowerOfAttorneyEdit>} />
         </Route>
         <Route path="/login" element={<Login />} />
 

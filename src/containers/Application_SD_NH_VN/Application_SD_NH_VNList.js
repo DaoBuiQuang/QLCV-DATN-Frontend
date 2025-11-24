@@ -65,6 +65,9 @@ function Application_SD_NH_VNList() {
     // { label: "Mã đơn DK", labelEn: "Matter code", key: "maDonDangKy" },
     { label: "Số Đơn", labelEn: "App No", key: "soDon" },
     { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
+    { label: "Ngày yêu cầu sửa đổi", key: "ngayYeuCau" },
+    { label: "Ngày ghi nhận sửa đổi", key: "ngayGhiNhanSuaDoi" },
+    { label: "Lần sửa đổi", key: "lanSuaDoi" },
     { label: "Tên khách hàng", labelEn: "Client Name", key: "tenKhachHang" },
     { label: "Tên đối tác", labelEn: "Partner Name", key: "tenDoiTac" },
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
@@ -91,6 +94,8 @@ function Application_SD_NH_VNList() {
     { label: "Ngày gửi bằng cho khách hàng", key: "ngayGuiBangChoKhachHang" },
     { label: "Loại đơn", labelEn: "Application Type", key: "loaiDon" },
 
+    
+
   ];
   const hiddenFieldKeys = [
     "ngayHoanThanhHoSoTaiLieu",
@@ -105,7 +110,10 @@ function Application_SD_NH_VNList() {
     "ngayGuiBangChoKhachHang",
     "ngayNhanBang",
     "ngayTraLoiKQThamDinhND",
-    "dsSPDV"
+    "dsSPDV",
+    "ngayThongBaoCapBang",
+    "hanNopPhiCapBang",
+    "ngayNopDon",
   ];
   const [showFieldModal, setShowFieldModal] = useState(false);
   const [selectedFields, setSelectedFields] = useState(

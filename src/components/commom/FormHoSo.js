@@ -13,18 +13,16 @@ function FormHoSo({
     soDon, setSoDon,
     ngayNopDon, setNgayNopDon,
     maHoSoVuViec, setMaHoSoVuViec,
-    idKhachHang, setIdKhachHang,
-    maKhachHang, setMaKhachHang,
-    idDoiTac, setIdDoiTac,
-    maDoiTac, setMaDoiTac,
+    idKhachHang, setIdKhachHang, setMaKhachHang,
+    idDoiTac, setIdDoiTac, setMaDoiTac,
     clientsRef, setClientsRef,
     ngayTiepNhan, setNgayTiepNhan,
-    ngayXuLy, setNgayXuLy,
     trangThaiVuViec, setTrangThaiVuViec,
-
     ngayDongHS, setNgayDongHS,
     ngayRutHS, setNgayRutHS,
     loaiDon, setLoaiDon,
+    daiDienSHTT,
+    setDaiDienSHTT
 }) {
     const navigate = useNavigate();
     const [customers, setCustomers] = useState([]);
@@ -137,11 +135,11 @@ function FormHoSo({
         if (trangThaiVuViec != null && trangThaiVuViec !== undefined) {
             const getTrangThaiVuViecLabel = (value) => {
                 const statusMap = {
-                    1: "Đang giải quyết",
-                    2: "Cấp bằng",
-                    3: "Từ chối",
-                    4: "Rút đơn",
-                    5: "Đóng đơn"
+                    '1': "Đang giải quyết",
+                    '2': "Cấp bằng",
+                    '3': "Từ chối",
+                    '4': "Rút đơn",
+                    '5': "Đóng đơn"
                 };
                 return statusMap[value] || "Không xác định";
             };
@@ -180,7 +178,7 @@ function FormHoSo({
                             setMaHoSoVuViec(val);
                             validateField("maHoSoVuViec", val);
                         }}
-                      
+
                         placeholder="Chọn khách hàng để ra mã hồ sơ"
                         className="w-full p-2 mt-1 border rounded-lg text-input h-10"
                     />
@@ -215,16 +213,22 @@ function FormHoSo({
                         <p className="text-red-500 text-xs mt-1 text-left">{errors.noiDungVuViec}</p>
                     )} */}
                 </div>
-                {/* <div >
-                    <label className="block text-gray-700 text-left ">Client's Ref</label>
+                <div>
+                    <label className="block text-gray-700 text-left">Đại diện sở hữu trí tuệ</label>
                     <input
                         type="text"
-                        value={soDon}
-                        placeholder="Nhập số đơn"
-                        onChange={(e) => setSoDon(e.target.value)}
-                        className="w-full p-2 mt-1 border rounded-lg text-input h-10"
+                        value={daiDienSHTT}
+                        onChange={(e) => {
+                            setDaiDienSHTT(e.target.value)
+                            validateField("clientsRef", e.target.value)
+                        }}
+                        placeholder="Nhập đại diện sở hữu trí tuệ"
+                        className="w-full p-2 mt-1 border rounded-lg text-input"
                     />
-                </div> */}
+                    {/* {errors.noiDungVuViec && (
+                        <p className="text-red-500 text-xs mt-1 text-left">{errors.noiDungVuViec}</p>
+                    )} */}
+                </div>
                 <div >
                     <label className="block text-gray-700 text-left ">Số đơn</label>
                     <input

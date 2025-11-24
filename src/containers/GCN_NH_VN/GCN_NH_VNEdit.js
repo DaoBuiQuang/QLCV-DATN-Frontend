@@ -47,6 +47,8 @@ function GCN_NH_VNEdit() {
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maDonDangKy, setMaDonDangKy] = useState("");
     const [trangThaiBang, setTrangThaiThaiBang] = useState(null);
+    const [idGUQ, setIdGUQ] = useState(null);
+    const [dsGiayUyQuyen, setDsGiayUyQuyen] = useState([]);
     const statusOptions = [
         { value: "1", label: "Chưa xử lý" },
         { value: "2", label: "Đang xử lý gia hạn" },
@@ -94,6 +96,7 @@ function GCN_NH_VNEdit() {
                 setDsNhomSPDV(item.dsNhomSPDV || null);
                 setAnhBangBase64(item.anhBang || null);
                 setVuViecList(item.vuViecs || []);
+                setIdGUQ(item.idGUQ || null);
             }
         } catch (error) {
             console.error("❌ Lỗi khi lấy chi tiết GCN_NH:", error);
@@ -149,7 +152,27 @@ function GCN_NH_VNEdit() {
             setHanNopTuyenThe(null);
         }
     }, [ngayCapBang]);
+    useEffect(() => {
+        const fetchGiayUyQuyen = async () => {
+            if (!idKhachHang) return;
 
+            try {
+                const res = await callAPI({
+                    method: "post",
+                    endpoint: "/power-of-attorney/all",
+                    data: { idKhachHang },
+                });
+
+                // res giả sử là array [{ id, soGUQ, ... }]
+                setDsGiayUyQuyen(res);
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách giấy ủy quyền:", error);
+                setDsGiayUyQuyen([]);
+            }
+        };
+
+        fetchGiayUyQuyen();
+    }, [idKhachHang]);
     // Submit
     const handleEditGCN = async () => {
         try {
@@ -173,7 +196,8 @@ function GCN_NH_VNEdit() {
                 hanGiaHan: hanGiaHanBang,
                 hanNopTuyenThe,
                 linkAnh: anhBang,
-                vuViecs: vuViecList
+                vuViecs: vuViecList,
+                idGUQ,
             };
 
             await callAPI({
@@ -413,6 +437,27 @@ function GCN_NH_VNEdit() {
                                 {errors.maNhanHieu}
                             </p>
                         )}
+                    </div>
+                    <div className="w-full">
+                        <label className="block text-gray-700 text-left">
+                            Số giấy ủy quyền
+                        </label>
+                        <Select
+                            options={formatOptionsNew(dsGiayUyQuyen, "id", "soGUQ")}
+                            value={
+                                idGUQ
+                                    ? formatOptionsNew(dsGiayUyQuyen, "id", "soGUQ").find(
+                                        (opt) => opt.value === idGUQ
+                                    )
+                                    : null
+                            }
+                            onChange={(selectedOption) =>
+                                setIdGUQ(selectedOption ? selectedOption.value : null)
+                            }
+                            placeholder="Chọn số giấy ủy quyền"
+                            className="w-full mt-1 rounded-lg text-left"
+                            isClearable
+                        />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Danh sách nhóm Sản phẩm dịch vụ</label>

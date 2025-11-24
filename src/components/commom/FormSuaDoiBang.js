@@ -76,7 +76,7 @@ const FormSuaDoiBang = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Số đơn */}
         <div>
-          <label className="block text-gray-700 text-left">Số đơn sửa đổi</label>
+          <label className="block text-gray-700 text-left">Số sửa đổi</label>
           <Input
             value={soDonSD}
             onChange={(e) => setSoDonSD(e.target.value)}

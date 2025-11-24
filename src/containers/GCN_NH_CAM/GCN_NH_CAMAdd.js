@@ -45,6 +45,8 @@ function GCN_NH_CAMAdd() {
     const [vuViecList, setVuViecList] = useState([]);
     const [maHoSoVuViec, setMaHoSoVuViec] = useState("");
     const [maDonDangKy, setMaDonDangKy] = useState("");
+    const [idGUQ, setIdGUQ] = useState(null);
+    const [dsGiayUyQuyen, setDsGiayUyQuyen] = useState([]);
     const isFormValid =
         soBang.trim() &&
         soDon.trim() &&
@@ -111,7 +113,27 @@ function GCN_NH_CAMAdd() {
             setHanNopTuyenThe(null);
         }
     }, [ngayCapBang]);
+    useEffect(() => {
+        const fetchGiayUyQuyen = async () => {
+            if (!idKhachHang) return;
 
+            try {
+                const res = await callAPI({
+                    method: "post",
+                    endpoint: "/power-of-attorney/all",
+                    data: { idKhachHang },
+                });
+
+                // res giả sử là array [{ id, soGUQ, ... }]
+                setDsGiayUyQuyen(res);
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách giấy ủy quyền:", error);
+                setDsGiayUyQuyen([]);
+            }
+        };
+
+        fetchGiayUyQuyen();
+    }, [idKhachHang]);
     // Submit
     const handleAddGCN = async () => {
         try {
@@ -134,7 +156,8 @@ function GCN_NH_CAMAdd() {
                 hanGiaHanBang,
                 hanNopTuyenThe,
                 anhBangBase64, // gửi base64 lên server
-                vuViecs: vuViecList
+                vuViecs: vuViecList,
+                idGUQ,
             };
 
             await callAPI({
@@ -374,6 +397,27 @@ function GCN_NH_CAMAdd() {
                                 {errors.maNhanHieu}
                             </p>
                         )}
+                    </div>
+                    <div className="w-full">
+                        <label className="block text-gray-700 text-left">
+                            Số giấy ủy quyền
+                        </label>
+                        <Select
+                            options={formatOptionsNew(dsGiayUyQuyen, "id", "soGUQ")}
+                            value={
+                                idGUQ
+                                    ? formatOptionsNew(dsGiayUyQuyen, "id", "soGUQ").find(
+                                        (opt) => opt.value === idGUQ
+                                    )
+                                    : null
+                            }
+                            onChange={(selectedOption) =>
+                                setIdGUQ(selectedOption ? selectedOption.value : null)
+                            }
+                            placeholder="Chọn số giấy ủy quyền"
+                            className="w-full mt-1 rounded-lg text-left"
+                            isClearable
+                        />
                     </div>
                     <div>
                         <label className="block text-gray-700 text-left">Danh sách nhóm Sản phẩm dịch vụ</label>

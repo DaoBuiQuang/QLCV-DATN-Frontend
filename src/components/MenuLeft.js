@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   PieChart, Users, Briefcase, Handshake, Globe, UserCheck,
   FileText, Settings, Tag, ShoppingCart, LayoutDashboard,
-  Key, User, ChevronDown, ChevronUp, DollarSign, Search
+  Key, User, ChevronDown, ChevronUp, DollarSign, Search, FileSignature
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -94,15 +94,15 @@ function MenuLeft() {
                   <li>
                     <NavLink to="/application_sd_nh_vnlist" className={navLinkClass}>
                       <FileText size={14} />
-                      <span className="text-left w-full">Đơn sửa đổi đơn đăng ký</span>
+                      <span className="text-left w-full">Tờ khai sửa đổi đơn đăng ký</span>
                     </NavLink>
                   </li>
-                  <li>
+                  {/* <li>
                     <NavLink to="/gcn_nh_sdlist" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Giấy chứng nhận(văn bằng) đã sửa đổi</span>
                     </NavLink>
-                  </li>
+                  </li> */}
                   <li>
                     <NavLink to="/application_gh_nh_vn_list" className={navLinkClass}>
                       <FileText size={14} />
@@ -247,12 +247,12 @@ function MenuLeft() {
                       <span className="text-left w-full">Giấy chứng nhận(văn bằng)</span>
                     </NavLink>
                   </li>
-                  <li>
+                  {/* <li>
                     <NavLink to="/gcn_nh_sd_camlist" className={navLinkClass}>
                       <FileText size={14} />
                       <span className="text-left w-full">Giấy chứng nhận(văn bằng) đã sửa đổi</span>
                     </NavLink>
-                  </li>
+                  </li> */}
                   <li>
                     <NavLink to="/affidavitlist" className={navLinkClass}>
                       <FileText size={14} />
@@ -262,7 +262,7 @@ function MenuLeft() {
                   <li>
                     <NavLink to="/application_sd_nh_khlist" className={navLinkClass}>
                       <FileText size={14} />
-                      <span className="text-left w-full">Đơn sửa đổi đơn đăng ký</span>
+                      <span className="text-left w-full">Tờ khai sửa đổi đơn đăng ký</span>
                     </NavLink>
                   </li>
                   <li>
@@ -412,6 +412,12 @@ function MenuLeft() {
                 <NavLink to="/customerlist" className={navLinkClass}>
                   <Users size={14} />
                   <span className="text-left w-full">{t("khachHang")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/power-of-attorneylist" className={navLinkClass}>
+                  <FileSignature size={14} />
+                  <span className="text-left w-full">{t("Giấy ủy quyền")}</span>
                 </NavLink>
               </li>
               <li>

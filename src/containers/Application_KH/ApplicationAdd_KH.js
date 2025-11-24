@@ -62,7 +62,7 @@ function ApplicationAdd_KH() {
     const [quyetDinhSo, setQuyetDinhSo] = useState("");
     const [ngayCapBang, setNgayCapBang] = useState(null);
     const [ngayHetHanBang, setNgayHetHanBang] = useState(null);
-
+    const [idGUQ, setIdGUQ] = useState(null);
     const [trangThaiDon, setTrangThaiDon] = useState("Nộp đơn");
     const [buocXuLy, setBuocXuLy] = useState("");
 
@@ -246,6 +246,7 @@ function ApplicationAdd_KH() {
                     maUyQuyen: maUyQuyen || null,
                     nhanHieu,
                     vuViecs: vuViecList,
+                    idGUQ: idGUQ,
                 },
             });
             await showSuccess("Thành công!", "Thêm đơn đăng ký nhãn hiệu thành công!");
@@ -455,6 +456,9 @@ function ApplicationAdd_KH() {
                             setGiayUyQuyenGoc={setGiayUyQuyenGoc}
                             maUyQuyen={maUyQuyen}
                             setMaUyQuyen={setMaUyQuyen}
+                            idGUQ={idGUQ}
+                            setIdGUQ={setIdGUQ}
+                            idKhachHang={idKhachHang}
                         />
                     </div>
                     {/* )} */}

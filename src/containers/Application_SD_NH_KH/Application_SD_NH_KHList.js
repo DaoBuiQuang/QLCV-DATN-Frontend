@@ -61,6 +61,9 @@ function Application_SD_NH_KHList() {
   const allFieldOptions = [
     { label: "Số Đơn", labelEn: "App No", key: "soDon" },
     { label: "Mã HSVV", labelEn: "Matter code", key: "maHoSoVuViec" },
+    { label: "Ngày yêu cầu sửa đổi", key: "ngayYeuCau" },
+    { label: "Ngày ghi nhận sửa đổi", key: "ngayGhiNhanSuaDoi" },
+    { label: "Lần sửa đổi", key: "lanSuaDoi" },
     { label: "Tên khách hàng", labelEn: "Client Name", key: "tenKhachHang" },
     { label: "Tên đối tác", labelEn: "Partner Name", key: "tenDoiTac" },
     { label: "Tên nhãn hiệu", labelEn: "Trademark", key: "tenNhanHieu" },
